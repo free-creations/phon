@@ -20,10 +20,11 @@ defaultTasks 'suite.build'
 
 
 
-//task copyFoobarLib(type: Copy, dependsOn: ':FoobarLib:jar') {
-//
-//  from '../FoobarLib/dist'
-//  into '../NbPlatform/moduleBar/release/modules/ext'
-//}
-//
-//tasks['-init'].dependsOn  copyFoobarLib
+task copyDbEntitiesLib(type: Copy, dependsOn: ':DbEntities:jar') {
+
+  from '../DbEntities/dist/DbEntities.jar'
+  from '../DbEntities/dist/lib'
+  into '../NbPhon/NbPhonAPI/release/modules/ext'
+}
+
+tasks['-init'].dependsOn  copyDbEntitiesLib
