@@ -5,11 +5,53 @@
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
             <code-name-base>de.free_creations.nbPhonAPI</code-name-base>
             <suite-component/>
-            <module-dependencies/>
+            <module-dependencies>
+                <dependency>
+                    <code-name-base>org.openide.dialogs</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>7.28.1</specification-version>
+                    </run-dependency>
+                </dependency>
+            </module-dependencies>
+            <test-dependencies>
+                <test-type>
+                    <name>unit</name>
+                    <test-dependency>
+                        <code-name-base>org.netbeans.libs.junit4</code-name-base>
+                        <compile-dependency/>
+                    </test-dependency>
+                </test-type>
+            </test-dependencies>
             <public-packages/>
+            <class-path-extension>
+                <runtime-relative-path>ext/derbyclient.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/derbyclient.jar</binary-origin>
+            </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/DbEntities.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/DbEntities.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/derby.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/derby.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/javax.persistence_2.1.0.v201304241213.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/javax.persistence_2.1.0.v201304241213.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/eclipselink.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/eclipselink.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/org.eclipse.persistence.jpa.jpql_2.5.0.v20130507-3faac2b.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/org.eclipse.persistence.jpa.jpql_2.5.0.v20130507-3faac2b.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/derbynet.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/derbynet.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
