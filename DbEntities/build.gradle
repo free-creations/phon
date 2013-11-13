@@ -20,10 +20,11 @@ ant.importBuild 'build.xml'
 // the Ant default task is also our Gradle default task
 defaultTasks 'default'
 
+task build (dependsOn: jar)
+
 // Gradle does not execute the tasks in the same (default) order as Ant,
 // therefore we must add some dependencies to force the correct order.
 tasks['-deps-jar-init'].dependsOn tasks['init']
-tasks['-do-jar-with-libraries-create-manifest'].dependsOn tasks['compile']
 
 
 
