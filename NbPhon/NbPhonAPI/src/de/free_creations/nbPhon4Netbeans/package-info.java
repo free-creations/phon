@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.jmNetbeans;
-
-import org.openide.windows.CloneableTopComponent;
 
 /**
- * This interface must be provided by the edit window.
- *
- * @see Module Editors
- * @author Harald Postner <Harald at free-creations.de>
+ * Integrates the database entities into
+ * the NetBeans rich client platform.
+ * 
+ * @see <a href="https://platform.netbeans.org/tutorials/nbm-crud.html">NetBeans Platform CRUD Application Tutorial</a>
+ * 
  */
-public interface PersonEditorProvider {
-
-  public CloneableTopComponent getEditor(boolean newWindow, Integer key);
-}
+package de.free_creations.nbPhon4Netbeans;

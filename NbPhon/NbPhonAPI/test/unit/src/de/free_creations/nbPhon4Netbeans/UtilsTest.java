@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.jmNetbeans;
+package de.free_creations.nbPhon4Netbeans;
 
 import org.junit.Test;
-import static de.free_creations.jmNetbeans.Utils.isInstanceOf;
-import static de.free_creations.jmNetbeans.Utils.integerCompareNull;
-import static de.free_creations.jmNetbeans.Utils.stringCompareNull;
-import static de.free_creations.jmNetbeans.Utils.typeCheckCompare;
-import static de.free_creations.jmNetbeans.Utils.bothValid;
+import static de.free_creations.nbPhon4Netbeans.Utils.isInstanceOf;
+import static de.free_creations.nbPhon4Netbeans.Utils.integerCompareNull;
+import static de.free_creations.nbPhon4Netbeans.Utils.stringCompareNull;
+import static de.free_creations.nbPhon4Netbeans.Utils.typeCheckCompare;
+import static de.free_creations.nbPhon4Netbeans.Utils.bothValid;
 import static org.junit.Assert.*;
 
 /**

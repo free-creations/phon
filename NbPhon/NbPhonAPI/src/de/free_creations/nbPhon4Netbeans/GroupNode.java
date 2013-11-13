@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.jmNetbeans;
+package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.nbPhonAPI.Manager;
-import static de.free_creations.jmNetbeans.IconManager.iconManager;
+import static de.free_creations.nbPhon4Netbeans.IconManager.iconManager;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

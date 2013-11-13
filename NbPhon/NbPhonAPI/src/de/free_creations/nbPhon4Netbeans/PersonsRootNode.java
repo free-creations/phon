@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.jmNetbeans;
+package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.Personen;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;

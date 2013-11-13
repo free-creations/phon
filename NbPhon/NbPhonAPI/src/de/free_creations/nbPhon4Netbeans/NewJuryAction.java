@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.jmNetbeans;
+package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Jury;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
+import de.free_creations.nbPhonAPI.JuryCollection;
 import de.free_creations.nbPhonAPI.Manager;
-import de.free_creations.nbPhonAPI.PersonCollection;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,35 +34,35 @@ import org.openide.util.NbBundle.Messages;
 
 @ActionID(
         category = "Edit",
-        id = "de.free_creations.jmNetbeans.NewPersonAction")
+        id = "de.free_creations.jmNetbeans.NewJuryAction")
 @ActionRegistration(
-        iconBase = "de/free_creations/jmNetbeans/resources/newAddress.png",
-        displayName = "#CTL_newPerson")
+        iconBase = "de/free_creations/nbPhon4Netbeans/resources/newJury.png",
+        displayName = "#CTL_newJury")
 @ActionReferences({
   @ActionReference(path = "Menu/Edit", position = 0),
-  @ActionReference(path = "Toolbars/File", position = 300),
-  @ActionReference(path = "Shortcuts", name = "D-ENTER")
+  @ActionReference(path = "Toolbars/File", position = 301),
+  //@ActionReference(path = "Shortcuts", name = "D-ENTER")
 })
-@Messages("CTL_newPerson=new Address")
-public final class NewPersonAction extends AbstractAction {
+@Messages("CTL_newJury=new Jury")
+public final class NewJuryAction extends AbstractAction {
 
-  private static final Logger logger = Logger.getLogger(NewPersonAction.class.getName());
+  private static final Logger logger = Logger.getLogger(NewJuryAction.class.getName());
 
-  public NewPersonAction() {
-    super("new Address");
+  public NewJuryAction() {
+    super("new Jury");
   }
 
   @Override
-  @SuppressWarnings("UseSpecificCatch")
+  //@SuppressWarnings("UseSpecificCatch")
   public void actionPerformed(ActionEvent e) {
     try {
-      PersonCollection personCollection = Manager.getPersonCollection();
-      Personen newPerson = personCollection.newEntity();
-      PersonEditorProvider provider =
+      JuryCollection personCollection = Manager.getJuryCollection();
+      Jury newJury = personCollection.newEntity();
+      JuryEditorProvider provider =
               Lookup.getDefault().lookup(
-              PersonEditorProvider.class);
+              JuryEditorProvider.class);
       if (provider != null) {
-        provider.getEditor(true, newPerson.getPersonid());
+        provider.getEditor(true, newJury.getJuryid() );
       } else {
         throw new RuntimeException("No Editor provider found.");
       }

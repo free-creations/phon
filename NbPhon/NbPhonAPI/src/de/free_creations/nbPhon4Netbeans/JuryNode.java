@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.jmNetbeans;
+package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.Jury;
 
@@ -36,7 +36,7 @@ import org.openide.nodes.Children;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.datatransfer.ExTransferable;
-import static de.free_creations.jmNetbeans.IconManager.*;
+import static de.free_creations.nbPhon4Netbeans.IconManager.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

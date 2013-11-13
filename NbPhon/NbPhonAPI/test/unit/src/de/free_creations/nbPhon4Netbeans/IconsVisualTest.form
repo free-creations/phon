@@ -59,7 +59,7 @@
     <Component class="javax.swing.JLabel" name="lblEnabled">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/jmNetbeans/Bundle.properties" key="IconsVisualTest.lblEnabled.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/nbPhon4Netbeans/Bundle.properties" key="IconsVisualTest.lblEnabled.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -110,7 +110,7 @@
     <Component class="javax.swing.JLabel" name="lblDisabled">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/jmNetbeans/Bundle.properties" key="IconsVisualTest.lblDisabled.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/nbPhon4Netbeans/Bundle.properties" key="IconsVisualTest.lblDisabled.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
