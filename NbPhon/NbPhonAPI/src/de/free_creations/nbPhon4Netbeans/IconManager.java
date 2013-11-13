@@ -34,6 +34,7 @@ import org.openide.util.Exceptions;
  */
 public class IconManager {
 
+  public final BufferedImage iconStar;
   //---- Group Node
   public final BufferedImage iconGroup;
   //---- Location Node
@@ -48,7 +49,6 @@ public class IconManager {
   public final BufferedImage iconTeacher;
   public final BufferedImage iconMan;
   public final BufferedImage iconWoman;
-  public final BufferedImage iconStar;
   public final BufferedImage iconNobody;
   public final BufferedImage iconGroupleader;
   //---- Instruments
@@ -125,12 +125,15 @@ public class IconManager {
    * BLOCKFLOETE x GITARRE x HORN x KLARINETTE x KLAVIER-DUO x KLAVIER-STREICH x
    * KUNSTLIED MUSICAL OBOE x ORGEL POP POSAUNE trombone x QUERFLOETE SAX x
    * SEL-BESETZ TROMPETE x TUBA x
+   *
+   * @param instrCategory
+   * @return
    */
-  public BufferedImage getInstrumentImage(String instrumentCategory) {
-    if (instrumentCategory == null) {
+  public BufferedImage getInstrumentImage(String instrCategory) {
+    if (instrCategory == null) {
       return null;
     }
-    switch (instrumentCategory) {
+    switch (instrCategory) {
       case "BLOCKFLOETE":
         return iconRecorder;
       case "GITARRE":
@@ -188,7 +191,7 @@ public class IconManager {
   /**
    * Overlays a star onto the given image and caches it for further use.
    *
-   * @param baseImage
+   * @param originalImage
    * @return
    */
   public BufferedImage getStaredImage(BufferedImage originalImage) {
@@ -209,7 +212,7 @@ public class IconManager {
   /**
    * Renders the image in gray and caches it for further use.
    *
-   * @param baseImage
+   * @param originalImage
    * @return
    */
   public BufferedImage getDisabledImage(BufferedImage originalImage) {
@@ -231,6 +234,7 @@ public class IconManager {
    * Overlays a star onto the given image and caches it for further use.
    *
    * @param baseImage
+   * @param instrumentCategory
    * @return
    */
   public BufferedImage getInstrumentedImage(BufferedImage baseImage, String instrumentCategory) {
@@ -285,10 +289,7 @@ public class IconManager {
       if (!Objects.equals(this.baseImage, other.baseImage)) {
         return false;
       }
-      if (!Objects.equals(this.instrumentCategory, other.instrumentCategory)) {
-        return false;
-      }
-      return true;
+      return Objects.equals(this.instrumentCategory, other.instrumentCategory);
     }
   }
 
@@ -320,7 +321,6 @@ public class IconManager {
     graphics.drawImage(image1, op, 0, 0);
     graphics.dispose();
 
-
     float[] scales = {1f, 1f, 1f, 0.5f};
     float[] offsets = {0x00, 0x31, 0x4e, 0};
     RescaleOp rop = new RescaleOp(scales, offsets, null);
@@ -328,7 +328,6 @@ public class IconManager {
     graphics = scaledImage.createGraphics();
     graphics.drawImage(greyImage, rop, 0, 0);
     graphics.dispose();
-
 
     return scaledImage;
   }

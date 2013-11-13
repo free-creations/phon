@@ -19,11 +19,12 @@ import de.free_creations.nbPhonAPI.Manager;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashSet;
 import javax.swing.Icon;
 import org.netbeans.spi.actions.AbstractSavable;
-import org.openide.util.ImageUtilities;
+
 
 
 /**
@@ -39,9 +40,14 @@ public class Committer {
 
   static private final HashSet<CommittableNode> pending = new HashSet<>();
   static private final Object pendingLock = new Object();
-  private static final Icon icon = ImageUtilities.loadImageIcon("de/free_creations/jmNetbeans/resources/star16.png", true);
-
+ 
   static public class SaveRequester extends AbstractSavable implements Icon {
+     private final Icon icon;
+
+    public SaveRequester(){
+      BufferedImage image = IconManager.iconManager().iconStar;
+      icon = IconManager.iconManager().image2icon(image);
+    }
 
     @Override
     protected String findDisplayName() {
@@ -84,10 +90,7 @@ public class Committer {
      */
     @Override
     public boolean equals(Object other) {
-      if (other instanceof SaveRequester) {
-        return true;
-      }
-      return false;
+      return other instanceof SaveRequester;
     }
 
     /**
