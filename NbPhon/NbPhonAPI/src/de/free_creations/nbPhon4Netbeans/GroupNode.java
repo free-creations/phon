@@ -70,7 +70,7 @@ public class GroupNode extends AbstractNode {
       new PersonNode(111, Manager.getPersonCollection()),};
 
 
-    ArrayList aNodes = new ArrayList();
+    ArrayList<Node> aNodes = new ArrayList<>();
     aNodes.addAll(Arrays.asList(nodes));
 
 

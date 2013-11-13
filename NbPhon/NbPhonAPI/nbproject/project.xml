@@ -64,7 +64,13 @@
                     </test-dependency>
                 </test-type>
             </test-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>de.free_creations.actions</package>
+                <package>de.free_creations.actions.person</package>
+                <package>de.free_creations.dbEntities</package>
+                <package>de.free_creations.nbPhon4Netbeans</package>
+                <package>de.free_creations.nbPhonAPI</package>
+            </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/derbyclient.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/derbyclient.jar</binary-origin>

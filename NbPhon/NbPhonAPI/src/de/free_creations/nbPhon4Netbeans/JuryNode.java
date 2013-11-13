@@ -208,7 +208,7 @@ public class JuryNode extends AbstractNode implements CommittableNode {
           return "Springer";
         }
       },};
-    ArrayList aNodes = new ArrayList();
+    ArrayList<Node> aNodes = new ArrayList<>();
     aNodes.addAll(Arrays.asList(nodes));
     LChildren children = new LChildren(aNodes);
     return children;
