@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: de.free_creations.editors
+OpenIDE-Module-Localizing-Bundle: de/free_creations/editors/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
