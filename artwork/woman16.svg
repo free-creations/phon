@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16px"
+   height="16px"
+   id="svg2985"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="woman16.svg"
+   inkscape:export-filename="/home/harald/NetBeansProjects/JMAdmin/artwork/woman16.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs2987" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="50.5"
+     inkscape:cx="8.4920701"
+     inkscape:cy="8"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:snap-grids="true"
+     inkscape:window-width="1280"
+     inkscape:window-height="977"
+     inkscape:window-x="0"
+     inkscape:window-y="281"
+     inkscape:window-maximized="1"
+     gridtolerance="10"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-nodes="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2993"
+       empspacing="8"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="false"
+       empcolor="#00009d"
+       empopacity="0.47058824"
+       spacingx="0.5px"
+       spacingy="0.5px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2990">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       style="fill:#00314e;fill-opacity:1;stroke:#000000;stroke-width:0.30000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="M 8,1.03125 C 6.9105252,1.03125 6.03125,1.6784653 6.03125,2.5 6.03125,3.3215347 6.9105252,4 8,4 9.0894748,4 9.96875,3.3215347 9.96875,2.5 9.96875,1.6784653 9.0894748,1.03125 8,1.03125 z M 4.59375,5 1,9 2.4375,9 5.75,5.3125 6.5,8 3,12 6.1980198,12 6.5,15 7.5,15 7.2113243,12 9,12 l -0.34375,3 1,0 L 10,12 13,12 9.5,8 10.21875,5.28125 13.5625,9 15,9 11.40625,5 z"
+       id="path3057"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sssssccccccccccccccccccccc" />
+    <rect
+       style="fill:#0e232e;fill-opacity:1;stroke:none"
+       id="rect3059"
+       width="1.5629822"
+       height="6.8313198"
+       x="25.60841"
+       y="6.6982603"
+       transform="matrix(1,0,-0.26692926,0.96371613,0,0)" />
+  </g>
+</svg>
