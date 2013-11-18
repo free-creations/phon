@@ -15,7 +15,7 @@
  */
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
---                      D r o p (o l d)  T a b l e s
+--                      D r o p (o l d)    T a b l e s
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ DROP TABLE "APP"."TIMESLOT";
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
---                      C r e a t e  T a b l e s
+--                      C r e a t e    T a b l e s
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ CREATE TABLE "APP"."PERSON" (
 -- Describes the details of the contests.
 -- -----------------------------------------------------------------------------
 CREATE TABLE "APP"."CONTEST" (
-  "JURYID" VARCHAR(50) NOT NULL, 
+  "CONTESTID" INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
   "WERTUNGSTYP" VARCHAR(50), 
   "VERANTWORTLICH" INTEGER, 
   "WERTUNG" VARCHAR(50), 
@@ -90,6 +90,7 @@ CREATE TABLE "APP"."CONTEST" (
 );
 
 -- -----------------------------------------------------------------------------
+-- Table AVAILABILITY
 -- Each record describes the availability of a given person for a specific
 -- time slot. When a new person record is created, for each timeslot a corresponding
 -- availability record mmust be inserted.
@@ -107,7 +108,7 @@ CREATE TABLE "APP"."AVAILABILITY" (
 -- to a task (identified by the function).
 -- -----------------------------------------------------------------------------
 CREATE TABLE "APP"."ALLOCATION" (
-  "ALLOCID" INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
+  "ALLOCATIONID" INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
   "ZEITID" INTEGER NOT NULL, 
   "JURYID" VARCHAR(50) NOT NULL, 
   "FUNKTIONID" VARCHAR(50) NOT NULL, 
@@ -119,7 +120,7 @@ CREATE TABLE "APP"."ALLOCATION" (
 
 -- -----------------------------------------------------------------------------
 -- Table FUNCTION
--- Describes in details the task of a person.
+-- Describes in detail the task of a person.
 -- -----------------------------------------------------------------------------
 CREATE TABLE "APP"."FUNCTION" (
   "FUNKTIONID" VARCHAR(50) NOT NULL, 
@@ -127,4 +128,26 @@ CREATE TABLE "APP"."FUNCTION" (
   "SORTVALUE" INTEGER
 );
 
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+--                      P r i m a r y    K e y s
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+ALTER TABLE "APP"."FUNCTION" 
+  ADD CONSTRAINT "FunctionPrimKey" PRIMARY KEY ("FUNKTIONID");
+ALTER TABLE "APP"."CONTEST" 
+  ADD CONSTRAINT "ContestPrimKey" PRIMARY KEY ("CONTESTID");
+ALTER TABLE "APP"."ALLOCATION" 
+  ADD CONSTRAINT "AllocationPrimKey" PRIMARY KEY ("ALLOCATIONID");
+ALTER TABLE "APP"."TIMESLOT" 
+  ADD CONSTRAINT "TimeslotPrimKey" PRIMARY KEY ("ZEITID");
+ALTER TABLE "APP"."AVAILABILITY" 
+  ADD CONSTRAINT "AvailabilityPrimKey" PRIMARY KEY ("VERFUEGID");
+ALTER TABLE "APP"."PERSON" 
+  ADD CONSTRAINT "PersonPrimKey" PRIMARY KEY ("PERSONID");
 
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+--                      F o r e i g n    K e y s
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
