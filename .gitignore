@@ -23,3 +23,5 @@
 /artwork/naming/
 /CreateDb/nbproject/private/
 /phonDb/CreateDb/nbproject/private/
+/phonDb/CreateDb/build/
+/phonDb/CreateDb/sql/populateExamplePersons.sql

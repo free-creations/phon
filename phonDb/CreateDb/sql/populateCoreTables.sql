@@ -23,3 +23,25 @@ INSERT INTO "APP"."FUNCTION" VALUES('HELFER1', 'Helfer 1',2);
 INSERT INTO "APP"."FUNCTION" VALUES('HELFER2', 'Helfer 2',3);
 INSERT INTO "APP"."FUNCTION" VALUES('HELFER3', 'Helfer 3',4);
 
+
+INSERT INTO "APP"."TIMESLOT" VALUES(1,	1,	1,'2014-04-02','09:00','13:00','Mittwoch','Mi_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(2,	1,	2,'2014-04-02','13:00','17:00','Mittwoch','Mi_Vo','Nachmittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(3,	1,	3,'2014-04-02','17:00','21:00','Mittwoch','Mi_Ab','Abend');
+
+INSERT INTO "APP"."TIMESLOT" VALUES(4,	2,	1,'2014-04-03','09:00','13:00','Donnerstag','Do_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(5,	2,	2,'2014-04-03','13:00','17:00','Donnerstag','Do_Vo','Nachmittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(6,	2,	3,'2014-04-03','17:00','21:00','Donnerstag','Do_Ab','Abend');
+
+INSERT INTO "APP"."TIMESLOT" VALUES(7,	3,	1,'2014-04-04','09:00','13:00','Freitag','Fr_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(8,	3,	2,'2014-04-04','13:00','17:00','Freitag','Fr_Vo','Nachmittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(9,	3,	3,'2014-04-04','17:00','21:00','Freitag','Fr_Ab','Abend');
+
+INSERT INTO "APP"."TIMESLOT" VALUES(10,	4,	1,'2014-04-05','09:00','13:00','Samstag','Sa_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(11,	4,	2,'2014-04-05','13:00','17:00','Samstag','Sa_Vo','Nachmittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(12,	4,	3,'2014-04-05','17:00','21:00','Samstag','Sa_Ab','Abend');
+
+INSERT INTO "APP"."TIMESLOT" VALUES(13,	5,	1,'2014-04-06','09:00','13:00','Sonntag','Fr_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(14,	5,	2,'2014-04-06','13:00','17:00','Sonntag','Fr_Vo','Nachmittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(15,	5,	3,'2014-04-06','17:00','21:00','Sonntag','Fr_Ab','Abend');
+
+
