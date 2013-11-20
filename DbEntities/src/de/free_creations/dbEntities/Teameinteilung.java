@@ -19,9 +19,12 @@ import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -29,6 +32,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -36,21 +40,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Harald <Harald at free-creations.de>
  */
 @Entity
-@Table(name = "TEAMEINTEILUNG")
+@Table(name = "ALLOCATION")
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Teameinteilung.findAll", query = "SELECT t FROM Teameinteilung t"),
-  @NamedQuery(name = "Teameinteilung.findByZeitid", query = "SELECT t FROM Teameinteilung t WHERE t.teameinteilungPK.zeitid = :zeitid"),
-  @NamedQuery(name = "Teameinteilung.findByJuryid", query = "SELECT t FROM Teameinteilung t WHERE t.teameinteilungPK.juryid = :juryid"),
-  @NamedQuery(name = "Teameinteilung.findByFunktionid", query = "SELECT t FROM Teameinteilung t WHERE t.teameinteilungPK.funktionid = :funktionid"),
+  @NamedQuery(name = "Teameinteilung.findByZeitid", query = "SELECT t FROM Teameinteilung t WHERE t.zeit = :zeitid"),
+  @NamedQuery(name = "Teameinteilung.findByJuryid", query = "SELECT t FROM Teameinteilung t WHERE t.contestid = :juryid"),
+  @NamedQuery(name = "Teameinteilung.findByFunktionid", query = "SELECT t FROM Teameinteilung t WHERE t.funktionen = :funktionid"),
   @NamedQuery(name = "Teameinteilung.findByLetzteaenderung", query = "SELECT t FROM Teameinteilung t WHERE t.letzteaenderung = :letzteaenderung"),
   @NamedQuery(name = "Teameinteilung.findByPlaner", query = "SELECT t FROM Teameinteilung t WHERE t.planer = :planer"),
-  @NamedQuery(name = "Teameinteilung.findByErklaerung", query = "SELECT t FROM Teameinteilung t WHERE t.erklaerung = :erklaerung")})
+  @NamedQuery(name = "Teameinteilung.findByErklaerung", query = "SELECT t FROM Teameinteilung t WHERE t.erklaerung = :erklaerung"),})
 public class Teameinteilung implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
-  @EmbeddedId
-  protected TeameinteilungPK teameinteilungPK;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Basic(optional = false)
+  @Column(name = "ALLOCATIONID")
+  private Integer allocationid;
   @Column(name = "LETZTEAENDERUNG")
   @Temporal(TemporalType.TIMESTAMP)
   private Date letzteaenderung;
@@ -58,18 +65,19 @@ public class Teameinteilung implements Serializable, DbEntity {
   private String planer;
   @Column(name = "ERKLAERUNG")
   private String erklaerung;
-  @JoinColumn(name = "ZEITID", referencedColumnName = "ZEITID", insertable = false, updatable = false)
+  @JoinColumn(name = "ZEITID", referencedColumnName = "ZEITID")
   @ManyToOne(optional = false)
   private Zeit zeit;
   @JoinColumn(name = "PERSONID", referencedColumnName = "PERSONID")
   @ManyToOne(optional = false)
   private Personen personid;
-  @JoinColumn(name = "JURYID", referencedColumnName = "JURYID", insertable = false, updatable = false)
-  @ManyToOne(optional = false)
-  private Jury jury;
-  @JoinColumn(name = "FUNKTIONID", referencedColumnName = "FUNKTIONID", insertable = false, updatable = false)
+  @JoinColumn(name = "FUNKTIONID", referencedColumnName = "FUNKTIONID")
   @ManyToOne(optional = false)
   private Funktionen funktionen;
+  @JoinColumn(name = "CONTESTID", referencedColumnName = "CONTESTID")
+  @ManyToOne(optional = false)
+  private Jury contestid;
+
 //  public final static String PROP_FUNCTION = "function";
 //  public final static String PROP_JURY = "jury";
 //  public final static String PROP_ZEIT = "zeit";
@@ -79,24 +87,16 @@ public class Teameinteilung implements Serializable, DbEntity {
   public Teameinteilung() {
   }
 
-  private Teameinteilung(TeameinteilungPK teameinteilungPK) {
-    setTeameinteilungPK(teameinteilungPK);
+  public Teameinteilung(Integer allocationid) {
+    this.allocationid = allocationid;
   }
 
-  private Teameinteilung(int zeitid, String juryid, String funktionid) {
-    this(new TeameinteilungPK(zeitid, juryid, funktionid));
-  }
-
-  public TeameinteilungPK getTeameinteilungPK() {
-    return teameinteilungPK;
-  }
-
-  private void setTeameinteilungPK(TeameinteilungPK teameinteilungPK) {
-    this.teameinteilungPK = teameinteilungPK;
+  public Integer getAllocationid() {
+    return allocationid;
   }
 
   public Teameinteilung(Zeit z, Jury j, Funktionen f) {
-    this(z.getZeitid(), j.getJuryid(), f.getFunktionid());
+    this();
     setZeit(z);
     setJury(j);
     setFunktionen(f);
@@ -139,7 +139,7 @@ public class Teameinteilung implements Serializable, DbEntity {
     return zeit;
   }
 
-  private void setZeit(Zeit zeit) {
+  public final void setZeit(Zeit zeit) {
     Zeit old = this.zeit;
     this.zeit = zeit;
 //    EntityIdentity newId = (zeit == null) ? null : zeit.identity();
@@ -178,12 +178,12 @@ public class Teameinteilung implements Serializable, DbEntity {
   }
 
   public Jury getJury() {
-    return jury;
+    return contestid;
   }
 
-  private void setJury(Jury jury) {
-    Jury old = this.jury;
-    this.jury = jury;
+  public final void setJury(Jury jury) {
+    Jury old = this.contestid;
+    this.contestid = jury;
 //    EntityIdentity newId = (jury == null) ? null : jury.identity();
 //    EntityIdentity oldId = (old == null) ? null : old.identity();
 
@@ -203,7 +203,7 @@ public class Teameinteilung implements Serializable, DbEntity {
     return funktionen;
   }
 
-  private void setFunktionen(Funktionen funktionen) {
+  public final void setFunktionen(Funktionen funktionen) {
     Funktionen old = this.funktionen;
     this.funktionen = funktionen;
 //    EntityIdentity newId = (funktionen == null) ? null : funktionen.identity();
@@ -223,7 +223,7 @@ public class Teameinteilung implements Serializable, DbEntity {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (teameinteilungPK != null ? teameinteilungPK.hashCode() : 0);
+    hash += (allocationid != null ? allocationid.hashCode() : 0);
     return hash;
   }
 
@@ -234,7 +234,7 @@ public class Teameinteilung implements Serializable, DbEntity {
       return false;
     }
     Teameinteilung other = (Teameinteilung) object;
-    if ((this.teameinteilungPK == null && other.teameinteilungPK != null) || (this.teameinteilungPK != null && !this.teameinteilungPK.equals(other.teameinteilungPK))) {
+    if ((this.allocationid == null && other.allocationid != null) || (this.allocationid != null && !this.allocationid.equals(other.allocationid))) {
       return false;
     }
     return true;
@@ -242,12 +242,12 @@ public class Teameinteilung implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Teameinteilung" + teameinteilungPK;
+    return "Teameinteilung" + allocationid;
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    assert (this.teameinteilungPK != null);
-    addPropertyChangeListener(listener, this.teameinteilungPK);
+    assert (this.allocationid != null);
+    addPropertyChangeListener(listener, this.allocationid);
   }
 
   /**
@@ -256,11 +256,11 @@ public class Teameinteilung implements Serializable, DbEntity {
    * and the given primary key.
    *
    * @param listener
-   * @param teameinteilungId
+   * @param allocationid
    */
-  public static void addPropertyChangeListener(PropertyChangeListener listener, TeameinteilungPK teameinteilungId) {
+  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer allocationid) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Teameinteilung.class, teameinteilungId));
+            new EntityIdentity(Teameinteilung.class, allocationid));
   }
 
   /**
@@ -270,7 +270,7 @@ public class Teameinteilung implements Serializable, DbEntity {
    * @param listener
    */
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    removePropertyChangeListener(listener, this.teameinteilungPK);
+    removePropertyChangeListener(listener, this.allocationid);
   }
 
   /**
@@ -279,11 +279,11 @@ public class Teameinteilung implements Serializable, DbEntity {
    * and the given primary key.
    *
    * @param listener the listener to be removed.
-   * @param teameinteilungId the primary key
+   * @param allocationid the primary key
    */
-  public static void removePropertyChangeListener(PropertyChangeListener listener, TeameinteilungPK teameinteilungId) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer allocationid) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Teameinteilung.class, teameinteilungId));
+            new EntityIdentity(Teameinteilung.class, allocationid));
 
   }
 
@@ -295,6 +295,6 @@ public class Teameinteilung implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Teameinteilung.class, teameinteilungPK);
+    return new EntityIdentity(Teameinteilung.class, allocationid);
   }
 }

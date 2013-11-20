@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Harald <Harald at free-creations.de>
  */
 @Entity
-@Table(name = "FUNKTIONEN")
+@Table(name = "JOB")
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Funktionen.findAll", query = "SELECT f FROM Funktionen f"),

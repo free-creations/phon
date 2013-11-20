@@ -53,7 +53,7 @@ public class TeameinteilungTest {
       entityManager.close();
     }
   }
-  private Teameinteilung testTeam;
+  private Teameinteilung testAllocation;
   private Personen testPerson;
 
   @Before
@@ -63,7 +63,7 @@ public class TeameinteilungTest {
     List<Teameinteilung> tt = qt.getResultList();
     assertNotNull(tt);
     assertFalse(tt.isEmpty());
-    testTeam = tt.get(0);
+    testAllocation = tt.get(0);
 
     TypedQuery<Personen> qp = entityManager.createNamedQuery("Personen.findAll", Personen.class);
     List<Personen> pp = qp.getResultList();
@@ -76,7 +76,7 @@ public class TeameinteilungTest {
   @After
   public void tearDown() {
     entityManager.getTransaction().rollback();
-    testTeam = null;
+    testAllocation = null;
   }
 
   /**
@@ -84,24 +84,24 @@ public class TeameinteilungTest {
    */
   @Test
   public void testIdentity() {
-    EntityIdentity expected = new EntityIdentity(testTeam.getClass(), testTeam.teameinteilungPK);
-    assertEquals(expected, testTeam.identity());
+    EntityIdentity expected = new EntityIdentity(testAllocation.getClass(), testAllocation.getAllocationid());
+    assertEquals(expected, testAllocation.identity());
   }
 
   @Test
   public void testSetGetPerson() {
-    Personen p = testTeam.getPersonid();
+    Personen p = testAllocation.getPersonid();
     assertNotNull("Oops this is a bad test item.", p);
-    assertTrue(p.getTeameinteilungList().contains(testTeam));
+    assertTrue(p.getTeameinteilungList().contains(testAllocation));
 
-    testTeam.setPersonid(null);
-    assertFalse(p.getTeameinteilungList().contains(testTeam));
+    testAllocation.setPersonid(null);
+    assertFalse(p.getTeameinteilungList().contains(testAllocation));
 
-    testTeam.setPersonid(p);
-    assertTrue(p.getTeameinteilungList().contains(testTeam));
+    testAllocation.setPersonid(p);
+    assertTrue(p.getTeameinteilungList().contains(testAllocation));
 
-    testTeam.prepareRemoval();
-    assertFalse(p.getTeameinteilungList().contains(testTeam));
+    testAllocation.prepareRemoval();
+    assertFalse(p.getTeameinteilungList().contains(testAllocation));
   }
 
   @Test
@@ -109,11 +109,12 @@ public class TeameinteilungTest {
     Zeit z = new Zeit(1001);
     entityManager.persist(z);
 
-    Jury j = new Jury("TestJ");
+    Jury j = new Jury();
     entityManager.persist(j);
 
     Funktionen f = new Funktionen("TestF");
     entityManager.persist(f);
+    entityManager.flush(); // give f,j,z their primary keys.
 
     Teameinteilung testItem = new Teameinteilung(z, j, f);
     testItem.setPersonid(testPerson);

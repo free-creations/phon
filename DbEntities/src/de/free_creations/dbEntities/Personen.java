@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Harald <Harald at free-creations.de>
  */
 @Entity
-@Table(name = "PERSONEN")
+@Table(name = "PERSON")
 @Access(AccessType.FIELD)
 @XmlRootElement
 @NamedQueries({

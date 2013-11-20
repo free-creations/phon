@@ -23,6 +23,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,11 +40,11 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Harald <Harald at free-creations.de>
  */
 @Entity
-@Table(name = "JURY")
+@Table(name = "CONTEST")
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Jury.findAll", query = "SELECT j FROM Jury j"),
-  @NamedQuery(name = "Jury.findByJuryid", query = "SELECT j FROM Jury j WHERE j.juryid = :juryid"),
+  @NamedQuery(name = "Jury.findByJuryid", query = "SELECT j FROM Jury j WHERE j.contestid = :juryid"),
   @NamedQuery(name = "Jury.findByWertungstyp", query = "SELECT j FROM Jury j WHERE j.wertungstyp = :wertungstyp"),
   @NamedQuery(name = "Jury.findByWertung", query = "SELECT j FROM Jury j WHERE j.wertung = :wertung"),
   @NamedQuery(name = "Jury.findByWertungsraum", query = "SELECT j FROM Jury j WHERE j.wertungsraum = :wertungsraum"),
@@ -55,9 +57,12 @@ public class Jury implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
-  @Column(name = "JURYID")
-  private String juryid;
+  @Column(name = "CONTESTID")
+  private Integer contestid;
+  @Column(name = "NAME")
+  private String name;
   @Column(name = "WERTUNGSTYP")
   private String wertungstyp;
   @Column(name = "WERTUNG")
@@ -74,7 +79,7 @@ public class Jury implements Serializable, DbEntity {
   private String zeitsamstag;
   @Column(name = "ZEITSONNTAG")
   private String zeitsonntag;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "jury")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "contestid")
   private List<Teameinteilung> teameinteilungList;
   @JoinColumn(name = "VERANTWORTLICH", referencedColumnName = "PERSONID")
   @ManyToOne
@@ -91,12 +96,20 @@ public class Jury implements Serializable, DbEntity {
   public Jury() {
   }
 
-  public Jury(String juryid) {
-    this.juryid = juryid;
+  public Jury(int contestid) {
+    this.contestid = contestid;
   }
 
-  public String getJuryid() {
-    return juryid;
+  public int getJuryid() {
+    return contestid;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
 //  public void setJuryid(String juryid) {
@@ -263,7 +276,7 @@ public class Jury implements Serializable, DbEntity {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (juryid != null ? juryid.hashCode() : 0);
+    hash += (contestid != null ? contestid.hashCode() : 0);
     return hash;
   }
 
@@ -274,7 +287,7 @@ public class Jury implements Serializable, DbEntity {
       return false;
     }
     Jury other = (Jury) object;
-    if ((this.juryid == null && other.juryid != null) || (this.juryid != null && !this.juryid.equals(other.juryid))) {
+    if ((this.contestid == null && other.contestid != null) || (this.contestid != null && !this.contestid.equals(other.contestid))) {
       return false;
     }
     return true;
@@ -282,20 +295,20 @@ public class Jury implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Jury[ juryid=" + juryid + " ]";
+    return "Jury[ juryid=" + contestid + " ]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    addPropertyChangeListener(listener, this.juryid);
+    addPropertyChangeListener(listener, this.contestid);
   }
 
-  public static void addPropertyChangeListener(PropertyChangeListener listener, String juryid) {
+  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer juryid) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
             new EntityIdentity(Jury.class, juryid));
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    removePropertyChangeListener(listener, this.juryid);
+    removePropertyChangeListener(listener, this.contestid);
   }
 
   /**
@@ -306,7 +319,7 @@ public class Jury implements Serializable, DbEntity {
    * @param listener
    * @param juryid
    */
-  public static void removePropertyChangeListener(PropertyChangeListener listener, String juryid) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer juryid) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
             new EntityIdentity(Jury.class, juryid));
   }
@@ -319,6 +332,6 @@ public class Jury implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Jury.class, juryid);
+    return new EntityIdentity(Jury.class, contestid);
   }
 }

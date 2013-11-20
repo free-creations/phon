@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Harald <Harald at free-creations.de>
  */
 @Entity
-@Table(name = "VERFUEGBARKEIT")
+@Table(name = "AVAILABILITY")
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Verfuegbarkeit.findAll", query = "SELECT v FROM Verfuegbarkeit v"),
