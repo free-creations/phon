@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.beans.PropertyChangeListener;
@@ -29,18 +29,18 @@ import static org.junit.Assert.*;
  */
 public class PersonCompareTest {
 
-  private class CollectionMock implements MutableEntityCollection<Personen, Integer> {
+  private class CollectionMock implements MutableEntityCollection<Person, Integer> {
 
-    public Personen p1 = null;
-    public Personen p2 = null;
+    public Person p1 = null;
+    public Person p2 = null;
 
     @Override
-    public List<Personen> getAll() {
+    public List<Person> getAll() {
       throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Personen findEntity(Integer key) throws DataBaseNotReadyException {
+    public Person findEntity(Integer key) throws DataBaseNotReadyException {
       switch (key) {
         case 1:
           return p1;
@@ -60,7 +60,7 @@ public class PersonCompareTest {
     }
 
     @Override
-    public Personen newEntity() throws DataBaseNotReadyException {
+    public Person newEntity() throws DataBaseNotReadyException {
       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -97,7 +97,7 @@ public class PersonCompareTest {
     assertEquals(0, result);
 
     // one family name not null
-    Personen p1 = new Personen();
+    Person p1 = new Person();
     personCollectionMock.p1 = p1;
     p1.setFamilienname("A");
     result = testComparator.compare(np1, np2);
@@ -107,7 +107,7 @@ public class PersonCompareTest {
     assertTrue(result < 0);
 
     // both family names not null
-    Personen p2 = new Personen();
+    Person p2 = new Person();
     personCollectionMock.p2 = p2;
     p2.setFamilienname("A");
     result = testComparator.compare(np1, np2);

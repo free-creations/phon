@@ -16,9 +16,9 @@
 package de.free_creations.nbPhonAPI;
 
 import de.free_creations.dbEntities.EntityIdentity;
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.Availability;
-import de.free_creations.dbEntities.Zeit;
+import de.free_creations.dbEntities.TimeSlot;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -46,7 +46,7 @@ public class PersonCollectionTest {
   public void getAll_mustNotBeEmpty() {
     System.out.println("getAll_mustNotBeEmpty");
     PersonCollection testItem = Manager.getPersonCollection();
-    List<Personen> allPersons = testItem.getAll();
+    List<Person> allPersons = testItem.getAll();
     assertNotNull(allPersons);
     assertFalse(allPersons.isEmpty());
   }
@@ -58,22 +58,22 @@ public class PersonCollectionTest {
   @Test
   public void find_mustAlwaysReturnTheSameEntity() throws DataBaseNotReadyException {
     PersonCollection cc = Manager.getPersonCollection();
-    List<Personen> allPersons = cc.getAll();
+    List<Person> allPersons = cc.getAll();
 
-    Personen testPerson = allPersons.get(0);
+    Person testPerson = allPersons.get(0);
     int key = testPerson.getPersonid();
 
-    Personen fromFind = cc.findEntity(key);
+    Person fromFind = cc.findEntity(key);
     assertTrue(testPerson == fromFind);
 
     testPerson.setFamilienname("Test");
-    Personen fromFind2 = cc.findEntity(key);
+    Person fromFind2 = cc.findEntity(key);
     assertEquals("Test", fromFind2.getFamilienname());
     ///
     /// BUT NOTE
     ///
     Manager.rollback();
-    Personen fromFind3 = cc.findEntity(key);
+    Person fromFind3 = cc.findEntity(key);
     assertTrue(testPerson != fromFind3); //!!!!!!!
 
   }
@@ -86,8 +86,8 @@ public class PersonCollectionTest {
   public void getAll_mustReturnTheSameElemets() {
     System.out.println("getAll_mustReturnTheSameElemets");
     PersonCollection testItem = Manager.getPersonCollection();
-    List<Personen> allPersons_1 = testItem.getAll();
-    List<Personen> allPersons_2 = testItem.getAll();
+    List<Person> allPersons_1 = testItem.getAll();
+    List<Person> allPersons_2 = testItem.getAll();
     // check that the first entry refernces the same record
     assertEquals(allPersons_1.get(0).getPersonid(), allPersons_2.get(0).getPersonid());
     // check pointer identity
@@ -102,17 +102,17 @@ public class PersonCollectionTest {
   public void getAll_mustReturnObjectsFromPersitencyContext() throws DataBaseNotReadyException {
     System.out.println("getAll_mustReturnObjectsFromPersitencyContext");
     PersonCollection testItem = Manager.getPersonCollection();
-    List<Personen> allPersons = testItem.getAll();
-    Personen personFromList = allPersons.get(0);
+    List<Person> allPersons = testItem.getAll();
+    Person personFromList = allPersons.get(0);
 
     Integer key = personFromList.getPersonid();
-    Personen personFromContext = Manager.getEntityManager().find(Personen.class, key);
+    Person personFromContext = Manager.getEntityManager().find(Person.class, key);
 
     assertTrue(personFromContext == personFromList);
   }
 
   /**
-   * When applying the method newPerson() the returned "Personen"- entity must
+   * When applying the method newPerson() the returned "Person"- entity must
    * be attached to the current persistency context.
    */
   @Test
@@ -120,7 +120,7 @@ public class PersonCollectionTest {
     System.out.println("newPerson_mustReturnObjectsFromPersitencyContext");
     PersonCollection testItem = Manager.getPersonCollection();
 
-    Personen newPerson = testItem.newEntity();
+    Person newPerson = testItem.newEntity();
 
     assertTrue(Manager.getEntityManager().contains(newPerson));
 
@@ -129,7 +129,7 @@ public class PersonCollectionTest {
   }
 
   /**
-   * When applying the method newPerson() the returned "Personen"- entity must
+   * When applying the method newPerson() the returned "Person"- entity must
    * have a valid key.
    */
   @Test
@@ -137,7 +137,7 @@ public class PersonCollectionTest {
     System.out.println("newPerson_mustHaveValidKey");
     PersonCollection testItem = Manager.getPersonCollection();
 
-    Personen newPerson = testItem.newEntity();
+    Person newPerson = testItem.newEntity();
     newPerson.setFamilienname("UNIT TEST: newPerson_mustHaveValidKey");
     int personid = newPerson.getPersonid();
 
@@ -147,7 +147,7 @@ public class PersonCollectionTest {
   }
 
   /**
-   * When applying the method newPerson() the returned "Personen"- entity must
+   * When applying the method newPerson() the returned "Person"- entity must
    * have all disponibility (Availability) records attached.
    */
   @Test
@@ -155,7 +155,7 @@ public class PersonCollectionTest {
     System.out.println("newPerson_mustHaveTimeSlots");
     PersonCollection testItem = Manager.getPersonCollection();
 
-    Personen newPerson = testItem.newEntity();
+    Person newPerson = testItem.newEntity();
     List<Availability> verfuegbarkeitList = newPerson.getVerfuegbarkeitList();
 
     // verify that the verfuegbarkeitList exists and is not empty
@@ -165,7 +165,7 @@ public class PersonCollectionTest {
     // verify that all the dependencies are correctly linked
     for (Availability v : verfuegbarkeitList) {
       assertEquals(v.getPersonid(), newPerson);
-      Zeit z = v.getZeitid();
+      TimeSlot z = v.getZeitid();
       assertTrue(z.getVerfuegbarkeitList().contains(v));
     }
   }
@@ -178,18 +178,18 @@ public class PersonCollectionTest {
   public void newPerson_ListMustGrow() throws DataBaseNotReadyException {
     System.out.println("newPerson_ListMustGrow");
     PersonCollection testItem = Manager.getPersonCollection();
-    List<Personen> listBefore = testItem.getAll();
+    List<Person> listBefore = testItem.getAll();
     int sizeBefore = listBefore.size();
 
-    Personen newPerson = testItem.newEntity();
+    Person newPerson = testItem.newEntity();
 
-    List<Personen> listAfter = testItem.getAll();
+    List<Person> listAfter = testItem.getAll();
     int sizeAfter = listAfter.size();
 
     assertEquals(sizeBefore + 1, sizeAfter);
 
     boolean found = false;
-    for (Personen p : listAfter) {
+    for (Person p : listAfter) {
       if (p == newPerson) {
         found = true;
       }

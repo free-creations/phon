@@ -83,7 +83,7 @@ public class Contest implements Serializable, DbEntity {
   private List<Allocation> teameinteilungList;
   @JoinColumn(name = "VERANTWORTLICH", referencedColumnName = "PERSONID")
   @ManyToOne
-  private Personen verantwortlich;
+  private Person verantwortlich;
   public static final String PROP_WERUNGSTYP = "wertungstyp";
   public static final String PROP_WERUNG = "wertung";
   public static final String PROP_WERUNGSRAUM = "wertungsraum";
@@ -251,12 +251,12 @@ public class Contest implements Serializable, DbEntity {
     this.teameinteilungList = teameinteilungList;
   }
 
-  public Personen getVerantwortlich() {
+  public Person getVerantwortlich() {
     return verantwortlich;
   }
 
-  public void setVerantwortlich(Personen p) {
-    Personen old = this.verantwortlich;
+  public void setVerantwortlich(Person p) {
+    Person old = this.verantwortlich;
     this.verantwortlich = p;
 
     EntityIdentity newId = (p == null) ? null : p.identity();

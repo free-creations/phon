@@ -25,7 +25,7 @@ import org.junit.Ignore;
  *
  * @author Harald <Harald at free-creations.de>
  */
-public class PersonenTest {
+public class PersonTest {
 
   static final String PersistenceUnitName = "DbEntitiesPU";
   private static EntityManager entityManager = null;
@@ -47,24 +47,24 @@ public class PersonenTest {
       entityManager.close();
     }
   }
-  private Personen testPerson;
-  private Personen testPerson_2;
-  private Zeit testZeit;
+  private Person testPerson;
+  private Person testPerson_2;
+  private TimeSlot testZeit;
   private Job testFunction;
 
   @Before
   public void setUp() {
     entityManager.getTransaction().begin();
 
-    TypedQuery<Personen> ppq = entityManager.createNamedQuery("Personen.findAll", Personen.class);
-    List<Personen> pp = ppq.getResultList();
+    TypedQuery<Person> ppq = entityManager.createNamedQuery("Person.findAll", Person.class);
+    List<Person> pp = ppq.getResultList();
     assertNotNull(pp);
     assertTrue(pp.size() > 2);
     testPerson = pp.get(0);
     testPerson_2 = pp.get(1);
 
-    TypedQuery<Zeit> zzq = entityManager.createNamedQuery("Zeit.findAll", Zeit.class);
-    List<Zeit> zz = zzq.getResultList();
+    TypedQuery<TimeSlot> zzq = entityManager.createNamedQuery("TimeSlot.findAll", TimeSlot.class);
+    List<TimeSlot> zz = zzq.getResultList();
     assertNotNull(zz);
     assertTrue(zz.size() > 1);
     testZeit = zz.get(0);
@@ -136,7 +136,7 @@ public class PersonenTest {
         // verify that the test listener got called.
         assertEquals(1, testListener.called);
         assertNotNull(testListener.lastEvent);
-        assertEquals(Personen.PROP_FAMILIENNAME, testListener.lastEvent.getPropertyName());
+        assertEquals(Person.PROP_FAMILIENNAME, testListener.lastEvent.getPropertyName());
         assertEquals("ABC", testListener.lastEvent.getNewValue());
 
         // remove the test listener 

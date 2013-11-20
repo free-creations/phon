@@ -16,7 +16,7 @@
 package de.free_creations.editors.person;
 
 import de.free_creations.dbEntities.Job;
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.actions.CheckedAction;
 import static de.free_creations.actions.CheckedAction.Severity.*;
 import static de.free_creations.actions.person.SetGroupleaderRule.setGroupleader;
@@ -65,7 +65,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private final PropertyChangeListener listener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      Personen p = thisPerson();
+      Person p = thisPerson();
       if (p != null) {
         refreshView(p);
       }
@@ -417,7 +417,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }// </editor-fold>//GEN-END:initComponents
 
   private void edNachnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edNachnameFocusLost
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldS = noNull(p.getFamilienname());
       String newS = edNachname.getText();
@@ -428,7 +428,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edNachnameFocusLost
 
   private void edVornameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edVornameFocusLost
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldS = noNull(p.getVorname());
       String newS = edVorname.getText();
@@ -439,7 +439,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edVornameFocusLost
 
   private void edPlzFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edPlzFocusLost
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldS = noNull(p.getPlz());
       String newS = edPlz.getText();
@@ -450,7 +450,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edPlzFocusLost
 
   private void edWohnortFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edWohnortFocusLost
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldS = noNull(p.getOrt());
       String newS = edWohnort.getText();
@@ -461,7 +461,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edWohnortFocusLost
 
   private void edStrasseFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edStrasseFocusLost
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldS = noNull(p.getStrasse());
       String newS = edStrasse.getText();
@@ -472,7 +472,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edStrasseFocusLost
 
   private void edFestnetzFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edFestnetzFocusLost
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldS = noNull(p.getTelnr());
       String newS = edFestnetz.getText();
@@ -483,7 +483,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edFestnetzFocusLost
 
   private void edHandyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edHandyFocusLost
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldS = noNull(p.getHandy());
       String newS = edHandy.getText();
@@ -494,7 +494,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edHandyFocusLost
 
   private void edEMailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edEMailFocusLost
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldS = noNull(p.getEmail());
       String newS = edEMail.getText();
@@ -505,7 +505,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edEMailFocusLost
 
   private void edFunctionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edFunctionActionPerformed
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       Job oldF = p.getGewuenschtefunktion();
       Job newF = edFunction.getSelectedItemFromPersistency();
@@ -518,12 +518,12 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
   private void edKollegeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edKollegeActionPerformed
 
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       Integer selectedKey = edKollege.getSelectedPersonId();
       try {
-        Personen newC = personCollection.findEntity(selectedKey);
-        Personen oldC = p.getGewuenschterkollege();
+        Person newC = personCollection.findEntity(selectedKey);
+        Person oldC = p.getGewuenschterkollege();
         if (!Objects.equals(oldC, newC)) {
           CheckedAction setGroupleaderRule = setGroupleader(p.getPersonid(), selectedKey);
           switch (setGroupleaderRule.level()) {
@@ -567,7 +567,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edKollegeActionPerformed
 
   private void edWertungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edWertungActionPerformed
-    Personen p = thisPerson();
+    Person p = thisPerson();
     if (p != null) {
       String oldW = p.getGewuenschtewertung();
       String newW = toString(edWertung.getSelectedItem());
@@ -640,12 +640,12 @@ public final class PersonTopComponent extends CloneableTopComponent {
   public void viewPersonRecord(Integer newKey) {
     if (currentKey != newKey) {
 
-      Personen.removePropertyChangeListener(listener, currentKey);
+      Person.removePropertyChangeListener(listener, currentKey);
       currentKey = newKey;
-      Personen person = thisPerson();
+      Person person = thisPerson();
 
       if (person != null) {
-        Personen.addPropertyChangeListener(listener, newKey);
+        Person.addPropertyChangeListener(listener, newKey);
         refreshView(person);
       }
       timeTable.setPersonId(newKey);
@@ -653,8 +653,8 @@ public final class PersonTopComponent extends CloneableTopComponent {
     }
   }
 
-  private Personen thisPerson() {
-    Personen p = null;
+  private Person thisPerson() {
+    Person p = null;
     try {
       p = personCollection.findEntity(currentKey);
     } catch (DataBaseNotReadyException ex) {
@@ -663,7 +663,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
     return p;
   }
 
-  private void refreshView(Personen person) {
+  private void refreshView(Person person) {
     setDisplayName(String.format("%s, %s", person.getFamilienname(), person.getVorname()));
     PersonId.setText(noNull(person.getPersonid()));
     edAlter.setSelectedItem(noNull(person.getAltersgruppe()));
@@ -683,11 +683,11 @@ public final class PersonTopComponent extends CloneableTopComponent {
     pnlGroupMembers.setGroupleader(findTeamleaderId(person));
   }
 
-  private Integer findTeamleaderId(Personen person) {
+  private Integer findTeamleaderId(Person person) {
     if (person == null) {
       return null;
     }
-    Personen p = person.getGewuenschterkollege();
+    Person p = person.getGewuenschterkollege();
     if (p == null) {
       return null;
     }

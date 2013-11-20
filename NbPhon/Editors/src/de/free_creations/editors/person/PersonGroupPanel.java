@@ -20,7 +20,7 @@ import static de.free_creations.actions.CheckedAction.Severity.irrecoverable;
 import static de.free_creations.actions.CheckedAction.Severity.ok;
 import static de.free_creations.actions.CheckedAction.Severity.recoverable;
 import de.free_creations.actions.person.SetGroupleaderRule;
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhon4Netbeans.PersonsRootNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
@@ -188,7 +188,7 @@ public class PersonGroupPanel extends javax.swing.JPanel
   private GroupMemberCollection groupMemberCollection;
 
   private class GroupMemberCollection implements
-          MutableEntityCollection<Personen, Integer>,
+          MutableEntityCollection<Person, Integer>,
           PropertyChangeListener {
 
     private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(GroupMemberCollection.this);
@@ -204,18 +204,18 @@ public class PersonGroupPanel extends javax.swing.JPanel
 
     public void startListening() {
       if (leaderId != null) {
-        Personen.addPropertyChangeListener(this, leaderId);
+        Person.addPropertyChangeListener(this, leaderId);
       }
     }
 
     public void stopListening() {
       if (leaderId != null) {
-        Personen.removePropertyChangeListener(this, leaderId);
+        Person.removePropertyChangeListener(this, leaderId);
       }
     }
 
     @Override
-    public Personen newEntity() throws DataBaseNotReadyException {
+    public Person newEntity() throws DataBaseNotReadyException {
       // do not call this function. If a new member is added to group list,
       // the GroupMemberCollection is atomatically updated
       throw new UnsupportedOperationException();
@@ -239,16 +239,16 @@ public class PersonGroupPanel extends javax.swing.JPanel
     }
 
     @Override
-    public List<Personen> getAll() {
-      final List<Personen> emptyResult = Collections.emptyList();
-      Personen p;
+    public List<Person> getAll() {
+      final List<Person> emptyResult = Collections.emptyList();
+      Person p;
       try {
         p = Manager.getPersonCollection().findEntity(leaderId);
       } catch (DataBaseNotReadyException ex) {
         p = null;
       }
       if (p != null) {
-        List<Personen> groupList = p.getGroupList();
+        List<Person> groupList = p.getGroupList();
         // if the team leader appears in the groupList, remove him to avoid recursion.
         groupList.remove(p);
         return groupList;
@@ -258,14 +258,14 @@ public class PersonGroupPanel extends javax.swing.JPanel
     }
 
     @Override
-    public Personen findEntity(Integer key) throws DataBaseNotReadyException {
+    public Person findEntity(Integer key) throws DataBaseNotReadyException {
       return Manager.getPersonCollection().findEntity(key);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      if (Personen.PROP_REMOVE_GROUPMEMBER.equals(evt.getPropertyName())
-              || Personen.PROP_ADD_GROUPMEMBER.equals(evt.getPropertyName())) {
+      if (Person.PROP_REMOVE_GROUPMEMBER.equals(evt.getPropertyName())
+              || Person.PROP_ADD_GROUPMEMBER.equals(evt.getPropertyName())) {
         // this will inform the root-node which will in turn inform the ExplorerManager
         // which will in turn update the display
         propertyChangeSupport.firePropertyChange(PROP_ITEM_LIST_CHANGED, null, null);

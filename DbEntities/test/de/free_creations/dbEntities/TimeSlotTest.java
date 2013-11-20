@@ -31,7 +31,7 @@ import org.junit.BeforeClass;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class ZeitTest {
+public class TimeSlotTest {
 
   static final String PersistenceUnitName = "DbEntitiesPU";
   private static EntityManager entityManager = null;
@@ -54,20 +54,20 @@ public class ZeitTest {
     }
   }
   private Query query;
-  private Zeit testZeit;
-  private Personen testPerson;
+  private TimeSlot testZeit;
+  private Person testPerson;
 
   @Before
   public void setUp() {
     entityManager.getTransaction().begin();
-    query = entityManager.createNamedQuery("Zeit.findAll");
-    List<Zeit> zz = query.getResultList();
+    query = entityManager.createNamedQuery("TimeSlot.findAll");
+    List<TimeSlot> zz = query.getResultList();
     assertNotNull(zz);
     assertTrue(zz.size() > 1);
     testZeit = zz.get(0);
 
-    query = entityManager.createNamedQuery("Personen.findAll");
-    List<Personen> pp = query.getResultList();
+    query = entityManager.createNamedQuery("Person.findAll");
+    List<Person> pp = query.getResultList();
     assertNotNull(pp);
     assertTrue(pp.size() > 1);
     testPerson = pp.get(0);
@@ -113,7 +113,7 @@ public class ZeitTest {
   @Test(expected=RuntimeException.class)  
   public void testAddVerfuegbarkeitToNewTimeSlot() {
 
-    Zeit newZeit = new Zeit();
+    TimeSlot newZeit = new TimeSlot();
     newZeit.setZeitid(12345);
 
 

@@ -18,7 +18,7 @@ package de.free_creations.editors.contest;
 import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Allocation;
-import de.free_creations.dbEntities.Zeit;
+import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.JobCollection;
@@ -313,7 +313,7 @@ public class AllocationTable extends JTable {
       }
       Contest j;
       Job f;
-      Zeit t;
+      TimeSlot t;
       try {
         j = Manager.getContestCollection().findEntity(juryId);
         f = Manager.getJobCollection().findEntity(functionIndex(rowIndex));

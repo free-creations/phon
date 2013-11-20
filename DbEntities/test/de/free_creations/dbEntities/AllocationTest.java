@@ -54,7 +54,7 @@ public class AllocationTest {
     }
   }
   private Allocation testAllocation;
-  private Personen testPerson;
+  private Person testPerson;
 
   @Before
   public void setUp() {
@@ -65,8 +65,8 @@ public class AllocationTest {
     assertFalse(tt.isEmpty());
     testAllocation = tt.get(0);
 
-    TypedQuery<Personen> qp = entityManager.createNamedQuery("Personen.findAll", Personen.class);
-    List<Personen> pp = qp.getResultList();
+    TypedQuery<Person> qp = entityManager.createNamedQuery("Person.findAll", Person.class);
+    List<Person> pp = qp.getResultList();
     assertNotNull(pp);
     assertFalse(pp.isEmpty());
     testPerson = pp.get(0);
@@ -90,7 +90,7 @@ public class AllocationTest {
 
   @Test
   public void testSetGetPerson() {
-    Personen p = testAllocation.getPersonid();
+    Person p = testAllocation.getPersonid();
     assertNotNull("Oops this is a bad test item.", p);
     assertTrue(p.getTeameinteilungList().contains(testAllocation));
 
@@ -106,7 +106,7 @@ public class AllocationTest {
 
   @Test
   public void testCreationDestuction() {
-    Zeit z = new Zeit(1001);
+    TimeSlot z = new TimeSlot(1001);
     entityManager.persist(z);
 
     Contest j = new Contest();

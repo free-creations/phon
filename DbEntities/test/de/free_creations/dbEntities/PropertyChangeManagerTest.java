@@ -51,7 +51,7 @@ public class PropertyChangeManagerTest {
         TestListener testListener = new TestListener();
         assertEquals(0, testListener.called);
 
-        EntityIdentity i = new EntityIdentity(Personen.class, 123);
+        EntityIdentity i = new EntityIdentity(Person.class, 123);
 
         PropertyChangeManager.instance().addPropertyChangeListener(testListener, i);
         PropertyChangeManager.instance().firePropertyChange(i, "TESTPROP", null, null);

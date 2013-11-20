@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Zeit;
+import de.free_creations.dbEntities.TimeSlot;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -42,7 +42,7 @@ public class TimeSlotCollectionTest {
     assertTrue("did you start the database-server?", Manager.isOpen());
     TimeSlotCollection timeSlotCollection = Manager.getTimeSlotCollection();
     assertNotNull(timeSlotCollection);
-    List<Zeit> result = timeSlotCollection.getAll();
+    List<TimeSlot> result = timeSlotCollection.getAll();
     assertNotNull(result);
     assertFalse(result.isEmpty());
   }
@@ -92,13 +92,13 @@ public class TimeSlotCollectionTest {
 
     for (int day = 0; day < dayCount; day++) {
       for (int timeOfDay = 0; timeOfDay < timeOfDayCount; timeOfDay++) {
-        Zeit t = timeSlotCollection.findEntity(day, timeOfDay);
+        TimeSlot t = timeSlotCollection.findEntity(day, timeOfDay);
         assertEquals(day+1, (int) t.getTag());
         assertEquals(timeOfDay+1, (int) t.getTageszeit());
       }
     }
     
-    Zeit t = timeSlotCollection.findEntity(-1, -1);
+    TimeSlot t = timeSlotCollection.findEntity(-1, -1);
     assertNull(t);
   }
 

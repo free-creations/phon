@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Zeit;
+import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.util.StringArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 /**
- * The TimeSlotCollection provides access to the "Zeit" records.
+ * The TimeSlotCollection provides access to the "TimeSlot" records.
  *
  * The procedures shall help to show the time-slots in tables ordered by days
  * and time of day.
@@ -33,7 +33,7 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class TimeSlotCollection implements EntityCollection<Zeit, Integer> {
+public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
 
   private final String[] timeOfDayNames;
   private final String[] dayNames;
@@ -50,8 +50,8 @@ public class TimeSlotCollection implements EntityCollection<Zeit, Integer> {
     StringArrayList _timeOfDayNames = new StringArrayList();
     StringArrayList _dayNames = new StringArrayList();
 
-    List<Zeit> tt = getAll();
-    for (Zeit t : tt) {
+    List<TimeSlot> tt = getAll();
+    for (TimeSlot t : tt) {
       if (t.getTageszeit() != null) {
         _timeOfDayNames.put(t.getTageszeit() - 1, t.getTageszeitprint());
       }
@@ -72,11 +72,11 @@ public class TimeSlotCollection implements EntityCollection<Zeit, Integer> {
    * @return the list of all entries in table ZEIT
    */
   @Override
-  public final List<Zeit> getAll() {
+  public final List<TimeSlot> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
         EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<Zeit> query = entityManager.createNamedQuery("Zeit.findAll", Zeit.class);
+        TypedQuery<TimeSlot> query = entityManager.createNamedQuery("TimeSlot.findAll", TimeSlot.class);
         return query.getResultList();
       } catch (DataBaseNotReadyException ignored) {
         return Collections.emptyList();
@@ -100,15 +100,15 @@ public class TimeSlotCollection implements EntityCollection<Zeit, Integer> {
    * t.getTageszeit()-1 if no such entry can be found the function returns null.
    * @throws DataBaseNotReadyException
    */
-  public Zeit findEntity(int day, int timeOfDay) throws DataBaseNotReadyException {
+  public TimeSlot findEntity(int day, int timeOfDay) throws DataBaseNotReadyException {
     final String qlString =
-            "SELECT z FROM Zeit z "
+            "SELECT z FROM TimeSlot z "
             + "WHERE z.tag = :tag "
             + "AND z.tageszeit = :tageszeit";
 
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
-      TypedQuery<Zeit> query = entityManager.createQuery(qlString, Zeit.class);
+      TypedQuery<TimeSlot> query = entityManager.createQuery(qlString, TimeSlot.class);
       query.setParameter("tag", day + 1);
       query.setParameter("tageszeit", timeOfDay + 1);
       try {
@@ -120,12 +120,12 @@ public class TimeSlotCollection implements EntityCollection<Zeit, Integer> {
   }
 
   @Override
-  public Zeit findEntity(Integer key) throws DataBaseNotReadyException {
+  public TimeSlot findEntity(Integer key) throws DataBaseNotReadyException {
     if (key == null) {
       return null;
     }
     synchronized (Manager.databaseAccessLock) {
-      return Manager.getEntityManager().find(Zeit.class, key);
+      return Manager.getEntityManager().find(TimeSlot.class, key);
     }
   }
 
@@ -144,7 +144,7 @@ public class TimeSlotCollection implements EntityCollection<Zeit, Integer> {
         throw new RuntimeException("Time-slot-collection has already been initialized.");
       }
       EntityManager entityManager = Manager.getEntityManager();
-      Zeit zeit = new Zeit(
+      TimeSlot zeit = new TimeSlot(
               16,//zeitId
               6, // tag, 
               3, // tageszeit, 

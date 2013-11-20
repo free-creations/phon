@@ -15,7 +15,7 @@
  */
 package de.free_creations.actions.person;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.EntityCollection;
 import de.free_creations.nbPhonAPI.Manager;
@@ -25,7 +25,7 @@ import static de.free_creations.actions.CheckedAction.Severity.*;
 import java.util.logging.Logger;
 
 /**
- * This rule set the value of the field Personen.gewuenschterkollege. Rules:
+ * This rule set the value of the field Person.gewuenschterkollege. Rules:
  *
  * OK => the new groupLeader is not member of an other group AND self is not a
  * group-leader.
@@ -45,8 +45,8 @@ import java.util.logging.Logger;
 public class AbstractRule implements CheckedAction {
 
   private static final Logger logger = Logger.getLogger(AbstractRule.class.getName());
-  private final Personen selfP;
-  private final Personen newMember;
+  private final Person selfP;
+  private final Person newMember;
   private Severity level;
   private String problemDescription;
   private String proposedSolution;
@@ -63,11 +63,11 @@ public class AbstractRule implements CheckedAction {
    * @param personCollection
    * @throws DataBaseNotReadyException
    */
-  protected AbstractRule(Integer self, Integer groupLeaderId, EntityCollection<Personen, Integer> personCollection) throws DataBaseNotReadyException {
+  protected AbstractRule(Integer self, Integer groupLeaderId, EntityCollection<Person, Integer> personCollection) throws DataBaseNotReadyException {
     this(personCollection.findEntity(self), personCollection.findEntity(groupLeaderId), 0);
   }
 
-  protected AbstractRule(Personen selfP, Personen newMember, int recursionDepth) {
+  protected AbstractRule(Person selfP, Person newMember, int recursionDepth) {
     this.selfP = selfP;
     this.newMember = newMember;
     this.recursionDepth = recursionDepth;
@@ -92,7 +92,7 @@ public class AbstractRule implements CheckedAction {
    * @param pp
    * @return
    */
-  static AbstractRule addGroupMember(Integer self, Integer newMemberId, EntityCollection<Personen, Integer> pp) throws DataBaseNotReadyException {
+  static AbstractRule addGroupMember(Integer self, Integer newMemberId, EntityCollection<Person, Integer> pp) throws DataBaseNotReadyException {
     return new AbstractRule(self, newMemberId, pp);
   }
 

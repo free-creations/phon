@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -30,7 +30,7 @@ import org.openide.nodes.Node;
 public class PersonsRootNode extends AbstractNode {
 
   private final PersonNodesArray children;
-  private final MutableEntityCollection<Personen, Integer> personCollection;
+  private final MutableEntityCollection<Person, Integer> personCollection;
   private final Action sortByNameAction = new AbstractAction("Sort by Name") {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -46,18 +46,18 @@ public class PersonsRootNode extends AbstractNode {
   private final Action newItemAction = new NewPersonAction();
   private final Action[] allActions = new Action[]{newItemAction, sortByNameAction, sortByPriorityAction};
 
-  private PersonsRootNode(PersonNodesArray children, MutableEntityCollection<Personen, Integer> pp) {
+  private PersonsRootNode(PersonNodesArray children, MutableEntityCollection<Person, Integer> pp) {
     super(children);
     this.children = children;
     this.personCollection = pp;
 
   }
 
-  public PersonsRootNode(MutableEntityCollection<Personen, Integer> pp) {
+  public PersonsRootNode(MutableEntityCollection<Person, Integer> pp) {
     this(pp,false);
   }
 
-  public PersonsRootNode(MutableEntityCollection<Personen, Integer> pp, boolean withNobody) {
+  public PersonsRootNode(MutableEntityCollection<Person, Integer> pp, boolean withNobody) {
     this(new PersonNodesArray(pp, withNobody), pp);
   }
 

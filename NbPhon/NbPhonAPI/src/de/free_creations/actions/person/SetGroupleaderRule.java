@@ -15,7 +15,7 @@
  */
 package de.free_creations.actions.person;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.EntityCollection;
 import de.free_creations.nbPhonAPI.Manager;
@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
- * This rule set the value of the field Personen.gewuenschterkollege. Rules:
+ * This rule set the value of the field Person.gewuenschterkollege. Rules:
  *
  * OK => the new groupLeader is not member of an other group AND self is not a
  * group-leader.
@@ -48,8 +48,8 @@ import java.util.logging.Logger;
 public class SetGroupleaderRule implements CheckedAction {
 
   private static final Logger logger = Logger.getLogger(SetGroupleaderRule.class.getName());
-  private final Personen selfP;
-  private final Personen leaderP;
+  private final Person selfP;
+  private final Person leaderP;
   private Severity level;
   private String problemDescription;
   private String proposedSolution;
@@ -66,11 +66,11 @@ public class SetGroupleaderRule implements CheckedAction {
    * @param personCollection
    * @throws DataBaseNotReadyException
    */
-  protected SetGroupleaderRule(Integer self, Integer groupLeaderId, EntityCollection<Personen, Integer> personCollection) throws DataBaseNotReadyException {
+  protected SetGroupleaderRule(Integer self, Integer groupLeaderId, EntityCollection<Person, Integer> personCollection) throws DataBaseNotReadyException {
     this(personCollection.findEntity(self), personCollection.findEntity(groupLeaderId), 0);
   }
 
-  protected SetGroupleaderRule(Personen selfP, Personen groupLeaderP, int recursionDepth) {
+  protected SetGroupleaderRule(Person selfP, Person groupLeaderP, int recursionDepth) {
     this.selfP = selfP;
     this.leaderP = groupLeaderP;
     this.recursionDepth = recursionDepth;
@@ -95,7 +95,7 @@ public class SetGroupleaderRule implements CheckedAction {
    * @param pp
    * @return
    */
-  static SetGroupleaderRule setGroupleader(Integer self, Integer groupLeaderId, EntityCollection<Personen, Integer> pp) throws DataBaseNotReadyException {
+  static SetGroupleaderRule setGroupleader(Integer self, Integer groupLeaderId, EntityCollection<Person, Integer> pp) throws DataBaseNotReadyException {
     return new SetGroupleaderRule(self, groupLeaderId, pp);
   }
 
@@ -149,7 +149,7 @@ public class SetGroupleaderRule implements CheckedAction {
     assert (selfP != null);
     //---
     // is the new groupLeader member of an other group?
-    Personen leadersLeader = (leaderP == null) ? null : leaderP.getGewuenschterkollege();
+    Person leadersLeader = (leaderP == null) ? null : leaderP.getGewuenschterkollege();
 
     if (leadersLeader != null) {
       if (!leadersLeader.equals(leaderP)) {
@@ -159,7 +159,7 @@ public class SetGroupleaderRule implements CheckedAction {
     }
     //---
     // is "self" a group-leader by his own?
-    List<Personen> groupList = selfP.getGroupList();
+    List<Person> groupList = selfP.getGroupList();
     if (groupList != null) {
       if (groupList.isEmpty()) {
         // OK, self has no group list, so it is for sure not
@@ -168,7 +168,7 @@ public class SetGroupleaderRule implements CheckedAction {
         // Hmm, self has a group list. But maybe we want to 
         // to reassign the existing group to his leader, this would be OK.
         if (groupList.size() > 1) {
-          for (Personen member : groupList) {
+          for (Person member : groupList) {
             if (!Objects.equals(member.getGewuenschterkollege(), leaderP)) {
               problemDescription = String.format("\"%s\" is a group-representative", selfP);
               return false; // self is truely a group leader
@@ -207,7 +207,7 @@ public class SetGroupleaderRule implements CheckedAction {
   private boolean recoverableCase() {
     //---
     // is the new groupLeader member of an other group?
-    Personen leadersLeader = (leaderP == null) ? null : leaderP.getGewuenschterkollege();
+    Person leadersLeader = (leaderP == null) ? null : leaderP.getGewuenschterkollege();
 
     if (leadersLeader != null) {
       if (!leadersLeader.equals(leaderP)) {
@@ -236,7 +236,7 @@ public class SetGroupleaderRule implements CheckedAction {
     }
     //---
     // is "self" a group-leader by him-self?
-    final List<Personen> groupList = selfP.getGroupList();
+    final List<Person> groupList = selfP.getGroupList();
     if (groupList != null) {
       if (!groupList.isEmpty()) {
         if (recursionDepth > 1) {
@@ -250,7 +250,7 @@ public class SetGroupleaderRule implements CheckedAction {
 
         // check if all members can be reassigned
         final ArrayList<SetGroupleaderRule> toDoList = new ArrayList<>();
-        for (Personen p : groupList) {
+        for (Person p : groupList) {
           if (!p.equals(selfP)) {
 
             SetGroupleaderRule moveTo = new SetGroupleaderRule(p, leaderP, recursionDepth + 1);
@@ -297,7 +297,7 @@ public class SetGroupleaderRule implements CheckedAction {
   private void irrecoverableCase() {
     // as a last resort delete the group
     level = irrecoverable;
-    Personen groupRepresentative = (selfP.getGewuenschterkollege() == null)
+    Person groupRepresentative = (selfP.getGewuenschterkollege() == null)
             ? selfP : selfP.getGewuenschterkollege();
 
     proposedSolution = String.format("Disolve (delete) \"group %s\"", groupRepresentative);
@@ -307,10 +307,10 @@ public class SetGroupleaderRule implements CheckedAction {
       public void run() {
         selfP.setGewuenschterkollege(null);
         // before we can iterate through the groupList we'll have to copy it into new array
-        List<Personen> groupList = selfP.getGroupList();
-        Personen[] groupListSave = new Personen[groupList.size()];
+        List<Person> groupList = selfP.getGroupList();
+        Person[] groupListSave = new Person[groupList.size()];
         groupListSave = groupList.toArray(groupListSave);
-        for (Personen p : groupListSave) {
+        for (Person p : groupListSave) {
           p.setGewuenschterkollege(null);
         }
       }

@@ -67,10 +67,10 @@ public class Allocation implements Serializable, DbEntity {
   private String erklaerung;
   @JoinColumn(name = "ZEITID", referencedColumnName = "ZEITID")
   @ManyToOne(optional = false)
-  private Zeit zeit;
+  private TimeSlot zeit;
   @JoinColumn(name = "PERSONID", referencedColumnName = "PERSONID")
   @ManyToOne(optional = false)
-  private Personen personid;
+  private Person personid;
   @JoinColumn(name = "FUNKTIONID", referencedColumnName = "FUNKTIONID")
   @ManyToOne(optional = false)
   private Job funktionen;
@@ -95,7 +95,7 @@ public class Allocation implements Serializable, DbEntity {
     return allocationid;
   }
 
-  public Allocation(Zeit z, Contest j, Job f) {
+  public Allocation(TimeSlot z, Contest j, Job f) {
     this();
     setZeit(z);
     setJury(j);
@@ -135,12 +135,12 @@ public class Allocation implements Serializable, DbEntity {
     this.erklaerung = erklaerung;
   }
 
-  public Zeit getZeit() {
+  public TimeSlot getZeit() {
     return zeit;
   }
 
-  public final void setZeit(Zeit zeit) {
-    Zeit old = this.zeit;
+  public final void setZeit(TimeSlot zeit) {
+    TimeSlot old = this.zeit;
     this.zeit = zeit;
 //    EntityIdentity newId = (zeit == null) ? null : zeit.identity();
 //    EntityIdentity oldId = (old == null) ? null : old.identity();
@@ -156,12 +156,12 @@ public class Allocation implements Serializable, DbEntity {
     }
   }
 
-  public Personen getPersonid() {
+  public Person getPersonid() {
     return personid;
   }
 
-  public void setPersonid(Personen personid) {
-    Personen old = this.personid;
+  public void setPersonid(Person personid) {
+    Person old = this.personid;
     this.personid = personid;
     EntityIdentity newId = (personid == null) ? null : personid.identity();
     EntityIdentity oldId = (old == null) ? null : old.identity();

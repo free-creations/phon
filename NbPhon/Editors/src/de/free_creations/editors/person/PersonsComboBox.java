@@ -15,7 +15,7 @@
  */
 package de.free_creations.editors.person;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhon4Netbeans.PersonsRootNode;
 import de.free_creations.nbPhonAPI.Manager;
@@ -126,7 +126,7 @@ public class PersonsComboBox extends ChoiceView {
     setSelectedIndex(selectedIndex);
   }
 
-  public void setSelectedPerson(Personen p) {
+  public void setSelectedPerson(Person p) {
     if (p == null) {
       setSelectedPersonId(null);
     } else {

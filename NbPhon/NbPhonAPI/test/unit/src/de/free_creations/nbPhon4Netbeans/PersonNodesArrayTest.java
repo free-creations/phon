@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.beans.PropertyChangeListener;
@@ -32,16 +32,16 @@ import org.openide.nodes.Node;
  */
 public class PersonNodesArrayTest {
 
-  private class CollectionMock implements MutableEntityCollection<Personen, Integer> {
+  private class CollectionMock implements MutableEntityCollection<Person, Integer> {
 
-    public Personen p1;
-    public Personen p2;
+    public Person p1;
+    public Person p2;
 
     @Override
-    public List<Personen> getAll() {
-      ArrayList<Personen> result = new ArrayList<>();
-      p1 = new Personen();
-      p2 = new Personen();
+    public List<Person> getAll() {
+      ArrayList<Person> result = new ArrayList<>();
+      p1 = new Person();
+      p2 = new Person();
       p1.setPersonid(1);
       p1.setFamilienname("A");
       p2.setPersonid(2);
@@ -52,7 +52,7 @@ public class PersonNodesArrayTest {
     }
 
     @Override
-    public Personen findEntity(Integer key) throws DataBaseNotReadyException {
+    public Person findEntity(Integer key) throws DataBaseNotReadyException {
       switch (key) {
         case 1:
           return p1;
@@ -64,7 +64,7 @@ public class PersonNodesArrayTest {
     }
 
     @Override
-    public Personen newEntity() throws DataBaseNotReadyException {
+    public Person newEntity() throws DataBaseNotReadyException {
       throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -62,11 +62,11 @@ public class Availability implements Serializable , DbEntity {
   private final static String PROP_ZEIT = "zeit";
   @JoinColumn(name = "ZEITID", referencedColumnName = "ZEITID")
   @ManyToOne(optional = false)
-  private Zeit zeitid;
+  private TimeSlot zeitid;
   final private static String PROP_PERSON = "person";
   @JoinColumn(name = "PERSONID", referencedColumnName = "PERSONID")
   @ManyToOne(optional = false)
-  private Personen personid;
+  private Person personid;
 
   public Availability() {
   }
@@ -99,9 +99,9 @@ public class Availability implements Serializable , DbEntity {
     Integer old = this.verfuegbar;
     this.verfuegbar = verfuegbar;
     if (!Objects.equals(old, verfuegbar)) {
-      firePropertyChangeOnSelf(Personen.PROP_VERFUEGBARKEIT, old, verfuegbar);
+      firePropertyChangeOnSelf(Person.PROP_VERFUEGBARKEIT, old, verfuegbar);
       if (personid != null) {
-        firePropertyChangeOnPerson(personid.getPersonid(), Personen.PROP_VERFUEGBARKEIT, old, verfuegbar);
+        firePropertyChangeOnPerson(personid.getPersonid(), Person.PROP_VERFUEGBARKEIT, old, verfuegbar);
       }
     }
   }
@@ -122,7 +122,7 @@ public class Availability implements Serializable , DbEntity {
     this.letzteaenderung = letzteaenderung;
   }
 
-  public Zeit getZeitid() {
+  public TimeSlot getZeitid() {
     return zeitid;
   }
 
@@ -130,8 +130,8 @@ public class Availability implements Serializable , DbEntity {
    * Set the time-slot for which this disponibility record holds.
    * @param zeitid 
    */
-  public void setZeitid(Zeit zeitid) {
-    Zeit old = this.zeitid;
+  public void setZeitid(TimeSlot zeitid) {
+    TimeSlot old = this.zeitid;
     this.zeitid = zeitid;
     EntityIdentity newId = (zeitid == null) ? null : zeitid.identity();
     EntityIdentity oldId = (old == null) ? null : old.identity();
@@ -147,7 +147,7 @@ public class Availability implements Serializable , DbEntity {
     }
   }
 
-  public Personen getPersonid() {
+  public Person getPersonid() {
     return personid;
   }
 
@@ -158,8 +158,8 @@ public class Availability implements Serializable , DbEntity {
    *
    * @param person
    */
-  public void setPersonid(Personen person) {
-    Personen old = this.personid;
+  public void setPersonid(Person person) {
+    Person old = this.personid;
     this.personid = person;
     EntityIdentity newId = (person == null) ? null : person.identity();
     EntityIdentity oldId = (old == null) ? null : old.identity();
@@ -229,7 +229,7 @@ public class Availability implements Serializable , DbEntity {
 
   private void firePropertyChangeOnPerson(Integer personenId, String propertyName, Object oldValue, Object newValue) {
     PropertyChangeManager.instance().firePropertyChange(
-            new EntityIdentity(Personen.class, personenId),
+            new EntityIdentity(Person.class, personenId),
             propertyName, oldValue, newValue);
   }
 

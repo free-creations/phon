@@ -15,7 +15,7 @@
  */
 
 /**
- * This package collects the rules that apply on the class Personen;
- * @see de.free_creations.dbEntities.Personen 
+ * This package collects the rules that apply on the class Person;
+ * @see de.free_creations.dbEntities.Person 
  */
 package de.free_creations.actions.person;

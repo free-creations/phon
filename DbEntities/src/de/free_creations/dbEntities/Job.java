@@ -56,7 +56,7 @@ public class Job implements Serializable, DbEntity {
   public final static String PROP_ADD_PREFERING_PERSON = "add_prefering_person";
   public final static String PROP_REMOVE_PREFERING_PERSON = "remove_prefering_person";
   @OneToMany(mappedBy = "gewuenschtefunktion")
-  private List<Personen> personenList;
+  private List<Person> personenList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "funktionen")
   private List<Allocation> teameinteilungList;
   public final static String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
@@ -93,7 +93,7 @@ public class Job implements Serializable, DbEntity {
    * @return the list of all persons who prefer to be assigned to this function.
    */
   @XmlTransient
-  public List<Personen> getPersonenList() {
+  public List<Person> getPersonenList() {
     return personenList;
   }
 
@@ -102,7 +102,7 @@ public class Job implements Serializable, DbEntity {
    *
    * @param p
    */
-  protected void addPreferingPerson(Personen p) {
+  protected void addPreferingPerson(Person p) {
     assert (p != null);
     if (personenList == null) {
       throw new RuntimeException("Cannot add a Person to this Function. Record must be persited");
@@ -123,7 +123,7 @@ public class Job implements Serializable, DbEntity {
    *
    * @param p
    */
-  protected void removePreferingPerson(Personen p) {
+  protected void removePreferingPerson(Person p) {
     if (personenList == null) {
       throw new RuntimeException("Cannot remove Person from Function. Record must be persited");
     }
@@ -135,7 +135,7 @@ public class Job implements Serializable, DbEntity {
     firePropertyChange(PROP_REMOVE_PREFERING_PERSON, p.identity(), null);
   }
 
-  private void setPersonenList(List<Personen> personenList) {
+  private void setPersonenList(List<Person> personenList) {
     this.personenList = personenList;
   }
 

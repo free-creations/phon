@@ -15,7 +15,7 @@
  */
 package de.free_creations.dbEntities;
 
-import static de.free_creations.dbEntities.ZeitTest.PersistenceUnitName;
+import static de.free_creations.dbEntities.TimeSlotTest.PersistenceUnitName;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

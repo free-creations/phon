@@ -34,10 +34,10 @@ public class EntityIdentityTest {
   public void testHashCode() {
     System.out.println("hashCode");
 
-    EntityIdentity p1 = new EntityIdentity(Personen.class, new Integer(123));
-    EntityIdentity p2 = new EntityIdentity(Personen.class, new Integer(123));
-    EntityIdentity p3 = new EntityIdentity(Personen.class, new Integer(456));
-    EntityIdentity z1 = new EntityIdentity(Zeit.class, new Integer(123));
+    EntityIdentity p1 = new EntityIdentity(Person.class, new Integer(123));
+    EntityIdentity p2 = new EntityIdentity(Person.class, new Integer(123));
+    EntityIdentity p3 = new EntityIdentity(Person.class, new Integer(456));
+    EntityIdentity z1 = new EntityIdentity(TimeSlot.class, new Integer(123));
     
     assertEquals(p1.hashCode(), p2.hashCode());
     assertTrue(p1.hashCode() != p3.hashCode());
@@ -56,10 +56,10 @@ public class EntityIdentityTest {
     Integer key2 = new Integer(123);
     assertNotSame(key1, key2);
     
-    EntityIdentity p1 = new EntityIdentity(Personen.class, key1);
-    EntityIdentity p2 = new EntityIdentity(Personen.class, key2);
-    EntityIdentity p3 = new EntityIdentity(Personen.class, new Integer(456));
-    EntityIdentity z1 = new EntityIdentity(Zeit.class, new Integer(123));
+    EntityIdentity p1 = new EntityIdentity(Person.class, key1);
+    EntityIdentity p2 = new EntityIdentity(Person.class, key2);
+    EntityIdentity p3 = new EntityIdentity(Person.class, new Integer(456));
+    EntityIdentity z1 = new EntityIdentity(TimeSlot.class, new Integer(123));
 
     assertTrue(p1.equals(p2));
     assertTrue(p2.equals(p1));

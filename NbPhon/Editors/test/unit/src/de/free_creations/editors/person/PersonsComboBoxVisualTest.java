@@ -15,7 +15,7 @@
  */
 package de.free_creations.editors.person;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import org.junit.Test;
@@ -127,7 +127,7 @@ public class PersonsComboBoxVisualTest extends javax.swing.JFrame {
     System.out.println("selected key: "+selectedKey);
     if(selectedKey != null){
       try {
-        Personen p = Manager.getPersonCollection().findEntity(selectedKey);
+        Person p = Manager.getPersonCollection().findEntity(selectedKey);
         System.out.println("  person: "+p.getFamilienname()+","+p.getVorname());
       } catch (DataBaseNotReadyException ex) {
         System.out.println("  Ooops database not ready.");

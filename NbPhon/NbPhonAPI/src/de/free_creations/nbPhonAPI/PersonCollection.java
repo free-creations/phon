@@ -15,9 +15,9 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.Availability;
-import de.free_creations.dbEntities.Zeit;
+import de.free_creations.dbEntities.TimeSlot;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -31,7 +31,7 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class PersonCollection implements MutableEntityCollection<Personen, Integer> {
+public class PersonCollection implements MutableEntityCollection<Person, Integer> {
 
   private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
   /**
@@ -61,11 +61,11 @@ public class PersonCollection implements MutableEntityCollection<Personen, Integ
    * @return the list of all entries in table PERSONEN
    */
   @Override
-  public List<Personen> getAll() {
+  public List<Person> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
         EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<Personen> query = entityManager.createNamedQuery("Personen.findAll", Personen.class);
+        TypedQuery<Person> query = entityManager.createNamedQuery("Person.findAll", Person.class);
         return query.getResultList();
       } catch (DataBaseNotReadyException ignored) {
         return Collections.emptyList();
@@ -74,12 +74,12 @@ public class PersonCollection implements MutableEntityCollection<Personen, Integ
   }
 
   @Override
-  public Personen findEntity(Integer key) throws DataBaseNotReadyException {
+  public Person findEntity(Integer key) throws DataBaseNotReadyException {
     if (key == null) {
       return null;
     }
     synchronized (Manager.databaseAccessLock) {
-      return Manager.getEntityManager().find(Personen.class, key);
+      return Manager.getEntityManager().find(Person.class, key);
     }
   }
 
@@ -91,11 +91,11 @@ public class PersonCollection implements MutableEntityCollection<Personen, Integ
    * corresponding record is flushed (but not committed).
    */
   @Override
-  public Personen newEntity() throws DataBaseNotReadyException {
-    Personen newPerson;
+  public Person newEntity() throws DataBaseNotReadyException {
+    Person newPerson;
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
-      newPerson = new Personen();
+      newPerson = new Person();
       entityManager.persist(newPerson);
       try {
         entityManager.flush();
@@ -103,10 +103,10 @@ public class PersonCollection implements MutableEntityCollection<Personen, Integ
         throw new DataBaseNotReadyException(ex);
       }
 
-      TypedQuery<Zeit> allTimesQuery = entityManager.createNamedQuery("Zeit.findAll", Zeit.class);
-      List<Zeit> allTimeslots = allTimesQuery.getResultList();
+      TypedQuery<TimeSlot> allTimesQuery = entityManager.createNamedQuery("TimeSlot.findAll", TimeSlot.class);
+      List<TimeSlot> allTimeslots = allTimesQuery.getResultList();
 
-      for (Zeit t : allTimeslots) {
+      for (TimeSlot t : allTimeslots) {
         Availability v = new Availability();
         v.setVerfuegbar(false);
         entityManager.persist(v);

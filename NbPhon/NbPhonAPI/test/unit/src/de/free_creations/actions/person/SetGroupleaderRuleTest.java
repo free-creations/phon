@@ -15,7 +15,7 @@
  */
 package de.free_creations.actions.person;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.EntityCollection;
 import java.util.Arrays;
@@ -32,19 +32,19 @@ import static de.free_creations.actions.CheckedAction.Severity.*;
  */
 public class SetGroupleaderRuleTest {
 
-  private class CollectionMock implements EntityCollection<Personen, Integer> {
+  private class CollectionMock implements EntityCollection<Person, Integer> {
 
-    public final Personen[] items = new Personen[]{
-      new Personen(0),//<- a virgin person
-      new Personen(1),//<- a virgin person
-      new Personen(2),//<- a normal group representant
-      new Personen(3),//<- a member in the group of item[2]
-      new Personen(4),//<- a slightly invalid group representative
-      new Personen(5),//<- a member in the group of item[4]
-      new Personen(6),//<- a member in the group of item[4]
+    public final Person[] items = new Person[]{
+      new Person(0),//<- a virgin person
+      new Person(1),//<- a virgin person
+      new Person(2),//<- a normal group representant
+      new Person(3),//<- a member in the group of item[2]
+      new Person(4),//<- a slightly invalid group representative
+      new Person(5),//<- a member in the group of item[4]
+      new Person(6),//<- a member in the group of item[4]
 
-      new Personen(7),//<- an invalid group representative (cyclic with 8)
-      new Personen(8),//<- an invalid group representative (cyclic with 7)
+      new Person(7),//<- an invalid group representative (cyclic with 8)
+      new Person(8),//<- an invalid group representative (cyclic with 7)
     };
 
     public CollectionMock() {
@@ -62,12 +62,12 @@ public class SetGroupleaderRuleTest {
     }
 
     @Override
-    public List<Personen> getAll() {
+    public List<Person> getAll() {
       return Arrays.asList(items);
     }
 
     @Override
-    public Personen findEntity(Integer key) throws DataBaseNotReadyException {
+    public Person findEntity(Integer key) throws DataBaseNotReadyException {
       if (key == null) {
         return null;
       }

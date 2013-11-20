@@ -59,15 +59,15 @@ public class AvailabilityTest {
     }
   }
   private Query query;
-  private Personen testPerson;
+  private Person testPerson;
   private Availability testVerfuegbarkeit;
-  private Zeit zeit;
+  private TimeSlot zeit;
 
   @Before
   public void setUp() {
     entityManager.getTransaction().begin();
-    query = entityManager.createNamedQuery("Personen.findAll");
-    List<Personen> result = query.getResultList();
+    query = entityManager.createNamedQuery("Person.findAll");
+    List<Person> result = query.getResultList();
     assertNotNull(result);
     assertTrue(result.size() > 1);
     testPerson = result.get(0);
@@ -77,9 +77,9 @@ public class AvailabilityTest {
     assertTrue(verfuegbarkeitList.size() > 1);
     testVerfuegbarkeit = verfuegbarkeitList.get(0);
 
-    query = entityManager.createNamedQuery("Zeit.findAll");
+    query = entityManager.createNamedQuery("TimeSlot.findAll");
 
-    List<Zeit> zeitList = query.getResultList();
+    List<TimeSlot> zeitList = query.getResultList();
     assertNotNull(zeitList);
     assertTrue(zeitList.size() > 1);
     zeit = zeitList.get(0);
@@ -123,7 +123,7 @@ public class AvailabilityTest {
         // verify that the test listener got called.
         assertEquals(1, testListener.called);
         assertNotNull(testListener.lastEvent);
-        assertEquals(Personen.PROP_VERFUEGBARKEIT, testListener.lastEvent.getPropertyName());
+        assertEquals(Person.PROP_VERFUEGBARKEIT, testListener.lastEvent.getPropertyName());
 
 
         // remove the test listener 
@@ -152,7 +152,7 @@ public class AvailabilityTest {
         // verify that the test listener got called.
         assertEquals(1, testListener.called);
         assertNotNull(testListener.lastEvent);
-        assertEquals(Personen.PROP_VERFUEGBARKEIT, testListener.lastEvent.getPropertyName());
+        assertEquals(Person.PROP_VERFUEGBARKEIT, testListener.lastEvent.getPropertyName());
 
 
         // remove the test listener 

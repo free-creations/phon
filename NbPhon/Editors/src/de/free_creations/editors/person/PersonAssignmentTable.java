@@ -15,10 +15,10 @@
  */
 package de.free_creations.editors.person;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Availability;
-import de.free_creations.dbEntities.Zeit;
+import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
@@ -206,7 +206,7 @@ public class PersonAssignmentTable extends JTable {
       return true;
     }
     try {
-      Zeit t = Manager.getTimeSlotCollection().findEntity(column - 1, row);
+      TimeSlot t = Manager.getTimeSlotCollection().findEntity(column - 1, row);
       if (t == null) {
         return false;
       } else {
@@ -230,10 +230,10 @@ public class PersonAssignmentTable extends JTable {
     if (dataModel instanceof AssignemtTableModel) {
       try {
         Integer personId = ((AssignemtTableModel) dataModel).getPersonId();
-        Personen p = Manager.getPersonCollection().findEntity(personId);
+        Person p = Manager.getPersonCollection().findEntity(personId);
         List<Availability> emptyVv = Collections.emptyList();
         List<Availability> vv = (p == null) ? emptyVv : p.getVerfuegbarkeitList();
-        Zeit t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
+        TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
         for (Availability v : vv) {
           if (Objects.equals(t, v.getZeitid())) {
             return v;
@@ -324,10 +324,10 @@ public class PersonAssignmentTable extends JTable {
      */
     private Allocation getAssignmentEntity(int rowIndex, int columnIndex) {
       try {
-        Personen p = Manager.getPersonCollection().findEntity(personId);
+        Person p = Manager.getPersonCollection().findEntity(personId);
         List<Allocation> emptyAa = Collections.emptyList();
         List<Allocation> aa = (p == null) ? emptyAa : p.getTeameinteilungList();
-        Zeit t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
+        TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
         for (Allocation a : aa) {
 
           if (Objects.equals(t, a.getZeit())) {
@@ -428,7 +428,7 @@ public class PersonAssignmentTable extends JTable {
      */
     private void stopListening() {
       if (personId != null) {
-        Personen.removePropertyChangeListener(this, personId);
+        Person.removePropertyChangeListener(this, personId);
       }
     }
 
@@ -437,13 +437,13 @@ public class PersonAssignmentTable extends JTable {
      */
     public void startListening() {
       if (personId != null) {
-        Personen.addPropertyChangeListener(this, personId);
+        Person.addPropertyChangeListener(this, personId);
       }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      if (Personen.PROP_VERFUEGBARKEIT.equals(evt.getPropertyName())) {
+      if (Person.PROP_VERFUEGBARKEIT.equals(evt.getPropertyName())) {
         fireTableDataChanged();
       }
     }

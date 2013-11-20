@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.util.Comparator;
@@ -32,9 +32,9 @@ public class PersonCompare {
 
   public static abstract class PersonComparator implements Comparator<Node> {
 
-    private final MutableEntityCollection<Personen, Integer> personCollection;
+    private final MutableEntityCollection<Person, Integer> personCollection;
 
-    public PersonComparator(MutableEntityCollection<Personen, Integer> personCollection) {
+    public PersonComparator(MutableEntityCollection<Person, Integer> personCollection) {
       this.personCollection = personCollection;
     }
 
@@ -43,13 +43,13 @@ public class PersonCompare {
       return compare(personCollection, n1, n2);
     }
 
-    protected abstract int compare(MutableEntityCollection<Personen, Integer> personCollection, Node n1, Node n2);
+    protected abstract int compare(MutableEntityCollection<Person, Integer> personCollection, Node n1, Node n2);
   };
 
-  public static PersonComparator byPriority(MutableEntityCollection<Personen, Integer> personCollection) {
+  public static PersonComparator byPriority(MutableEntityCollection<Person, Integer> personCollection) {
     return new PersonComparator(personCollection) {
       @Override
-      public int compare(MutableEntityCollection<Personen, Integer> personCollection, Node n1, Node n2) {
+      public int compare(MutableEntityCollection<Person, Integer> personCollection, Node n1, Node n2) {
         assert (personCollection != null);
         int checkNull = checkValidPersonNodes(n1, n2);
         if (checkNull != bothValid) {
@@ -65,8 +65,8 @@ public class PersonCompare {
           }
         }
         try {
-          Personen p1 = personCollection.findEntity(((PersonNode) n1).getKey());
-          Personen p2 = personCollection.findEntity(((PersonNode) n2).getKey());
+          Person p1 = personCollection.findEntity(((PersonNode) n1).getKey());
+          Person p2 = personCollection.findEntity(((PersonNode) n2).getKey());
           int checkNull2 = checkNotNull(p1, p2);
           if (checkNull2 != bothValid) {
             return checkNull2;
@@ -87,10 +87,10 @@ public class PersonCompare {
     };
   }
 
-  public static PersonComparator byName(MutableEntityCollection<Personen, Integer> personCollection) {
+  public static PersonComparator byName(MutableEntityCollection<Person, Integer> personCollection) {
     return new PersonComparator(personCollection) {
       @Override
-      public int compare(MutableEntityCollection<Personen, Integer> personCollection, Node n1, Node n2) {
+      public int compare(MutableEntityCollection<Person, Integer> personCollection, Node n1, Node n2) {
         assert (personCollection != null);
         int checkNull = checkValidPersonNodes(n1, n2);
         if (checkNull != bothValid) {
@@ -106,8 +106,8 @@ public class PersonCompare {
           }
         }
         try {
-          Personen p1 = personCollection.findEntity(pn1.getKey());
-          Personen p2 = personCollection.findEntity(pn2.getKey());
+          Person p1 = personCollection.findEntity(pn1.getKey());
+          Person p2 = personCollection.findEntity(pn2.getKey());
           int checkNull2 = checkNotNull(p1, p2);
           if (checkNull2 != bothValid) {
             return checkNull2;

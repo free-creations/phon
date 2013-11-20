@@ -16,7 +16,7 @@
 package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.EntityIdentity;
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -33,7 +33,7 @@ import org.openide.nodes.Node;
  */
 public class PersonNodesArray extends Children.SortedArray {
   
-  private final MutableEntityCollection<Personen, Integer> personCollection;
+  private final MutableEntityCollection<Person, Integer> personCollection;
   private final PropertyChangeListener personCollectionListener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -69,11 +69,11 @@ public class PersonNodesArray extends Children.SortedArray {
   };
   private final boolean hasNobodyNode;
 
-  public PersonNodesArray(MutableEntityCollection<Personen, Integer> personCollection) {
+  public PersonNodesArray(MutableEntityCollection<Person, Integer> personCollection) {
     this(personCollection, false);
   }
 
-  public PersonNodesArray(MutableEntityCollection<Personen, Integer> personCollection, boolean withNobody) {
+  public PersonNodesArray(MutableEntityCollection<Person, Integer> personCollection, boolean withNobody) {
     super();
     hasNobodyNode = withNobody;
     super.setComparator(PersonCompare.byName(personCollection));
@@ -83,12 +83,12 @@ public class PersonNodesArray extends Children.SortedArray {
 
   @Override
   protected ArrayList<Node> initCollection() {
-    List<Personen> pp = personCollection.getAll();
+    List<Person> pp = personCollection.getAll();
     ArrayList<Node> result = new ArrayList<>(pp.size());
     if (hasNobodyNode) {
       result.add(new PersonNode(PersonNode.nullKey, personCollection));
     }
-    for (Personen p : pp) {
+    for (Person p : pp) {
       assert (p != null);
       Integer personid = p.getPersonid();
       assert (personid != null);

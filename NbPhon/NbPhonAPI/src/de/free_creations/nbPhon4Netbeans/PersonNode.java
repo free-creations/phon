@@ -16,7 +16,7 @@
 package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.Job;
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.awt.Image;
@@ -87,20 +87,20 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       notifyPendingChanges();
-      if (Personen.PROP_HERRFRAU.equals(evt.getPropertyName())) {
+      if (Person.PROP_HERRFRAU.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
       }
-      if (Personen.PROP_FAMILIENNAME.equals(evt.getPropertyName())) {
+      if (Person.PROP_FAMILIENNAME.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
       }
-      if (Personen.PROP_VORNAME.equals(evt.getPropertyName())) {
+      if (Person.PROP_VORNAME.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
       }
-      if (Personen.PROP_VERFUEGBARKEIT.equals(evt.getPropertyName())) {
+      if (Person.PROP_VERFUEGBARKEIT.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
         fireIconChange();
       }
-      if (Personen.PROP_GEWUENSCHTEWERTUNG.equals(evt.getPropertyName())) {
+      if (Person.PROP_GEWUENSCHTEWERTUNG.equals(evt.getPropertyName())) {
         fireIconChange();
       }
 
@@ -153,7 +153,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
   public int getPersonId() {
     return keyToPersonId(key);
   }
-  private final MutableEntityCollection<Personen, Integer> personsManager;
+  private final MutableEntityCollection<Person, Integer> personsManager;
   private final EditCookie editCookie = new EditCookie() {
     @Override
     public void edit() {
@@ -196,13 +196,13 @@ public class PersonNode extends AbstractNode implements CommittableNode {
   };
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
 
-  public PersonNode(Integer personId, MutableEntityCollection<Personen, Integer> personsManager) {
+  public PersonNode(Integer personId, MutableEntityCollection<Person, Integer> personsManager) {
     super(Children.LEAF);
     assert (personsManager != null);
     this.key = personIdToKey(personId);
     this.personsManager = personsManager;
     if (key != nullKey) {
-      Personen.addPropertyChangeListener(listener, personId);
+      Person.addPropertyChangeListener(listener, personId);
       getCookieSet().add(editCookie);
     }
   }
@@ -242,7 +242,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
 
   @Override
   public String getName() {
-    return String.format("Personen[ personid=%d ]", key);
+    return String.format("Person[ personid=%d ]", key);
   }
 
   @Override
@@ -251,7 +251,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
       return "";
     }
     try {
-      Personen p = personsManager.findEntity(key);
+      Person p = personsManager.findEntity(key);
       if (p != null) {
         return String.format("%s, %s", p.getFamilienname(), p.getVorname());
       } else {
@@ -304,7 +304,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
    */
   private boolean isAvailable() {
     try {
-      Personen p = personsManager.findEntity(key);
+      Person p = personsManager.findEntity(key);
       if (p != null) {
         return p.isAvailable();
       }
@@ -318,7 +318,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
       return iconManager().iconNobody;
     }
     try {
-      Personen p = personsManager.findEntity(key);
+      Person p = personsManager.findEntity(key);
       if (p != null) {
         BufferedImage personsIcon = getPersonsIcon(p);
         String gewuenschtewertung = p.getGewuenschtewertung();
@@ -330,7 +330,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     return iconManager().iconMan; // the default
   }
 
-  private BufferedImage getPersonsIcon(Personen p) {
+  private BufferedImage getPersonsIcon(Person p) {
     assert (p != null);
     if (isGroupleader(p)) {
       return iconManager().iconGroupleader;
@@ -357,11 +357,11 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     }
   }
 
-  private boolean isGroupleader(Personen p) {
+  private boolean isGroupleader(Person p) {
     if (p == null) {
       return false;
     }
-    List<Personen> groupList = p.getGroupList();
+    List<Person> groupList = p.getGroupList();
     if (groupList == null) {
       return false;
     }

@@ -50,22 +50,22 @@ import javax.xml.bind.annotation.XmlTransient;
 @Access(AccessType.FIELD)
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Personen.findAll", query = "SELECT p FROM Personen p"),
-  @NamedQuery(name = "Personen.findByPersonid", query = "SELECT p FROM Personen p WHERE p.personid = :personid"),
-  @NamedQuery(name = "Personen.findByFamilienname", query = "SELECT p FROM Personen p WHERE p.familienname = :familienname"),
-  @NamedQuery(name = "Personen.findByVorname", query = "SELECT p FROM Personen p WHERE p.vorname = :vorname"),
-  @NamedQuery(name = "Personen.findByHerrfrau", query = "SELECT p FROM Personen p WHERE p.herrfrau = :herrfrau"),
-  @NamedQuery(name = "Personen.findByPlz", query = "SELECT p FROM Personen p WHERE p.plz = :plz"),
-  @NamedQuery(name = "Personen.findByOrt", query = "SELECT p FROM Personen p WHERE p.ort = :ort"),
-  @NamedQuery(name = "Personen.findByStrasse", query = "SELECT p FROM Personen p WHERE p.strasse = :strasse"),
-  @NamedQuery(name = "Personen.findByTelnr", query = "SELECT p FROM Personen p WHERE p.telnr = :telnr"),
-  @NamedQuery(name = "Personen.findByHandy", query = "SELECT p FROM Personen p WHERE p.handy = :handy"),
-  @NamedQuery(name = "Personen.findByEmail", query = "SELECT p FROM Personen p WHERE p.email = :email"),
-  @NamedQuery(name = "Personen.findByAltersgruppe", query = "SELECT p FROM Personen p WHERE p.altersgruppe = :altersgruppe"),
-  @NamedQuery(name = "Personen.findByNotiz", query = "SELECT p FROM Personen p WHERE p.notiz = :notiz"),
-  @NamedQuery(name = "Personen.findByGewuenschtewertung", query = "SELECT p FROM Personen p WHERE p.gewuenschtewertung = :gewuenschtewertung"),
-  @NamedQuery(name = "Personen.findByLetzteaenderung", query = "SELECT p FROM Personen p WHERE p.letzteaenderung = :letzteaenderung")})
-public class Personen implements Serializable, DbEntity {
+  @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
+  @NamedQuery(name = "Person.findByPersonid", query = "SELECT p FROM Person p WHERE p.personid = :personid"),
+  @NamedQuery(name = "Person.findByFamilienname", query = "SELECT p FROM Person p WHERE p.familienname = :familienname"),
+  @NamedQuery(name = "Person.findByVorname", query = "SELECT p FROM Person p WHERE p.vorname = :vorname"),
+  @NamedQuery(name = "Person.findByHerrfrau", query = "SELECT p FROM Person p WHERE p.herrfrau = :herrfrau"),
+  @NamedQuery(name = "Person.findByPlz", query = "SELECT p FROM Person p WHERE p.plz = :plz"),
+  @NamedQuery(name = "Person.findByOrt", query = "SELECT p FROM Person p WHERE p.ort = :ort"),
+  @NamedQuery(name = "Person.findByStrasse", query = "SELECT p FROM Person p WHERE p.strasse = :strasse"),
+  @NamedQuery(name = "Person.findByTelnr", query = "SELECT p FROM Person p WHERE p.telnr = :telnr"),
+  @NamedQuery(name = "Person.findByHandy", query = "SELECT p FROM Person p WHERE p.handy = :handy"),
+  @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email"),
+  @NamedQuery(name = "Person.findByAltersgruppe", query = "SELECT p FROM Person p WHERE p.altersgruppe = :altersgruppe"),
+  @NamedQuery(name = "Person.findByNotiz", query = "SELECT p FROM Person p WHERE p.notiz = :notiz"),
+  @NamedQuery(name = "Person.findByGewuenschtewertung", query = "SELECT p FROM Person p WHERE p.gewuenschtewertung = :gewuenschtewertung"),
+  @NamedQuery(name = "Person.findByLetzteaenderung", query = "SELECT p FROM Person p WHERE p.letzteaenderung = :letzteaenderung")})
+public class Person implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -126,10 +126,10 @@ public class Personen implements Serializable, DbEntity {
   public static final String PROP_LETZTEAENDERUNG = "LETZTEAENDERUNG";
   //
   @OneToMany(mappedBy = "gewuenschterkollege")
-  private List<Personen> personenList;
+  private List<Person> personenList;
   @JoinColumn(name = "GEWUENSCHTERKOLLEGE", referencedColumnName = "PERSONID")
   @ManyToOne
-  private Personen gewuenschterkollege;
+  private Person gewuenschterkollege;
   public static final String PROP_FAVOREDGROUPLEADER = "FAVOREDGROUPLEADER";
   public static final String PROP_REMOVE_GROUPMEMBER = "REMOVE_GROUPMEMBER";
   public static final String PROP_ADD_GROUPMEMBER = "PROP_ADD_GROUPMEMBER";
@@ -153,17 +153,17 @@ public class Personen implements Serializable, DbEntity {
   public static final String PROP_REMOVE_JURY = "removeJury";
   public static final String PROP_ADD_JURY = "addJury";
 
-  public Personen() {
+  public Person() {
   }
 
   /**
-   * A constructor that permits to setup a Personen object with some fields
+   * A constructor that permits to setup a Person object with some fields
    * initialized as the entity manager would do. This constructor is used
    * exclusively in tests.
    *
    * @param personid
    */
-  public Personen(Integer personid) {
+  public Person(Integer personid) {
     this.personid = personid;
     this.personenList = new ArrayList<>();
   }
@@ -335,20 +335,20 @@ public class Personen implements Serializable, DbEntity {
    * @return the list of all persons who favor this person as group-leader.
    */
   @XmlTransient
-  public List<Personen> getGroupList() {
+  public List<Person> getGroupList() {
     return personenList;
   }
 
-  private void setPersonenList(List<Personen> personenList) {
+  private void setPersonenList(List<Person> personenList) {
     this.personenList = personenList;
   }
 
-  public Personen getGewuenschterkollege() {
+  public Person getGewuenschterkollege() {
     return gewuenschterkollege;
   }
 
-  public void setGewuenschterkollege(Personen p) {
-    Personen old = this.gewuenschterkollege;
+  public void setGewuenschterkollege(Person p) {
+    Person old = this.gewuenschterkollege;
     this.gewuenschterkollege = p;
 
     EntityIdentity newId = (p == null) ? null : p.identity();
@@ -399,7 +399,7 @@ public class Personen implements Serializable, DbEntity {
 
   void removeTeameinteilung(Allocation t) {
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot remove Allocation from Personen. Record must be persited");
+      throw new RuntimeException("Cannot remove Allocation from Person. Record must be persited");
     }
     if (!teameinteilungList.contains(t)) {
       return;
@@ -431,7 +431,7 @@ public class Personen implements Serializable, DbEntity {
 
   void removeJuryResponsability(Contest j) {
     if (juryList == null) {
-      throw new RuntimeException("Cannot remove Contest from Personen. Record must be persited");
+      throw new RuntimeException("Cannot remove Contest from Person. Record must be persited");
     }
     if (!juryList.contains(j)) {
       return;
@@ -444,7 +444,7 @@ public class Personen implements Serializable, DbEntity {
   void addJuryResponsability(Contest j) {
     assert (j != null);
     if (juryList == null) {
-      throw new RuntimeException("Cannot add Contest to Personen. Record must be persited");
+      throw new RuntimeException("Cannot add Contest to Person. Record must be persited");
     }
     if (juryList.contains(j)) {
       return;
@@ -523,10 +523,10 @@ public class Personen implements Serializable, DbEntity {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Personen)) {
+    if (!(object instanceof Person)) {
       return false;
     }
-    Personen other = (Personen) object;
+    Person other = (Person) object;
     if ((this.personid == null && other.personid != null) || (this.personid != null && !this.personid.equals(other.personid))) {
       return false;
     }
@@ -561,7 +561,7 @@ public class Personen implements Serializable, DbEntity {
    */
   public static void addPropertyChangeListener(PropertyChangeListener listener, Integer personid) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Personen.class, personid));
+            new EntityIdentity(Person.class, personid));
   }
 
   /**
@@ -584,7 +584,7 @@ public class Personen implements Serializable, DbEntity {
    */
   public static void removePropertyChangeListener(PropertyChangeListener listener, Integer personid) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Personen.class, personid));
+            new EntityIdentity(Person.class, personid));
 
   }
 
@@ -596,10 +596,10 @@ public class Personen implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Personen.class, personid);
+    return new EntityIdentity(Person.class, personid);
   }
 
-  private void removeGroupmember(Personen p) {
+  private void removeGroupmember(Person p) {
     assert (p != null);
     if (personenList == null) {
       throw new RuntimeException("Cannot remove Person from Group-list. Record must be persited");
@@ -612,7 +612,7 @@ public class Personen implements Serializable, DbEntity {
     firePropertyChange(PROP_REMOVE_GROUPMEMBER, p.identity(), null);
   }
 
-  private void addGroupmember(Personen p) {
+  private void addGroupmember(Person p) {
     assert (p != null);
     if (personenList == null) {
       throw new RuntimeException("Cannot add Person to Group-list. Record must be persited");

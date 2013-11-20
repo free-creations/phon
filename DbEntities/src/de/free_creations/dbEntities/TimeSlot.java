@@ -41,17 +41,17 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "TIMESLOT")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Zeit.findAll", query = "SELECT z FROM Zeit z"),
-  @NamedQuery(name = "Zeit.findByZeitid", query = "SELECT z FROM Zeit z WHERE z.zeitid = :zeitid"),
-  @NamedQuery(name = "Zeit.findByTag", query = "SELECT z FROM Zeit z WHERE z.tag = :tag"),
-  @NamedQuery(name = "Zeit.findByTageszeit", query = "SELECT z FROM Zeit z WHERE z.tageszeit = :tageszeit"),
-  @NamedQuery(name = "Zeit.findByDatum", query = "SELECT z FROM Zeit z WHERE z.datum = :datum"),
-  @NamedQuery(name = "Zeit.findByStartzeit", query = "SELECT z FROM Zeit z WHERE z.startzeit = :startzeit"),
-  @NamedQuery(name = "Zeit.findByEndezeit", query = "SELECT z FROM Zeit z WHERE z.endezeit = :endezeit"),
-  @NamedQuery(name = "Zeit.findByWochentag", query = "SELECT z FROM Zeit z WHERE z.wochentag = :wochentag"),
-  @NamedQuery(name = "Zeit.findByLabel", query = "SELECT z FROM Zeit z WHERE z.label = :label"),
-  @NamedQuery(name = "Zeit.findByTageszeitprint", query = "SELECT z FROM Zeit z WHERE z.tageszeitprint = :tageszeitprint")})
-public class Zeit implements Serializable, DbEntity {
+  @NamedQuery(name = "TimeSlot.findAll", query = "SELECT z FROM TimeSlot z"),
+  @NamedQuery(name = "TimeSlot.findByZeitid", query = "SELECT z FROM TimeSlot z WHERE z.zeitid = :zeitid"),
+  @NamedQuery(name = "TimeSlot.findByTag", query = "SELECT z FROM TimeSlot z WHERE z.tag = :tag"),
+  @NamedQuery(name = "TimeSlot.findByTageszeit", query = "SELECT z FROM TimeSlot z WHERE z.tageszeit = :tageszeit"),
+  @NamedQuery(name = "TimeSlot.findByDatum", query = "SELECT z FROM TimeSlot z WHERE z.datum = :datum"),
+  @NamedQuery(name = "TimeSlot.findByStartzeit", query = "SELECT z FROM TimeSlot z WHERE z.startzeit = :startzeit"),
+  @NamedQuery(name = "TimeSlot.findByEndezeit", query = "SELECT z FROM TimeSlot z WHERE z.endezeit = :endezeit"),
+  @NamedQuery(name = "TimeSlot.findByWochentag", query = "SELECT z FROM TimeSlot z WHERE z.wochentag = :wochentag"),
+  @NamedQuery(name = "TimeSlot.findByLabel", query = "SELECT z FROM TimeSlot z WHERE z.label = :label"),
+  @NamedQuery(name = "TimeSlot.findByTageszeitprint", query = "SELECT z FROM TimeSlot z WHERE z.tageszeitprint = :tageszeitprint")})
+public class TimeSlot implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -85,7 +85,7 @@ public class Zeit implements Serializable, DbEntity {
   public static final String PROP_ADD_TEAMEINTEILUNG = "addTeameinteilung";
   public static final String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
 
-  public Zeit() {
+  public TimeSlot() {
   }
 
   /**
@@ -98,7 +98,7 @@ public class Zeit implements Serializable, DbEntity {
    * @param tageszeitprint
    * @deprecated use only for tests.
    */
-  public Zeit(Integer zeitid, Integer tag, Integer tageszeit, String wochentag, String label, String tageszeitprint) {
+  public TimeSlot(Integer zeitid, Integer tag, Integer tageszeit, String wochentag, String label, String tageszeitprint) {
     this.zeitid = zeitid;
     this.tag = tag;
     this.tageszeit = tageszeit;
@@ -107,7 +107,7 @@ public class Zeit implements Serializable, DbEntity {
     this.tageszeitprint = tageszeitprint;
   }
 
-  public Zeit(Integer zeitid) {
+  public TimeSlot(Integer zeitid) {
     this.zeitid = zeitid;
   }
 
@@ -228,10 +228,10 @@ public class Zeit implements Serializable, DbEntity {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Zeit)) {
+    if (!(object instanceof TimeSlot)) {
       return false;
     }
-    Zeit other = (Zeit) object;
+    TimeSlot other = (TimeSlot) object;
     if ((this.zeitid == null && other.zeitid != null) || (this.zeitid != null && !this.zeitid.equals(other.zeitid))) {
       return false;
     }
@@ -240,7 +240,7 @@ public class Zeit implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "de.free_creations.dbEntities.Zeit[ zeitid=" + zeitid + " ]";
+    return "de.free_creations.dbEntities.TimeSlot[ zeitid=" + zeitid + " ]";
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
@@ -249,7 +249,7 @@ public class Zeit implements Serializable, DbEntity {
 
   public static void removePropertyChangeListener(PropertyChangeListener listener, Integer zeitid) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Personen.class, zeitid));
+            new EntityIdentity(Person.class, zeitid));
 
   }
 
@@ -261,6 +261,6 @@ public class Zeit implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Zeit.class, zeitid);
+    return new EntityIdentity(TimeSlot.class, zeitid);
   }
 }

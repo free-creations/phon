@@ -15,7 +15,7 @@
  */
 package de.free_creations.editors.contest;
 
-import de.free_creations.dbEntities.Zeit;
+import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
@@ -150,7 +150,7 @@ public class TimeTable extends JTable {
       return true;
     }
     try {
-      Zeit t = Manager.getTimeSlotCollection().findEntity(column - 1, row);
+      TimeSlot t = Manager.getTimeSlotCollection().findEntity(column - 1, row);
       if (t == null) {
         return false;
       } else {

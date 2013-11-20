@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Personen;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.PersonCollection;
@@ -57,7 +57,7 @@ public final class NewPersonAction extends AbstractAction {
   public void actionPerformed(ActionEvent e) {
     try {
       PersonCollection personCollection = Manager.getPersonCollection();
-      Personen newPerson = personCollection.newEntity();
+      Person newPerson = personCollection.newEntity();
       PersonEditorProvider provider =
               Lookup.getDefault().lookup(
               PersonEditorProvider.class);
