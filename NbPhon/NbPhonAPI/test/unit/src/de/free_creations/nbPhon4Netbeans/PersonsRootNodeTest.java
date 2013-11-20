@@ -89,24 +89,24 @@ public class PersonsRootNodeTest {
    * Test of getActions method, of class PersonsRootNode.
    */
   @Test
-  @Ignore("function is trivial")
   public void testGetActions() {
+    //  @Ignore("function is trivial")
   }
 
   /**
    * Test of sortByName method, of class PersonsRootNode.
    */
   @Test
-  @Ignore("function is trivial")
   public void testSortByName() {
+    //   @Ignore("function is trivial")
   }
 
   /**
    * Test of sortByPriority method, of class PersonsRootNode.
    */
   @Test
-  @Ignore("function is trivial")
   public void testSortByPriority() {
+    //   @Ignore("function is trivial")
   }
 
   /**

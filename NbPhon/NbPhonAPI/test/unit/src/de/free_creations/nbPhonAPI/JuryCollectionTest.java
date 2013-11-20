@@ -112,8 +112,8 @@ public class JuryCollectionTest {
   /**
    * Test of juryTypes method, of class JuryCollection.
    */
-  @Test
-  @Ignore("Tested with testNewEntity")
+  @Test 
   public void testJuryTypes() {
+     //Ignore("Tested with testNewEntity")
   }
 }
