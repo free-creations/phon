@@ -15,7 +15,7 @@
  */
 package de.free_creations.editors.person;
 
-import de.free_creations.dbEntities.Funktionen;
+import de.free_creations.dbEntities.Job;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import java.awt.event.KeyAdapter;
@@ -29,7 +29,7 @@ import javax.swing.JComboBox;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class FunctionsComboBox extends JComboBox<Funktionen> {
+public class FunctionsComboBox extends JComboBox<Job> {
 
   private final KeyListener keyListener =
           new KeyAdapter() {
@@ -54,7 +54,7 @@ public class FunctionsComboBox extends JComboBox<Funktionen> {
 
   }
 
-  public Funktionen getSelectedItemFromPersistency() {
+  public Job getSelectedItemFromPersistency() {
     return refreshItem(getSelectedItem());
   }
 
@@ -64,9 +64,9 @@ public class FunctionsComboBox extends JComboBox<Funktionen> {
    * @param anItem
    * @return
    */
-  private Funktionen refreshItem(Object anItem) {
-    if (anItem instanceof Funktionen) {
-      Funktionen mayBeZomby = (Funktionen) anItem;
+  private Job refreshItem(Object anItem) {
+    if (anItem instanceof Job) {
+      Job mayBeZomby = (Job) anItem;
       try {
         return Manager.getJobCollection().findEntity(mayBeZomby.getFunktionid());
       } catch (DataBaseNotReadyException ex) {
@@ -76,18 +76,18 @@ public class FunctionsComboBox extends JComboBox<Funktionen> {
     return null;
   }
 
-  public class FunctionsComboBoxModel extends DefaultComboBoxModel<Funktionen> {
+  public class FunctionsComboBoxModel extends DefaultComboBoxModel<Job> {
 
     public FunctionsComboBoxModel() {
       super();
       if (java.beans.Beans.isDesignTime()) {
-        Funktionen f0 = new Funktionen("LEHRER", "LehrkraftXX", 1);
+        Job f0 = new Job("LEHRER", "LehrkraftXX", 1);
         addElement(f0);
         FunctionsComboBoxModel.this.setSelectedItem(f0);
 
       } else {
-        List<Funktionen> ff = Manager.getJobCollection().getAll();
-        for (Funktionen f : ff) {
+        List<Job> ff = Manager.getJobCollection().getAll();
+        for (Job f : ff) {
           addElement(f);
         }
         addElement(null);

@@ -136,7 +136,7 @@ public class Personen implements Serializable, DbEntity {
   //
   @JoinColumn(name = "GEWUENSCHTEFUNKTION", referencedColumnName = "FUNKTIONID")
   @ManyToOne
-  private Funktionen gewuenschtefunktion;
+  private Job gewuenschtefunktion;
   public static final String PROP_GEWUENSCHTEFUNKTION = "GEWUENSCHTEFUNKTION";
   //
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
@@ -366,12 +366,12 @@ public class Personen implements Serializable, DbEntity {
 
   }
 
-  public Funktionen getGewuenschtefunktion() {
+  public Job getGewuenschtefunktion() {
     return gewuenschtefunktion;
   }
 
-  public void setGewuenschtefunktion(Funktionen gewuenschtefunktion) {
-    Funktionen old = this.gewuenschtefunktion;
+  public void setGewuenschtefunktion(Job gewuenschtefunktion) {
+    Job old = this.gewuenschtefunktion;
     this.gewuenschtefunktion = gewuenschtefunktion;
 
     EntityIdentity newId = (gewuenschtefunktion == null) ? null : gewuenschtefunktion.identity();

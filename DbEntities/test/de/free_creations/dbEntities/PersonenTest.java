@@ -50,7 +50,7 @@ public class PersonenTest {
   private Personen testPerson;
   private Personen testPerson_2;
   private Zeit testZeit;
-  private Funktionen testFunction;
+  private Job testFunction;
 
   @Before
   public void setUp() {
@@ -69,8 +69,8 @@ public class PersonenTest {
     assertTrue(zz.size() > 1);
     testZeit = zz.get(0);
 
-    TypedQuery<Funktionen> ffq = entityManager.createNamedQuery("Funktionen.findAll", Funktionen.class);
-    List<Funktionen> ff = ffq.getResultList();
+    TypedQuery<Job> ffq = entityManager.createNamedQuery("Job.findAll", Job.class);
+    List<Job> ff = ffq.getResultList();
     assertNotNull(ff);
     assertTrue(ff.size() > 1);
     testFunction = ff.get(0);

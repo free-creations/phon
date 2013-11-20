@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Funktionen;
+import de.free_creations.dbEntities.Job;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -78,9 +78,9 @@ public class JobCollectionTest {
     System.out.println("testFindEntity_int");
     assertTrue("did you start the database-server?", Manager.isOpen());
     JobCollection functionsCollection = Manager.getJobCollection();
-    Funktionen f0 = functionsCollection.findEntity(0);
+    Job f0 = functionsCollection.findEntity(0);
     assertNotNull(f0);
-    Funktionen f1 = functionsCollection.findEntity(1);
+    Job f1 = functionsCollection.findEntity(1);
     assertNotNull(f1);
 
     assertTrue(f1.getSortvalue() >= f0.getSortvalue());

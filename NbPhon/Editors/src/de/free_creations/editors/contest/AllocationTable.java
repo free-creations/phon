@@ -15,7 +15,7 @@
  */
 package de.free_creations.editors.contest;
 
-import de.free_creations.dbEntities.Funktionen;
+import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Zeit;
@@ -312,7 +312,7 @@ public class AllocationTable extends JTable {
         return null;
       }
       Contest j;
-      Funktionen f;
+      Job f;
       Zeit t;
       try {
         j = Manager.getContestCollection().findEntity(juryId);

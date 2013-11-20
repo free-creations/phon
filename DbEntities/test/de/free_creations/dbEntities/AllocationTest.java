@@ -112,7 +112,7 @@ public class AllocationTest {
     Contest j = new Contest();
     entityManager.persist(j);
 
-    Funktionen f = new Funktionen("TestF");
+    Job f = new Job("TestF");
     entityManager.persist(f);
     entityManager.flush(); // give f,j,z their primary keys.
 

@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Funktionen;
+import de.free_creations.dbEntities.Job;
 import static de.free_creations.nbPhonAPI.util.CompareUtils.bothValid;
 import static de.free_creations.nbPhonAPI.util.CompareUtils.typeCheckCompare;
 import static de.free_creations.nbPhonAPI.util.CompareUtils.integerCompareNull;
@@ -29,14 +29,14 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JobCollection implements EntityCollection<Funktionen, String> {
+public class JobCollection implements EntityCollection<Job, String> {
 
   private final String[] jobNames;
   private final String[] jobKeys;
-  private final Comparator<Funktionen> compareOnSortOrder = new Comparator<Funktionen>() {
+  private final Comparator<Job> compareOnSortOrder = new Comparator<Job>() {
     @Override
-    public int compare(Funktionen f1, Funktionen f2) {
-      int c = typeCheckCompare(f1, f2, Funktionen.class);
+    public int compare(Job f1, Job f2) {
+      int c = typeCheckCompare(f1, f2, Job.class);
       if (c != bothValid) {
         return c;
       }
@@ -45,11 +45,11 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
   };
 
   protected JobCollection() {
-    List<Funktionen> ff = getAll();
+    List<Job> ff = getAll();
     jobNames = new String[ff.size()];
     jobKeys = new String[ff.size()];
     for (int i = 0; i < jobNames.length; i++) {
-      Funktionen f = ff.get(i);
+      Job f = ff.get(i);
       jobNames[i] = f.getFunktionname();
       jobKeys[i] = f.getFunktionid();
     }
@@ -58,7 +58,7 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
   /**
    * The names of all functions in table FUNKTIONEN.
    *
-   * @return an array of function-names sorted on {@link Funktionen#sortvalue}.
+   * @return an array of function-names sorted on {@link Job#sortvalue}.
    */
   public String[] jobNames() {
     return this.jobNames;
@@ -67,7 +67,7 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
   /**
    * The primary keys of all functions in table FUNKTIONEN.
    *
-   * @return an array of key-values sorted on {@link Funktionen#sortvalue}.
+   * @return an array of key-values sorted on {@link Job#sortvalue}.
    */
   public String[] jobKeys() {
     return this.jobKeys;
@@ -82,12 +82,12 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
    * @return the list of all entries in table FUNKTIONEN
    */
   @Override
-  public final List<Funktionen> getAll() {
+  public final List<Job> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
         EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<Funktionen> query = entityManager.createNamedQuery("Funktionen.findAll", Funktionen.class);
-        List<Funktionen> ff = query.getResultList();
+        TypedQuery<Job> query = entityManager.createNamedQuery("Job.findAll", Job.class);
+        List<Job> ff = query.getResultList();
         Collections.sort(ff, compareOnSortOrder);
         return ff;
       } catch (DataBaseNotReadyException ignored) {
@@ -104,12 +104,12 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
    * persistency context.
    */
   @Override
-  public Funktionen findEntity(String key) throws DataBaseNotReadyException {
+  public Job findEntity(String key) throws DataBaseNotReadyException {
     if (key == null) {
       return null;
     }
     synchronized (Manager.databaseAccessLock) {
-      return Manager.getEntityManager().find(Funktionen.class, key);
+      return Manager.getEntityManager().find(Job.class, key);
     }
   }
 
@@ -119,7 +119,7 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
    * @return
    * @throws DataBaseNotReadyException 
    */
-  public Funktionen findEntity(int index) throws DataBaseNotReadyException {
+  public Job findEntity(int index) throws DataBaseNotReadyException {
     return findEntity(jobKeys[index]);
   }
 }

@@ -38,11 +38,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "JOB")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Funktionen.findAll", query = "SELECT f FROM Funktionen f"),
-  @NamedQuery(name = "Funktionen.findByFunktionid", query = "SELECT f FROM Funktionen f WHERE f.funktionid = :funktionid"),
-  @NamedQuery(name = "Funktionen.findByFunktionname", query = "SELECT f FROM Funktionen f WHERE f.funktionname = :funktionname"),
-  @NamedQuery(name = "Funktionen.findBySortvalue", query = "SELECT f FROM Funktionen f WHERE f.sortvalue = :sortvalue")})
-public class Funktionen implements Serializable, DbEntity {
+  @NamedQuery(name = "Job.findAll", query = "SELECT f FROM Job f"),
+  @NamedQuery(name = "Job.findByFunktionid", query = "SELECT f FROM Job f WHERE f.funktionid = :funktionid"),
+  @NamedQuery(name = "Job.findByFunktionname", query = "SELECT f FROM Job f WHERE f.funktionname = :funktionname"),
+  @NamedQuery(name = "Job.findBySortvalue", query = "SELECT f FROM Job f WHERE f.sortvalue = :sortvalue")})
+public class Job implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -62,16 +62,16 @@ public class Funktionen implements Serializable, DbEntity {
   public final static String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
   public final static String  PROP_ADD_TEAMEINTEILUNG  = "addTeameinteilung";
 
-  public Funktionen() {
+  public Job() {
   }
 
-  public Funktionen(String funktionid, String funktionname, Integer sortvalue) {
+  public Job(String funktionid, String funktionname, Integer sortvalue) {
     this.funktionid = funktionid;
     this.funktionname = funktionname;
     this.sortvalue = sortvalue;
   }
 
-  public Funktionen(String funktionid) {
+  public Job(String funktionid) {
     this.funktionid = funktionid;
   }
 
@@ -190,10 +190,10 @@ public class Funktionen implements Serializable, DbEntity {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Funktionen)) {
+    if (!(object instanceof Job)) {
       return false;
     }
-    Funktionen other = (Funktionen) object;
+    Job other = (Job) object;
     if ((this.funktionid == null && other.funktionid != null) || (this.funktionid != null && !this.funktionid.equals(other.funktionid))) {
       return false;
     }
@@ -224,7 +224,7 @@ public class Funktionen implements Serializable, DbEntity {
    */
   public static void addPropertyChangeListener(PropertyChangeListener listener, String funktionid) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Funktionen.class, funktionid));
+            new EntityIdentity(Job.class, funktionid));
   }
 
   /**
@@ -247,7 +247,7 @@ public class Funktionen implements Serializable, DbEntity {
    */
   public static void removePropertyChangeListener(PropertyChangeListener listener, String funktionid) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Funktionen.class, funktionid));
+            new EntityIdentity(Job.class, funktionid));
 
   }
 
@@ -259,6 +259,6 @@ public class Funktionen implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Funktionen.class, funktionid);
+    return new EntityIdentity(Job.class, funktionid);
   }
 }

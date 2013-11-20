@@ -15,7 +15,7 @@
  */
 package de.free_creations.editors.person;
 
-import de.free_creations.dbEntities.Funktionen;
+import de.free_creations.dbEntities.Job;
 import de.free_creations.nbPhonAPI.Manager;
 
 import org.junit.Ignore;
@@ -127,7 +127,7 @@ public class FunktionenComboBoxVisualTest extends javax.swing.JFrame {
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     // TODO add your handling code here:
     
-    Funktionen f = new Funktionen("LEHRER", null, 0);
+    Job f = new Job("LEHRER", null, 0);
     functionsComboBox1.setSelectedItem(f);
   }//GEN-LAST:event_jButton2ActionPerformed
 

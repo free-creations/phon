@@ -15,7 +15,7 @@
  */
 package de.free_creations.editors.person;
 
-import de.free_creations.dbEntities.Funktionen;
+import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Personen;
 import de.free_creations.actions.CheckedAction;
 import static de.free_creations.actions.CheckedAction.Severity.*;
@@ -507,8 +507,8 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edFunctionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edFunctionActionPerformed
     Personen p = thisPerson();
     if (p != null) {
-      Funktionen oldF = p.getGewuenschtefunktion();
-      Funktionen newF = edFunction.getSelectedItemFromPersistency();
+      Job oldF = p.getGewuenschtefunktion();
+      Job newF = edFunction.getSelectedItemFromPersistency();
       if (!Objects.equals(oldF, newF)) {
         p.setGewuenschtefunktion(newF);
       }

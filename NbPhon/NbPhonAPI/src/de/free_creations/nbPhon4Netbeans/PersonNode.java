@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Funktionen;
+import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Personen;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
@@ -335,7 +335,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     if (isGroupleader(p)) {
       return iconManager().iconGroupleader;
     }
-    Funktionen function = p.getGewuenschtefunktion();
+    Job function = p.getGewuenschtefunktion();
     if (function != null) {
       if ("LEHRER".equalsIgnoreCase(function.getFunktionid())) {
         return iconManager().iconTeacher;

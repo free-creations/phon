@@ -73,7 +73,7 @@ public class Allocation implements Serializable, DbEntity {
   private Personen personid;
   @JoinColumn(name = "FUNKTIONID", referencedColumnName = "FUNKTIONID")
   @ManyToOne(optional = false)
-  private Funktionen funktionen;
+  private Job funktionen;
   @JoinColumn(name = "CONTESTID", referencedColumnName = "CONTESTID")
   @ManyToOne(optional = false)
   private Contest contestid;
@@ -95,7 +95,7 @@ public class Allocation implements Serializable, DbEntity {
     return allocationid;
   }
 
-  public Allocation(Zeit z, Contest j, Funktionen f) {
+  public Allocation(Zeit z, Contest j, Job f) {
     this();
     setZeit(z);
     setJury(j);
@@ -199,12 +199,12 @@ public class Allocation implements Serializable, DbEntity {
 
   }
 
-  public Funktionen getFunktionen() {
+  public Job getFunktionen() {
     return funktionen;
   }
 
-  public final void setFunktionen(Funktionen funktionen) {
-    Funktionen old = this.funktionen;
+  public final void setFunktionen(Job funktionen) {
+    Job old = this.funktionen;
     this.funktionen = funktionen;
 //    EntityIdentity newId = (funktionen == null) ? null : funktionen.identity();
 //    EntityIdentity oldId = (old == null) ? null : old.identity();

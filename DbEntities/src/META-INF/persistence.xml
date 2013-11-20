@@ -3,11 +3,11 @@
   <persistence-unit name="DbEntitiesPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>de.free_creations.dbEntities.Personen</class>
-    <class>de.free_creations.dbEntities.Funktionen</class>
     <class>de.free_creations.dbEntities.Zeit</class>
     <class>de.free_creations.dbEntities.Availability</class>
     <class>de.free_creations.dbEntities.Contest</class>
     <class>de.free_creations.dbEntities.Allocation</class>
+    <class>de.free_creations.dbEntities.Job</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/phonDb"/>
       <property name="javax.persistence.jdbc.password" value="app"/>
