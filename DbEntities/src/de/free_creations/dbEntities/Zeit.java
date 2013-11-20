@@ -78,7 +78,7 @@ public class Zeit implements Serializable, DbEntity {
   @Column(name = "TAGESZEITPRINT")
   private String tageszeitprint;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "zeit")
-  private List<Teameinteilung> teameinteilungList;
+  private List<Allocation> teameinteilungList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "zeitid")
   private List<Availability> verfuegbarkeitList;
   public static final String PROP_VERFUEGBARKEIT = "verfuegbarkeit";
@@ -152,32 +152,32 @@ public class Zeit implements Serializable, DbEntity {
   }
 
   @XmlTransient
-  public List<Teameinteilung> getTeameinteilungList() {
+  public List<Allocation> getTeameinteilungList() {
     return teameinteilungList;
   }
 
-  public void setTeameinteilungList(List<Teameinteilung> teameinteilungList) {
+  public void setTeameinteilungList(List<Allocation> teameinteilungList) {
     this.teameinteilungList = teameinteilungList;
   }
 
-  void addTeameinteilung(Teameinteilung t) {
+  void addTeameinteilung(Allocation t) {
     assert (t != null);
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Teameinteilung to this Time-Slot. Record must be persited");
+      throw new RuntimeException("Cannot add a Allocation to this Time-Slot. Record must be persited");
     }
     if (teameinteilungList.contains(t)) {
       return;
     }
     if (t.getZeit() != this) {
-      throw new RuntimeException("Cannot add Teameinteilung for an other Time-Slot.");
+      throw new RuntimeException("Cannot add Allocation for an other Time-Slot.");
     }
     teameinteilungList.add(t);
     firePropertyChange(PROP_ADD_TEAMEINTEILUNG, null, t.identity());
   }
 
-  void removeTeameinteilung(Teameinteilung t) {
+  void removeTeameinteilung(Allocation t) {
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Teameinteilung to this Time-Slot. Record must be persited");
+      throw new RuntimeException("Cannot add a Allocation to this Time-Slot. Record must be persited");
     }
     if (!teameinteilungList.contains(t)) {
       return;

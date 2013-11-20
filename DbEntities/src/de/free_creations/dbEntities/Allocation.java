@@ -43,14 +43,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ALLOCATION")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Teameinteilung.findAll", query = "SELECT t FROM Teameinteilung t"),
-  @NamedQuery(name = "Teameinteilung.findByZeitid", query = "SELECT t FROM Teameinteilung t WHERE t.zeit = :zeitid"),
-  @NamedQuery(name = "Teameinteilung.findByJuryid", query = "SELECT t FROM Teameinteilung t WHERE t.contestid = :juryid"),
-  @NamedQuery(name = "Teameinteilung.findByFunktionid", query = "SELECT t FROM Teameinteilung t WHERE t.funktionen = :funktionid"),
-  @NamedQuery(name = "Teameinteilung.findByLetzteaenderung", query = "SELECT t FROM Teameinteilung t WHERE t.letzteaenderung = :letzteaenderung"),
-  @NamedQuery(name = "Teameinteilung.findByPlaner", query = "SELECT t FROM Teameinteilung t WHERE t.planer = :planer"),
-  @NamedQuery(name = "Teameinteilung.findByErklaerung", query = "SELECT t FROM Teameinteilung t WHERE t.erklaerung = :erklaerung"),})
-public class Teameinteilung implements Serializable, DbEntity {
+  @NamedQuery(name = "Allocation.findAll", query = "SELECT t FROM Allocation t"),
+  @NamedQuery(name = "Allocation.findByZeitid", query = "SELECT t FROM Allocation t WHERE t.zeit = :zeitid"),
+  @NamedQuery(name = "Allocation.findByJuryid", query = "SELECT t FROM Allocation t WHERE t.contestid = :juryid"),
+  @NamedQuery(name = "Allocation.findByFunktionid", query = "SELECT t FROM Allocation t WHERE t.funktionen = :funktionid"),
+  @NamedQuery(name = "Allocation.findByLetzteaenderung", query = "SELECT t FROM Allocation t WHERE t.letzteaenderung = :letzteaenderung"),
+  @NamedQuery(name = "Allocation.findByPlaner", query = "SELECT t FROM Allocation t WHERE t.planer = :planer"),
+  @NamedQuery(name = "Allocation.findByErklaerung", query = "SELECT t FROM Allocation t WHERE t.erklaerung = :erklaerung"),})
+public class Allocation implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -84,10 +84,10 @@ public class Teameinteilung implements Serializable, DbEntity {
   public final static String PROP_PERSON = "person";
   public final static String PROP_SELF_REMOVED = "selfRemoved";
 
-  public Teameinteilung() {
+  public Allocation() {
   }
 
-  public Teameinteilung(Integer allocationid) {
+  public Allocation(Integer allocationid) {
     this.allocationid = allocationid;
   }
 
@@ -95,7 +95,7 @@ public class Teameinteilung implements Serializable, DbEntity {
     return allocationid;
   }
 
-  public Teameinteilung(Zeit z, Contest j, Funktionen f) {
+  public Allocation(Zeit z, Contest j, Funktionen f) {
     this();
     setZeit(z);
     setJury(j);
@@ -230,10 +230,10 @@ public class Teameinteilung implements Serializable, DbEntity {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Teameinteilung)) {
+    if (!(object instanceof Allocation)) {
       return false;
     }
-    Teameinteilung other = (Teameinteilung) object;
+    Allocation other = (Allocation) object;
     if ((this.allocationid == null && other.allocationid != null) || (this.allocationid != null && !this.allocationid.equals(other.allocationid))) {
       return false;
     }
@@ -242,7 +242,7 @@ public class Teameinteilung implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Teameinteilung" + allocationid;
+    return "Allocation" + allocationid;
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -260,7 +260,7 @@ public class Teameinteilung implements Serializable, DbEntity {
    */
   public static void addPropertyChangeListener(PropertyChangeListener listener, Integer allocationid) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Teameinteilung.class, allocationid));
+            new EntityIdentity(Allocation.class, allocationid));
   }
 
   /**
@@ -283,7 +283,7 @@ public class Teameinteilung implements Serializable, DbEntity {
    */
   public static void removePropertyChangeListener(PropertyChangeListener listener, Integer allocationid) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Teameinteilung.class, allocationid));
+            new EntityIdentity(Allocation.class, allocationid));
 
   }
 
@@ -295,6 +295,6 @@ public class Teameinteilung implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Teameinteilung.class, allocationid);
+    return new EntityIdentity(Allocation.class, allocationid);
   }
 }

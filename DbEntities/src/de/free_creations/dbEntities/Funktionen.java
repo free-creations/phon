@@ -58,7 +58,7 @@ public class Funktionen implements Serializable, DbEntity {
   @OneToMany(mappedBy = "gewuenschtefunktion")
   private List<Personen> personenList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "funktionen")
-  private List<Teameinteilung> teameinteilungList;
+  private List<Allocation> teameinteilungList;
   public final static String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
   public final static String  PROP_ADD_TEAMEINTEILUNG  = "addTeameinteilung";
 
@@ -140,7 +140,7 @@ public class Funktionen implements Serializable, DbEntity {
   }
 
   @XmlTransient
-  public List<Teameinteilung> getTeameinteilungList() {
+  public List<Allocation> getTeameinteilungList() {
     return teameinteilungList;
   }
 
@@ -149,13 +149,13 @@ public class Funktionen implements Serializable, DbEntity {
    *
    * @param teameinteilungList
    */
-  protected void setTeameinteilungList(List<Teameinteilung> teameinteilungList) {
+  protected void setTeameinteilungList(List<Allocation> teameinteilungList) {
     this.teameinteilungList = teameinteilungList;
   }
 
-  void removeTeameinteilung(Teameinteilung t) {
+  void removeTeameinteilung(Allocation t) {
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot remove Teameinteilung from Function. Record must be persited");
+      throw new RuntimeException("Cannot remove Allocation from Function. Record must be persited");
     }
     if (!teameinteilungList.contains(t)) {
       return;
@@ -165,16 +165,16 @@ public class Funktionen implements Serializable, DbEntity {
     firePropertyChange(PROP_REMOVE_TEAMEINTEILUNG, t.identity(), null);
   }
 
-  void addTeameinteilung(Teameinteilung t) {
+  void addTeameinteilung(Allocation t) {
     assert (t != null);
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Teameinteilung to this Function. Record must be persited");
+      throw new RuntimeException("Cannot add a Allocation to this Function. Record must be persited");
     }
     if (teameinteilungList.contains(t)) {
       return;
     }
     if (t.getFunktionen() != this) {
-      throw new RuntimeException("Cannot add Teameinteilung for an other function.");
+      throw new RuntimeException("Cannot add Allocation for an other function.");
     }
     teameinteilungList.add(t);
     firePropertyChange(PROP_ADD_TEAMEINTEILUNG, null, t.identity());

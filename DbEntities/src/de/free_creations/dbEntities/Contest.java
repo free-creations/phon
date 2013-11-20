@@ -80,7 +80,7 @@ public class Contest implements Serializable, DbEntity {
   @Column(name = "ZEITSONNTAG")
   private String zeitsonntag;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "contestid")
-  private List<Teameinteilung> teameinteilungList;
+  private List<Allocation> teameinteilungList;
   @JoinColumn(name = "VERANTWORTLICH", referencedColumnName = "PERSONID")
   @ManyToOne
   private Personen verantwortlich;
@@ -216,28 +216,28 @@ public class Contest implements Serializable, DbEntity {
   }
 
   @XmlTransient
-  public List<Teameinteilung> getTeameinteilungList() {
+  public List<Allocation> getTeameinteilungList() {
     return teameinteilungList;
   }
 
-  protected void addTeameinteilung(Teameinteilung t) {
+  protected void addTeameinteilung(Allocation t) {
     assert (t != null);
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Teameinteilung to this Contest. Record must be persited");
+      throw new RuntimeException("Cannot add a Allocation to this Contest. Record must be persited");
     }
     if (teameinteilungList.contains(t)) {
       return;
     }
     if (t.getJury() != this) {
-      throw new RuntimeException("Cannot add Teameinteilung for an other jury.");
+      throw new RuntimeException("Cannot add Allocation for an other jury.");
     }
     teameinteilungList.add(t);
     firePropertyChange(PROP_ADD_TEAMEINTEILUNG, null, t.identity());
   }
 
-  protected void removeTeameinteilung(Teameinteilung t) {
+  protected void removeTeameinteilung(Allocation t) {
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot remove Teameinteilung from Contest. Record must be persited");
+      throw new RuntimeException("Cannot remove Allocation from Contest. Record must be persited");
     }
     if (!teameinteilungList.contains(t)) {
       return;
@@ -247,7 +247,7 @@ public class Contest implements Serializable, DbEntity {
     firePropertyChange(PROP_REMOVE_TEAMEINTEILUNG, t.identity(), null);
   }
 
-  protected void setTeameinteilungList(List<Teameinteilung> teameinteilungList) {
+  protected void setTeameinteilungList(List<Allocation> teameinteilungList) {
     this.teameinteilungList = teameinteilungList;
   }
 

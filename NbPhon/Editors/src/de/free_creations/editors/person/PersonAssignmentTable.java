@@ -16,7 +16,7 @@
 package de.free_creations.editors.person;
 
 import de.free_creations.dbEntities.Personen;
-import de.free_creations.dbEntities.Teameinteilung;
+import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Availability;
 import de.free_creations.dbEntities.Zeit;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
@@ -322,13 +322,13 @@ public class PersonAssignmentTable extends JTable {
      * Manager.getTimeSlotCollection)
      * @return
      */
-    private Teameinteilung getAssignmentEntity(int rowIndex, int columnIndex) {
+    private Allocation getAssignmentEntity(int rowIndex, int columnIndex) {
       try {
         Personen p = Manager.getPersonCollection().findEntity(personId);
-        List<Teameinteilung> emptyAa = Collections.emptyList();
-        List<Teameinteilung> aa = (p == null) ? emptyAa : p.getTeameinteilungList();
+        List<Allocation> emptyAa = Collections.emptyList();
+        List<Allocation> aa = (p == null) ? emptyAa : p.getTeameinteilungList();
         Zeit t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
-        for (Teameinteilung a : aa) {
+        for (Allocation a : aa) {
 
           if (Objects.equals(t, a.getZeit())) {
             return a;
@@ -349,7 +349,7 @@ public class PersonAssignmentTable extends JTable {
      */
     private String getAssignmentValue(int rowIndex, int columnIndex) {
       assert (columnIndex > 0);
-      Teameinteilung a = getAssignmentEntity(rowIndex, columnIndex);
+      Allocation a = getAssignmentEntity(rowIndex, columnIndex);
       String result = "";
       if (a != null) {
         result = String.format("<html>%s<br>%s</html>",

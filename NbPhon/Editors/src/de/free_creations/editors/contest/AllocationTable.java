@@ -17,7 +17,7 @@ package de.free_creations.editors.contest;
 
 import de.free_creations.dbEntities.Funktionen;
 import de.free_creations.dbEntities.Contest;
-import de.free_creations.dbEntities.Teameinteilung;
+import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Zeit;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
@@ -65,8 +65,8 @@ public class AllocationTable extends JTable {
       Component editor = super.getTableCellEditorComponent(table, value, isSelected, row, column);
       if (editor instanceof AllocationPersonsComboBox) {
         AllocationPersonsComboBox cb = (AllocationPersonsComboBox) editor;
-        if (value instanceof Teameinteilung) {
-          Teameinteilung t = (Teameinteilung) value;
+        if (value instanceof Allocation) {
+          Allocation t = (Allocation) value;
           cb.setSelectedPerson(t.getPersonid());
         } else {
           cb.setSelectedPerson(null);
@@ -152,7 +152,7 @@ public class AllocationTable extends JTable {
         if (model.getRowType(row) == RowType.dayOfTimeRow) {
           preparedRenderer.setBackground(headerColorDark);
         } else {
-          Teameinteilung alloc = model.getAllocationValue(row, column);
+          Allocation alloc = model.getAllocationValue(row, column);
           PersonNode node =
                   (alloc == null)
                   ? null
@@ -268,7 +268,7 @@ public class AllocationTable extends JTable {
           }
         default:
           if (getRowType(rowIndex) == RowType.functionRow) {
-            Teameinteilung allocationValue = getAllocationValue(rowIndex, columnIndex);
+            Allocation allocationValue = getAllocationValue(rowIndex, columnIndex);
             if (allocationValue == null) {
               return "none";
             } else {
@@ -307,7 +307,7 @@ public class AllocationTable extends JTable {
       }
     }
 
-    private Teameinteilung getAllocationValue(int rowIndex, int columnIndex) {
+    private Allocation getAllocationValue(int rowIndex, int columnIndex) {
       if (juryId == null) {
         return null;
       }
@@ -322,9 +322,9 @@ public class AllocationTable extends JTable {
       } catch (DataBaseNotReadyException ignored) {
         return null;
       }
-      List<Teameinteilung> aa = j.getTeameinteilungList();//the allocations for this jury
+      List<Allocation> aa = j.getTeameinteilungList();//the allocations for this jury
 
-      for (Teameinteilung a : aa) {
+      for (Allocation a : aa) {
         if (Objects.equals(a.getZeit(), t)) {
           if (Objects.equals(a.getFunktionen(), f)) {
             return a;

@@ -140,7 +140,7 @@ public class Personen implements Serializable, DbEntity {
   public static final String PROP_GEWUENSCHTEFUNKTION = "GEWUENSCHTEFUNKTION";
   //
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
-  private List<Teameinteilung> teameinteilungList;
+  private List<Allocation> teameinteilungList;
   //
   @OneToMany(mappedBy = "verantwortlich")
   private List<Contest> juryList;
@@ -389,17 +389,17 @@ public class Personen implements Serializable, DbEntity {
   }
 
   @XmlTransient
-  public List<Teameinteilung> getTeameinteilungList() {
+  public List<Allocation> getTeameinteilungList() {
     return teameinteilungList;
   }
 
-  public void setTeameinteilungList(List<Teameinteilung> teameinteilungList) {
+  public void setTeameinteilungList(List<Allocation> teameinteilungList) {
     this.teameinteilungList = teameinteilungList;
   }
 
-  void removeTeameinteilung(Teameinteilung t) {
+  void removeTeameinteilung(Allocation t) {
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot remove Teameinteilung from Personen. Record must be persited");
+      throw new RuntimeException("Cannot remove Allocation from Personen. Record must be persited");
     }
     if (!teameinteilungList.contains(t)) {
       return;
@@ -409,16 +409,16 @@ public class Personen implements Serializable, DbEntity {
     firePropertyChange(PROP_REMOVE_TEAMEINTEILUNG, t.identity(), null);
   }
 
-  void addTeameinteilung(Teameinteilung t) {
+  void addTeameinteilung(Allocation t) {
     assert (t != null);
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add Teameinteilung. Record must be persited");
+      throw new RuntimeException("Cannot add Allocation. Record must be persited");
     }
     if (teameinteilungList.contains(t)) {
       return;
     }
     if (t.getPersonid() != this) {
-      throw new RuntimeException("Cannot add Teameinteilung used for other person.");
+      throw new RuntimeException("Cannot add Allocation used for other person.");
     }
     teameinteilungList.add(t);
     firePropertyChange(PROP_ADD_TEAMEINTEILUNG, null, t.identity());

@@ -31,7 +31,7 @@ import org.junit.BeforeClass;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class TeameinteilungTest {
+public class AllocationTest {
 
   static final String PersistenceUnitName = "DbEntitiesPU";
   private static EntityManager entityManager = null;
@@ -53,14 +53,14 @@ public class TeameinteilungTest {
       entityManager.close();
     }
   }
-  private Teameinteilung testAllocation;
+  private Allocation testAllocation;
   private Personen testPerson;
 
   @Before
   public void setUp() {
     entityManager.getTransaction().begin();
-    TypedQuery<Teameinteilung> qt = entityManager.createNamedQuery("Teameinteilung.findAll", Teameinteilung.class);
-    List<Teameinteilung> tt = qt.getResultList();
+    TypedQuery<Allocation> qt = entityManager.createNamedQuery("Allocation.findAll", Allocation.class);
+    List<Allocation> tt = qt.getResultList();
     assertNotNull(tt);
     assertFalse(tt.isEmpty());
     testAllocation = tt.get(0);
@@ -80,7 +80,7 @@ public class TeameinteilungTest {
   }
 
   /**
-   * Test of identity method, of class Teameinteilung.
+   * Test of identity method, of class Allocation.
    */
   @Test
   public void testIdentity() {
@@ -116,7 +116,7 @@ public class TeameinteilungTest {
     entityManager.persist(f);
     entityManager.flush(); // give f,j,z their primary keys.
 
-    Teameinteilung testItem = new Teameinteilung(z, j, f);
+    Allocation testItem = new Allocation(z, j, f);
     testItem.setPersonid(testPerson);
     entityManager.persist(testItem);
 
