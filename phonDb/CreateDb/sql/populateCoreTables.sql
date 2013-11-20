@@ -18,10 +18,10 @@
 --  T a b l e  F U N C T I O N
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
-INSERT INTO "APP"."FUNCTION" VALUES('LEHRER', 'Lehrkraft',1);
-INSERT INTO "APP"."FUNCTION" VALUES('HELFER1', 'Helfer 1',2);
-INSERT INTO "APP"."FUNCTION" VALUES('HELFER2', 'Helfer 2',3);
-INSERT INTO "APP"."FUNCTION" VALUES('HELFER3', 'Helfer 3',4);
+INSERT INTO "APP"."JOB" VALUES('LEHRER', 'Lehrkraft',1);
+INSERT INTO "APP"."JOB" VALUES('HELFER1', 'Helfer 1',2);
+INSERT INTO "APP"."JOB" VALUES('HELFER2', 'Helfer 2',3);
+INSERT INTO "APP"."JOB" VALUES('HELFER3', 'Helfer 3',4);
 
 
 INSERT INTO "APP"."TIMESLOT" VALUES(1,	1,	1,'2014-04-02','09:00','13:00','Mittwoch','Mi_Vo','Vormittag');

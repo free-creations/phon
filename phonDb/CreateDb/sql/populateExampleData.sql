@@ -63,7 +63,7 @@ INSERT INTO "APP"."CONTEST" VALUES(20,'QUERFLOETE-2','QUERFLOETE',NULL,'Querflï¿
 
 INSERT INTO "APP"."CONTEST" VALUES(21,'SAX','SAX',NULL,'Saxophon','Mï¿½rike-Gymn. Musiksaal','6','Mï¿½rike-Gymnasium','14:00-18:40','10:00-18:40','10:00-17:40');
 --'BADER'
-/**/
+
 INSERT INTO "APP"."CONTEST" VALUES(22,'SELTENE-BESETZUNG','SEL-BESETZ',NULL,'Bes. Ens. "Klassik"','Forum Hinterbï¿½hne (AG VI)','3','Forum am Schlosspark','09:00-20:00','/','/');
 --'SCHOENERSTEDT'
 
@@ -77,3 +77,6 @@ INSERT INTO "APP"."CONTEST" VALUES(25,'TUBA','TUBA',NULL,'Tenorhorn / Bar. / Eup
 --'AUWEDER'
 
 ALTER TABLE "APP"."CONTEST" ALTER COLUMN CONTESTID RESTART WITH 26;
+
+
+

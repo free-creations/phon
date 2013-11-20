@@ -32,7 +32,7 @@ DROP TABLE "APP"."PERSON";
 DROP TABLE "APP"."CONTEST";
 DROP TABLE "APP"."AVAILABILITY";
 DROP TABLE "APP"."ALLOCATION";
-DROP TABLE "APP"."FUNCTION";
+DROP TABLE "APP"."JOB";
 DROP TABLE "APP"."TIMESLOT";
 
 
@@ -129,10 +129,10 @@ CREATE TABLE "APP"."ALLOCATION" (
 );
 
 -- -----------------------------------------------------------------------------
--- Table FUNCTION
+-- Table JOB
 -- Describes in detail the task of a person.
 -- -----------------------------------------------------------------------------
-CREATE TABLE "APP"."FUNCTION" (
+CREATE TABLE "APP"."JOB" (
   "FUNKTIONID" VARCHAR(50) NOT NULL, 
   "FUNKTIONNAME" VARCHAR(50), 
   "SORTVALUE" INTEGER
@@ -143,7 +143,7 @@ CREATE TABLE "APP"."FUNCTION" (
 --                      P r i m a r y    K e y s
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
-ALTER TABLE "APP"."FUNCTION" 
+ALTER TABLE "APP"."JOB" 
   ADD CONSTRAINT "FunctionPrimKey" PRIMARY KEY ("FUNKTIONID");
 ALTER TABLE "APP"."CONTEST" 
   ADD CONSTRAINT "ContestPrimKey" PRIMARY KEY ("CONTESTID");
@@ -183,13 +183,13 @@ ALTER TABLE "APP"."ALLOCATION"
   ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "APP"."ALLOCATION" 
   ADD CONSTRAINT "ALLOCATION_FK4" FOREIGN KEY ("FUNKTIONID") 
-  REFERENCES "APP"."FUNCTION" ("FUNKTIONID") 
+  REFERENCES "APP"."JOB" ("FUNKTIONID") 
   ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Table PERSON
 ALTER TABLE "APP"."PERSON" 
   ADD CONSTRAINT "PERSON_FK1" FOREIGN KEY ("GEWUENSCHTEFUNKTION") 
-  REFERENCES "APP"."FUNCTION" ("FUNKTIONID") ON DELETE NO ACTION ON UPDATE NO ACTION;
+  REFERENCES "APP"."JOB" ("FUNKTIONID") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- Table AVAILABILITY
 ALTER TABLE "APP"."AVAILABILITY"  
