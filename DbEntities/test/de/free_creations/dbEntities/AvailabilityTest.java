@@ -36,7 +36,7 @@ import org.junit.Test;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class VerfuegbarkeitTest {
+public class AvailabilityTest {
 
   static final String PersistenceUnitName = "DbEntitiesPU";
   private static EntityManager entityManager = null;
@@ -60,7 +60,7 @@ public class VerfuegbarkeitTest {
   }
   private Query query;
   private Personen testPerson;
-  private Verfuegbarkeit testVerfuegbarkeit;
+  private Availability testVerfuegbarkeit;
   private Zeit zeit;
 
   @Before
@@ -72,7 +72,7 @@ public class VerfuegbarkeitTest {
     assertTrue(result.size() > 1);
     testPerson = result.get(0);
 
-    List<Verfuegbarkeit> verfuegbarkeitList = testPerson.getVerfuegbarkeitList();
+    List<Availability> verfuegbarkeitList = testPerson.getVerfuegbarkeitList();
     assertNotNull(verfuegbarkeitList);
     assertTrue(verfuegbarkeitList.size() > 1);
     testVerfuegbarkeit = verfuegbarkeitList.get(0);
@@ -97,7 +97,7 @@ public class VerfuegbarkeitTest {
 
   @Test
   public void testMustBeFalseOnCreation() {
-    Verfuegbarkeit newItem = new Verfuegbarkeit();
+    Availability newItem = new Availability();
     newItem.setPersonid(testPerson);
     newItem.setZeitid(zeit);
     entityManager.persist(newItem);

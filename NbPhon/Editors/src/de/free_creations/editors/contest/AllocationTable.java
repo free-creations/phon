@@ -16,7 +16,7 @@
 package de.free_creations.editors.contest;
 
 import de.free_creations.dbEntities.Funktionen;
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Teameinteilung;
 import de.free_creations.dbEntities.Zeit;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
@@ -311,7 +311,7 @@ public class AllocationTable extends JTable {
       if (juryId == null) {
         return null;
       }
-      Jury j;
+      Contest j;
       Funktionen f;
       Zeit t;
       try {

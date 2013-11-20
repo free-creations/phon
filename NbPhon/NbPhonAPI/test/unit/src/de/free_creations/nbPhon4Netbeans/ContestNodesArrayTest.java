@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.beans.PropertyChangeListener;
@@ -31,16 +31,16 @@ import org.openide.nodes.Node;
  */
 public class ContestNodesArrayTest {
 
-  private class CollectionMock implements MutableEntityCollection<Jury, Integer> {
+  private class CollectionMock implements MutableEntityCollection<Contest, Integer> {
 
-    public Jury j1;
-    public Jury j2;
+    public Contest j1;
+    public Contest j2;
 
     @Override
-    public List<Jury> getAll() {
-      ArrayList<Jury> result = new ArrayList<>();
-      j1 = new Jury(1);
-      j2 = new Jury(2);
+    public List<Contest> getAll() {
+      ArrayList<Contest> result = new ArrayList<>();
+      j1 = new Contest(1);
+      j2 = new Contest(2);
       j1.setWertung("j1 jury");
       j2.setWertung("j2 jury");
 
@@ -50,7 +50,7 @@ public class ContestNodesArrayTest {
     }
 
     @Override
-    public Jury findEntity(Integer key) throws DataBaseNotReadyException {
+    public Contest findEntity(Integer key) throws DataBaseNotReadyException {
       switch (key) {
         case 1:
           return j1;
@@ -62,7 +62,7 @@ public class ContestNodesArrayTest {
     }
 
     @Override
-    public Jury newEntity() throws DataBaseNotReadyException {
+    public Contest newEntity() throws DataBaseNotReadyException {
       throw new UnsupportedOperationException("Not supported (not tested) yet.");
     }
 

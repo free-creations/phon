@@ -143,10 +143,10 @@ public class Personen implements Serializable, DbEntity {
   private List<Teameinteilung> teameinteilungList;
   //
   @OneToMany(mappedBy = "verantwortlich")
-  private List<Jury> juryList;
+  private List<Contest> juryList;
   //
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
-  private List<Verfuegbarkeit> verfuegbarkeitList;
+  private List<Availability> verfuegbarkeitList;
   public static final String PROP_VERFUEGBARKEIT = "VERFUEGBARKEIT";
   public static final String PROP_ADD_TEAMEINTEILUNG = "addTeameinteilung";
   public static final String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
@@ -425,13 +425,13 @@ public class Personen implements Serializable, DbEntity {
   }
 
   @XmlTransient
-  public List<Jury> getJuryList() {
+  public List<Contest> getJuryList() {
     return juryList;
   }
 
-  void removeJuryResponsability(Jury j) {
+  void removeJuryResponsability(Contest j) {
     if (juryList == null) {
-      throw new RuntimeException("Cannot remove Jury from Personen. Record must be persited");
+      throw new RuntimeException("Cannot remove Contest from Personen. Record must be persited");
     }
     if (!juryList.contains(j)) {
       return;
@@ -441,22 +441,22 @@ public class Personen implements Serializable, DbEntity {
     firePropertyChange(PROP_REMOVE_JURY, j.identity(), null);
   }
 
-  void addJuryResponsability(Jury j) {
+  void addJuryResponsability(Contest j) {
     assert (j != null);
     if (juryList == null) {
-      throw new RuntimeException("Cannot add Jury to Personen. Record must be persited");
+      throw new RuntimeException("Cannot add Contest to Personen. Record must be persited");
     }
     if (juryList.contains(j)) {
       return;
     }
     if (j.getVerantwortlich() != this) {
-      throw new RuntimeException("Cannot add Jury used for other person.");
+      throw new RuntimeException("Cannot add Contest used for other person.");
     }
     juryList.add(j);
     firePropertyChange(PROP_ADD_JURY, null, j.identity());
   }
 
-  public void setJuryList(List<Jury> juryList) {
+  public void setJuryList(List<Contest> juryList) {
     this.juryList = juryList;
   }
 
@@ -465,11 +465,11 @@ public class Personen implements Serializable, DbEntity {
    * @return true if this person is available for at least one time-slot.
    */
   public boolean isAvailable() {
-    List<Verfuegbarkeit> vv = getVerfuegbarkeitList();
+    List<Availability> vv = getVerfuegbarkeitList();
     if (vv == null) {
       return false;
     }
-    for (Verfuegbarkeit v : vv) {
+    for (Availability v : vv) {
       if (v.isVerfuegbar()) {
         return true;
       }
@@ -478,23 +478,23 @@ public class Personen implements Serializable, DbEntity {
   }
 
   @XmlTransient
-  public List<Verfuegbarkeit> getVerfuegbarkeitList() {
+  public List<Availability> getVerfuegbarkeitList() {
     return verfuegbarkeitList;
   }
 
-  private void setVerfuegbarkeitList(List<Verfuegbarkeit> verfuegbarkeitList) {
+  private void setVerfuegbarkeitList(List<Availability> verfuegbarkeitList) {
     this.verfuegbarkeitList = verfuegbarkeitList;
   }
 
   /**
-   * Adds a Verfuegbarkeit to this person.
+   * Adds a Availability to this person.
    *
-   * This method is protected, use {@link Verfuegbarkeit#setPersonid() }
+   * This method is protected, use {@link Availability#setPersonid() }
    *
-   * @param v a new Verfuegbarkeit record. It is assumed that this record is not
-   * assigned to an other person.
+   * @param v a new Availability record. It is assumed that this record is not
+ assigned to an other person.
    */
-  protected void addVerfuegbarkeit(Verfuegbarkeit v) {
+  protected void addVerfuegbarkeit(Availability v) {
     assert (v != null);
     if (verfuegbarkeitList == null) {
       throw new RuntimeException("Cannot add Verfügbarkeit. Record must be persited");
@@ -509,7 +509,7 @@ public class Personen implements Serializable, DbEntity {
     firePropertyChange(PROP_VERFUEGBARKEIT, null, v.identity());
   }
 
-  protected void removeVerfuegbarkeit(Verfuegbarkeit v) {
+  protected void removeVerfuegbarkeit(Availability v) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.ContestCollection;
 import de.free_creations.nbPhonAPI.Manager;
@@ -43,13 +43,13 @@ import org.openide.util.NbBundle.Messages;
   @ActionReference(path = "Toolbars/File", position = 301),
   //@ActionReference(path = "Shortcuts", name = "D-ENTER")
 })
-@Messages("CTL_newJury=new Jury")
+@Messages("CTL_newJury=new Contest")
 public final class NewContestAction extends AbstractAction {
 
   private static final Logger logger = Logger.getLogger(NewContestAction.class.getName());
 
   public NewContestAction() {
-    super("new Jury");
+    super("new Contest");
   }
 
   @Override
@@ -57,7 +57,7 @@ public final class NewContestAction extends AbstractAction {
   public void actionPerformed(ActionEvent e) {
     try {
       ContestCollection personCollection = Manager.getContestCollection();
-      Jury newJury = personCollection.newEntity();
+      Contest newJury = personCollection.newEntity();
       ContestEditorProvider provider =
               Lookup.getDefault().lookup(
               ContestEditorProvider.class);

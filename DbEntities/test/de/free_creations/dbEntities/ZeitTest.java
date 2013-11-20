@@ -85,14 +85,14 @@ public class ZeitTest {
   @Test
   public void testAddVerfuegbarkeit() {
 
-    Verfuegbarkeit v1 = new Verfuegbarkeit();
+    Availability v1 = new Availability();
     v1.setPersonid(testPerson);
     entityManager.persist(v1);
     v1.setZeitid(testZeit);
     //testZeit.addVerfuegbarkeit(v1);
     entityManager.flush(); //
 
-    Verfuegbarkeit v2 = new Verfuegbarkeit();
+    Availability v2 = new Availability();
     v2.setPersonid(testPerson);
     entityManager.persist(v2);
     v2.setZeitid(testZeit);
@@ -104,8 +104,8 @@ public class ZeitTest {
   }
 
   /**
-   * A disponibility record (Verfuegbarkeit) can only be
-   * added to a persisted time-slot record. 
+   * A disponibility record (Availability) can only be
+ added to a persisted time-slot record. 
    * 
    * An attempt to add to an un-persisted time-slot results in an
    * exception as this test demonstrates.
@@ -117,7 +117,7 @@ public class ZeitTest {
     newZeit.setZeitid(12345);
 
 
-    Verfuegbarkeit v1 = new Verfuegbarkeit();
+    Availability v1 = new Availability();
     v1.setPersonid(testPerson);
     entityManager.persist(v1);
     newZeit.addVerfuegbarkeit(v1); //<<< boom

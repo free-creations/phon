@@ -15,7 +15,7 @@
  */
 package de.free_creations.editors.contest;
 
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.editors.contest.Bundle;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.ContestCollection;
@@ -59,7 +59,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
   private final PropertyChangeListener listener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      Jury j = thisJury();
+      Contest j = thisJury();
       if (j != null) {
         refreshView(j);
       }
@@ -182,7 +182,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
   }// </editor-fold>//GEN-END:initComponents
 
   private void edRaumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edRaumFocusLost
-    Jury j = thisJury();
+    Contest j = thisJury();
     if (j != null) {
       String oldS = noNull(j.getWertungsraum());
       String newS = edRaum.getText();
@@ -193,7 +193,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edRaumFocusLost
 
   private void edWertungFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edWertungFocusLost
-    Jury j = thisJury();
+    Contest j = thisJury();
     if (j != null) {
       String oldS = noNull(j.getWertung());
       String newS = edWertung.getText();
@@ -240,12 +240,12 @@ public final class ContestTopComponent extends CloneableTopComponent {
 
   void viewJuryRecord(Integer newKey) {
     if (!Objects.equals(currentKey, newKey)) {
-      Jury.removePropertyChangeListener(listener, currentKey);
+      Contest.removePropertyChangeListener(listener, currentKey);
       currentKey = newKey;
 
-      Jury newJury = thisJury();
+      Contest newJury = thisJury();
       if (newJury != null) {
-        Jury.addPropertyChangeListener(listener, newKey);
+        Contest.addPropertyChangeListener(listener, newKey);
         refreshView(newJury);
       }
       lblJuryId.setText(String.format("%s",newKey));
@@ -253,8 +253,8 @@ public final class ContestTopComponent extends CloneableTopComponent {
     }
   }
 
-  private Jury thisJury() {
-    Jury j = null;
+  private Contest thisJury() {
+    Contest j = null;
     try {
       j = juryCollection.findEntity(currentKey);
     } catch (DataBaseNotReadyException ex) {
@@ -263,7 +263,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
     return j;
   }
 
-  private void refreshView(Jury jury) {
+  private void refreshView(Contest jury) {
     assert (jury != null);
     String wertung = noNull(jury.getWertung()).trim();
     if (wertung.length() > 0) {

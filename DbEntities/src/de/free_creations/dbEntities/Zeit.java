@@ -80,7 +80,7 @@ public class Zeit implements Serializable, DbEntity {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "zeit")
   private List<Teameinteilung> teameinteilungList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "zeitid")
-  private List<Verfuegbarkeit> verfuegbarkeitList;
+  private List<Availability> verfuegbarkeitList;
   public static final String PROP_VERFUEGBARKEIT = "verfuegbarkeit";
   public static final String PROP_ADD_TEAMEINTEILUNG = "addTeameinteilung";
   public static final String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
@@ -188,7 +188,7 @@ public class Zeit implements Serializable, DbEntity {
   }
 
   @XmlTransient
-  public List<Verfuegbarkeit> getVerfuegbarkeitList() {
+  public List<Availability> getVerfuegbarkeitList() {
     return verfuegbarkeitList;
   }
 
@@ -198,7 +198,7 @@ public class Zeit implements Serializable, DbEntity {
    * @param v a new VERFUEGBARKEIT record. It is assumed that this record is not
    * assigned to an other time-slot and that the this entity has been persisted.
    */
-  protected void addVerfuegbarkeit(Verfuegbarkeit v) {
+  protected void addVerfuegbarkeit(Availability v) {
     assert (v != null);
     if (verfuegbarkeitList == null) {
       throw new RuntimeException("Cannot add Verfügbarkeit. Record must be persited");
@@ -214,7 +214,7 @@ public class Zeit implements Serializable, DbEntity {
     firePropertyChange(PROP_VERFUEGBARKEIT, null, v);
   }
 
-  void removeVerfuegbarkeit(Verfuegbarkeit v) {
+  void removeVerfuegbarkeit(Availability v) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

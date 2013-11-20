@@ -16,7 +16,7 @@
 package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.EntityIdentity;
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.beans.PropertyChangeEvent;
@@ -50,9 +50,9 @@ public class ContestNodesArray extends Children.SortedArray {
 
       // try to get the corresponding entities
       try {
-        Jury j1 = juryCollection.findEntity(jn1.getJuryId());
-        Jury j2 = juryCollection.findEntity(jn2.getJuryId());
-        int notNullCheck = Utils.typeCheckCompare(j1, j2, Jury.class);
+        Contest j1 = juryCollection.findEntity(jn1.getJuryId());
+        Contest j2 = juryCollection.findEntity(jn2.getJuryId());
+        int notNullCheck = Utils.typeCheckCompare(j1, j2, Contest.class);
         if (notNullCheck != Utils.bothValid) {
           // OOps, one or both entities could not be foud in the database...
           return notNullCheck;
@@ -77,18 +77,18 @@ public class ContestNodesArray extends Children.SortedArray {
       }
     }
   };
-  private final MutableEntityCollection<Jury, Integer> juryCollection;
+  private final MutableEntityCollection<Contest, Integer> juryCollection;
   private final PropertyChangeListener personCollectionListener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       if (MutableEntityCollection.PROP_ITEM_ADDED.equals(evt.getPropertyName())) {
-        // a new Jury has been added to the to the  juryCollection,
+        // a new Contest has been added to the to the  juryCollection,
         // this jury must now be added to the internal "nodes" list.
         Object o = evt.getNewValue();
         if (o instanceof EntityIdentity) {
           EntityIdentity newJury = (EntityIdentity) o;
           Integer juryId = (Integer) newJury.primaryKey;
-          //create a node for this new Jury
+          //create a node for this new Contest
           ContestNode newNode = new ContestNode(juryId, juryCollection);
           newNode.notifyPendingChanges();
           if (nodes instanceof ArrayList) {
@@ -103,7 +103,7 @@ public class ContestNodesArray extends Children.SortedArray {
         }
       }
       if (MutableEntityCollection.PROP_ITEM_REMOVED.equals(evt.getPropertyName())) {
-        // a  Jury has been removed from the  juryCollection,
+        // a  Contest has been removed from the  juryCollection,
         // we re-initialize the list from scratch. (Removing the item from
         // the existing list might be a little more efficient but not worth the hassle.)
         nodes = initCollection();
@@ -118,7 +118,7 @@ public class ContestNodesArray extends Children.SortedArray {
     }
   };
 
-  public ContestNodesArray(MutableEntityCollection<Jury, Integer> juryCollection) {
+  public ContestNodesArray(MutableEntityCollection<Contest, Integer> juryCollection) {
     super();
     super.setComparator(juryComparator);
     this.juryCollection = juryCollection;
@@ -127,10 +127,10 @@ public class ContestNodesArray extends Children.SortedArray {
 
   @Override
   protected ArrayList<Node> initCollection() {
-    List<Jury> jj = juryCollection.getAll();
+    List<Contest> jj = juryCollection.getAll();
     ArrayList<Node> result = new ArrayList<>(jj.size());
 
-    for (Jury j : jj) {
+    for (Contest j : jj) {
       assert (j != null);
       Integer juryid = j.getJuryid();
       assert (juryid != null);

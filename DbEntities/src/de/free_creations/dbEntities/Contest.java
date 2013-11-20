@@ -43,17 +43,17 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CONTEST")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Jury.findAll", query = "SELECT j FROM Jury j"),
-  @NamedQuery(name = "Jury.findByJuryid", query = "SELECT j FROM Jury j WHERE j.contestid = :juryid"),
-  @NamedQuery(name = "Jury.findByWertungstyp", query = "SELECT j FROM Jury j WHERE j.wertungstyp = :wertungstyp"),
-  @NamedQuery(name = "Jury.findByWertung", query = "SELECT j FROM Jury j WHERE j.wertung = :wertung"),
-  @NamedQuery(name = "Jury.findByWertungsraum", query = "SELECT j FROM Jury j WHERE j.wertungsraum = :wertungsraum"),
-  @NamedQuery(name = "Jury.findByAustraggungsortplannr", query = "SELECT j FROM Jury j WHERE j.austraggungsortplannr = :austraggungsortplannr"),
-  @NamedQuery(name = "Jury.findByAustraggungsort", query = "SELECT j FROM Jury j WHERE j.austraggungsort = :austraggungsort"),
-  @NamedQuery(name = "Jury.findByZeitfreitag", query = "SELECT j FROM Jury j WHERE j.zeitfreitag = :zeitfreitag"),
-  @NamedQuery(name = "Jury.findByZeitsamstag", query = "SELECT j FROM Jury j WHERE j.zeitsamstag = :zeitsamstag"),
-  @NamedQuery(name = "Jury.findByZeitsonntag", query = "SELECT j FROM Jury j WHERE j.zeitsonntag = :zeitsonntag")})
-public class Jury implements Serializable, DbEntity {
+  @NamedQuery(name = "Contest.findAll", query = "SELECT j FROM Contest j"),
+  @NamedQuery(name = "Contest.findByJuryid", query = "SELECT j FROM Contest j WHERE j.contestid = :juryid"),
+  @NamedQuery(name = "Contest.findByWertungstyp", query = "SELECT j FROM Contest j WHERE j.wertungstyp = :wertungstyp"),
+  @NamedQuery(name = "Contest.findByWertung", query = "SELECT j FROM Contest j WHERE j.wertung = :wertung"),
+  @NamedQuery(name = "Contest.findByWertungsraum", query = "SELECT j FROM Contest j WHERE j.wertungsraum = :wertungsraum"),
+  @NamedQuery(name = "Contest.findByAustraggungsortplannr", query = "SELECT j FROM Contest j WHERE j.austraggungsortplannr = :austraggungsortplannr"),
+  @NamedQuery(name = "Contest.findByAustraggungsort", query = "SELECT j FROM Contest j WHERE j.austraggungsort = :austraggungsort"),
+  @NamedQuery(name = "Contest.findByZeitfreitag", query = "SELECT j FROM Contest j WHERE j.zeitfreitag = :zeitfreitag"),
+  @NamedQuery(name = "Contest.findByZeitsamstag", query = "SELECT j FROM Contest j WHERE j.zeitsamstag = :zeitsamstag"),
+  @NamedQuery(name = "Contest.findByZeitsonntag", query = "SELECT j FROM Contest j WHERE j.zeitsonntag = :zeitsonntag")})
+public class Contest implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -93,10 +93,10 @@ public class Jury implements Serializable, DbEntity {
   public static final String PROP_ADD_TEAMEINTEILUNG = "addTeameinteilung";
   public static final String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
 
-  public Jury() {
+  public Contest() {
   }
 
-  public Jury(int contestid) {
+  public Contest(int contestid) {
     this.contestid = contestid;
   }
 
@@ -223,7 +223,7 @@ public class Jury implements Serializable, DbEntity {
   protected void addTeameinteilung(Teameinteilung t) {
     assert (t != null);
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Teameinteilung to this Jury. Record must be persited");
+      throw new RuntimeException("Cannot add a Teameinteilung to this Contest. Record must be persited");
     }
     if (teameinteilungList.contains(t)) {
       return;
@@ -237,7 +237,7 @@ public class Jury implements Serializable, DbEntity {
 
   protected void removeTeameinteilung(Teameinteilung t) {
     if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot remove Teameinteilung from Jury. Record must be persited");
+      throw new RuntimeException("Cannot remove Teameinteilung from Contest. Record must be persited");
     }
     if (!teameinteilungList.contains(t)) {
       return;
@@ -283,10 +283,10 @@ public class Jury implements Serializable, DbEntity {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Jury)) {
+    if (!(object instanceof Contest)) {
       return false;
     }
-    Jury other = (Jury) object;
+    Contest other = (Contest) object;
     if ((this.contestid == null && other.contestid != null) || (this.contestid != null && !this.contestid.equals(other.contestid))) {
       return false;
     }
@@ -295,7 +295,7 @@ public class Jury implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Jury[ juryid=" + contestid + " ]";
+    return "Contest[ juryid=" + contestid + " ]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -304,7 +304,7 @@ public class Jury implements Serializable, DbEntity {
 
   public static void addPropertyChangeListener(PropertyChangeListener listener, Integer juryid) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Jury.class, juryid));
+            new EntityIdentity(Contest.class, juryid));
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
@@ -321,7 +321,7 @@ public class Jury implements Serializable, DbEntity {
    */
   public static void removePropertyChangeListener(PropertyChangeListener listener, Integer juryid) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Jury.class, juryid));
+            new EntityIdentity(Contest.class, juryid));
   }
 
   private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
@@ -332,6 +332,6 @@ public class Jury implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Jury.class, contestid);
+    return new EntityIdentity(Contest.class, contestid);
   }
 }

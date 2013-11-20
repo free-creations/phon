@@ -16,7 +16,7 @@
 package de.free_creations.nbPhonAPI;
 
 import de.free_creations.dbEntities.Personen;
-import de.free_creations.dbEntities.Verfuegbarkeit;
+import de.free_creations.dbEntities.Availability;
 import de.free_creations.dbEntities.Zeit;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
@@ -107,7 +107,7 @@ public class PersonCollection implements MutableEntityCollection<Personen, Integ
       List<Zeit> allTimeslots = allTimesQuery.getResultList();
 
       for (Zeit t : allTimeslots) {
-        Verfuegbarkeit v = new Verfuegbarkeit();
+        Availability v = new Availability();
         v.setVerfuegbar(false);
         entityManager.persist(v);
         v.setZeitid(t);

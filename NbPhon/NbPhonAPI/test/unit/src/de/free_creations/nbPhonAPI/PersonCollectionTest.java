@@ -17,7 +17,7 @@ package de.free_creations.nbPhonAPI;
 
 import de.free_creations.dbEntities.EntityIdentity;
 import de.free_creations.dbEntities.Personen;
-import de.free_creations.dbEntities.Verfuegbarkeit;
+import de.free_creations.dbEntities.Availability;
 import de.free_creations.dbEntities.Zeit;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
@@ -148,7 +148,7 @@ public class PersonCollectionTest {
 
   /**
    * When applying the method newPerson() the returned "Personen"- entity must
-   * have all disponibility (Verfuegbarkeit) records attached.
+   * have all disponibility (Availability) records attached.
    */
   @Test
   public void newPerson_mustHaveTimeSlots() throws DataBaseNotReadyException {
@@ -156,14 +156,14 @@ public class PersonCollectionTest {
     PersonCollection testItem = Manager.getPersonCollection();
 
     Personen newPerson = testItem.newEntity();
-    List<Verfuegbarkeit> verfuegbarkeitList = newPerson.getVerfuegbarkeitList();
+    List<Availability> verfuegbarkeitList = newPerson.getVerfuegbarkeitList();
 
     // verify that the verfuegbarkeitList exists and is not empty
     assertNotNull(verfuegbarkeitList);
     assertFalse(verfuegbarkeitList.isEmpty());
 
     // verify that all the dependencies are correctly linked
-    for (Verfuegbarkeit v : verfuegbarkeitList) {
+    for (Availability v : verfuegbarkeitList) {
       assertEquals(v.getPersonid(), newPerson);
       Zeit z = v.getZeitid();
       assertTrue(z.getVerfuegbarkeitList().contains(v));

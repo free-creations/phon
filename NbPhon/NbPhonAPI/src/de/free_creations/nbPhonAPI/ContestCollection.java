@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -30,7 +30,7 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class ContestCollection implements MutableEntityCollection<Jury, Integer> {
+public class ContestCollection implements MutableEntityCollection<Contest, Integer> {
 
   private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -38,9 +38,9 @@ public class ContestCollection implements MutableEntityCollection<Jury, Integer>
   }
 
   public Set<String> contestTypes() {
-    List<Jury> jj = getAll();
+    List<Contest> jj = getAll();
     TreeSet<String> result = new TreeSet<>();
-    for (Jury j : jj) {
+    for (Contest j : jj) {
       if (j.getWertungstyp() != null) {
         result.add(j.getWertungstyp());
       }
@@ -49,12 +49,12 @@ public class ContestCollection implements MutableEntityCollection<Jury, Integer>
   }
 
   @Override
-  public List<Jury> getAll() {
+  public List<Contest> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
         EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<Jury> query = entityManager.createNamedQuery("Jury.findAll", Jury.class);
-        List<Jury> jj = query.getResultList();
+        TypedQuery<Contest> query = entityManager.createNamedQuery("Contest.findAll", Contest.class);
+        List<Contest> jj = query.getResultList();
         return jj;
       } catch (DataBaseNotReadyException ignored) {
         return Collections.emptyList();
@@ -63,21 +63,21 @@ public class ContestCollection implements MutableEntityCollection<Jury, Integer>
   }
 
   @Override
-  public Jury findEntity(Integer key) throws DataBaseNotReadyException {
+  public Contest findEntity(Integer key) throws DataBaseNotReadyException {
     if (key == null) {
       return null;
     }
     synchronized (Manager.databaseAccessLock) {
-      return Manager.getEntityManager().find(Jury.class, key);
+      return Manager.getEntityManager().find(Contest.class, key);
     }
   }
 
   @Override
-  public Jury newEntity() throws DataBaseNotReadyException {
-    Jury newContest = null;
+  public Contest newEntity() throws DataBaseNotReadyException {
+    Contest newContest = null;
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
-      newContest = new Jury();
+      newContest = new Contest();
       entityManager.persist(newContest);
       try {
         entityManager.flush();

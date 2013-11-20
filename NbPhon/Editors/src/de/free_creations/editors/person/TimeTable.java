@@ -16,7 +16,7 @@
 package de.free_creations.editors.person;
 
 import de.free_creations.dbEntities.Personen;
-import de.free_creations.dbEntities.Verfuegbarkeit;
+import de.free_creations.dbEntities.Availability;
 import de.free_creations.dbEntities.Zeit;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
@@ -255,13 +255,13 @@ public class TimeTable extends JTable {
      * Manager.getTimeSlotCollection)
      * @return
      */
-    private Verfuegbarkeit getVerfuegEntity(int rowIndex, int columnIndex) {
+    private Availability getVerfuegEntity(int rowIndex, int columnIndex) {
       try {
         Personen p = Manager.getPersonCollection().findEntity(personId);
-        List<Verfuegbarkeit> emptyVv = Collections.emptyList();
-        List<Verfuegbarkeit> vv = (p == null) ? emptyVv : p.getVerfuegbarkeitList();
+        List<Availability> emptyVv = Collections.emptyList();
+        List<Availability> vv = (p == null) ? emptyVv : p.getVerfuegbarkeitList();
         Zeit t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
-        for (Verfuegbarkeit v : vv) {
+        for (Availability v : vv) {
           if (Objects.equals(t, v.getZeitid())) {
             return v;
           }
@@ -281,7 +281,7 @@ public class TimeTable extends JTable {
      */
     private boolean getVerfuegValue(int rowIndex, int columnIndex) {
       assert (columnIndex > 0);
-      Verfuegbarkeit v = getVerfuegEntity(rowIndex, columnIndex);
+      Availability v = getVerfuegEntity(rowIndex, columnIndex);
       if (v != null) {
         return v.isVerfuegbar();
       } else {
@@ -314,7 +314,7 @@ public class TimeTable extends JTable {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
       if (columnIndex > 0) {
-        Verfuegbarkeit v = getVerfuegEntity(rowIndex, columnIndex);
+        Availability v = getVerfuegEntity(rowIndex, columnIndex);
         if (v != null) {
           if (aValue instanceof Boolean) {
             v.setVerfuegbar((Boolean) aValue);

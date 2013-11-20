@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
@@ -72,7 +72,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   public static class JuryNodeFlavor extends DataFlavor {
 
     public JuryNodeFlavor() {
-      super(ContestNode.class, "Jury");
+      super(ContestNode.class, "Contest");
     }
   }
 
@@ -127,7 +127,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   public Integer getJuryId() {
     return key;
   }
-  private final MutableEntityCollection<Jury, Integer> juryManager;
+  private final MutableEntityCollection<Contest, Integer> juryManager;
   private final EditCookie editCookie = new EditCookie() {
     @Override
     public void edit() {
@@ -170,14 +170,14 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   };
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
 
-  public ContestNode(Integer juryId, MutableEntityCollection<Jury, Integer> juryManager) {
+  public ContestNode(Integer juryId, MutableEntityCollection<Contest, Integer> juryManager) {
     super(makeChildren());
 
     this.key = juryId;
 
     this.juryManager = juryManager;
     if (key != null) {
-      Jury.addPropertyChangeListener(listener, juryId);
+      Contest.addPropertyChangeListener(listener, juryId);
       getCookieSet().add(editCookie);
     }
   }
@@ -249,7 +249,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
 
   @Override
   public String getName() {
-    return String.format("Jury[ %s ]", key);
+    return String.format("Contest[ %s ]", key);
   }
 
   @Override
@@ -258,7 +258,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
       return "";
     }
     try {
-      Jury j = juryManager.findEntity(key);
+      Contest j = juryManager.findEntity(key);
       if (j != null) {
         String wertung = j.getWertung();
         if (wertung != null) {
@@ -280,7 +280,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
     BufferedImage result = iconManager().iconJury;
     if (key != null) {
       try {
-        Jury j = juryManager.findEntity(key);
+        Contest j = juryManager.findEntity(key);
         if (j != null) {
           String wertungstyp = j.getWertungstyp();
           result = iconManager().getInstrumentedImage(result, wertungstyp);

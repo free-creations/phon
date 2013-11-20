@@ -88,7 +88,7 @@ public class PersonenTest {
    */
   @Test
   public void testAddVerfuegbarkeit() {
-    Verfuegbarkeit v1 = new Verfuegbarkeit();
+    Availability v1 = new Availability();
     entityManager.persist(v1);
     v1.setZeitid(testZeit);
 

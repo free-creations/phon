@@ -76,7 +76,7 @@ public class Teameinteilung implements Serializable, DbEntity {
   private Funktionen funktionen;
   @JoinColumn(name = "CONTESTID", referencedColumnName = "CONTESTID")
   @ManyToOne(optional = false)
-  private Jury contestid;
+  private Contest contestid;
 
 //  public final static String PROP_FUNCTION = "function";
 //  public final static String PROP_JURY = "jury";
@@ -95,7 +95,7 @@ public class Teameinteilung implements Serializable, DbEntity {
     return allocationid;
   }
 
-  public Teameinteilung(Zeit z, Jury j, Funktionen f) {
+  public Teameinteilung(Zeit z, Contest j, Funktionen f) {
     this();
     setZeit(z);
     setJury(j);
@@ -177,12 +177,12 @@ public class Teameinteilung implements Serializable, DbEntity {
     }
   }
 
-  public Jury getJury() {
+  public Contest getJury() {
     return contestid;
   }
 
-  public final void setJury(Jury jury) {
-    Jury old = this.contestid;
+  public final void setJury(Contest jury) {
+    Contest old = this.contestid;
     this.contestid = jury;
 //    EntityIdentity newId = (jury == null) ? null : jury.identity();
 //    EntityIdentity oldId = (old == null) ? null : old.identity();

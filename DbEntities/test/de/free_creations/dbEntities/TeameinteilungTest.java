@@ -109,7 +109,7 @@ public class TeameinteilungTest {
     Zeit z = new Zeit(1001);
     entityManager.persist(z);
 
-    Jury j = new Jury();
+    Contest j = new Contest();
     entityManager.persist(j);
 
     Funktionen f = new Funktionen("TestF");

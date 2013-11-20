@@ -42,11 +42,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "AVAILABILITY")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Verfuegbarkeit.findAll", query = "SELECT v FROM Verfuegbarkeit v"),
-  @NamedQuery(name = "Verfuegbarkeit.findByVerfuegid", query = "SELECT v FROM Verfuegbarkeit v WHERE v.verfuegid = :verfuegid"),
-  @NamedQuery(name = "Verfuegbarkeit.findByVerfuegbar", query = "SELECT v FROM Verfuegbarkeit v WHERE v.verfuegbar = :verfuegbar"),
-  @NamedQuery(name = "Verfuegbarkeit.findByLetzteaenderung", query = "SELECT v FROM Verfuegbarkeit v WHERE v.letzteaenderung = :letzteaenderung")})
-public class Verfuegbarkeit implements Serializable , DbEntity {
+  @NamedQuery(name = "Availability.findAll", query = "SELECT v FROM Availability v"),
+  @NamedQuery(name = "Availability.findByVerfuegid", query = "SELECT v FROM Availability v WHERE v.verfuegid = :verfuegid"),
+  @NamedQuery(name = "Availability.findByVerfuegbar", query = "SELECT v FROM Availability v WHERE v.verfuegbar = :verfuegbar"),
+  @NamedQuery(name = "Availability.findByLetzteaenderung", query = "SELECT v FROM Availability v WHERE v.letzteaenderung = :letzteaenderung")})
+public class Availability implements Serializable , DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -68,10 +68,10 @@ public class Verfuegbarkeit implements Serializable , DbEntity {
   @ManyToOne(optional = false)
   private Personen personid;
 
-  public Verfuegbarkeit() {
+  public Availability() {
   }
 
-  public Verfuegbarkeit(Integer verfuegid) {
+  public Availability(Integer verfuegid) {
     this.verfuegid = verfuegid;
   }
 
@@ -137,7 +137,7 @@ public class Verfuegbarkeit implements Serializable , DbEntity {
     EntityIdentity oldId = (old == null) ? null : old.identity();
 
     if (!Objects.equals(old, zeitid)) {
-      firePropertyChangeOnSelf(Verfuegbarkeit.PROP_ZEIT, oldId, newId);
+      firePropertyChangeOnSelf(Availability.PROP_ZEIT, oldId, newId);
       if (old != null) {
         old.removeVerfuegbarkeit(this);
       }
@@ -165,7 +165,7 @@ public class Verfuegbarkeit implements Serializable , DbEntity {
     EntityIdentity oldId = (old == null) ? null : old.identity();
 
     if (!Objects.equals(old, person)) {
-      firePropertyChangeOnSelf(Verfuegbarkeit.PROP_PERSON, oldId, newId);
+      firePropertyChangeOnSelf(Availability.PROP_PERSON, oldId, newId);
       if (old != null) {
         old.removeVerfuegbarkeit(this);
       }
@@ -185,10 +185,10 @@ public class Verfuegbarkeit implements Serializable , DbEntity {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Verfuegbarkeit)) {
+    if (!(object instanceof Availability)) {
       return false;
     }
-    Verfuegbarkeit other = (Verfuegbarkeit) object;
+    Availability other = (Availability) object;
     if ((this.verfuegid == null && other.verfuegid != null) || (this.verfuegid != null && !this.verfuegid.equals(other.verfuegid))) {
       return false;
     }
@@ -197,7 +197,7 @@ public class Verfuegbarkeit implements Serializable , DbEntity {
 
   @Override
   public String toString() {
-    return "de.free_creations.dbEntities.Verfuegbarkeit[ verfuegid=" + verfuegid + " ]";
+    return "de.free_creations.dbEntities.Availability[ verfuegid=" + verfuegid + " ]";
   }
 
   /**
@@ -235,6 +235,6 @@ public class Verfuegbarkeit implements Serializable , DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Verfuegbarkeit.class, verfuegid);
+    return new EntityIdentity(Availability.class, verfuegid);
   }
 }

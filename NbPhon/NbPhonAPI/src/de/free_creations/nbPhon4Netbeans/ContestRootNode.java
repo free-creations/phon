@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import javax.swing.Action;
 import org.openide.nodes.AbstractNode;
@@ -28,20 +28,20 @@ import org.openide.nodes.Node;
 public class ContestRootNode extends AbstractNode {
 
   private final ContestNodesArray children;
-  private final MutableEntityCollection<Jury, Integer> juryCollection;
+  private final MutableEntityCollection<Contest, Integer> juryCollection;
  
 
   private final Action newItemAction = new NewContestAction();
   private final Action[] allActions = new Action[]{newItemAction};
 
-  private ContestRootNode(ContestNodesArray children, MutableEntityCollection<Jury, Integer> jj) {
+  private ContestRootNode(ContestNodesArray children, MutableEntityCollection<Contest, Integer> jj) {
     super(children);
     this.children = children;
     this.juryCollection = jj;
 
   }
 
-  public ContestRootNode(MutableEntityCollection<Jury, Integer> pp) {
+  public ContestRootNode(MutableEntityCollection<Contest, Integer> pp) {
     this(new ContestNodesArray(pp), pp);
   }
 
@@ -102,7 +102,7 @@ public class ContestRootNode extends AbstractNode {
   }
 
   /**
-   * Find the position of a Jury node with a given key.
+   * Find the position of a Contest node with a given key.
    *
    * @param key
    * @return return the current position. If there is no ContestNode with the

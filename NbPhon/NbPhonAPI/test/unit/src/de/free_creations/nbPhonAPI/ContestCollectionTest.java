@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Jury;
+import de.free_creations.dbEntities.Contest;
 import java.util.List;
 import java.util.Set;
 import org.junit.Test;
@@ -61,7 +61,7 @@ public class ContestCollectionTest {
    */
   @Test
   public void testGetAll() {
-    List<Jury> result = contestCollection.getAll();
+    List<Contest> result = contestCollection.getAll();
     assertNotNull(result);
     assertFalse(result.isEmpty());
   }
@@ -72,7 +72,7 @@ public class ContestCollectionTest {
   @Test
   public void testFindEntity() throws Exception {
 
-    Jury entity = contestCollection.findEntity(1);
+    Contest entity = contestCollection.findEntity(1);
     assertNotNull(entity);
     assertEquals(1, entity.getJuryid());
   }
@@ -83,7 +83,7 @@ public class ContestCollectionTest {
   @Test
   public void testNewEntity() throws Exception {
     System.out.println("testNewEntity");
-    Jury entity = contestCollection.newEntity();
+    Contest entity = contestCollection.newEntity();
     assertNotNull(entity);
     System.out.println("..."+entity.getJuryid());
   }
