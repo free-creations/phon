@@ -64,7 +64,7 @@ public class JuryNodesArray extends Children.SortedArray {
         if (result == 0) {
           // OOps, they have both the same long description (probably both null)
           // So we'll discriminate through the primary key.
-          return Utils.stringCompareNull(jn1.getJuryId(), jn2.getJuryId());
+          return Utils.integerCompareNull(jn1.getJuryId(), jn2.getJuryId());
         }
 
         // OK, this is the result we wanted.
@@ -73,11 +73,11 @@ public class JuryNodesArray extends Children.SortedArray {
       } catch (DataBaseNotReadyException ex) {
         // OOps, database not ready.
         // So we'll discriminate through the primary key.
-        return Utils.stringCompareNull(jn1.getJuryId(), jn2.getJuryId());
+        return Utils.integerCompareNull(jn1.getJuryId(), jn2.getJuryId());
       }
     }
   };
-  private final MutableEntityCollection<Jury, String> juryCollection;
+  private final MutableEntityCollection<Jury, Integer> juryCollection;
   private final PropertyChangeListener personCollectionListener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -87,7 +87,7 @@ public class JuryNodesArray extends Children.SortedArray {
         Object o = evt.getNewValue();
         if (o instanceof EntityIdentity) {
           EntityIdentity newJury = (EntityIdentity) o;
-          String juryId = (String) newJury.primaryKey;
+          Integer juryId = (Integer) newJury.primaryKey;
           //create a node for this new Jury
           JuryNode newNode = new JuryNode(juryId, juryCollection);
           newNode.notifyPendingChanges();
@@ -118,7 +118,7 @@ public class JuryNodesArray extends Children.SortedArray {
     }
   };
 
-  public JuryNodesArray(MutableEntityCollection<Jury, String> juryCollection) {
+  public JuryNodesArray(MutableEntityCollection<Jury, Integer> juryCollection) {
     super();
     super.setComparator(juryComparator);
     this.juryCollection = juryCollection;
@@ -132,7 +132,7 @@ public class JuryNodesArray extends Children.SortedArray {
 
     for (Jury j : jj) {
       assert (j != null);
-      String juryid = j.getJuryid();
+      Integer juryid = j.getJuryid();
       assert (juryid != null);
       result.add(new JuryNode(juryid, juryCollection));
     }
@@ -154,7 +154,7 @@ public class JuryNodesArray extends Children.SortedArray {
    * @return returns the index of the current position. Returns -1 if no
    * JuryNode with the searched key could be found.
    */
-  int findIndexForNode(String key) {
+  int findIndexForNode(Integer key) {
     int nodesCount = getNodesCount();
     for (int i = 0; i < nodesCount; i++) {
       Node n = getNodeAt(i);

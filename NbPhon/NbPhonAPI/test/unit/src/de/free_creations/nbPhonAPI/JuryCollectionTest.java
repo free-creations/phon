@@ -72,9 +72,9 @@ public class JuryCollectionTest {
   @Test
   public void testFindEntity() throws Exception {
 
-    Jury entity = juryCollection.findEntity("BLOCKFLOETE-1");
+    Jury entity = juryCollection.findEntity(1);
     assertNotNull(entity);
-    assertEquals("BLOCKFLOETE-1", entity.getJuryid());
+    assertEquals(1, entity.getJuryid());
   }
 
   /**

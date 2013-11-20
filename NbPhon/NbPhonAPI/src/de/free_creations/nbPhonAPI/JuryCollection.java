@@ -30,7 +30,7 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JuryCollection implements MutableEntityCollection<Jury, String> {
+public class JuryCollection implements MutableEntityCollection<Jury, Integer> {
 
   private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -63,7 +63,7 @@ public class JuryCollection implements MutableEntityCollection<Jury, String> {
   }
 
   @Override
-  public Jury findEntity(String key) throws DataBaseNotReadyException {
+  public Jury findEntity(Integer key) throws DataBaseNotReadyException {
     if (key == null) {
       return null;
     }
@@ -74,39 +74,31 @@ public class JuryCollection implements MutableEntityCollection<Jury, String> {
 
   @Override
   public Jury newEntity() throws DataBaseNotReadyException {
-    Jury newJury = null;
+    Jury newContest = null;
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
-      newJury = new Jury(makeNewKey());
-      entityManager.persist(newJury);
+      newContest = new Jury();
+      entityManager.persist(newContest);
       try {
         entityManager.flush();
-        firePropertyChange(PROP_ITEM_ADDED, null, newJury.identity());
+      } catch (Throwable ex) {
+        throw new DataBaseNotReadyException(ex);
+      }
+      try {
+        entityManager.flush();
+        firePropertyChange(PROP_ITEM_ADDED, null, newContest.identity());
       } catch (Throwable ex) {
         throw new DataBaseNotReadyException(ex);
       }
       
-      return newJury;
+      return newContest;
     }
   }
 
-  /**
-   * A very simplistic way to generate a new primary key.
-   * @return
-   * @throws DataBaseNotReadyException 
-   */
-  private String makeNewKey() throws DataBaseNotReadyException {
-    for (int i = 1; i < Integer.MAX_VALUE; i++) {
-      String newKey = String.format("Jury%d", i);
-      if (findEntity(newKey) == null) {
-        return newKey;
-      }
-    }
-    throw new RuntimeException("Key range exhausted.");
-  }
+
 
   @Override
-  public void removeEntity(String key) throws DataBaseNotReadyException {
+  public void removeEntity(Integer key) throws DataBaseNotReadyException {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

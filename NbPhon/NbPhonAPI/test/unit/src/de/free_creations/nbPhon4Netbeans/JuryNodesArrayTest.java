@@ -31,7 +31,7 @@ import org.openide.nodes.Node;
  */
 public class JuryNodesArrayTest {
 
-  private class CollectionMock implements MutableEntityCollection<Jury, String> {
+  private class CollectionMock implements MutableEntityCollection<Jury, Integer> {
 
     public Jury j1;
     public Jury j2;
@@ -39,8 +39,8 @@ public class JuryNodesArrayTest {
     @Override
     public List<Jury> getAll() {
       ArrayList<Jury> result = new ArrayList<>();
-      j1 = new Jury("J1");
-      j2 = new Jury("J2");
+      j1 = new Jury(1);
+      j2 = new Jury(2);
       j1.setWertung("j1 jury");
       j2.setWertung("j2 jury");
 
@@ -50,11 +50,11 @@ public class JuryNodesArrayTest {
     }
 
     @Override
-    public Jury findEntity(String key) throws DataBaseNotReadyException {
+    public Jury findEntity(Integer key) throws DataBaseNotReadyException {
       switch (key) {
-        case "J1":
+        case 1:
           return j1;
-        case "J2":
+        case 2:
           return j2;
       }
       return null;
@@ -75,12 +75,12 @@ public class JuryNodesArrayTest {
     }
 
     @Override
-    public void removeEntity(String key) throws DataBaseNotReadyException {
+    public void removeEntity(Integer key) throws DataBaseNotReadyException {
       throw new UnsupportedOperationException("Not supported (not tested) yet.");
 
     }
   };
-  private CollectionMock juryCollectionMock = new CollectionMock();
+  private final CollectionMock juryCollectionMock = new CollectionMock();
 
   /**
    * Test of initCollection method, of class JuryNodesArray.
@@ -100,12 +100,12 @@ public class JuryNodesArrayTest {
   public void testfindIndexForNode() {
     JuryNodesArray testItem = new JuryNodesArray(juryCollectionMock);
 
-    int indexFirstNode = testItem.findIndexForNode("J1");
+    int indexFirstNode = testItem.findIndexForNode(1);
     assertEquals(0, indexFirstNode);
-    int indexSecondNode = testItem.findIndexForNode("J2");
+    int indexSecondNode = testItem.findIndexForNode(2);
     assertEquals(1, indexSecondNode);
 
-    int indexNotFound = testItem.findIndexForNode("CannotBeFound");
+    int indexNotFound = testItem.findIndexForNode(10000);
     assertEquals(-1, indexNotFound);
 
     int indexNotFound2 = testItem.findIndexForNode(null);

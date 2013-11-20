@@ -28,20 +28,20 @@ import org.openide.nodes.Node;
 public class JuryRootNode extends AbstractNode {
 
   private final JuryNodesArray children;
-  private final MutableEntityCollection<Jury, String> juryCollection;
+  private final MutableEntityCollection<Jury, Integer> juryCollection;
  
 
   private final Action newItemAction = new NewJuryAction();
   private final Action[] allActions = new Action[]{newItemAction};
 
-  private JuryRootNode(JuryNodesArray children, MutableEntityCollection<Jury, String> jj) {
+  private JuryRootNode(JuryNodesArray children, MutableEntityCollection<Jury, Integer> jj) {
     super(children);
     this.children = children;
     this.juryCollection = jj;
 
   }
 
-  public JuryRootNode(MutableEntityCollection<Jury, String> pp) {
+  public JuryRootNode(MutableEntityCollection<Jury, Integer> pp) {
     this(new JuryNodesArray(pp), pp);
   }
 
@@ -92,7 +92,7 @@ public class JuryRootNode extends AbstractNode {
    * @return the JuryNode that is currently at the position given by index.
    * Returns null if the index is invalid.
    */
-  public String getNodeKeyAt(int index) {
+  public Integer getNodeKeyAt(int index) {
     JuryNode node = getNodeAt(index);
     if (node != null) {
       return node.getJuryId();
@@ -108,7 +108,7 @@ public class JuryRootNode extends AbstractNode {
    * @return return the current position. If there is no JuryNode with the
    * given key the function will return -1.
    */
-  public int findIndexForNode(String key) {
+  public int findIndexForNode(int key) {
     return children.findIndexForNode(key);
   }
 }

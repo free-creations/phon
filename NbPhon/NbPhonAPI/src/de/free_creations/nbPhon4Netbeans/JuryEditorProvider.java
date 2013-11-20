@@ -25,5 +25,5 @@ import org.openide.windows.CloneableTopComponent;
  */
 public interface JuryEditorProvider {
 
-  public CloneableTopComponent getEditor(boolean newWindow, String key);
+  public CloneableTopComponent getEditor(boolean newWindow, Integer key);
 }

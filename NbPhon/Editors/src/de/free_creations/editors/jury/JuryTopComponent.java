@@ -53,7 +53,7 @@ import org.openide.windows.CloneableTopComponent;
 })
 public final class JuryTopComponent extends CloneableTopComponent {
 
-  private String currentKey = null;
+  private Integer currentKey = null;
   private final JuryCollection juryCollection = Manager.getJuryCollection();
   private final PropertyChangeListener listener = new PropertyChangeListener() {
     @Override
@@ -73,7 +73,7 @@ public final class JuryTopComponent extends CloneableTopComponent {
 
   }
 
-  JuryTopComponent(String key) {
+  JuryTopComponent(Integer key) {
     this();
     viewJuryRecord(key);
 
@@ -237,7 +237,7 @@ public final class JuryTopComponent extends CloneableTopComponent {
     // TODO read your settings according to their version
   }
 
-  void viewJuryRecord(String newKey) {
+  void viewJuryRecord(Integer newKey) {
     if (!Objects.equals(currentKey, newKey)) {
       Jury.removePropertyChangeListener(listener, currentKey);
       currentKey = newKey;
@@ -247,7 +247,7 @@ public final class JuryTopComponent extends CloneableTopComponent {
         Jury.addPropertyChangeListener(listener, newKey);
         refreshView(newJury);
       }
-      lblJuryId.setText(newKey);
+      lblJuryId.setText(String.format("%s",newKey));
       allocationTable.setJuryId(newKey);
     }
   }
@@ -268,10 +268,10 @@ public final class JuryTopComponent extends CloneableTopComponent {
     if (wertung.length() > 0) {
       setDisplayName(wertung);
     } else {
-      setDisplayName(currentKey);
+      setDisplayName(String.format("Contest[%s]", currentKey));
     }
 
-    lblJuryId.setText(currentKey);
+    lblJuryId.setText(String.format("%s", currentKey));
     edWertung.setText(noNull(jury.getWertung()));
     edRaum.setText(noNull(jury.getWertungsraum()));
     edCategory.setText(noNull(jury.getWertungstyp()));

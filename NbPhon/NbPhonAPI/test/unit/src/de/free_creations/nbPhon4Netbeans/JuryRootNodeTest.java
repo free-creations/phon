@@ -31,7 +31,7 @@ import org.junit.Ignore;
  */
 public class JuryRootNodeTest {
 
-  private class CollectionMock implements MutableEntityCollection<Jury, String> {
+  private class CollectionMock implements MutableEntityCollection<Jury, Integer> {
 
     public Jury j1;
     public Jury j2;
@@ -39,8 +39,8 @@ public class JuryRootNodeTest {
     @Override
     public List<Jury> getAll() {
       ArrayList<Jury> result = new ArrayList<>();
-      j1 = new Jury("J1");
-      j2 = new Jury("J2");
+      j1 = new Jury(1);
+      j2 = new Jury(2);
       j1.setWertung("j1 jury");
       j2.setWertung("j2 jury");
 
@@ -50,11 +50,11 @@ public class JuryRootNodeTest {
     }
 
     @Override
-    public Jury findEntity(String key) throws DataBaseNotReadyException {
+    public Jury findEntity(Integer key) throws DataBaseNotReadyException {
       switch (key) {
-        case "J1":
+        case 1:
           return j1;
-        case "J2":
+        case 2:
           return j2;
       }
       return null;
@@ -75,12 +75,12 @@ public class JuryRootNodeTest {
     }
 
     @Override
-    public void removeEntity(String key) throws DataBaseNotReadyException {
+    public void removeEntity(Integer key) throws DataBaseNotReadyException {
       throw new UnsupportedOperationException("Not supported (not tested) yet.");
 
     }
   };
-  private CollectionMock juryCollectionMock = new CollectionMock();
+  private final CollectionMock juryCollectionMock = new CollectionMock();
 
   public JuryRootNodeTest() {
   }
@@ -116,9 +116,9 @@ public class JuryRootNodeTest {
   public void testGetNodeAt() {
     JuryRootNode testRoot = new JuryRootNode(juryCollectionMock);
     JuryNode node1 = testRoot.getNodeAt(0);
-    assertEquals(juryCollectionMock.j1.getJuryid(), node1.getJuryId());
+    assertEquals((int)juryCollectionMock.j1.getJuryid(), (int)node1.getJuryId());
     JuryNode node2 = testRoot.getNodeAt(1);
-    assertEquals(juryCollectionMock.j2.getJuryid(), node2.getJuryId());
+    assertEquals((int)juryCollectionMock.j2.getJuryid(), (int)node2.getJuryId());
 
 
     JuryNode nullJury = testRoot.getNodeAt(4711);
@@ -131,12 +131,12 @@ public class JuryRootNodeTest {
   @Test
   public void testGetNodeKeyAt() {
     JuryRootNode testRoot = new JuryRootNode(juryCollectionMock);
-    String nodeKey1 = testRoot.getNodeKeyAt(0);
-    assertEquals("J1", nodeKey1);
-    String nodeKey2 = testRoot.getNodeKeyAt(1);
-    assertEquals("J2", nodeKey2);
+    int nodeKey1 = testRoot.getNodeKeyAt(0);
+    assertEquals(1, nodeKey1);
+    int nodeKey2 = testRoot.getNodeKeyAt(1);
+    assertEquals(2, nodeKey2);
 
-    String notFoundKey = testRoot.getNodeKeyAt(4711);
+    Integer notFoundKey = testRoot.getNodeKeyAt(4711);
     assertNull(notFoundKey);
   }
 
@@ -146,12 +146,12 @@ public class JuryRootNodeTest {
   @Test
   public void testFindIndexForNode() {
     JuryRootNode testRoot = new JuryRootNode(juryCollectionMock);
-    int indexForNode1 = testRoot.findIndexForNode("J1");
+    int indexForNode1 = testRoot.findIndexForNode(1);
     assertEquals(0, indexForNode1);
-    int indexForNode2 = testRoot.findIndexForNode("J2");
+    int indexForNode2 = testRoot.findIndexForNode(2);
     assertEquals(1, indexForNode2);
 
-    int notFindable = testRoot.findIndexForNode("J4711");
+    int notFindable = testRoot.findIndexForNode(47114711);
     assertEquals(-1, notFindable);
   }
 

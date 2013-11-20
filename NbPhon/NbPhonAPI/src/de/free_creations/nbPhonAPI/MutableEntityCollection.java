@@ -22,6 +22,8 @@ import java.beans.PropertyChangeListener;
  * a specific table of the database.
  * 
  * @author Harald Postner <Harald at free-creations.de>
+ * @param <EntiyClass>
+ * @param <KeyClass>
  */
 public interface MutableEntityCollection<EntiyClass, KeyClass>
         extends EntityCollection<EntiyClass, KeyClass> {

@@ -44,8 +44,8 @@ import org.openide.nodes.Node;
 
 /**
  *
- * @see http://netbeans.dzone.com/nb-how-to-drag-drop-with-nodes-api for a DnD
- * example.
+ * @see http://netbeans.dzone.com/nb-how-to-drag-drop-with-nodes-apifor a DnD
+ example.
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class JuryNode extends AbstractNode implements CommittableNode {
@@ -81,11 +81,11 @@ public class JuryNode extends AbstractNode implements CommittableNode {
    */
   public class JuryNodeTransferable extends ExTransferable.Single {
 
-    private final String transferablePersonId;
+    private final Integer contestId;
 
-    public JuryNodeTransferable(String personId) {
+    public JuryNodeTransferable(Integer contestId) {
       super(JURY_NODE_FLAVOR);
-      this.transferablePersonId = personId;
+      this.contestId = contestId;
     }
 
     /**
@@ -94,13 +94,13 @@ public class JuryNode extends AbstractNode implements CommittableNode {
      * @return
      */
     @Override
-    protected String getData() {
-      return transferablePersonId;
+    protected Integer getData() {
+      return contestId;
     }
   }
   public static final DataFlavor JURY_NODE_FLAVOR = new JuryNodeFlavor();
   private boolean pendingChanges = false;
-  private final String key;
+  private final Integer key;
   private final PropertyChangeListener listener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -124,10 +124,10 @@ public class JuryNode extends AbstractNode implements CommittableNode {
    *
    * @return returns the juryId.
    */
-  public String getJuryId() {
+  public Integer getJuryId() {
     return key;
   }
-  private final MutableEntityCollection<Jury, String> juryManager;
+  private final MutableEntityCollection<Jury, Integer> juryManager;
   private final EditCookie editCookie = new EditCookie() {
     @Override
     public void edit() {
@@ -170,7 +170,7 @@ public class JuryNode extends AbstractNode implements CommittableNode {
   };
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
 
-  public JuryNode(String juryId, MutableEntityCollection<Jury, String> juryManager) {
+  public JuryNode(Integer juryId, MutableEntityCollection<Jury, Integer> juryManager) {
     super(makeChildren());
 
     this.key = juryId;

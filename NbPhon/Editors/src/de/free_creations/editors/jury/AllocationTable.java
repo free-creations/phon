@@ -104,11 +104,11 @@ public class AllocationTable extends JTable {
     setCellSelectionEnabled(true);
   }
 
-  void setJuryId(String key) {
+  void setJuryId(Integer key) {
     TableModel oldModel = getModel();
     if (oldModel instanceof AllocationTableModel) {
       AllocationTableModel oldAllocModel = (AllocationTableModel) oldModel;
-      String oldKey = oldAllocModel.getJuryId();
+      Integer oldKey = oldAllocModel.getJuryId();
       if (Objects.equals(oldKey, key)) {
         return;
       }
@@ -220,11 +220,11 @@ public class AllocationTable extends JTable {
     private final int timeOfDayCount;
     private final String[] dayNames;
     private final int dayCount;
-    private final String juryId;
+    private final Integer juryId;
     private final String[] functionNames;
     private final int functionCount;
 
-    AllocationTableModel(String juryId) {
+    AllocationTableModel(Integer juryId) {
       this.juryId = juryId;
       TimeSlotCollection tt = Manager.getTimeSlotCollection();
       dayNames = tt.dayNames();
@@ -237,7 +237,7 @@ public class AllocationTable extends JTable {
 
     }
 
-    public String getJuryId() {
+    public Integer getJuryId() {
       return juryId;
     }
 

@@ -31,7 +31,7 @@ public class JuryEditorProvider implements de.free_creations.nbPhon4Netbeans.Jur
 
 
   @Override
-  public CloneableTopComponent getEditor(boolean newWindow, String key) {
+  public CloneableTopComponent getEditor(boolean newWindow, Integer key) {
     WindowManager windowManager = WindowManager.getDefault();
     JuryTopComponent editor = null;
     if(!newWindow){
