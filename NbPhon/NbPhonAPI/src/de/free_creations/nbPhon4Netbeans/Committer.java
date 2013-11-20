@@ -32,7 +32,7 @@ import org.netbeans.spi.actions.AbstractSavable;
  * commitment of pending changes.
  *
  * @see <a href="https://platform.netbeans.org/tutorials/nbm-crud.html">NetBeans
- * Platform CRUD Application Tutorial</a>
+ Platform CRUD Application Tutorial</a>
  *
  * @author Harald Postner <Harald at free-creations.de>
  */

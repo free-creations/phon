@@ -38,6 +38,9 @@ public class PersonCollection implements MutableEntityCollection<Personen, Integ
    * Indicates that a new item has been added.
    */
   
+  /**
+   * Indicates that a new item has been added.
+   */
   public static final String PROP_DATABASESTATUS = "databaseStatus";
 
   /**

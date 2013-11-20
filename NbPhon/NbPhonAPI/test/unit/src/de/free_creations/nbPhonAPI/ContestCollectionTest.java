@@ -29,7 +29,7 @@ import org.junit.Ignore;
  */
 public class ContestCollectionTest {
 
-  ContestCollection juryCollection = null;
+  ContestCollection contestCollection = null;
 
   public ContestCollectionTest() {
   }
@@ -37,8 +37,8 @@ public class ContestCollectionTest {
   @Before
   public void setUp() throws Exception {
     assertTrue("did you start the database-server?", Manager.isOpen());
-    juryCollection = Manager.getJuryCollection();
-    assertNotNull(juryCollection);
+    contestCollection = Manager.getContestCollection();
+    assertNotNull(contestCollection);
 
   }
 
@@ -46,9 +46,9 @@ public class ContestCollectionTest {
    * Test of getJuryTypes method, of class ContestCollection.
    */
   @Test
-  public void testGetJuryTypes() {
+  public void testContestTypes() {
     System.out.println("testGetJuryTypes");
-    Set<String> juryTypes = juryCollection.juryTypes();
+    Set<String> juryTypes = contestCollection.contestTypes();
     assertNotNull(juryTypes);
     assertFalse(juryTypes.isEmpty());
     for (String jt : juryTypes) {
@@ -61,7 +61,7 @@ public class ContestCollectionTest {
    */
   @Test
   public void testGetAll() {
-    List<Jury> result = juryCollection.getAll();
+    List<Jury> result = contestCollection.getAll();
     assertNotNull(result);
     assertFalse(result.isEmpty());
   }
@@ -72,7 +72,7 @@ public class ContestCollectionTest {
   @Test
   public void testFindEntity() throws Exception {
 
-    Jury entity = juryCollection.findEntity(1);
+    Jury entity = contestCollection.findEntity(1);
     assertNotNull(entity);
     assertEquals(1, entity.getJuryid());
   }
@@ -83,7 +83,7 @@ public class ContestCollectionTest {
   @Test
   public void testNewEntity() throws Exception {
     System.out.println("testNewEntity");
-    Jury entity = juryCollection.newEntity();
+    Jury entity = contestCollection.newEntity();
     assertNotNull(entity);
     System.out.println("..."+entity.getJuryid());
   }
@@ -110,7 +110,7 @@ public class ContestCollectionTest {
   }
 
   /**
-   * Test of juryTypes method, of class ContestCollection.
+   * Test of contestTypes method, of class ContestCollection.
    */
   @Test 
   public void testJuryTypes() {

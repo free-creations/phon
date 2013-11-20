@@ -56,7 +56,7 @@ public final class NewContestAction extends AbstractAction {
   //@SuppressWarnings("UseSpecificCatch")
   public void actionPerformed(ActionEvent e) {
     try {
-      ContestCollection personCollection = Manager.getJuryCollection();
+      ContestCollection personCollection = Manager.getContestCollection();
       Jury newJury = personCollection.newEntity();
       ContestEditorProvider provider =
               Lookup.getDefault().lookup(

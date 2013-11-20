@@ -231,8 +231,8 @@ public class AllocationTable extends JTable {
       dayCount = dayNames.length;
       timeOfDayNames = tt.timeOfDayNames();
       timeOfDayCount = timeOfDayNames.length;
-      JobCollection ff = Manager.getFunctionsCollection();
-      functionNames = ff.functionNames();
+      JobCollection ff = Manager.getJobCollection();
+      functionNames = ff.jobNames();
       functionCount = functionNames.length;
 
     }
@@ -315,8 +315,8 @@ public class AllocationTable extends JTable {
       Funktionen f;
       Zeit t;
       try {
-        j = Manager.getJuryCollection().findEntity(juryId);
-        f = Manager.getFunctionsCollection().findEntity(functionIndex(rowIndex));
+        j = Manager.getContestCollection().findEntity(juryId);
+        f = Manager.getJobCollection().findEntity(functionIndex(rowIndex));
         t = Manager.getTimeSlotCollection().findEntity(
                 dayIndex(columnIndex), timeOfDayIndex(rowIndex));
       } catch (DataBaseNotReadyException ignored) {

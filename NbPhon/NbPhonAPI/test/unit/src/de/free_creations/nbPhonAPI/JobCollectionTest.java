@@ -34,14 +34,14 @@ public class JobCollectionTest {
   }
 
   /**
-   * Test of functionNames method, of class JobCollection.
+   * Test of jobNames method, of class JobCollection.
    */
   @Test
-  public void testFunctionNames() {
+  public void testJobNames() {
     System.out.println("testFunctionNames");
     assertTrue("did you start the database-server?", Manager.isOpen());
-    JobCollection functionsCollection = Manager.getFunctionsCollection();
-    String[] functionNames = functionsCollection.functionNames();
+    JobCollection functionsCollection = Manager.getJobCollection();
+    String[] functionNames = functionsCollection.jobNames();
     assertNotNull(functionNames);
     assertTrue("Problem in test-database, not enough functions defined.", functionNames.length > 1);
     for (String s : functionNames) {
@@ -57,10 +57,10 @@ public class JobCollectionTest {
   }
 
   /**
-   * Test of functionKeys method, of class JobCollection.
+   * Test of jobKeys method, of class JobCollection.
    */
   @Test
-  public void testFunctionKeys() {
+  public void testJobKeys() {
   }
 
   /**
@@ -77,7 +77,7 @@ public class JobCollectionTest {
   public void testFindEntity_int() throws Exception {
     System.out.println("testFindEntity_int");
     assertTrue("did you start the database-server?", Manager.isOpen());
-    JobCollection functionsCollection = Manager.getFunctionsCollection();
+    JobCollection functionsCollection = Manager.getJobCollection();
     Funktionen f0 = functionsCollection.findEntity(0);
     assertNotNull(f0);
     Funktionen f1 = functionsCollection.findEntity(1);

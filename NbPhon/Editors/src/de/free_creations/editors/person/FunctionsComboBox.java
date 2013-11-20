@@ -68,7 +68,7 @@ public class FunctionsComboBox extends JComboBox<Funktionen> {
     if (anItem instanceof Funktionen) {
       Funktionen mayBeZomby = (Funktionen) anItem;
       try {
-        return Manager.getFunctionsCollection().findEntity(mayBeZomby.getFunktionid());
+        return Manager.getJobCollection().findEntity(mayBeZomby.getFunktionid());
       } catch (DataBaseNotReadyException ex) {
         return null;
       }
@@ -86,7 +86,7 @@ public class FunctionsComboBox extends JComboBox<Funktionen> {
         FunctionsComboBoxModel.this.setSelectedItem(f0);
 
       } else {
-        List<Funktionen> ff = Manager.getFunctionsCollection().getAll();
+        List<Funktionen> ff = Manager.getJobCollection().getAll();
         for (Funktionen f : ff) {
           addElement(f);
         }

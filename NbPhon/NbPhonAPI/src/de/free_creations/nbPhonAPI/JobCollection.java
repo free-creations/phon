@@ -31,8 +31,8 @@ import javax.persistence.TypedQuery;
  */
 public class JobCollection implements EntityCollection<Funktionen, String> {
 
-  private final String[] functionNames;
-  private final String[] functionKeys;
+  private final String[] jobNames;
+  private final String[] jobKeys;
   private final Comparator<Funktionen> compareOnSortOrder = new Comparator<Funktionen>() {
     @Override
     public int compare(Funktionen f1, Funktionen f2) {
@@ -46,12 +46,12 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
 
   protected JobCollection() {
     List<Funktionen> ff = getAll();
-    functionNames = new String[ff.size()];
-    functionKeys = new String[ff.size()];
-    for (int i = 0; i < functionNames.length; i++) {
+    jobNames = new String[ff.size()];
+    jobKeys = new String[ff.size()];
+    for (int i = 0; i < jobNames.length; i++) {
       Funktionen f = ff.get(i);
-      functionNames[i] = f.getFunktionname();
-      functionKeys[i] = f.getFunktionid();
+      jobNames[i] = f.getFunktionname();
+      jobKeys[i] = f.getFunktionid();
     }
   }
 
@@ -60,8 +60,8 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
    *
    * @return an array of function-names sorted on {@link Funktionen#sortvalue}.
    */
-  public String[] functionNames() {
-    return this.functionNames;
+  public String[] jobNames() {
+    return this.jobNames;
   }
 
   /**
@@ -69,8 +69,8 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
    *
    * @return an array of key-values sorted on {@link Funktionen#sortvalue}.
    */
-  public String[] functionKeys() {
-    return this.functionKeys;
+  public String[] jobKeys() {
+    return this.jobKeys;
   }
 
   /**
@@ -115,11 +115,11 @@ public class JobCollection implements EntityCollection<Funktionen, String> {
 
   /**
    * Returns an entity from the current persistency context.
-   * @param index the index as in {@link #functionKeys} and {@link #functionNames}
+   * @param index the index as in {@link #jobKeys} and {@link #jobNames}
    * @return
    * @throws DataBaseNotReadyException 
    */
   public Funktionen findEntity(int index) throws DataBaseNotReadyException {
-    return findEntity(functionKeys[index]);
+    return findEntity(jobKeys[index]);
   }
 }

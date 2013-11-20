@@ -55,7 +55,7 @@ import org.openide.windows.CloneableTopComponent;
 public final class ContestTopComponent extends CloneableTopComponent {
 
   private Integer currentKey = null;
-  private final ContestCollection juryCollection = Manager.getJuryCollection();
+  private final ContestCollection juryCollection = Manager.getContestCollection();
   private final PropertyChangeListener listener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

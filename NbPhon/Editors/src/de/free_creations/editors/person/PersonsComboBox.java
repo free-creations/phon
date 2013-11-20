@@ -31,8 +31,8 @@ import org.openide.explorer.view.NodeListModel;
 
 /**
  *
- * @see http://netbeans.dzone.com/nb-how-to-drag-drop-with-nodes-api for a DnD
- * example.
+ * @see http://netbeans.dzone.com/nb-how-to-drag-drop-with-nodes-apifor a DnD
+ example.
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class PersonsComboBox extends ChoiceView {

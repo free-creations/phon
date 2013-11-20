@@ -44,7 +44,7 @@ public class JuryComboBox extends JComboBox<String> {
         JuryComboBoxModel.this.setSelectedItem("KLAVIER-STREICH");
 
       } else {
-        Set<String> juryTypes = Manager.getJuryCollection().juryTypes();
+        Set<String> juryTypes = Manager.getContestCollection().contestTypes();
         for (String jt : juryTypes) {
           addElement(jt);
         }

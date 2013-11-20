@@ -37,28 +37,28 @@ import org.openide.util.NbBundle.Messages;
  * A window which displays the list of all juries registered in the database.
  */
 @ConvertAsProperties(
-        dtd = "-//de.free_creations.explorers//Jury//EN",
+        dtd = "-//de.free_creations.explorers//Contest//EN",
         autostore = false)
 @TopComponent.Description(
-        preferredID = "JuryListTopComponent",
+        preferredID = "ContestListTopComponent",
         iconBase = "de/free_creations/explorers/resources/chairs.png",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "explorer", openAtStartup = true,position = 200)
-@ActionID(category = "Window", id = "de.free_creations.explorers.JuryListTopComponent")
+@ActionID(category = "Window", id = "de.free_creations.explorers.ContestListTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
-        displayName = "#CTL_JuryListAction",
-        preferredID = "JuryListTopComponent")
+        displayName = "#CTL_ContestListAction",
+        preferredID = "ContestListTopComponent")
 @Messages({
-  "CTL_JuryListAction=Show all Juries",
-  "CTL_JuryListTopComponent=Juries",
-  "HINT_JuryListTopComponent=All juries registered in the database"
+  "CTL_ContestListAction=Show all Contests",
+  "CTL_ContestListTopComponent=Contests",
+  "HINT_ContestListTopComponent=All Contests registered in the database"
 })
-public final class JuryListTopComponent extends TopComponent
+public final class ContestListTopComponent extends TopComponent
         implements ExplorerManager.Provider {
 
-  private static final Logger logger = Logger.getLogger(JuryListTopComponent.class.getName());
-  private static ExplorerManager explorerManager = new ExplorerManager();
+  private static final Logger logger = Logger.getLogger(ContestListTopComponent.class.getName());
+  private static final ExplorerManager explorerManager = new ExplorerManager();
   private DatabaseActivationTask databaseActivationTask = null;
 
   private class DatabaseActivationTask extends SwingWorker<Void, Void> {
@@ -75,7 +75,7 @@ public final class JuryListTopComponent extends TopComponent
     protected Void doInBackground() throws Exception {
       try {
         progressHandle.start();
-        ContestCollection jj = Manager.getJuryCollection();
+        ContestCollection jj = Manager.getContestCollection();
         juryRootNode = new ContestRootNode(jj);
       } catch (Throwable ex) {
         logger.log(Level.SEVERE, "Could not access the database.", ex);
@@ -94,9 +94,9 @@ public final class JuryListTopComponent extends TopComponent
     }
   }
 
-  public JuryListTopComponent() {
+  public ContestListTopComponent() {
     initComponents();
-    setName(Bundle.CTL_JuryListTopComponent());
+    setName(Bundle.CTL_ContestListTopComponent());
     //setToolTipText(Bundle.HINT_JuryListTopComponent());
     putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
     //ListView listView = (ListView) scrollPane;

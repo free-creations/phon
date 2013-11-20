@@ -37,7 +37,7 @@ public class ContestCollection implements MutableEntityCollection<Jury, Integer>
   protected ContestCollection() {
   }
 
-  public Set<String> juryTypes() {
+  public Set<String> contestTypes() {
     List<Jury> jj = getAll();
     TreeSet<String> result = new TreeSet<>();
     for (Jury j : jj) {

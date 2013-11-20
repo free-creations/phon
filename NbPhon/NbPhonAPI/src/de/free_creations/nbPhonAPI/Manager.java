@@ -20,13 +20,13 @@ public class Manager {
   private static EntityManager entityManager = null;
   private static final PersonCollection personCollection = new PersonCollection();
   private static TimeSlotCollection timeSlotCollection = null;
-  private static JobCollection functionsCollection = null;
+  private static JobCollection jobCollection = null;
   private static boolean problemHasBeenReported = false;
   public static final Object databaseAccessLock = new Object();
   private static final Object timeSlotLock = new Object();
-  private static final Object functionsLock = new Object();
-  private static final Object juryLock = new Object();
-  private static ContestCollection juryCollection = null;
+  private static final Object jobColLock = new Object();
+  private static final Object contestLock = new Object();
+  private static ContestCollection contestCollection = null;
 
   protected static EntityManager getEntityManager() throws DataBaseNotReadyException {
     synchronized (databaseAccessLock) {
@@ -157,12 +157,12 @@ public class Manager {
    *
    * @return the collection of all FUNCTIONS records.
    */
-  public static JobCollection getFunctionsCollection() {
-    synchronized (functionsLock) {
-      if (functionsCollection == null) {
-        functionsCollection = new JobCollection();
+  public static JobCollection getJobCollection() {
+    synchronized (jobColLock) {
+      if (jobCollection == null) {
+        jobCollection = new JobCollection();
       }
-      return functionsCollection;
+      return jobCollection;
     }
   }
 
@@ -171,12 +171,12 @@ public class Manager {
    *
    * @return the collection of all JURY records.
    */
-  public static ContestCollection getJuryCollection() {
-    synchronized (juryLock) {
-      if (juryCollection == null) {
-        juryCollection = new ContestCollection();
+  public static ContestCollection getContestCollection() {
+    synchronized (contestLock) {
+      if (contestCollection == null) {
+        contestCollection = new ContestCollection();
       }
-      return juryCollection;
+      return contestCollection;
     }
   }
 }
