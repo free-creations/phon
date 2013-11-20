@@ -130,6 +130,11 @@ public class TimeSlotCollection implements EntityCollection<Zeit, Integer> {
   }
 
   /**
+   * This method is used in module "Editors" in "TimeTableVisualTest"
+   * to see how the display performs when there are gaps in the time-slot succession.
+   * It adds a supplementary time-slot item. It is assumed that the time-slot table
+   * is pre-populated using the provided "populateCoreTables.sql" and has exactly 
+   * 15 entries.
    * @deprecated only for test
    */
   @Deprecated
@@ -140,8 +145,8 @@ public class TimeSlotCollection implements EntityCollection<Zeit, Integer> {
       }
       EntityManager entityManager = Manager.getEntityManager();
       Zeit zeit = new Zeit(
-              10,//zeitId
-              4, // tag, 
+              16,//zeitId
+              6, // tag, 
               3, // tageszeit, 
               "TEST", // wochentag, 
               "test_ab",// label, 
