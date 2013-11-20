@@ -51,7 +51,7 @@ public class AllocationPersonsComboBoxVisualTest extends javax.swing.JFrame {
   private void initComponents() {
 
     jLabel1 = new javax.swing.JLabel();
-    btnSetKeyTo56 = new javax.swing.JButton();
+    btnSetKeyTo12 = new javax.swing.JButton();
     btnSetKeyTo50000 = new javax.swing.JButton();
     btnSetKeyToNull = new javax.swing.JButton();
     allocationPersonsComboBox1 = new de.free_creations.editors.jury.AllocationPersonsComboBox();
@@ -60,10 +60,10 @@ public class AllocationPersonsComboBoxVisualTest extends javax.swing.JFrame {
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(AllocationPersonsComboBoxVisualTest.class, "AllocationPersonsComboBoxVisualTest.jLabel1.text")); // NOI18N
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnSetKeyTo56, org.openide.util.NbBundle.getMessage(AllocationPersonsComboBoxVisualTest.class, "AllocationPersonsComboBoxVisualTest.btnSetKeyTo56.text")); // NOI18N
-    btnSetKeyTo56.addActionListener(new java.awt.event.ActionListener() {
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetKeyTo12, org.openide.util.NbBundle.getMessage(AllocationPersonsComboBoxVisualTest.class, "AllocationPersonsComboBoxVisualTest.btnSetKeyTo12.text")); // NOI18N
+    btnSetKeyTo12.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        btnSetKeyTo56ActionPerformed(evt);
+        btnSetKeyTo12ActionPerformed(evt);
       }
     });
 
@@ -93,7 +93,7 @@ public class AllocationPersonsComboBoxVisualTest extends javax.swing.JFrame {
             .addComponent(allocationPersonsComboBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnSetKeyToNull, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnSetKeyTo50000, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-            .addComponent(btnSetKeyTo56, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(btnSetKeyTo12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         .addContainerGap(138, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
@@ -102,7 +102,7 @@ public class AllocationPersonsComboBoxVisualTest extends javax.swing.JFrame {
         .addContainerGap()
         .addComponent(allocationPersonsComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addGap(12, 12, 12)
-        .addComponent(btnSetKeyTo56)
+        .addComponent(btnSetKeyTo12)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(btnSetKeyTo50000)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -115,10 +115,10 @@ public class AllocationPersonsComboBoxVisualTest extends javax.swing.JFrame {
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-  private void btnSetKeyTo56ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetKeyTo56ActionPerformed
+  private void btnSetKeyTo12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetKeyTo12ActionPerformed
     // TODO add your handling code here:
-    allocationPersonsComboBox1.setSelectedPersonId(56);
-  }//GEN-LAST:event_btnSetKeyTo56ActionPerformed
+    allocationPersonsComboBox1.setSelectedPersonId(12);
+  }//GEN-LAST:event_btnSetKeyTo12ActionPerformed
 
   private void btnSetKeyTo50000ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetKeyTo50000ActionPerformed
     // TODO add your handling code here:
@@ -174,8 +174,8 @@ public class AllocationPersonsComboBoxVisualTest extends javax.swing.JFrame {
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private de.free_creations.editors.jury.AllocationPersonsComboBox allocationPersonsComboBox1;
+  private javax.swing.JButton btnSetKeyTo12;
   private javax.swing.JButton btnSetKeyTo50000;
-  private javax.swing.JButton btnSetKeyTo56;
   private javax.swing.JButton btnSetKeyToNull;
   private javax.swing.JLabel jLabel1;
   // End of variables declaration//GEN-END:variables

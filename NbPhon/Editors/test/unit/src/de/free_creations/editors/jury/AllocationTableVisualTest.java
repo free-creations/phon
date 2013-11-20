@@ -42,7 +42,7 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
     jScrollPane2 = new javax.swing.JScrollPane();
     allocationTable1 = new de.free_creations.editors.jury.AllocationTable();
     btnBlockfloete = new javax.swing.JButton();
-    btnJuryNull = new javax.swing.JButton();
+    btnContestNull = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,10 +55,10 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
       }
     });
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnJuryNull, org.openide.util.NbBundle.getMessage(AllocationTableVisualTest.class, "AllocationTableVisualTest.btnJuryNull.text")); // NOI18N
-    btnJuryNull.addActionListener(new java.awt.event.ActionListener() {
+    org.openide.awt.Mnemonics.setLocalizedText(btnContestNull, org.openide.util.NbBundle.getMessage(AllocationTableVisualTest.class, "AllocationTableVisualTest.btnContestNull.text")); // NOI18N
+    btnContestNull.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        btnJuryNullActionPerformed(evt);
+        btnContestNullActionPerformed(evt);
       }
     });
 
@@ -73,7 +73,7 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
           .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
               .addComponent(btnBlockfloete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-              .addComponent(btnJuryNull, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+              .addComponent(btnContestNull, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGap(0, 0, Short.MAX_VALUE)))
         .addContainerGap())
     );
@@ -85,7 +85,7 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(btnBlockfloete)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(btnJuryNull)
+        .addComponent(btnContestNull)
         .addGap(43, 43, 43))
     );
 
@@ -96,9 +96,9 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
     allocationTable1.setJuryId(1);
   }//GEN-LAST:event_btnBlockfloeteActionPerformed
 
-  private void btnJuryNullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJuryNullActionPerformed
+  private void btnContestNullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContestNullActionPerformed
     allocationTable1.setJuryId(null);
-  }//GEN-LAST:event_btnJuryNullActionPerformed
+  }//GEN-LAST:event_btnContestNullActionPerformed
 
   /**
    * @param args the command line arguments
@@ -142,7 +142,7 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private de.free_creations.editors.jury.AllocationTable allocationTable1;
   private javax.swing.JButton btnBlockfloete;
-  private javax.swing.JButton btnJuryNull;
+  private javax.swing.JButton btnContestNull;
   private javax.swing.JScrollPane jScrollPane2;
   // End of variables declaration//GEN-END:variables
 }

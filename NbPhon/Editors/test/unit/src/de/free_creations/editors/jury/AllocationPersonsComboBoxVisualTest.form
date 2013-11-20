@@ -31,7 +31,7 @@
                       <Component id="allocationPersonsComboBox1" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnSetKeyToNull" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnSetKeyTo50000" alignment="0" pref="242" max="32767" attributes="0"/>
-                      <Component id="btnSetKeyTo56" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnSetKeyTo12" alignment="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="138" max="32767" attributes="0"/>
@@ -44,7 +44,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="allocationPersonsComboBox1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-              <Component id="btnSetKeyTo56" min="-2" max="-2" attributes="0"/>
+              <Component id="btnSetKeyTo12" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnSetKeyTo50000" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -64,14 +64,14 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnSetKeyTo56">
+    <Component class="javax.swing.JButton" name="btnSetKeyTo12">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/editors/jury/Bundle.properties" key="AllocationPersonsComboBoxVisualTest.btnSetKeyTo56.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/editors/jury/Bundle.properties" key="AllocationPersonsComboBoxVisualTest.btnSetKeyTo12.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSetKeyTo56ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSetKeyTo12ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnSetKeyTo50000">
