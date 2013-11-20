@@ -15,8 +15,8 @@
  */
 package de.free_creations.explorers;
 
-import de.free_creations.nbPhon4Netbeans.JuryRootNode;
-import de.free_creations.nbPhonAPI.JuryCollection;
+import de.free_creations.nbPhon4Netbeans.ContestRootNode;
+import de.free_creations.nbPhonAPI.ContestCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import java.awt.Cursor;
 import java.util.logging.Level;
@@ -64,7 +64,7 @@ public final class JuryListTopComponent extends TopComponent
   private class DatabaseActivationTask extends SwingWorker<Void, Void> {
 
     private final ProgressHandle progressHandle;
-    JuryRootNode juryRootNode = null;
+    ContestRootNode juryRootNode = null;
 
     public DatabaseActivationTask() {
       super();
@@ -75,8 +75,8 @@ public final class JuryListTopComponent extends TopComponent
     protected Void doInBackground() throws Exception {
       try {
         progressHandle.start();
-        JuryCollection jj = Manager.getJuryCollection();
-        juryRootNode = new JuryRootNode(jj);
+        ContestCollection jj = Manager.getJuryCollection();
+        juryRootNode = new ContestRootNode(jj);
       } catch (Throwable ex) {
         logger.log(Level.SEVERE, "Could not access the database.", ex);
       }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.editors.jury;
+package de.free_creations.editors.contest;
 
 import de.free_creations.dbEntities.Funktionen;
 import de.free_creations.dbEntities.Jury;
@@ -21,7 +21,7 @@ import de.free_creations.dbEntities.Teameinteilung;
 import de.free_creations.dbEntities.Zeit;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
-import de.free_creations.nbPhonAPI.FunctionsCollection;
+import de.free_creations.nbPhonAPI.JobCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import java.awt.Color;
@@ -231,7 +231,7 @@ public class AllocationTable extends JTable {
       dayCount = dayNames.length;
       timeOfDayNames = tt.timeOfDayNames();
       timeOfDayCount = timeOfDayNames.length;
-      FunctionsCollection ff = Manager.getFunctionsCollection();
+      JobCollection ff = Manager.getFunctionsCollection();
       functionNames = ff.functionNames();
       functionCount = functionNames.length;
 

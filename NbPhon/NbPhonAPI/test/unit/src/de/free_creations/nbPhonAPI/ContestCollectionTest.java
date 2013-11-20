@@ -27,11 +27,11 @@ import org.junit.Ignore;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JuryCollectionTest {
+public class ContestCollectionTest {
 
-  JuryCollection juryCollection = null;
+  ContestCollection juryCollection = null;
 
-  public JuryCollectionTest() {
+  public ContestCollectionTest() {
   }
 
   @Before
@@ -43,7 +43,7 @@ public class JuryCollectionTest {
   }
 
   /**
-   * Test of getJuryTypes method, of class JuryCollection.
+   * Test of getJuryTypes method, of class ContestCollection.
    */
   @Test
   public void testGetJuryTypes() {
@@ -57,7 +57,7 @@ public class JuryCollectionTest {
   }
 
   /**
-   * Test of getAll method, of class JuryCollection.
+   * Test of getAll method, of class ContestCollection.
    */
   @Test
   public void testGetAll() {
@@ -67,7 +67,7 @@ public class JuryCollectionTest {
   }
 
   /**
-   * Test of findEntity method, of class JuryCollection.
+   * Test of findEntity method, of class ContestCollection.
    */
   @Test
   public void testFindEntity() throws Exception {
@@ -78,7 +78,7 @@ public class JuryCollectionTest {
   }
 
   /**
-   * Test of newEntity method, of class JuryCollection.
+   * Test of newEntity method, of class ContestCollection.
    */
   @Test
   public void testNewEntity() throws Exception {
@@ -89,28 +89,28 @@ public class JuryCollectionTest {
   }
 
   /**
-   * Test of removeEntity method, of class JuryCollection.
+   * Test of removeEntity method, of class ContestCollection.
    */
   @Test
   public void testRemoveEntity() throws Exception {
   }
 
   /**
-   * Test of addPropertyChangeListener method, of class JuryCollection.
+   * Test of addPropertyChangeListener method, of class ContestCollection.
    */
   @Test
   public void testAddPropertyChangeListener() {
   }
 
   /**
-   * Test of removePropertyChangeListener method, of class JuryCollection.
+   * Test of removePropertyChangeListener method, of class ContestCollection.
    */
   @Test
   public void testRemovePropertyChangeListener() {
   }
 
   /**
-   * Test of juryTypes method, of class JuryCollection.
+   * Test of juryTypes method, of class ContestCollection.
    */
   @Test 
   public void testJuryTypes() {

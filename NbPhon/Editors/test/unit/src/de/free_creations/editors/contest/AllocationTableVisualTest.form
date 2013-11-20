@@ -61,14 +61,14 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="de.free_creations.editors.jury.AllocationTable" name="allocationTable1">
+        <Component class="de.free_creations.editors.contest.AllocationTable" name="allocationTable1">
         </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="btnBlockfloete">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/editors/jury/Bundle.properties" key="AllocationTableVisualTest.btnBlockfloete.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/editors/contest/Bundle.properties" key="AllocationTableVisualTest.btnBlockfloete.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>
@@ -78,7 +78,7 @@
     <Component class="javax.swing.JButton" name="btnContestNull">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/editors/jury/Bundle.properties" key="AllocationTableVisualTest.btnContestNull.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/editors/contest/Bundle.properties" key="AllocationTableVisualTest.btnContestNull.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>

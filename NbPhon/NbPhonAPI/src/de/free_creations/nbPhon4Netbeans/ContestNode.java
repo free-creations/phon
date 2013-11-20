@@ -48,7 +48,7 @@ import org.openide.nodes.Node;
  example.
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JuryNode extends AbstractNode implements CommittableNode {
+public class ContestNode extends AbstractNode implements CommittableNode {
 
   private static class LChildren extends Children.Array {
 
@@ -72,7 +72,7 @@ public class JuryNode extends AbstractNode implements CommittableNode {
   public static class JuryNodeFlavor extends DataFlavor {
 
     public JuryNodeFlavor() {
-      super(JuryNode.class, "Jury");
+      super(ContestNode.class, "Jury");
     }
   }
 
@@ -138,9 +138,9 @@ public class JuryNode extends AbstractNode implements CommittableNode {
     @Override
     public void actionPerformed(ActionEvent e) {
       try {
-        JuryEditorProvider provider =
+        ContestEditorProvider provider =
                 Lookup.getDefault().lookup(
-                JuryEditorProvider.class);
+                ContestEditorProvider.class);
         if (provider != null) {
           provider.getEditor(false, key);
         } else {
@@ -155,9 +155,9 @@ public class JuryNode extends AbstractNode implements CommittableNode {
     @Override
     public void actionPerformed(ActionEvent e) {
       try {
-        JuryEditorProvider provider =
+        ContestEditorProvider provider =
                 Lookup.getDefault().lookup(
-                JuryEditorProvider.class);
+                ContestEditorProvider.class);
         if (provider != null) {
           provider.getEditor(true, key);
         } else {
@@ -170,7 +170,7 @@ public class JuryNode extends AbstractNode implements CommittableNode {
   };
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
 
-  public JuryNode(Integer juryId, MutableEntityCollection<Jury, Integer> juryManager) {
+  public ContestNode(Integer juryId, MutableEntityCollection<Jury, Integer> juryManager) {
     super(makeChildren());
 
     this.key = juryId;
@@ -306,7 +306,7 @@ public class JuryNode extends AbstractNode implements CommittableNode {
 
   /**
    * The transferable in a Drag and Drop is the default Netbeans node
-   * transferable plus the specific JuryNodeTransferable.
+ transferable plus the specific ContestNodeTransferable.
    *
    * @return the interface for classes that can be used to provide data for a
    * transfer operation.

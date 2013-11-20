@@ -30,11 +30,11 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JuryCollection implements MutableEntityCollection<Jury, Integer> {
+public class ContestCollection implements MutableEntityCollection<Jury, Integer> {
 
   private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-  protected JuryCollection() {
+  protected ContestCollection() {
   }
 
   public Set<String> juryTypes() {

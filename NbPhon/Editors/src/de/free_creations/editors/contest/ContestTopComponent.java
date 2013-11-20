@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.editors.jury;
+package de.free_creations.editors.contest;
 
 import de.free_creations.dbEntities.Jury;
+import de.free_creations.editors.contest.Bundle;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
-import de.free_creations.nbPhonAPI.JuryCollection;
+import de.free_creations.nbPhonAPI.ContestCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -34,27 +35,27 @@ import org.openide.windows.CloneableTopComponent;
  * Top component which displays something.
  */
 @ConvertAsProperties(
-        dtd = "-//de.free_creations.editors.jury//Jury//EN",
+        dtd = "-//de.free_creations.editors.contest//Contest//EN",
         autostore = false)
 @TopComponent.Description(
-        preferredID = "JuryEditorTopComponent",
-        iconBase = "de/free_creations/editors/jury/chairs.png",
+        preferredID = "ContestTopComponent",
+        iconBase = "de/free_creations/editors/contest/chairs.png",
         persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
-@ActionID(category = "Window", id = "de.free_creations.editors.jury.JuryTopComponent")
+@ActionID(category = "Window", id = "de.free_creations.editors.contest.JuryTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
-        displayName = "#CTL_JuryAction",
+        displayName = "#CTL_ContestAction",
         preferredID = "JuryEditorTopComponent")
 @Messages({
-  "CTL_JuryAction=Jury",
-  "CTL_JuryTopComponent=Jury",
-  "HINT_JuryTopComponent=This is a Jury window"
+  "CTL_ContestAction=Contest",
+  "CTL_ContestTopComponent=Contest",
+  "HINT_ContestTopComponent=Show the details of a Contest"
 })
-public final class JuryTopComponent extends CloneableTopComponent {
+public final class ContestTopComponent extends CloneableTopComponent {
 
   private Integer currentKey = null;
-  private final JuryCollection juryCollection = Manager.getJuryCollection();
+  private final ContestCollection juryCollection = Manager.getJuryCollection();
   private final PropertyChangeListener listener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -66,14 +67,14 @@ public final class JuryTopComponent extends CloneableTopComponent {
     }
   };
 
-  public JuryTopComponent() {
+  public ContestTopComponent() {
     initComponents();
-    setName(Bundle.CTL_JuryTopComponent());
-    //setToolTipText(Bundle.HINT_JuryTopComponent());
+    setName(Bundle.CTL_ContestTopComponent());
+    //setToolTipText(Bundle.HINT_ContestTopComponent());
 
   }
 
-  JuryTopComponent(Integer key) {
+  ContestTopComponent(Integer key) {
     this();
     viewJuryRecord(key);
 
@@ -95,33 +96,33 @@ public final class JuryTopComponent extends CloneableTopComponent {
     edRaum = new javax.swing.JTextField();
     jLabel4 = new javax.swing.JLabel();
     jScrollPane1 = new javax.swing.JScrollPane();
-    allocationTable = new de.free_creations.editors.jury.AllocationTable();
+    allocationTable = new de.free_creations.editors.contest.AllocationTable();
     jScrollPane2 = new javax.swing.JScrollPane();
-    timeTable1 = new de.free_creations.editors.jury.TimeTable();
+    timeTable1 = new de.free_creations.editors.contest.TimeTable();
 
-    org.openide.awt.Mnemonics.setLocalizedText(lblJuryId, org.openide.util.NbBundle.getMessage(JuryTopComponent.class, "JuryTopComponent.lblJuryId.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(lblJuryId, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.lblJuryId.text")); // NOI18N
 
-    edWertung.setText(org.openide.util.NbBundle.getMessage(JuryTopComponent.class, "JuryTopComponent.edWertung.text")); // NOI18N
+    edWertung.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edWertung.text")); // NOI18N
     edWertung.addFocusListener(new java.awt.event.FocusAdapter() {
       public void focusLost(java.awt.event.FocusEvent evt) {
         edWertungFocusLost(evt);
       }
     });
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(JuryTopComponent.class, "JuryTopComponent.jLabel2.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel2.text")); // NOI18N
 
-    edCategory.setText(org.openide.util.NbBundle.getMessage(JuryTopComponent.class, "JuryTopComponent.edCategory.text")); // NOI18N
+    edCategory.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edCategory.text")); // NOI18N
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(JuryTopComponent.class, "JuryTopComponent.jLabel3.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel3.text")); // NOI18N
 
-    edRaum.setText(org.openide.util.NbBundle.getMessage(JuryTopComponent.class, "JuryTopComponent.edRaum.text")); // NOI18N
+    edRaum.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edRaum.text")); // NOI18N
     edRaum.addFocusListener(new java.awt.event.FocusAdapter() {
       public void focusLost(java.awt.event.FocusEvent evt) {
         edRaumFocusLost(evt);
       }
     });
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(JuryTopComponent.class, "JuryTopComponent.jLabel4.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel4.text")); // NOI18N
 
     jScrollPane1.setViewportView(allocationTable);
 
@@ -202,7 +203,7 @@ public final class JuryTopComponent extends CloneableTopComponent {
     }
   }//GEN-LAST:event_edWertungFocusLost
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private de.free_creations.editors.jury.AllocationTable allocationTable;
+  private de.free_creations.editors.contest.AllocationTable allocationTable;
   private javax.swing.JTextField edCategory;
   private javax.swing.JTextField edRaum;
   private javax.swing.JTextField edWertung;
@@ -212,7 +213,7 @@ public final class JuryTopComponent extends CloneableTopComponent {
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JLabel lblJuryId;
-  private de.free_creations.editors.jury.TimeTable timeTable1;
+  private de.free_creations.editors.contest.TimeTable timeTable1;
   // End of variables declaration//GEN-END:variables
 
   @Override

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.editors.jury;
+package de.free_creations.editors.contest;
 
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
   private void initComponents() {
 
     jScrollPane2 = new javax.swing.JScrollPane();
-    allocationTable1 = new de.free_creations.editors.jury.AllocationTable();
+    allocationTable1 = new de.free_creations.editors.contest.AllocationTable();
     btnBlockfloete = new javax.swing.JButton();
     btnContestNull = new javax.swing.JButton();
 
@@ -140,7 +140,7 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
     System.out.println("Use \"Run File\" to see this test.");
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private de.free_creations.editors.jury.AllocationTable allocationTable1;
+  private de.free_creations.editors.contest.AllocationTable allocationTable1;
   private javax.swing.JButton btnBlockfloete;
   private javax.swing.JButton btnContestNull;
   private javax.swing.JScrollPane jScrollPane2;

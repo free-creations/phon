@@ -25,24 +25,24 @@ import org.openide.nodes.Node;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JuryRootNode extends AbstractNode {
+public class ContestRootNode extends AbstractNode {
 
-  private final JuryNodesArray children;
+  private final ContestNodesArray children;
   private final MutableEntityCollection<Jury, Integer> juryCollection;
  
 
-  private final Action newItemAction = new NewJuryAction();
+  private final Action newItemAction = new NewContestAction();
   private final Action[] allActions = new Action[]{newItemAction};
 
-  private JuryRootNode(JuryNodesArray children, MutableEntityCollection<Jury, Integer> jj) {
+  private ContestRootNode(ContestNodesArray children, MutableEntityCollection<Jury, Integer> jj) {
     super(children);
     this.children = children;
     this.juryCollection = jj;
 
   }
 
-  public JuryRootNode(MutableEntityCollection<Jury, Integer> pp) {
-    this(new JuryNodesArray(pp), pp);
+  public ContestRootNode(MutableEntityCollection<Jury, Integer> pp) {
+    this(new ContestNodesArray(pp), pp);
   }
 
   @Override
@@ -61,10 +61,10 @@ public class JuryRootNode extends AbstractNode {
    * If a child with such index does not exists it returns null.
    *
    * @param index
-   * @return the JuryNode that is currently at the position given by index or
-   * null if the index is invalid.
+   * @return the ContestNode that is currently at the position given by index or
+ null if the index is invalid.
    */
-  public JuryNode getNodeAt(int index) {
+  public ContestNode getNodeAt(int index) {
     if (index < 0) {
       return null;
     }
@@ -72,8 +72,8 @@ public class JuryRootNode extends AbstractNode {
       return null;
     }
     Node result = children.getNodeAt(index);
-    if (result instanceof JuryNode) {
-      return (JuryNode) result;
+    if (result instanceof ContestNode) {
+      return (ContestNode) result;
     } else {
       return null;
     }
@@ -89,11 +89,11 @@ public class JuryRootNode extends AbstractNode {
    *
    *
    * @param index
-   * @return the JuryNode that is currently at the position given by index.
-   * Returns null if the index is invalid.
+   * @return the ContestNode that is currently at the position given by index.
+ Returns null if the index is invalid.
    */
   public Integer getNodeKeyAt(int index) {
-    JuryNode node = getNodeAt(index);
+    ContestNode node = getNodeAt(index);
     if (node != null) {
       return node.getJuryId();
     } else {
@@ -105,8 +105,8 @@ public class JuryRootNode extends AbstractNode {
    * Find the position of a Jury node with a given key.
    *
    * @param key
-   * @return return the current position. If there is no JuryNode with the
-   * given key the function will return -1.
+   * @return return the current position. If there is no ContestNode with the
+ given key the function will return -1.
    */
   public int findIndexForNode(int key) {
     return children.findIndexForNode(key);

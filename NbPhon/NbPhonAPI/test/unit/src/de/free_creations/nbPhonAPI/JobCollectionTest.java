@@ -24,9 +24,9 @@ import static org.junit.Assert.*;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class FunctionsCollectionTest {
+public class JobCollectionTest {
 
-  public FunctionsCollectionTest() {
+  public JobCollectionTest() {
   }
 
   @Before
@@ -34,13 +34,13 @@ public class FunctionsCollectionTest {
   }
 
   /**
-   * Test of functionNames method, of class FunctionsCollection.
+   * Test of functionNames method, of class JobCollection.
    */
   @Test
   public void testFunctionNames() {
     System.out.println("testFunctionNames");
     assertTrue("did you start the database-server?", Manager.isOpen());
-    FunctionsCollection functionsCollection = Manager.getFunctionsCollection();
+    JobCollection functionsCollection = Manager.getFunctionsCollection();
     String[] functionNames = functionsCollection.functionNames();
     assertNotNull(functionNames);
     assertTrue("Problem in test-database, not enough functions defined.", functionNames.length > 1);
@@ -50,34 +50,34 @@ public class FunctionsCollectionTest {
   }
 
   /**
-   * Test of getAll method, of class FunctionsCollection.
+   * Test of getAll method, of class JobCollection.
    */
   @Test
   public void testGetAll() {
   }
 
   /**
-   * Test of functionKeys method, of class FunctionsCollection.
+   * Test of functionKeys method, of class JobCollection.
    */
   @Test
   public void testFunctionKeys() {
   }
 
   /**
-   * Test of findEntity method, of class FunctionsCollection.
+   * Test of findEntity method, of class JobCollection.
    */
   @Test
   public void testFindEntity_String() throws Exception {
   }
 
   /**
-   * Test of findEntity method, of class FunctionsCollection.
+   * Test of findEntity method, of class JobCollection.
    */
   @Test
   public void testFindEntity_int() throws Exception {
     System.out.println("testFindEntity_int");
     assertTrue("did you start the database-server?", Manager.isOpen());
-    FunctionsCollection functionsCollection = Manager.getFunctionsCollection();
+    JobCollection functionsCollection = Manager.getFunctionsCollection();
     Funktionen f0 = functionsCollection.findEntity(0);
     assertNotNull(f0);
     Funktionen f1 = functionsCollection.findEntity(1);

@@ -20,10 +20,10 @@ import org.openide.windows.CloneableTopComponent;
 /**
  * This interface must be provided by the edit window.
  *
- * @see Module Editors
+ * @see ModuleEditors
  * @author Harald Postner <Harald at free-creations.de>
  */
-public interface JuryEditorProvider {
+public interface ContestEditorProvider {
 
   public CloneableTopComponent getEditor(boolean newWindow, Integer key);
 }

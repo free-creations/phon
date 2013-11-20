@@ -29,7 +29,7 @@ import org.junit.Ignore;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JuryRootNodeTest {
+public class ContestRootNodeTest {
 
   private class CollectionMock implements MutableEntityCollection<Jury, Integer> {
 
@@ -82,11 +82,11 @@ public class JuryRootNodeTest {
   };
   private final CollectionMock juryCollectionMock = new CollectionMock();
 
-  public JuryRootNodeTest() {
+  public ContestRootNodeTest() {
   }
 
   /**
-   * Test of getActions method, of class JuryRootNode.
+   * Test of getActions method, of class ContestRootNode.
    */
   @Test
   public void testGetActions() {
@@ -94,7 +94,7 @@ public class JuryRootNodeTest {
   }
 
   /**
-   * Test of sortByName method, of class JuryRootNode.
+   * Test of sortByName method, of class ContestRootNode.
    */
   @Test
   public void testSortByName() {
@@ -102,7 +102,7 @@ public class JuryRootNodeTest {
   }
 
   /**
-   * Test of sortByPriority method, of class JuryRootNode.
+   * Test of sortByPriority method, of class ContestRootNode.
    */
   @Test
   public void testSortByPriority() {
@@ -110,27 +110,27 @@ public class JuryRootNodeTest {
   }
 
   /**
-   * Test of getNodeAt method, of class JuryRootNode.
+   * Test of getNodeAt method, of class ContestRootNode.
    */
   @Test
   public void testGetNodeAt() {
-    JuryRootNode testRoot = new JuryRootNode(juryCollectionMock);
-    JuryNode node1 = testRoot.getNodeAt(0);
+    ContestRootNode testRoot = new ContestRootNode(juryCollectionMock);
+    ContestNode node1 = testRoot.getNodeAt(0);
     assertEquals((int)juryCollectionMock.j1.getJuryid(), (int)node1.getJuryId());
-    JuryNode node2 = testRoot.getNodeAt(1);
+    ContestNode node2 = testRoot.getNodeAt(1);
     assertEquals((int)juryCollectionMock.j2.getJuryid(), (int)node2.getJuryId());
 
 
-    JuryNode nullJury = testRoot.getNodeAt(4711);
+    ContestNode nullJury = testRoot.getNodeAt(4711);
     assertNull(nullJury);
   }
 
   /**
-   * Test of getNodeKeyAt method, of class JuryRootNode.
+   * Test of getNodeKeyAt method, of class ContestRootNode.
    */
   @Test
   public void testGetNodeKeyAt() {
-    JuryRootNode testRoot = new JuryRootNode(juryCollectionMock);
+    ContestRootNode testRoot = new ContestRootNode(juryCollectionMock);
     int nodeKey1 = testRoot.getNodeKeyAt(0);
     assertEquals(1, nodeKey1);
     int nodeKey2 = testRoot.getNodeKeyAt(1);
@@ -141,11 +141,11 @@ public class JuryRootNodeTest {
   }
 
   /**
-   * Test of findIndexForNode method, of class JuryRootNode.
+   * Test of findIndexForNode method, of class ContestRootNode.
    */
   @Test
   public void testFindIndexForNode() {
-    JuryRootNode testRoot = new JuryRootNode(juryCollectionMock);
+    ContestRootNode testRoot = new ContestRootNode(juryCollectionMock);
     int indexForNode1 = testRoot.findIndexForNode(1);
     assertEquals(0, indexForNode1);
     int indexForNode2 = testRoot.findIndexForNode(2);

@@ -29,7 +29,7 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class FunctionsCollection implements EntityCollection<Funktionen, String> {
+public class JobCollection implements EntityCollection<Funktionen, String> {
 
   private final String[] functionNames;
   private final String[] functionKeys;
@@ -44,7 +44,7 @@ public class FunctionsCollection implements EntityCollection<Funktionen, String>
     }
   };
 
-  protected FunctionsCollection() {
+  protected JobCollection() {
     List<Funktionen> ff = getAll();
     functionNames = new String[ff.size()];
     functionKeys = new String[ff.size()];

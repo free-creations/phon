@@ -33,20 +33,20 @@ import org.openide.nodes.Node;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JuryNodesArray extends Children.SortedArray {
+public class ContestNodesArray extends Children.SortedArray {
 
   private final Comparator<Node> juryComparator = new Comparator<Node>() {
     @Override
     public int compare(Node n1, Node n2) {
 
       // make sure both nodes are JuryNodes
-      int typeCheck = Utils.typeCheckCompare(n1, n2, JuryNode.class);
+      int typeCheck = Utils.typeCheckCompare(n1, n2, ContestNode.class);
       if (typeCheck != Utils.bothValid) {
         // OOps, one or both nodes were not of the expected type..
         return typeCheck;
       }
-      JuryNode jn1 = (JuryNode) n1;
-      JuryNode jn2 = (JuryNode) n2;
+      ContestNode jn1 = (ContestNode) n1;
+      ContestNode jn2 = (ContestNode) n2;
 
       // try to get the corresponding entities
       try {
@@ -89,7 +89,7 @@ public class JuryNodesArray extends Children.SortedArray {
           EntityIdentity newJury = (EntityIdentity) o;
           Integer juryId = (Integer) newJury.primaryKey;
           //create a node for this new Jury
-          JuryNode newNode = new JuryNode(juryId, juryCollection);
+          ContestNode newNode = new ContestNode(juryId, juryCollection);
           newNode.notifyPendingChanges();
           if (nodes instanceof ArrayList) {
             // if the nodes- list is an ArrayList (as created in initCollection)
@@ -118,7 +118,7 @@ public class JuryNodesArray extends Children.SortedArray {
     }
   };
 
-  public JuryNodesArray(MutableEntityCollection<Jury, Integer> juryCollection) {
+  public ContestNodesArray(MutableEntityCollection<Jury, Integer> juryCollection) {
     super();
     super.setComparator(juryComparator);
     this.juryCollection = juryCollection;
@@ -134,7 +134,7 @@ public class JuryNodesArray extends Children.SortedArray {
       assert (j != null);
       Integer juryid = j.getJuryid();
       assert (juryid != null);
-      result.add(new JuryNode(juryid, juryCollection));
+      result.add(new ContestNode(juryid, juryCollection));
     }
 
     Comparator<? super Node> comparator = getComparator();
@@ -152,14 +152,14 @@ public class JuryNodesArray extends Children.SortedArray {
    *
    * @param key the JuryId that is searched for.
    * @return returns the index of the current position. Returns -1 if no
-   * JuryNode with the searched key could be found.
+ ContestNode with the searched key could be found.
    */
   int findIndexForNode(Integer key) {
     int nodesCount = getNodesCount();
     for (int i = 0; i < nodesCount; i++) {
       Node n = getNodeAt(i);
-      if (n instanceof JuryNode) {
-        JuryNode pn = (JuryNode) n;
+      if (n instanceof ContestNode) {
+        ContestNode pn = (ContestNode) n;
         if (Objects.equals(pn.getJuryId(), key)) {
           return i;
         }

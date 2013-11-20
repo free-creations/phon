@@ -52,7 +52,7 @@
           <Image iconType="3" name="/de/free_creations/editors/resources/house.png"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/editors/jury/Bundle.properties" key="TimeTableCellPanel.lblLocation.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/editors/contest/Bundle.properties" key="TimeTableCellPanel.lblLocation.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -63,7 +63,7 @@
         </Property>
         <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/editors/jury/Bundle.properties" key="TimeTableCellPanel.btnCheck.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/editors/contest/Bundle.properties" key="TimeTableCellPanel.btnCheck.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
@@ -74,7 +74,7 @@
     <Component class="javax.swing.JTextField" name="lblTime">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/editors/jury/Bundle.properties" key="TimeTableCellPanel.lblTime.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/editors/contest/Bundle.properties" key="TimeTableCellPanel.lblTime.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">

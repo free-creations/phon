@@ -17,7 +17,7 @@ package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.Jury;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
-import de.free_creations.nbPhonAPI.JuryCollection;
+import de.free_creations.nbPhonAPI.ContestCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
@@ -44,11 +44,11 @@ import org.openide.util.NbBundle.Messages;
   //@ActionReference(path = "Shortcuts", name = "D-ENTER")
 })
 @Messages("CTL_newJury=new Jury")
-public final class NewJuryAction extends AbstractAction {
+public final class NewContestAction extends AbstractAction {
 
-  private static final Logger logger = Logger.getLogger(NewJuryAction.class.getName());
+  private static final Logger logger = Logger.getLogger(NewContestAction.class.getName());
 
-  public NewJuryAction() {
+  public NewContestAction() {
     super("new Jury");
   }
 
@@ -56,11 +56,11 @@ public final class NewJuryAction extends AbstractAction {
   //@SuppressWarnings("UseSpecificCatch")
   public void actionPerformed(ActionEvent e) {
     try {
-      JuryCollection personCollection = Manager.getJuryCollection();
+      ContestCollection personCollection = Manager.getJuryCollection();
       Jury newJury = personCollection.newEntity();
-      JuryEditorProvider provider =
+      ContestEditorProvider provider =
               Lookup.getDefault().lookup(
-              JuryEditorProvider.class);
+              ContestEditorProvider.class);
       if (provider != null) {
         provider.getEditor(true, newJury.getJuryid() );
       } else {

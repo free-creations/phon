@@ -20,13 +20,13 @@ public class Manager {
   private static EntityManager entityManager = null;
   private static final PersonCollection personCollection = new PersonCollection();
   private static TimeSlotCollection timeSlotCollection = null;
-  private static FunctionsCollection functionsCollection = null;
+  private static JobCollection functionsCollection = null;
   private static boolean problemHasBeenReported = false;
   public static final Object databaseAccessLock = new Object();
   private static final Object timeSlotLock = new Object();
   private static final Object functionsLock = new Object();
   private static final Object juryLock = new Object();
-  private static JuryCollection juryCollection = null;
+  private static ContestCollection juryCollection = null;
 
   protected static EntityManager getEntityManager() throws DataBaseNotReadyException {
     synchronized (databaseAccessLock) {
@@ -157,10 +157,10 @@ public class Manager {
    *
    * @return the collection of all FUNCTIONS records.
    */
-  public static FunctionsCollection getFunctionsCollection() {
+  public static JobCollection getFunctionsCollection() {
     synchronized (functionsLock) {
       if (functionsCollection == null) {
-        functionsCollection = new FunctionsCollection();
+        functionsCollection = new JobCollection();
       }
       return functionsCollection;
     }
@@ -171,10 +171,10 @@ public class Manager {
    *
    * @return the collection of all JURY records.
    */
-  public static JuryCollection getJuryCollection() {
+  public static ContestCollection getJuryCollection() {
     synchronized (juryLock) {
       if (juryCollection == null) {
-        juryCollection = new JuryCollection();
+        juryCollection = new ContestCollection();
       }
       return juryCollection;
     }

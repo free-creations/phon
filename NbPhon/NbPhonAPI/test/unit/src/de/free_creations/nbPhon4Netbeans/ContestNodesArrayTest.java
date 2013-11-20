@@ -29,7 +29,7 @@ import org.openide.nodes.Node;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class JuryNodesArrayTest {
+public class ContestNodesArrayTest {
 
   private class CollectionMock implements MutableEntityCollection<Jury, Integer> {
 
@@ -83,22 +83,22 @@ public class JuryNodesArrayTest {
   private final CollectionMock juryCollectionMock = new CollectionMock();
 
   /**
-   * Test of initCollection method, of class JuryNodesArray.
+   * Test of initCollection method, of class ContestNodesArray.
    */
   @Test
   public void testInitCollection() {
-    JuryNodesArray testItem = new JuryNodesArray(juryCollectionMock);
+    ContestNodesArray testItem = new ContestNodesArray(juryCollectionMock);
     ArrayList<Node> result = testItem.initCollection();
     assertNotNull(result);
     assertEquals(2, result.size());
   }
 
   /**
-   * Test of findIndexForNode method, of class JuryNodesArray.
+   * Test of findIndexForNode method, of class ContestNodesArray.
    */
   @Test
   public void testfindIndexForNode() {
-    JuryNodesArray testItem = new JuryNodesArray(juryCollectionMock);
+    ContestNodesArray testItem = new ContestNodesArray(juryCollectionMock);
 
     int indexFirstNode = testItem.findIndexForNode(1);
     assertEquals(0, indexFirstNode);

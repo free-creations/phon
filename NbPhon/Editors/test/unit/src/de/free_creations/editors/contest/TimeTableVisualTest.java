@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.editors.jury;
+package de.free_creations.editors.contest;
 
 
 
@@ -59,7 +59,7 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
   private void initComponents() {
 
     jScrollPane1 = new javax.swing.JScrollPane();
-    timeTable1 = new de.free_creations.editors.jury.TimeTable();
+    timeTable1 = new de.free_creations.editors.contest.TimeTable();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -127,6 +127,6 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JScrollPane jScrollPane1;
-  private de.free_creations.editors.jury.TimeTable timeTable1;
+  private de.free_creations.editors.contest.TimeTable timeTable1;
   // End of variables declaration//GEN-END:variables
 }

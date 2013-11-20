@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.editors.jury;
+package de.free_creations.editors.contest;
 
 import de.free_creations.dbEntities.Zeit;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;

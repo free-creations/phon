@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.editors.jury;
+package de.free_creations.editors.contest;
 
 import org.openide.windows.CloneableTopComponent;
 import org.openide.windows.TopComponent;
@@ -24,24 +24,24 @@ import org.openide.windows.WindowManager;
  * @author Harald Postner <Harald at free-creations.de>
  */
 @org.openide.util.lookup.ServiceProvider(
-        service=de.free_creations.nbPhon4Netbeans.JuryEditorProvider.class,
+        service=de.free_creations.nbPhon4Netbeans.ContestEditorProvider.class,
         position=100)
-public class JuryEditorProvider implements de.free_creations.nbPhon4Netbeans.JuryEditorProvider {
+public class ContestEditorProvider implements de.free_creations.nbPhon4Netbeans.ContestEditorProvider {
 
 
 
   @Override
   public CloneableTopComponent getEditor(boolean newWindow, Integer key) {
     WindowManager windowManager = WindowManager.getDefault();
-    JuryTopComponent editor = null;
+    ContestTopComponent editor = null;
     if(!newWindow){
       TopComponent foundTC = windowManager.findTopComponent("JuryEditorTopComponent");
-      if(foundTC instanceof JuryTopComponent){
-        editor = (JuryTopComponent)foundTC;
+      if(foundTC instanceof ContestTopComponent){
+        editor = (ContestTopComponent)foundTC;
       }
     }
     if(editor == null){
-     editor = new JuryTopComponent(key);
+     editor = new ContestTopComponent(key);
     }
     editor.viewJuryRecord(key);
     editor.open();

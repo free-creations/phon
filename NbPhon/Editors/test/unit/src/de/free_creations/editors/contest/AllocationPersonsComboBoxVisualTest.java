@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.editors.jury;
+package de.free_creations.editors.contest;
 
 
 
@@ -54,7 +54,7 @@ public class AllocationPersonsComboBoxVisualTest extends javax.swing.JFrame {
     btnSetKeyTo12 = new javax.swing.JButton();
     btnSetKeyTo50000 = new javax.swing.JButton();
     btnSetKeyToNull = new javax.swing.JButton();
-    allocationPersonsComboBox1 = new de.free_creations.editors.jury.AllocationPersonsComboBox();
+    allocationPersonsComboBox1 = new de.free_creations.editors.contest.AllocationPersonsComboBox();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -173,7 +173,7 @@ public class AllocationPersonsComboBoxVisualTest extends javax.swing.JFrame {
     System.out.println("Use \"Run File\" to see this test.");
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private de.free_creations.editors.jury.AllocationPersonsComboBox allocationPersonsComboBox1;
+  private de.free_creations.editors.contest.AllocationPersonsComboBox allocationPersonsComboBox1;
   private javax.swing.JButton btnSetKeyTo12;
   private javax.swing.JButton btnSetKeyTo50000;
   private javax.swing.JButton btnSetKeyToNull;
