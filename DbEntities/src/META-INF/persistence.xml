@@ -8,6 +8,7 @@
     <class>de.free_creations.dbEntities.Job</class>
     <class>de.free_creations.dbEntities.TimeSlot</class>
     <class>de.free_creations.dbEntities.Person</class>
+    <class>de.free_creations.dbEntities.Crew</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/phonDb"/>
       <property name="javax.persistence.jdbc.password" value="app"/>

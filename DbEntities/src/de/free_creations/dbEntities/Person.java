@@ -67,6 +67,10 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Person.findByLetzteaenderung", query = "SELECT p FROM Person p WHERE p.letzteaenderung = :letzteaenderung")})
 public class Person implements Serializable, DbEntity {
 
+  @JoinColumn(name = "CREW", referencedColumnName = "CREW")
+  @ManyToOne
+  private Crew crew;
+
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -148,10 +152,11 @@ public class Person implements Serializable, DbEntity {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
   private List<Availability> verfuegbarkeitList;
   public static final String PROP_VERFUEGBARKEIT = "VERFUEGBARKEIT";
-  public static final String PROP_ADD_TEAMEINTEILUNG = "addTeameinteilung";
-  public static final String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
-  public static final String PROP_REMOVE_JURY = "removeJury";
-  public static final String PROP_ADD_JURY = "addJury";
+  public static final String PROP_ADD_TEAMEINTEILUNG = "PROP_ADD_TEAMEINTEILUNG";
+  public static final String PROP_REMOVE_TEAMEINTEILUNG = "PROP_REMOVE_TEAMEINTEILUNG";
+  public static final String PROP_REMOVE_JURY = "PROP_REMOVE_JURY";
+  public static final String PROP_ADD_JURY = "PROP_ADD_JURY";
+  public static final String PROP_CREWMEMBER = "PROP_CREWMEMBER";
 
   public Person() {
   }
@@ -492,7 +497,7 @@ public class Person implements Serializable, DbEntity {
    * This method is protected, use {@link Availability#setPersonid() }
    *
    * @param v a new Availability record. It is assumed that this record is not
- assigned to an other person.
+   * assigned to an other person.
    */
   protected void addVerfuegbarkeit(Availability v) {
     assert (v != null);
@@ -625,5 +630,28 @@ public class Person implements Serializable, DbEntity {
     }
     personenList.add(p);
     firePropertyChange(PROP_ADD_GROUPMEMBER, null, p.identity());
+  }
+
+  public Crew getCrew() {
+    return crew;
+  }
+
+  public void setCrew(Crew crew) {
+
+    Crew old = this.crew;
+    this.crew = crew;
+
+    EntityIdentity newId = (crew == null) ? null : crew.identity();
+    EntityIdentity oldId = (old == null) ? null : old.identity();
+
+    if (!Objects.equals(oldId, newId)) {
+      firePropertyChange(PROP_CREWMEMBER, oldId, newId);
+      if (old != null) {
+        old.removePerson(this);
+      }
+      if (crew != null) {
+        crew.addPerson(this);
+      }
+    }
   }
 }

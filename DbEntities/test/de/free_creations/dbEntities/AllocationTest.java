@@ -105,7 +105,7 @@ public class AllocationTest {
   }
 
   @Test
-  public void testCreationDestuction() {
+  public void testCreationDestruction() {
     TimeSlot z = new TimeSlot(1001);
     entityManager.persist(z);
 
