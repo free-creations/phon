@@ -147,7 +147,7 @@ public class Person implements Serializable, DbEntity {
   private List<Allocation> teameinteilungList;
   //
   @OneToMany(mappedBy = "verantwortlich")
-  private List<Contest> juryList;
+  private List<Contest> contestList;
   //
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
   private List<Availability> verfuegbarkeitList;
@@ -344,14 +344,17 @@ public class Person implements Serializable, DbEntity {
     return personenList;
   }
 
+  @Deprecated
   private void setPersonenList(List<Person> personenList) {
     this.personenList = personenList;
   }
 
+  @Deprecated
   public Person getGewuenschterkollege() {
     return gewuenschterkollege;
   }
 
+  @Deprecated
   public void setGewuenschterkollege(Person p) {
     Person old = this.gewuenschterkollege;
     this.gewuenschterkollege = p;
@@ -431,38 +434,38 @@ public class Person implements Serializable, DbEntity {
 
   @XmlTransient
   public List<Contest> getJuryList() {
-    return juryList;
+    return contestList;
   }
 
   void removeJuryResponsability(Contest j) {
-    if (juryList == null) {
+    if (contestList == null) {
       throw new RuntimeException("Cannot remove Contest from Person. Record must be persited");
     }
-    if (!juryList.contains(j)) {
+    if (!contestList.contains(j)) {
       return;
     }
-    juryList.remove(j);
+    contestList.remove(j);
     assert (j != null);
     firePropertyChange(PROP_REMOVE_JURY, j.identity(), null);
   }
 
   void addJuryResponsability(Contest j) {
     assert (j != null);
-    if (juryList == null) {
+    if (contestList == null) {
       throw new RuntimeException("Cannot add Contest to Person. Record must be persited");
     }
-    if (juryList.contains(j)) {
+    if (contestList.contains(j)) {
       return;
     }
     if (j.getVerantwortlich() != this) {
       throw new RuntimeException("Cannot add Contest used for other person.");
     }
-    juryList.add(j);
+    contestList.add(j);
     firePropertyChange(PROP_ADD_JURY, null, j.identity());
   }
 
   public void setJuryList(List<Contest> juryList) {
-    this.juryList = juryList;
+    this.contestList = juryList;
   }
 
   /**
@@ -604,6 +607,7 @@ public class Person implements Serializable, DbEntity {
     return new EntityIdentity(Person.class, personid);
   }
 
+  @Deprecated
   private void removeGroupmember(Person p) {
     assert (p != null);
     if (personenList == null) {
@@ -617,6 +621,7 @@ public class Person implements Serializable, DbEntity {
     firePropertyChange(PROP_REMOVE_GROUPMEMBER, p.identity(), null);
   }
 
+  @Deprecated
   private void addGroupmember(Person p) {
     assert (p != null);
     if (personenList == null) {

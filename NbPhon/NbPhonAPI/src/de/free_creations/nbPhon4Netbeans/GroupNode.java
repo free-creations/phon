@@ -29,7 +29,9 @@ import org.openide.nodes.Node;
 /**
  *
  * @author Harald Postner <Harald at free-creations.de>
+ * @deprecated 
  */
+@Deprecated
 public class GroupNode extends AbstractNode {
 
   private final String groupId;
