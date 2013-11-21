@@ -21,6 +21,7 @@ public class Manager {
   private static final PersonCollection personCollection = new PersonCollection();
   private static TimeSlotCollection timeSlotCollection = null;
   private static JobCollection jobCollection = null;
+  private static final CrewCollection crewCollection = new CrewCollection();
   private static boolean problemHasBeenReported = false;
   public static final Object databaseAccessLock = new Object();
   private static final Object timeSlotLock = new Object();
@@ -64,6 +65,7 @@ public class Manager {
    * Show an error dialog if the database cannot be accessed, this dialog is
    * only shown the first time that this procedure is called, thus avoiding to
    * nag the user with several times the same error report at startup.
+   * @return 
    */
   public static boolean assertOpen() {
     boolean open = isOpen();
@@ -120,12 +122,21 @@ public class Manager {
   }
 
   /**
-   * Returns the collection of all PERSONEN records.
+   * Returns the collection of all PERSON records.
    *
-   * @return the collection of all PERSONEN records.
+   * @return the collection of all PERSON records.
    */
   public static PersonCollection getPersonCollection() {
     return personCollection;
+  }
+
+  /**
+   * Returns the collection of all CREW records.
+   *
+   * @return the collection of all CREW records.
+   */
+  public static CrewCollection getCrewCollection() {
+    return crewCollection;
   }
 
   /**
@@ -144,6 +155,7 @@ public class Manager {
 
   /**
    * Indicates whether the time-slot-collection has been initialized.
+   *
    * @return true if the has been initialized.
    */
   protected static boolean hasTimeSlotCollection() {
