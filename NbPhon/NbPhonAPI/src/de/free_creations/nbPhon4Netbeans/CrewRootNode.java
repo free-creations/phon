@@ -52,6 +52,9 @@ public class CrewRootNode extends AbstractNode {
         CrewNode cn = new CrewNode(c.getCrewId(), crewManager, personManager);
         result.add(cn);
       }
+      // add a special node showing all those persons that are not in a crew
+      CrewNode cn = new CrewNode(null, crewManager, personManager);
+      result.add(cn);
       return result;
     }
 

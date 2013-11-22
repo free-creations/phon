@@ -17,9 +17,6 @@ package de.free_creations.editors.person;
 
 import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Person;
-import de.free_creations.actions.CheckedAction;
-import static de.free_creations.actions.CheckedAction.Severity.*;
-import static de.free_creations.actions.person.SetGroupleaderRule.setGroupleader;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.PersonCollection;
@@ -27,8 +24,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import org.netbeans.api.settings.ConvertAsProperties;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Exceptions;
@@ -118,10 +113,8 @@ public final class PersonTopComponent extends CloneableTopComponent {
     timeTable = new de.free_creations.editors.person.TimeTable();
     edFunction = new de.free_creations.editors.person.FunctionsComboBox();
     edWertung = new de.free_creations.editors.person.JuryComboBox();
-    jPanel2 = new javax.swing.JPanel();
-    edKollege = new de.free_creations.editors.person.PersonsComboBox();
-    pnlGroupMembers = new de.free_creations.editors.person.PersonGroupPanel();
     jLabel11 = new javax.swing.JLabel();
+    crewPanel = new de.free_creations.editors.person.PersonCrewPanel();
     jScrollPane2 = new javax.swing.JScrollPane();
     edNotiz = new javax.swing.JTextArea();
     jLabel12 = new javax.swing.JLabel();
@@ -234,35 +227,6 @@ public final class PersonTopComponent extends CloneableTopComponent {
       }
     });
 
-    jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-    edKollege.setMinimumSize(new java.awt.Dimension(32, 26));
-    edKollege.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        edKollegeActionPerformed(evt);
-      }
-    });
-
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel2Layout.createSequentialGroup()
-        .addGap(0, 0, 0)
-        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(edKollege, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(pnlGroupMembers, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addGap(0, 0, 0))
-    );
-    jPanel2Layout.setVerticalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel2Layout.createSequentialGroup()
-        .addGap(0, 0, 0)
-        .addComponent(edKollege, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addGap(0, 0, 0)
-        .addComponent(pnlGroupMembers, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE))
-    );
-
     org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel11.text")); // NOI18N
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -275,13 +239,16 @@ public final class PersonTopComponent extends CloneableTopComponent {
           .addComponent(jLabel3)
           .addGroup(jPanel1Layout.createSequentialGroup()
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(jLabel11))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+              .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel11)
+                .addGap(119, 119, 119))
+              .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(crewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
               .addComponent(edFunction, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(edWertung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
@@ -301,12 +268,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
           .addComponent(jLabel11))
         .addGap(0, 0, 0)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(jPanel1Layout.createSequentialGroup()
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-              .addComponent(edFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(edWertung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(0, 106, Short.MAX_VALUE))
-          .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+          .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addComponent(edFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(edWertung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(crewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
     );
 
     edNotiz.setColumns(20);
@@ -516,56 +481,6 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
   }//GEN-LAST:event_edFunctionActionPerformed
 
-  private void edKollegeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edKollegeActionPerformed
-
-    Person p = thisPerson();
-    if (p != null) {
-      Integer selectedKey = edKollege.getSelectedPersonId();
-      try {
-        Person newC = personCollection.findEntity(selectedKey);
-        Person oldC = p.getGewuenschterkollege();
-        if (!Objects.equals(oldC, newC)) {
-          CheckedAction setGroupleaderRule = setGroupleader(p.getPersonid(), selectedKey);
-          switch (setGroupleaderRule.level()) {
-            case ok: {
-              setGroupleaderRule.apply();
-              return;
-            }
-            case recoverable: {
-              NotifyDescriptor.Confirmation message = new NotifyDescriptor.Confirmation(
-                      setGroupleaderRule.problemDescription() + "!\n\n"
-                      + setGroupleaderRule.proposedSolution() + "?",
-                      NotifyDescriptor.OK_CANCEL_OPTION,
-                      NotifyDescriptor.WARNING_MESSAGE);
-              Object reply = DialogDisplayer.getDefault().notify(message);
-              if (NotifyDescriptor.OK_OPTION.equals(reply)) {
-                setGroupleaderRule.apply();
-              }
-              edKollege.setSelectedPerson(p.getGewuenschterkollege());
-              return;
-            }
-            case irrecoverable: {
-              NotifyDescriptor.Confirmation message = new NotifyDescriptor.Confirmation(
-                      setGroupleaderRule.problemDescription() + "!\n\n"
-                      + setGroupleaderRule.proposedSolution() + "?",
-                      NotifyDescriptor.OK_CANCEL_OPTION,
-                      NotifyDescriptor.ERROR_MESSAGE);
-              Object reply = DialogDisplayer.getDefault().notify(message);
-              if (NotifyDescriptor.OK_OPTION.equals(reply)) {
-                setGroupleaderRule.apply();
-              }
-              edKollege.setSelectedPerson(p.getGewuenschterkollege());
-              return;
-
-            }
-          }
-        }
-      } catch (DataBaseNotReadyException ex) {
-        Exceptions.printStackTrace(ex);
-      }
-    }
-  }//GEN-LAST:event_edKollegeActionPerformed
-
   private void edWertungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edWertungActionPerformed
     Person p = thisPerson();
     if (p != null) {
@@ -579,13 +494,13 @@ public final class PersonTopComponent extends CloneableTopComponent {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField PersonId;
   private de.free_creations.editors.person.PersonAssignmentTable assignmentTable;
+  private de.free_creations.editors.person.PersonCrewPanel crewPanel;
   private javax.swing.JComboBox edAlter;
   private javax.swing.JTextField edEMail;
   private javax.swing.JTextField edFestnetz;
   private de.free_creations.editors.person.FunctionsComboBox edFunction;
   private javax.swing.JTextField edHandy;
   private javax.swing.JComboBox edHerrFrau;
-  private de.free_creations.editors.person.PersonsComboBox edKollege;
   private javax.swing.JTextField edNachname;
   private javax.swing.JTextArea edNotiz;
   private javax.swing.JTextField edPlz;
@@ -607,11 +522,9 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private javax.swing.JLabel jLabel8;
   private javax.swing.JLabel jLabel9;
   private javax.swing.JPanel jPanel1;
-  private javax.swing.JPanel jPanel2;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JScrollPane jScrollPane3;
-  private de.free_creations.editors.person.PersonGroupPanel pnlGroupMembers;
   private de.free_creations.editors.person.TimeTable timeTable;
   // End of variables declaration//GEN-END:variables
 
@@ -672,7 +585,6 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edFunction.setSelectedItem(person.getGewuenschtefunktion());
     edHandy.setText(noNull(person.getHandy()));
     edHerrFrau.setSelectedItem(noNull(person.getHerrfrau()));
-    edKollege.setSelectedPerson(person.getGewuenschterkollege());
     edNachname.setText(noNull(person.getFamilienname()));
     edNotiz.setText(noNull(person.getNotiz()));
     edPlz.setText(noNull(person.getPlz()));
@@ -680,7 +592,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edVorname.setText(noNull(person.getVorname()));
     edWertung.setSelectedItem(person.getGewuenschtewertung());
     edWohnort.setText(noNull(person.getOrt()));
-    pnlGroupMembers.setGroupleader(findTeamleaderId(person));
+    crewPanel.setPersonId(person.getPersonid());
   }
 
   private Integer findTeamleaderId(Person person) {
