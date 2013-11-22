@@ -35,8 +35,9 @@ import org.openide.util.Exceptions;
 public class IconManager {
 
   public final BufferedImage iconStar;
-  //---- Group Node
-  public final BufferedImage iconGroup;
+  //---- Crew Node
+  public final BufferedImage iconCrew;
+  public final BufferedImage iconCrewOpened;
   //---- Location Node
   public final BufferedImage iconLocation;
   //---- JuryNode
@@ -71,7 +72,8 @@ public class IconManager {
 
   private IconManager() throws IOException {
     //---- Location Node
-    iconGroup = ImageIO.read(IconManager.class.getResource("resources/group.png"));
+    iconCrew = ImageIO.read(IconManager.class.getResource("resources/group.png"));
+    iconCrewOpened = ImageIO.read(IconManager.class.getResource("resources/groupOpened.png"));
     //---- Location Node
     iconLocation = ImageIO.read(IconManager.class.getResource("resources/house.png"));
     //---- JuryNode

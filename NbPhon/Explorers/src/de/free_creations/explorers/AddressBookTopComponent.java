@@ -59,7 +59,7 @@ public final class AddressBookTopComponent extends TopComponent
         implements ExplorerManager.Provider {
 
   private static final Logger logger = Logger.getLogger(AddressBookTopComponent.class.getName());
-  private static ExplorerManager explorerManager = new ExplorerManager();
+  private static final ExplorerManager explorerManager = new ExplorerManager();
   private DatabaseActivationTask databaseActivationTask = null;
 
   private class DatabaseActivationTask extends SwingWorker<Void, Void> {

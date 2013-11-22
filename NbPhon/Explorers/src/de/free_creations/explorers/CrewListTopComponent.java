@@ -15,21 +15,22 @@
  */
 package de.free_creations.explorers;
 
-
-import de.free_creations.nbPhon4Netbeans.GroupNode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import de.free_creations.nbPhon4Netbeans.CrewRootNode;
+import de.free_creations.nbPhonAPI.CrewCollection;
+import de.free_creations.nbPhonAPI.Manager;
+import de.free_creations.nbPhonAPI.PersonCollection;
+import java.awt.Cursor;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingWorker;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.BeanTreeView;
-import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Children;
-import org.openide.nodes.Node;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -37,125 +38,74 @@ import org.openide.util.NbBundle.Messages;
  * A window which displays the list of all groups registered in the database.
  */
 @ConvertAsProperties(
-        dtd = "-//de.free_creations.explorers//Group//EN",
+        dtd = "-//de.free_creations.explorers//Crew//EN",
         autostore = false)
 @TopComponent.Description(
-        preferredID = "GroupListTopComponent",
+        preferredID = "CrewListTopComponent",
         iconBase = "de/free_creations/explorers/resources/group.png",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "explorer", openAtStartup = true, position = 150)
-@ActionID(category = "Window", id = "de.free_creations.explorers.GroupListTopComponent")
+@ActionID(category = "Window", id = "de.free_creations.explorers.CrewListTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
-        displayName = "#CTL_GroupListAction",
-        preferredID = "GroupListTopComponent")
+        displayName = "#CTL_CrewListAction",
+        preferredID = "CrewListTopComponent")
 @Messages({
-  "CTL_GroupListAction=Show all Groups",
-  "CTL_GroupListTopComponent=Groups",
-  "HINT_GroupListTopComponent=All groups registered in the database"
+  "CTL_CrewListAction=Show all Crews",
+  "CTL_CrewListTopComponent=Crews",
+  "HINT_CrewListTopComponent=All crews registered in the database"
 })
-public final class GroupListTopComponent extends TopComponent
+public final class CrewListTopComponent extends TopComponent
         implements ExplorerManager.Provider {
 
-  private final Node[] nodes;
-  private static final Logger logger = Logger.getLogger(GroupListTopComponent.class.getName());
-  private static ExplorerManager explorerManager = new ExplorerManager();
-  //private DatabaseActivationTask databaseActivationTask = null;
-//
-//  private class DatabaseActivationTask extends SwingWorker<Void, Void> {
-//
-//    private final ProgressHandle progressHandle;
-//    GroupRootNode groupRootNode = null;
-//
-//    public DatabaseActivationTask() {
-//      super();
-//      progressHandle = ProgressHandleFactory.createHandle("Connecting to Database.");
-//    }
-//
-//    @Override
-//    protected Void doInBackground() throws Exception {
-//      try {
-//        progressHandle.start();
-//        GroupCollection jj = Manager.getGroupCollection();
-//        groupRootNode = new GroupRootNode(jj);
-//      } catch (Throwable ex) {
-//        logger.log(Level.SEVERE, "Could not access the database.", ex);
-//      }
-//      return null;
-//    }
-//
-//    @Override
-//    protected void done() {
-//      Manager.assertOpen();
-//      if (groupRootNode != null) {
-//        explorerManager.setRootContext(groupRootNode);
-//      }
-//      scrollPane.setCursor(null);
-//      progressHandle.finish();
-//    }
-//  }
-//
+  private static final Logger logger = Logger.getLogger(CrewListTopComponent.class.getName());
+  private static final ExplorerManager explorerManager = new ExplorerManager();
+  private DatabaseActivationTask databaseActivationTask = null;
 
-  private class LChildren extends Children.Array {
+  private class DatabaseActivationTask extends SwingWorker<Void, Void> {
 
-    private final Collection<Node> ch;
+    private final ProgressHandle progressHandle;
+    private CrewRootNode crewRootNode = null;
 
-    public LChildren(Collection<Node> ch) {
+    public DatabaseActivationTask() {
       super();
-      assert (ch != null);
-      this.ch = ch;
+      progressHandle = ProgressHandleFactory.createHandle("Connecting to Database.");
     }
 
     @Override
-    protected Collection<Node> initCollection() {
-      return ch;
+    protected Void doInBackground() throws Exception {
+      try {
+        progressHandle.start();
+        PersonCollection pp = Manager.getPersonCollection();
+        CrewCollection cc = Manager.getCrewCollection();
+        crewRootNode = new CrewRootNode(cc, pp);
+      } catch (Throwable ex) {
+        logger.log(Level.SEVERE, "Could not access the database.", ex);
+      }
+      return null;
     }
-  };
 
-  public GroupListTopComponent() {
+    @Override
+    protected void done() {
+      Manager.assertOpen();
+      if (crewRootNode != null) {
+        explorerManager.setRootContext(crewRootNode);
+      }
+      scrollPane.setCursor(null);
+      progressHandle.finish();
+    }
+  }
+
+  public CrewListTopComponent() {
     initComponents();
-    setName(Bundle.CTL_GroupListTopComponent());
-    //setToolTipText(Bundle.HINT_GroupListTopComponent());
+    setName(Bundle.CTL_CrewListTopComponent());
+    //setToolTipText(Bundle.HINT_CrewListTopComponent());
     putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
     //ListView listView = (ListView) scrollPane;
 
     BeanTreeView beanTreeView = (BeanTreeView) scrollPane;
     beanTreeView.setRootVisible(false);
     associateLookup(ExplorerUtils.createLookup(explorerManager, getActionMap()));
-
-    //---
-    nodes = new Node[]{
-      new GroupNode("Thönges"),
-      new GroupNode("Leuschner"),
-      new GroupNode("Reikow"),
-      new GroupNode("Godel"),
-      new GroupNode("Schönerstedt"),
-      new GroupNode("Sirotek"),
-      new GroupNode("Henn"),
-      new GroupNode("Peschke"),
-      new GroupNode("Körner"),
-      new GroupNode("Kabisch"),
-      new GroupNode("Radermacher"),
-      new GroupNode("Schimmack"),
-      new GroupNode("Ritter"),
-      new GroupNode("Leutert"),
-      new GroupNode("Grossmann"),
-      new GroupNode("Warnecke"),
-      new GroupNode("Schiessler"),};
-
-    ArrayList aNodes = new ArrayList();
-    aNodes.addAll(Arrays.asList(nodes));
-
-
-    LChildren children = new LChildren(aNodes);
-
-
-    Node rootNode = new AbstractNode(children);
-    explorerManager.setRootContext(rootNode);
-
-
-
-
   }
 
   /**
@@ -187,13 +137,13 @@ public final class GroupListTopComponent extends TopComponent
   @Override
   public void componentOpened() {
     super.componentOpened();
-//    synchronized (databaseActivationTaskLock) {
-//      if (databaseActivationTask == null) {
-//        scrollPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-//        databaseActivationTask = new DatabaseActivationTask();
-//        databaseActivationTask.execute();
-//      }
-//    }
+    synchronized (databaseActivationTaskLock) {
+      if (databaseActivationTask == null) {
+        scrollPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        databaseActivationTask = new DatabaseActivationTask();
+        databaseActivationTask.execute();
+      }
+    }
   }
 
   @Override
