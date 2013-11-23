@@ -16,8 +16,14 @@
 package de.free_creations.editors.person;
 
 
+import de.free_creations.dbEntities.Person;
+import de.free_creations.dbEntities.Team;
+import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
+import de.free_creations.nbPhonAPI.TeamCollection;
+import java.util.List;
 import org.junit.Test;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -52,20 +58,20 @@ public class PersonTeamPanelVisualTest extends javax.swing.JFrame {
     jLabel1 = new javax.swing.JLabel();
     btnSetGroupLeader = new javax.swing.JButton();
     btnSetNull = new javax.swing.JButton();
-    personTeamPanel1 = new de.free_creations.editors.person.PersonTeamPanel();
+    personTeamPanel2 = new de.free_creations.editors.person.PersonTeamPanel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonTeamPanelVisualTest.jLabel1.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonCrewPanelVisualTest.jLabel1.text")); // NOI18N
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnSetGroupLeader, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonTeamPanelVisualTest.btnSetGroupLeader.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetGroupLeader, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonCrewPanelVisualTest.btnSetGroupLeader.text")); // NOI18N
     btnSetGroupLeader.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         btnSetGroupLeaderActionPerformed(evt);
       }
     });
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnSetNull, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonTeamPanelVisualTest.btnSetNull.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetNull, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonCrewPanelVisualTest.btnSetNull.text")); // NOI18N
     btnSetNull.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         btnSetNullActionPerformed(evt);
@@ -82,15 +88,15 @@ public class PersonTeamPanelVisualTest extends javax.swing.JFrame {
           .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(btnSetGroupLeader, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
           .addComponent(btnSetNull, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(personTeamPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(personTeamPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(personTeamPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(personTeamPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGap(16, 16, 16)
         .addComponent(btnSetGroupLeader)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(btnSetNull)
@@ -103,13 +109,21 @@ public class PersonTeamPanelVisualTest extends javax.swing.JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
   private void btnSetGroupLeaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetGroupLeaderActionPerformed
-    // TODO add your handling code here:
-    personTeamPanel1.setPersonId(3);
+    try {
+      TeamCollection teamCollection = Manager.getTeamCollection();
+      Team team1 = teamCollection.findEntity(1);
+      List<Person> personList = team1.getPersonList();
+      if(!personList.isEmpty()){
+      personTeamPanel2.setPersonId(personList.get(0).getPersonid());
+      }
+    } catch (DataBaseNotReadyException ex) {
+      Exceptions.printStackTrace(ex);
+    }
   }//GEN-LAST:event_btnSetGroupLeaderActionPerformed
 
   private void btnSetNullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetNullActionPerformed
     // TODO add your handling code here:
-    personTeamPanel1.setPersonId(null);
+    personTeamPanel2.setPersonId(null);
   }//GEN-LAST:event_btnSetNullActionPerformed
 
   /**
@@ -158,6 +172,6 @@ public class PersonTeamPanelVisualTest extends javax.swing.JFrame {
   private javax.swing.JButton btnSetGroupLeader;
   private javax.swing.JButton btnSetNull;
   private javax.swing.JLabel jLabel1;
-  private de.free_creations.editors.person.PersonTeamPanel personTeamPanel1;
+  private de.free_creations.editors.person.PersonTeamPanel personTeamPanel2;
   // End of variables declaration//GEN-END:variables
 }

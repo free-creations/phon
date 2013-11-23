@@ -318,8 +318,8 @@
                                   <EmptySpace min="-2" pref="119" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="crewPanel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="teamPanel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -356,8 +356,9 @@
                           <Component id="edFunction" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="edWertung" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="crewPanel" min="-2" max="-2" attributes="0"/>
+                      <Component id="teamPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -427,7 +428,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="de.free_creations.editors.person.PersonCrewPanel" name="crewPanel">
+        <Component class="de.free_creations.editors.person.PersonTeamPanel" name="teamPanel">
         </Component>
       </SubComponents>
     </Container>
