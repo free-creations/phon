@@ -21,7 +21,7 @@ public class Manager {
   private static final PersonCollection personCollection = new PersonCollection();
   private static TimeSlotCollection timeSlotCollection = null;
   private static JobCollection jobCollection = null;
-  private static final CrewCollection crewCollection = new CrewCollection();
+  private static final TeamCollection teamCollection = new TeamCollection();
   private static boolean problemHasBeenReported = false;
   public static final Object databaseAccessLock = new Object();
   private static final Object timeSlotLock = new Object();
@@ -131,12 +131,12 @@ public class Manager {
   }
 
   /**
-   * Returns the collection of all CREW records.
+   * Returns the collection of all TEAM records.
    *
-   * @return the collection of all CREW records.
+   * @return the collection of all TEAM records.
    */
-  public static CrewCollection getCrewCollection() {
-    return crewCollection;
+  public static TeamCollection getTeamCollection() {
+    return teamCollection;
   }
 
   /**

@@ -67,9 +67,9 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Person.findByLetzteaenderung", query = "SELECT p FROM Person p WHERE p.letzteaenderung = :letzteaenderung")})
 public class Person implements Serializable, DbEntity {
 
-  @JoinColumn(name = "CREW", referencedColumnName = "CREW")
+  @JoinColumn(name = "TEAM", referencedColumnName = "TEAM")
   @ManyToOne
-  private Crew crew;
+  private Team team;
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -156,7 +156,7 @@ public class Person implements Serializable, DbEntity {
   public static final String PROP_REMOVE_TEAMEINTEILUNG = "PROP_REMOVE_TEAMEINTEILUNG";
   public static final String PROP_REMOVE_JURY = "PROP_REMOVE_JURY";
   public static final String PROP_ADD_JURY = "PROP_ADD_JURY";
-  public static final String PROP_CREWMEMBER = "PROP_CREWMEMBER";
+  public static final String PROP_TEAMMEMBER = "PROP_TEAMMEMBER";
 
   public Person() {
   }
@@ -637,25 +637,25 @@ public class Person implements Serializable, DbEntity {
     firePropertyChange(PROP_ADD_GROUPMEMBER, null, p.identity());
   }
 
-  public Crew getCrew() {
-    return crew;
+  public Team getTeam() {
+    return team;
   }
 
-  public void setCrew(Crew crew) {
+  public void setTeam(Team team) {
 
-    Crew old = this.crew;
-    this.crew = crew;
+    Team old = this.team;
+    this.team = team;
 
-    EntityIdentity newId = (crew == null) ? null : crew.identity();
+    EntityIdentity newId = (team == null) ? null : team.identity();
     EntityIdentity oldId = (old == null) ? null : old.identity();
 
     if (!Objects.equals(oldId, newId)) {
-      firePropertyChange(PROP_CREWMEMBER, oldId, newId);
+      firePropertyChange(PROP_TEAMMEMBER, oldId, newId);
       if (old != null) {
         old.removePerson(this);
       }
-      if (crew != null) {
-        crew.addPerson(this);
+      if (team != null) {
+        team.addPerson(this);
       }
     }
   }

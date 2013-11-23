@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Crew;
+import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.Person;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +28,18 @@ import static org.junit.Assert.*;
  *
  * @author Harald Postner<harald at free-creations.de>
  */
-public class CrewCollectionTest {
+public class TeamCollectionTest {
 
-  private CrewCollection crewCollection;
+  private TeamCollection teamCollection;
 
-  public CrewCollectionTest() {
+  public TeamCollectionTest() {
   }
 
   @Before
   public void setUp() throws Exception {
     assertTrue("did you start the database-server?", Manager.isOpen());
-    crewCollection = Manager.getCrewCollection();
-    assertNotNull(crewCollection);
+    teamCollection = Manager.getTeamCollection();
+    assertNotNull(teamCollection);
   }
 
   @After
@@ -48,61 +48,61 @@ public class CrewCollectionTest {
   }
 
   /**
-   * Test of getAll method, of class CrewCollection.
+   * Test of getAll method, of class TeamCollection.
    */
   @Test
   public void testGetAll() {
-    List<Crew> cc = crewCollection.getAll();
+    List<Team> cc = teamCollection.getAll();
     assertNotNull(cc);
     assertFalse(cc.isEmpty());
   }
 
   /**
-   * Test of findEntity method, of class CrewCollection.
+   * Test of findEntity method, of class TeamCollection.
    *
    * @throws java.lang.Exception
    */
   @Test
   public void testFindEntity() throws Exception {
     // we assume that the test database contains at least one record
-    Crew c = crewCollection.findEntity(1);
+    Team c = teamCollection.findEntity(1);
     assertNotNull("Bad test data?", c);
-    assertEquals((int) c.getCrewId(), 1);
+    assertEquals((int) c.getTeamId(), 1);
   }
 
   /**
-   * Test of newEntity method, of class CrewCollection.
+   * Test of newEntity method, of class TeamCollection.
    */
   @Test
   public void testNewEntity() throws Exception {
-    Crew c = crewCollection.newEntity();
+    Team c = teamCollection.newEntity();
     assertNotNull(c);
-    assertNotNull(c.getCrewId());
-    assertTrue(c.getCrewId() > 1);
+    assertNotNull(c.getTeamId());
+    assertTrue(c.getTeamId() > 1);
   }
 
   /**
-   * Test of removeEntity method, of class CrewCollection.
+   * Test of removeEntity method, of class TeamCollection.
    */
   @Test
   public void testRemoveEntity() throws Exception {
     // we assume that the test database contains at least one record
-    // and that this crew has some members attached.
-    Crew c = crewCollection.findEntity(1);
+    // and that this team has some members attached.
+    Team c = teamCollection.findEntity(1);
     ArrayList<Person> personList = new ArrayList<>(c.getPersonList());
     assertFalse("Bad test data?", personList.isEmpty());
     
-    crewCollection.removeEntity(1);
+    teamCollection.removeEntity(1);
     
-    assertNull(crewCollection.findEntity(1));
+    assertNull(teamCollection.findEntity(1));
     for(Person p:personList){
-      assertNull(p.getCrew());
+      assertNull(p.getTeam());
     }
 
   }
 
   /**
-   * Test of addPropertyChangeListener method, of class CrewCollection.
+   * Test of addPropertyChangeListener method, of class TeamCollection.
    */
   @Test
   public void testAddPropertyChangeListener() {
@@ -110,7 +110,7 @@ public class CrewCollectionTest {
   }
 
   /**
-   * Test of removePropertyChangeListener method, of class CrewCollection.
+   * Test of removePropertyChangeListener method, of class TeamCollection.
    */
   @Test
   public void testRemovePropertyChangeListener() {

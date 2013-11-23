@@ -15,8 +15,8 @@
  */
 package de.free_creations.explorers;
 
-import de.free_creations.nbPhon4Netbeans.CrewRootNode;
-import de.free_creations.nbPhonAPI.CrewCollection;
+import de.free_creations.nbPhon4Netbeans.TeamRootNode;
+import de.free_creations.nbPhonAPI.TeamCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.PersonCollection;
 import java.awt.Cursor;
@@ -38,34 +38,34 @@ import org.openide.util.NbBundle.Messages;
  * A window which displays the list of all groups registered in the database.
  */
 @ConvertAsProperties(
-        dtd = "-//de.free_creations.explorers//Crew//EN",
+        dtd = "-//de.free_creations.explorers//Team//EN",
         autostore = false)
 @TopComponent.Description(
-        preferredID = "CrewListTopComponent",
+        preferredID = "TeamListTopComponent",
         iconBase = "de/free_creations/explorers/resources/group.png",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "explorer", openAtStartup = true, position = 150)
-@ActionID(category = "Window", id = "de.free_creations.explorers.CrewListTopComponent")
+@ActionID(category = "Window", id = "de.free_creations.explorers.TeamListTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
-        displayName = "#CTL_CrewListAction",
-        preferredID = "CrewListTopComponent")
+        displayName = "#CTL_TeamListAction",
+        preferredID = "TeamListTopComponent")
 @Messages({
-  "CTL_CrewListAction=Show all Crews",
-  "CTL_CrewListTopComponent=Crews",
-  "HINT_CrewListTopComponent=All crews registered in the database"
+  "CTL_TeamListAction=Show all Teams",
+  "CTL_TeamListTopComponent=Teams",
+  "HINT_TeamListTopComponent=All teams registered in the database"
 })
-public final class CrewListTopComponent extends TopComponent
+public final class TeamListTopComponent extends TopComponent
         implements ExplorerManager.Provider {
 
-  private static final Logger logger = Logger.getLogger(CrewListTopComponent.class.getName());
+  private static final Logger logger = Logger.getLogger(TeamListTopComponent.class.getName());
   private static final ExplorerManager explorerManager = new ExplorerManager();
   private DatabaseActivationTask databaseActivationTask = null;
 
   private class DatabaseActivationTask extends SwingWorker<Void, Void> {
 
     private final ProgressHandle progressHandle;
-    private CrewRootNode crewRootNode = null;
+    private TeamRootNode teamRootNode = null;
 
     public DatabaseActivationTask() {
       super();
@@ -77,8 +77,8 @@ public final class CrewListTopComponent extends TopComponent
       try {
         progressHandle.start();
         PersonCollection pp = Manager.getPersonCollection();
-        CrewCollection cc = Manager.getCrewCollection();
-        crewRootNode = new CrewRootNode(cc, pp);
+        TeamCollection cc = Manager.getTeamCollection();
+        teamRootNode = new TeamRootNode(cc, pp);
       } catch (Throwable ex) {
         logger.log(Level.SEVERE, "Could not access the database.", ex);
       }
@@ -88,18 +88,18 @@ public final class CrewListTopComponent extends TopComponent
     @Override
     protected void done() {
       Manager.assertOpen();
-      if (crewRootNode != null) {
-        explorerManager.setRootContext(crewRootNode);
+      if (teamRootNode != null) {
+        explorerManager.setRootContext(teamRootNode);
       }
       scrollPane.setCursor(null);
       progressHandle.finish();
     }
   }
 
-  public CrewListTopComponent() {
+  public TeamListTopComponent() {
     initComponents();
-    setName(Bundle.CTL_CrewListTopComponent());
-    //setToolTipText(Bundle.HINT_CrewListTopComponent());
+    setName(Bundle.CTL_TeamListTopComponent());
+    //setToolTipText(Bundle.HINT_TeamListTopComponent());
     putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
     //ListView listView = (ListView) scrollPane;
 

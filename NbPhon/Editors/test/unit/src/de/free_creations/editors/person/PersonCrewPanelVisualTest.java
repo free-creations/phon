@@ -23,12 +23,12 @@ import org.junit.Test;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class PersonCrewPanelVisualTest extends javax.swing.JFrame {
+public class PersonTeamPanelVisualTest extends javax.swing.JFrame {
 
   /**
    * Creates new form TimeTableVisualTest
    */
-  public PersonCrewPanelVisualTest() {
+  public PersonTeamPanelVisualTest() {
     
   }
   protected void initialize() {
@@ -52,20 +52,20 @@ public class PersonCrewPanelVisualTest extends javax.swing.JFrame {
     jLabel1 = new javax.swing.JLabel();
     btnSetGroupLeader = new javax.swing.JButton();
     btnSetNull = new javax.swing.JButton();
-    personCrewPanel1 = new de.free_creations.editors.person.PersonCrewPanel();
+    personTeamPanel1 = new de.free_creations.editors.person.PersonTeamPanel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PersonCrewPanelVisualTest.class, "PersonCrewPanelVisualTest.jLabel1.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonTeamPanelVisualTest.jLabel1.text")); // NOI18N
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnSetGroupLeader, org.openide.util.NbBundle.getMessage(PersonCrewPanelVisualTest.class, "PersonCrewPanelVisualTest.btnSetGroupLeader.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetGroupLeader, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonTeamPanelVisualTest.btnSetGroupLeader.text")); // NOI18N
     btnSetGroupLeader.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         btnSetGroupLeaderActionPerformed(evt);
       }
     });
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnSetNull, org.openide.util.NbBundle.getMessage(PersonCrewPanelVisualTest.class, "PersonCrewPanelVisualTest.btnSetNull.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetNull, org.openide.util.NbBundle.getMessage(PersonTeamPanelVisualTest.class, "PersonTeamPanelVisualTest.btnSetNull.text")); // NOI18N
     btnSetNull.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         btnSetNullActionPerformed(evt);
@@ -82,14 +82,14 @@ public class PersonCrewPanelVisualTest extends javax.swing.JFrame {
           .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(btnSetGroupLeader, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
           .addComponent(btnSetNull, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(personCrewPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(personTeamPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(personCrewPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(personTeamPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(btnSetGroupLeader)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -104,12 +104,12 @@ public class PersonCrewPanelVisualTest extends javax.swing.JFrame {
 
   private void btnSetGroupLeaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetGroupLeaderActionPerformed
     // TODO add your handling code here:
-    personCrewPanel1.setPersonId(3);
+    personTeamPanel1.setPersonId(3);
   }//GEN-LAST:event_btnSetGroupLeaderActionPerformed
 
   private void btnSetNullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetNullActionPerformed
     // TODO add your handling code here:
-    personCrewPanel1.setPersonId(null);
+    personTeamPanel1.setPersonId(null);
   }//GEN-LAST:event_btnSetNullActionPerformed
 
   /**
@@ -129,13 +129,13 @@ public class PersonCrewPanelVisualTest extends javax.swing.JFrame {
         }
       }
     } catch (ClassNotFoundException ex) {
-      java.util.logging.Logger.getLogger(PersonCrewPanelVisualTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+      java.util.logging.Logger.getLogger(PersonTeamPanelVisualTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     } catch (InstantiationException ex) {
-      java.util.logging.Logger.getLogger(PersonCrewPanelVisualTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+      java.util.logging.Logger.getLogger(PersonTeamPanelVisualTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     } catch (IllegalAccessException ex) {
-      java.util.logging.Logger.getLogger(PersonCrewPanelVisualTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+      java.util.logging.Logger.getLogger(PersonTeamPanelVisualTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-      java.util.logging.Logger.getLogger(PersonCrewPanelVisualTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+      java.util.logging.Logger.getLogger(PersonTeamPanelVisualTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
     //</editor-fold>
 
@@ -143,7 +143,7 @@ public class PersonCrewPanelVisualTest extends javax.swing.JFrame {
     java.awt.EventQueue.invokeLater(new Runnable() {
       @Override
       public void run() {
-        PersonCrewPanelVisualTest personsComboBoxVisualTest = new PersonCrewPanelVisualTest();
+        PersonTeamPanelVisualTest personsComboBoxVisualTest = new PersonTeamPanelVisualTest();
         personsComboBoxVisualTest.initialize();                
         personsComboBoxVisualTest.setVisible(true);
       }
@@ -158,6 +158,6 @@ public class PersonCrewPanelVisualTest extends javax.swing.JFrame {
   private javax.swing.JButton btnSetGroupLeader;
   private javax.swing.JButton btnSetNull;
   private javax.swing.JLabel jLabel1;
-  private de.free_creations.editors.person.PersonCrewPanel personCrewPanel1;
+  private de.free_creations.editors.person.PersonTeamPanel personTeamPanel1;
   // End of variables declaration//GEN-END:variables
 }

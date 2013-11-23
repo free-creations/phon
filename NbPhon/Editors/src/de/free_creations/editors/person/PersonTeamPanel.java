@@ -15,10 +15,10 @@
  */
 package de.free_creations.editors.person;
 
-import de.free_creations.dbEntities.Crew;
+import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.Person;
-import de.free_creations.nbPhon4Netbeans.CrewNode;
-import de.free_creations.nbPhonAPI.CrewCollection;
+import de.free_creations.nbPhon4Netbeans.TeamNode;
+import de.free_creations.nbPhonAPI.TeamCollection;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.PersonCollection;
@@ -30,30 +30,30 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 
 /**
- * The PersonCrewPanel shows all persons who are 
- * in the same crew as the given person.
+ * The PersonTeamPanel shows all persons who are 
+ * in the same team as the given person.
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class PersonCrewPanel extends javax.swing.JPanel
+public class PersonTeamPanel extends javax.swing.JPanel
         implements ExplorerManager.Provider {
 
   private final ExplorerManager explorerManager = new ExplorerManager();
   /**
-   * The identity of the person who's crew is currently been displayed *
+   * The identity of the person who's team is currently been displayed *
    */
   private Integer personId = null;
   /**
-   * The crew Node that currently shows the crew
+   * The team Node that currently shows the team
    */
-  private CrewNode crewNode = null;
+  private TeamNode teamNode = null;
   
   private final Node emptyNode = new AbstractNode(Children.LEAF);
 
   /**
    * Creates new form PersonGroupPanel
    */
-  public PersonCrewPanel() {
+  public PersonTeamPanel() {
     initComponents();
     if (java.beans.Beans.isDesignTime()) {
       return;
@@ -115,17 +115,17 @@ public class PersonCrewPanel extends javax.swing.JPanel
         explorerManager.setRootContext(emptyNode);
         return;
       }
-      Crew crew = p.getCrew();
-      if (crew == null) {
+      Team team = p.getTeam();
+      if (team == null) {
         explorerManager.setRootContext(emptyNode);
         return;
       }
-      CrewCollection cc = Manager.getCrewCollection();
-      if(crewNode != null){
-        crewNode.detach();
+      TeamCollection cc = Manager.getTeamCollection();
+      if(teamNode != null){
+        teamNode.detach();
       }
-      crewNode = new CrewNode(crew.getCrewId(), cc, pp);
-      explorerManager.setRootContext(crewNode);
+      teamNode = new TeamNode(team.getTeamId(), cc, pp);
+      explorerManager.setRootContext(teamNode);
     } catch (DataBaseNotReadyException ex) {
       explorerManager.setRootContext(null);
     }

@@ -62,9 +62,9 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Person.findByGewuenschterkollege", query = "SELECT p FROM Person p WHERE p.gewuenschterkollege = :gewuenschterkollege"),
   @NamedQuery(name = "Person.findByLetzteaenderung", query = "SELECT p FROM Person p WHERE p.letzteaenderung = :letzteaenderung")})
 public class Person implements Serializable {
-  @JoinColumn(name = "CREW", referencedColumnName = "CREW")
+  @JoinColumn(name = "TEAM", referencedColumnName = "TEAM")
   @ManyToOne
-  private Crew crew;
+  private Team team;
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -297,12 +297,12 @@ public class Person implements Serializable {
     return "testDb.Person[ personid=" + personid + " ]";
   }
 
-  public Crew getCrew() {
-    return crew;
+  public Team getTeam() {
+    return team;
   }
 
-  public void setCrew(Crew crew) {
-    this.crew = crew;
+  public void setTeam(Team team) {
+    this.team = team;
   }
   
 }

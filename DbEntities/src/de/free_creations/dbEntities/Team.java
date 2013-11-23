@@ -36,40 +36,40 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Harald Postner<harald at free-creations.de>
  */
 @Entity
-@Table(name = "CREW")
+@Table(name = "TEAM")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Crew.findAll", query = "SELECT c FROM Crew c"),
-  @NamedQuery(name = "Crew.findByCrew", query = "SELECT c FROM Crew c WHERE c.crewId = :crew"),
-  @NamedQuery(name = "Crew.findByName", query = "SELECT c FROM Crew c WHERE c.name = :name")})
-public class Crew implements Serializable, DbEntity {
+  @NamedQuery(name = "Team.findAll", query = "SELECT c FROM Team c"),
+  @NamedQuery(name = "Team.findByTeam", query = "SELECT c FROM Team c WHERE c.teamId = :team"),
+  @NamedQuery(name = "Team.findByName", query = "SELECT c FROM Team c WHERE c.name = :name")})
+public class Team implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
-  @Column(name = "CREW")
-  private Integer crewId;
+  @Column(name = "TEAM")
+  private Integer teamId;
   @Column(name = "NAME")
   private String name;
-  @OneToMany(mappedBy = "crew")
+  @OneToMany(mappedBy = "team")
   private List<Person> personList;
   public static final String PROP_ADD_PERSON = "addPerson";
   public static final String PROP_REMOVE_PERSON = "removePerson";
 
-  public Crew() {
+  public Team() {
   }
 
-  public Crew(Integer crew) {
-    this.crewId = crew;
+  public Team(Integer team) {
+    this.teamId = team;
   }
 
-  public Integer getCrewId() {
-    return crewId;
+  public Integer getTeamId() {
+    return teamId;
   }
 
-  protected void setCrewId(Integer crewId) {
-    this.crewId = crewId;
+  protected void setTeamId(Integer teamId) {
+    this.teamId = teamId;
   }
 
   public String getName() {
@@ -90,20 +90,20 @@ public class Crew implements Serializable, DbEntity {
   }
 
   /**
-   * Adds a person who wants to be in this crew.
+   * Adds a person who wants to be in this team.
    *
    * @param p
    */
   protected void addPerson(Person p) {
     assert (p != null);
     if (personList == null) {
-      throw new RuntimeException("Cannot add a Person to this Crew. Record must be persited");
+      throw new RuntimeException("Cannot add a Person to this Team. Record must be persited");
     }
     if (personList.contains(p)) {
       return;
     }
-    if (p.getCrew() != this) {
-      throw new RuntimeException("Cannot add Person whishing an other Crew.");
+    if (p.getTeam() != this) {
+      throw new RuntimeException("Cannot add Person whishing an other Team.");
     }
     personList.add(p);
     firePropertyChange(PROP_ADD_PERSON, null, p.identity());
@@ -130,18 +130,18 @@ public class Crew implements Serializable, DbEntity {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (crewId != null ? crewId.hashCode() : 0);
+    hash += (teamId != null ? teamId.hashCode() : 0);
     return hash;
   }
 
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Crew)) {
+    if (!(object instanceof Team)) {
       return false;
     }
-    Crew other = (Crew) object;
-    if ((this.crewId == null && other.crewId != null) || (this.crewId != null && !this.crewId.equals(other.crewId))) {
+    Team other = (Team) object;
+    if ((this.teamId == null && other.teamId != null) || (this.teamId != null && !this.teamId.equals(other.teamId))) {
       return false;
     }
     return true;
@@ -150,23 +150,23 @@ public class Crew implements Serializable, DbEntity {
   @Override
   public String toString() {
     if (name != null) {
-      return String.format("Crew \"%s\"", name);
+      return String.format("Team \"%s\"", name);
     } else {
-      return String.format("Crew [%s]", crewId);
+      return String.format("Team [%s]", teamId);
     }
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    addPropertyChangeListener(listener, this.crewId);
+    addPropertyChangeListener(listener, this.teamId);
   }
 
-  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer crewId) {
+  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer teamId) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Crew.class, crewId));
+            new EntityIdentity(Team.class, teamId));
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    removePropertyChangeListener(listener, this.crewId);
+    removePropertyChangeListener(listener, this.teamId);
   }
 
   /**
@@ -175,11 +175,11 @@ public class Crew implements Serializable, DbEntity {
    * and the given primary key.
    *
    * @param listener
-   * @param crewid
+   * @param teamid
    */
-  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer crewid) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer teamid) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Crew.class, crewid));
+            new EntityIdentity(Team.class, teamid));
   }
 
   private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
@@ -190,6 +190,6 @@ public class Crew implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Crew.class, crewId);
+    return new EntityIdentity(Team.class, teamId);
   }
 }

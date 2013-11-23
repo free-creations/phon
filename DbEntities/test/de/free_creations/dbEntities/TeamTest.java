@@ -31,7 +31,7 @@ import org.junit.BeforeClass;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class CrewTest {
+public class TeamTest {
 
   static final String PersistenceUnitName = "DbEntitiesPU";
   private static EntityManager entityManager = null;
@@ -53,23 +53,23 @@ public class CrewTest {
       entityManager.close();
     }
   }
-  private Crew testCrew;
+  private Team testTeam;
   private Person testPerson;
 
   @Before
   public void setUp() {
     entityManager.getTransaction().begin();
-    TypedQuery<Crew> qt = entityManager.createNamedQuery("Crew.findAll", Crew.class);
-    List<Crew> cc = qt.getResultList();
+    TypedQuery<Team> qt = entityManager.createNamedQuery("Team.findAll", Team.class);
+    List<Team> cc = qt.getResultList();
     assertNotNull(cc);
     assertFalse(cc.isEmpty());
-    testCrew = cc.get(0);
+    testTeam = cc.get(0);
   }
 
   @After
   public void tearDown() {
     entityManager.getTransaction().rollback();
-    testCrew = null;
+    testTeam = null;
   }
 
   /**
@@ -77,8 +77,8 @@ public class CrewTest {
    */
   @Test
   public void testIdentity() {
-    EntityIdentity expected = new EntityIdentity(testCrew.getClass(), testCrew.getCrewId());
-    assertEquals(expected, testCrew.identity());
+    EntityIdentity expected = new EntityIdentity(testTeam.getClass(), testTeam.getTeamId());
+    assertEquals(expected, testTeam.identity());
   }
 
   @Test
@@ -86,13 +86,13 @@ public class CrewTest {
     Person p = new Person();
     entityManager.persist(p);
     entityManager.flush(); // give p its primary keys.
-    assertFalse(testCrew.getPersonList().contains(p));
+    assertFalse(testTeam.getPersonList().contains(p));
 
-    p.setCrew(testCrew);
-    assertTrue(testCrew.getPersonList().contains(p));    
+    p.setTeam(testTeam);
+    assertTrue(testTeam.getPersonList().contains(p));    
     
-    p.setCrew(null);
-    assertFalse(testCrew.getPersonList().contains(p));
+    p.setTeam(null);
+    assertFalse(testTeam.getPersonList().contains(p));
     
   }
 

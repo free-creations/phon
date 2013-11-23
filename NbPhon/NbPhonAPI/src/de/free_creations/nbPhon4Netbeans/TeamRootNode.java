@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Crew;
+import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.util.ArrayList;
@@ -29,45 +29,45 @@ import org.openide.nodes.Node;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class CrewRootNode extends AbstractNode {
+public class TeamRootNode extends AbstractNode {
 
-  private static class CrewMembers extends Children.Array {
+  private static class TeamMembers extends Children.Array {
 
-    private final MutableEntityCollection<Crew, Integer> crewManager;
+    private final MutableEntityCollection<Team, Integer> teamManager;
     private final MutableEntityCollection<Person, Integer> personManager;
 
-    private CrewMembers(
-            MutableEntityCollection<Crew, Integer> crewManager,
+    private TeamMembers(
+            MutableEntityCollection<Team, Integer> teamManager,
             MutableEntityCollection<Person, Integer> personManager) {
 
-      this.crewManager = crewManager;
+      this.teamManager = teamManager;
       this.personManager = personManager;
     }
 
     @Override
     protected Collection<Node> initCollection() {
-      List<Crew> cc = crewManager.getAll();
+      List<Team> cc = teamManager.getAll();
       ArrayList<Node> result = new ArrayList<>();
-      for(Crew c:cc){
-        CrewNode cn = new CrewNode(c.getCrewId(), crewManager, personManager);
+      for(Team c:cc){
+        TeamNode cn = new TeamNode(c.getTeamId(), teamManager, personManager);
         result.add(cn);
       }
-      // add a special node showing all those persons that are not in a crew
-      CrewNode cn = new CrewNode(null, crewManager, personManager);
+      // add a special node showing all those persons that are not in a team
+      TeamNode cn = new TeamNode(null, teamManager, personManager);
       result.add(cn);
       return result;
     }
 
   };
 
-  public CrewRootNode(MutableEntityCollection<Crew, Integer> crewManager,
+  public TeamRootNode(MutableEntityCollection<Team, Integer> teamManager,
           MutableEntityCollection<Person, Integer> personManager) {
-    super(new CrewMembers(crewManager, personManager));
+    super(new TeamMembers(teamManager, personManager));
   }
 
   @Override
   public String getName() {
-    return String.format("Crew Root");
+    return String.format("Team Root");
   }
 
 }

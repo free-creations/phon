@@ -89,7 +89,7 @@ public class GroupNode extends AbstractNode {
 
   @Override
   public Image getIcon(int type) {
-    BufferedImage result = iconManager().iconCrew;
+    BufferedImage result = iconManager().iconTeam;
     return result;
   }
 }

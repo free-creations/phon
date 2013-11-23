@@ -36,37 +36,37 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Harald Postner<harald at free-creations.de>
  */
 @Entity
-@Table(name = "CREW")
+@Table(name = "TEAM")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Crew.findAll", query = "SELECT c FROM Crew c"),
-  @NamedQuery(name = "Crew.findByCrew", query = "SELECT c FROM Crew c WHERE c.crew = :crew"),
-  @NamedQuery(name = "Crew.findByName", query = "SELECT c FROM Crew c WHERE c.name = :name")})
-public class Crew implements Serializable {
+  @NamedQuery(name = "Team.findAll", query = "SELECT c FROM Team c"),
+  @NamedQuery(name = "Team.findByTeam", query = "SELECT c FROM Team c WHERE c.team = :team"),
+  @NamedQuery(name = "Team.findByName", query = "SELECT c FROM Team c WHERE c.name = :name")})
+public class Team implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
-  @Column(name = "CREW")
-  private Integer crew;
+  @Column(name = "TEAM")
+  private Integer team;
   @Column(name = "NAME")
   private String name;
-  @OneToMany(mappedBy = "crew")
+  @OneToMany(mappedBy = "team")
   private Collection<Person> personCollection;
 
-  public Crew() {
+  public Team() {
   }
 
-  public Crew(Integer crew) {
-    this.crew = crew;
+  public Team(Integer team) {
+    this.team = team;
   }
 
-  public Integer getCrew() {
-    return crew;
+  public Integer getTeam() {
+    return team;
   }
 
-  public void setCrew(Integer crew) {
-    this.crew = crew;
+  public void setTeam(Integer team) {
+    this.team = team;
   }
 
   public String getName() {
@@ -89,18 +89,18 @@ public class Crew implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (crew != null ? crew.hashCode() : 0);
+    hash += (team != null ? team.hashCode() : 0);
     return hash;
   }
 
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Crew)) {
+    if (!(object instanceof Team)) {
       return false;
     }
-    Crew other = (Crew) object;
-    if ((this.crew == null && other.crew != null) || (this.crew != null && !this.crew.equals(other.crew))) {
+    Team other = (Team) object;
+    if ((this.team == null && other.team != null) || (this.team != null && !this.team.equals(other.team))) {
       return false;
     }
     return true;
@@ -108,7 +108,7 @@ public class Crew implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Crew[ crew=" + crew + " ]";
+    return "testDb.Team[ team=" + team + " ]";
   }
   
 }

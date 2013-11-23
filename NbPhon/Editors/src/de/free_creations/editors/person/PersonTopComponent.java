@@ -114,7 +114,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edFunction = new de.free_creations.editors.person.FunctionsComboBox();
     edWertung = new de.free_creations.editors.person.JuryComboBox();
     jLabel11 = new javax.swing.JLabel();
-    crewPanel = new de.free_creations.editors.person.PersonCrewPanel();
+    teamPanel = new de.free_creations.editors.person.PersonTeamPanel();
     jScrollPane2 = new javax.swing.JScrollPane();
     edNotiz = new javax.swing.JTextArea();
     jLabel12 = new javax.swing.JLabel();
@@ -243,7 +243,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
                 .addComponent(jLabel11)
                 .addGap(119, 119, 119))
               .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(crewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
@@ -271,7 +271,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
           .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
             .addComponent(edFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(edWertung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addComponent(crewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+          .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
     );
 
     edNotiz.setColumns(20);
@@ -494,7 +494,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField PersonId;
   private de.free_creations.editors.person.PersonAssignmentTable assignmentTable;
-  private de.free_creations.editors.person.PersonCrewPanel crewPanel;
+  private de.free_creations.editors.person.PersonTeamPanel teamPanel;
   private javax.swing.JComboBox edAlter;
   private javax.swing.JTextField edEMail;
   private javax.swing.JTextField edFestnetz;
@@ -592,7 +592,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edVorname.setText(noNull(person.getVorname()));
     edWertung.setSelectedItem(person.getGewuenschtewertung());
     edWohnort.setText(noNull(person.getOrt()));
-    crewPanel.setPersonId(person.getPersonid());
+    teamPanel.setPersonId(person.getPersonid());
   }
 
   private Integer findTeamleaderId(Person person) {

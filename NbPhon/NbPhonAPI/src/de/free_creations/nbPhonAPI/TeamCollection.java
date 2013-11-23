@@ -15,7 +15,7 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Crew;
+import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.Person;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
@@ -30,34 +30,34 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class CrewCollection implements MutableEntityCollection<Crew, Integer> {
+public class TeamCollection implements MutableEntityCollection<Team, Integer> {
 
   private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
   /**
    * The constructor is protected, in order to ensure the singleton pattern.
    *
-   * To get access to this instance use the getCrewCollection() method of the
+   * To get access to this instance use the getTeamCollection() method of the
    * Manager.
    */
-  protected CrewCollection() {
+  protected TeamCollection() {
   }
 
   /**
-   * Returns the list of all entries in table CREW.
+   * Returns the list of all entries in table TEAM.
    *
    * If the connection to the database cannot be established, an empty list will
    * be returned.
    *
-   * @return the list of all entries in table CREW
+   * @return the list of all entries in table TEAM
    */
   @Override
-  public final List<Crew> getAll() {
+  public final List<Team> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
         EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<Crew> query = entityManager.createNamedQuery("Crew.findAll", Crew.class);
-        List<Crew> cc = query.getResultList();
+        TypedQuery<Team> query = entityManager.createNamedQuery("Team.findAll", Team.class);
+        List<Team> cc = query.getResultList();
         return cc;
       } catch (DataBaseNotReadyException ignored) {
         return Collections.emptyList();
@@ -74,34 +74,34 @@ public class CrewCollection implements MutableEntityCollection<Crew, Integer> {
    * @throws de.free_creations.nbPhonAPI.DataBaseNotReadyException
    */
   @Override
-  public Crew findEntity(Integer key) throws DataBaseNotReadyException {
+  public Team findEntity(Integer key) throws DataBaseNotReadyException {
     if (key == null) {
       return null;
     }
     synchronized (Manager.databaseAccessLock) {
-      return Manager.getEntityManager().find(Crew.class, key);
+      return Manager.getEntityManager().find(Team.class, key);
     }
   }
 
   /**
-   * Creates a new record in the table CREW.
+   * Creates a new record in the table TEAM.
    *
-   * @return an entity representing a new record in the table CREW. Note, the
+   * @return an entity representing a new record in the table TEAM. Note, the
    * returned entity is attached to the current persistence context and a
    * corresponding record is flushed (but not committed).
    * @throws de.free_creations.nbPhonAPI.DataBaseNotReadyException
    */
   @Override
-  public Crew newEntity() throws DataBaseNotReadyException {
+  public Team newEntity() throws DataBaseNotReadyException {
 
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
-      Crew newCrew = new Crew();
-      entityManager.persist(newCrew);
+      Team newTeam = new Team();
+      entityManager.persist(newTeam);
       try {
         entityManager.flush();
-        firePropertyChange(PROP_ITEM_ADDED, null, newCrew.identity());
-        return newCrew;
+        firePropertyChange(PROP_ITEM_ADDED, null, newTeam.identity());
+        return newTeam;
       } catch (Throwable ex) {
         throw new DataBaseNotReadyException(ex);
       }
@@ -109,9 +109,9 @@ public class CrewCollection implements MutableEntityCollection<Crew, Integer> {
   }
 
   /**
-   * Removes a CREW-record from the database.
+   * Removes a TEAM-record from the database.
    *
-   * Note: all persons inscribed in the given crew are removed from the crew
+   * Note: all persons inscribed in the given team are removed from the team
    * before deleting the record.
    *
    * @param key
@@ -119,14 +119,14 @@ public class CrewCollection implements MutableEntityCollection<Crew, Integer> {
    */
   @Override
   public void removeEntity(Integer key) throws DataBaseNotReadyException {
-    Crew toRemove = findEntity(key);
+    Team toRemove = findEntity(key);
     if (toRemove == null) {
       return; // should we throw an exception here?
     }
     assert (toRemove.getPersonList() != null);
     ArrayList<Person> pp = new ArrayList<>(toRemove.getPersonList());
     for (Person p : pp) {
-      p.setCrew(null);
+      p.setTeam(null);
     }
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
