@@ -19,6 +19,7 @@
 --  T a b l e  JOBTYPE
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
+DELETE FROM "APP"."JOBTYPE";
 INSERT INTO "APP"."JOBTYPE" VALUES('LEHRER', 'Lehrkraft','teacher.png');
 INSERT INTO "APP"."JOBTYPE" VALUES('HELFER', 'Helfer','helper.png');
 
@@ -27,16 +28,18 @@ INSERT INTO "APP"."JOBTYPE" VALUES('HELFER', 'Helfer','helper.png');
 --  T a b l e  JOB
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
-INSERT INTO "APP"."JOB" VALUES('LEHRER', 'LEHRER', 'Lehrkraft',1);
-INSERT INTO "APP"."JOB" VALUES('HELFER1','HELFER', 'Helfer 1',2);
-INSERT INTO "APP"."JOB" VALUES('HELFER2','HELFER', 'Helfer 2',3);
-INSERT INTO "APP"."JOB" VALUES('HELFER3','HELFER', 'Helfer 3',4);
+DELETE FROM "APP"."JOB";
+INSERT INTO "APP"."JOB" VALUES('LEHRER', 'LEHRER', 'Lehrkraft');
+INSERT INTO "APP"."JOB" VALUES('HELFER1','HELFER', 'Helfer 1');
+INSERT INTO "APP"."JOB" VALUES('HELFER2','HELFER', 'Helfer 2');
+INSERT INTO "APP"."JOB" VALUES('HELFER3','HELFER', 'Helfer 3');
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
 --  T a b l e  CONTESTTYPE
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
+DELETE FROM "APP"."CONTESTTYPE";
 INSERT INTO "APP"."CONTESTTYPE" VALUES('KLAVIER', 'Klavier', 'piano.png');
 INSERT INTO "APP"."CONTESTTYPE" VALUES('GESANG', 'Gesang', 'sing.png');
 INSERT INTO "APP"."CONTESTTYPE" VALUES('HARFE', 'Harfe', 'harp.png');
@@ -49,6 +52,7 @@ INSERT INTO "APP"."CONTESTTYPE" VALUES('NEUEMUSIK', 'Neue Musik', 'newmusic.png'
 --  T a b l e  TIMESLOT
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
+DELETE FROM "APP"."TIMESLOT";
 INSERT INTO "APP"."TIMESLOT" VALUES(1,	1,	1,'2014-04-02','08:00','11:00','Mittwoch','Mi_Vo','Vormittag');
 INSERT INTO "APP"."TIMESLOT" VALUES(2,	1,	2,'2014-04-02','11:00','15:00','Mittwoch','Mi_Mi','Mittag');
 INSERT INTO "APP"."TIMESLOT" VALUES(3,	1,	3,'2014-04-02','15:00','18:00','Mittwoch','Mi_Na','Nachmittag');
