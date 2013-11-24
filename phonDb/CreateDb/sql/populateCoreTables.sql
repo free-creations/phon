@@ -19,8 +19,8 @@
 --  T a b l e  JOBTYPE
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
-INSERT INTO "APP"."JOBTYPE" VALUES('LEHRER', 'Lehrkraft');
-INSERT INTO "APP"."JOBTYPE" VALUES('HELFER', 'Helfer');
+INSERT INTO "APP"."JOBTYPE" VALUES('LEHRER', 'Lehrkraft','teacher.png');
+INSERT INTO "APP"."JOBTYPE" VALUES('HELFER', 'Helfer','helper.png');
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
@@ -34,27 +34,39 @@ INSERT INTO "APP"."JOB" VALUES('HELFER3','HELFER', 'Helfer 3',4);
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
+--  T a b l e  CONTESTTYPE
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+INSERT INTO "APP"."CONTESTTYPE" VALUES('KLAVIER', 'Klavier', 'piano.png');
+INSERT INTO "APP"."CONTESTTYPE" VALUES('GESANG', 'Gesang', 'sing.png');
+INSERT INTO "APP"."CONTESTTYPE" VALUES('HARFE', 'Harfe', 'harp.png');
+INSERT INTO "APP"."CONTESTTYPE" VALUES('ENSEMBLE', 'Ensemble', 'ensemble.png');
+INSERT INTO "APP"."CONTESTTYPE" VALUES('POP', 'Popularmusik', 'pop.png');
+INSERT INTO "APP"."CONTESTTYPE" VALUES('NEUEMUSIK', 'Neue Musik', 'newmusic.png');
+
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 --  T a b l e  TIMESLOT
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
-INSERT INTO "APP"."TIMESLOT" VALUES(1,	1,	1,'2014-04-02','09:00','13:00','Mittwoch','Mi_Vo','Vormittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(2,	1,	2,'2014-04-02','13:00','17:00','Mittwoch','Mi_Vo','Nachmittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(3,	1,	3,'2014-04-02','17:00','21:00','Mittwoch','Mi_Ab','Abend');
+INSERT INTO "APP"."TIMESLOT" VALUES(1,	1,	1,'2014-04-02','08:00','11:00','Mittwoch','Mi_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(2,	1,	2,'2014-04-02','11:00','15:00','Mittwoch','Mi_Mi','Mittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(3,	1,	3,'2014-04-02','15:00','18:00','Mittwoch','Mi_Na','Nachmittag');
 
-INSERT INTO "APP"."TIMESLOT" VALUES(4,	2,	1,'2014-04-03','09:00','13:00','Donnerstag','Do_Vo','Vormittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(5,	2,	2,'2014-04-03','13:00','17:00','Donnerstag','Do_Vo','Nachmittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(6,	2,	3,'2014-04-03','17:00','21:00','Donnerstag','Do_Ab','Abend');
+INSERT INTO "APP"."TIMESLOT" VALUES(4,	2,	1,'2014-04-03','08:00','11:00','Donnerstag','Do_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(5,	2,	2,'2014-04-03','11:00','15:00','Donnerstag','Do_Mi','Mittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(6,	2,	3,'2014-04-03','15:00','18:00','Donnerstag','Do_Na','Nachmittag');
 
-INSERT INTO "APP"."TIMESLOT" VALUES(7,	3,	1,'2014-04-04','09:00','13:00','Freitag','Fr_Vo','Vormittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(8,	3,	2,'2014-04-04','13:00','17:00','Freitag','Fr_Vo','Nachmittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(9,	3,	3,'2014-04-04','17:00','21:00','Freitag','Fr_Ab','Abend');
+INSERT INTO "APP"."TIMESLOT" VALUES(7,	3,	1,'2014-04-04','08:00','11:00','Freitag','Fr_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(8,	3,	2,'2014-04-04','11:00','15:00','Freitag','Fr_Mi','Mittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(9,	3,	3,'2014-04-04','15:00','18:00','Freitag','Fr_Na','Nachmittag');
 
-INSERT INTO "APP"."TIMESLOT" VALUES(10,	4,	1,'2014-04-05','09:00','13:00','Samstag','Sa_Vo','Vormittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(11,	4,	2,'2014-04-05','13:00','17:00','Samstag','Sa_Vo','Nachmittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(12,	4,	3,'2014-04-05','17:00','21:00','Samstag','Sa_Ab','Abend');
+INSERT INTO "APP"."TIMESLOT" VALUES(10,	4,	1,'2014-04-05','08:00','11:00','Samstag','Sa_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(11,	4,	2,'2014-04-05','11:00','15:00','Samstag','Sa_Mi','Mittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(12,	4,	3,'2014-04-05','15:00','18:00','Samstag','Sa_Na','Nachmittag');
 
-INSERT INTO "APP"."TIMESLOT" VALUES(13,	5,	1,'2014-04-06','09:00','13:00','Sonntag','Fr_Vo','Vormittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(14,	5,	2,'2014-04-06','13:00','17:00','Sonntag','Fr_Vo','Nachmittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(15,	5,	3,'2014-04-06','17:00','21:00','Sonntag','Fr_Ab','Abend');
+INSERT INTO "APP"."TIMESLOT" VALUES(13,	5,	1,'2014-04-06','08:00','11:00','Sonntag','Fr_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(14,	5,	2,'2014-04-06','11:00','15:00','Sonntag','Fr_Mi','Mittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(15,	5,	3,'2014-04-06','15:00','18:00','Sonntag','Fr_Na','Nachmittag');
 
 

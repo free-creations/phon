@@ -61,9 +61,9 @@ CREATE TABLE "APP"."TIMESLOT" (
   "TIMESLOTID" INTEGER NOT NULL, 
   "DAY" INTEGER, -- the day e.g. (1= first day of the events, 2= second day etc.)
   "TIMEOFDAY" INTEGER, -- the time of the day e.g. (1= morning, 2=noon, 3=evening)
-  "DATUM" DATE, -- the date of this timeslot e.g. 02.04.2014
-  "START" TIME, -- start of this time-slot 9.30
-  "END" TIME, -- end of this time-slot 12.00đf
+  "DATUM" DATE, -- the date of this timeslot e.g. 2014-04-02
+  "START" TIME, -- start of this time-slot 09:30
+  "END" TIME, -- end of this time-slot 12:00
   "WOCHENTAG" VARCHAR(50), -- day of the week e.g. "Mittwoch" ("Wednesday")
   "LABEL" VARCHAR(50), -- a short label for printout e.g. Mi_Vo
   "TIMEOFDAYPRINT" VARCHAR(50) -- printout for the time-of-day e.g. "Vormittag" ("Morning")
