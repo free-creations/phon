@@ -16,10 +16,49 @@
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
+--  T a b l e  LOCATION
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+DELETE FROM "APP"."LOCATION";
+/*
+INSERT INTO "APP"."LOCATION" VALUES(1,'NAME','BUILDING','ROOM','STREET','TOWN','GRIDNUMBER');
+*/
+INSERT INTO "APP"."LOCATION" VALUES(1,'JMS 0.11','Jugendmusikschule','Saal 0.11','Hindenburgstr. 29','71638 Ludwigsburg',NULL);
+INSERT INTO "APP"."LOCATION" VALUES(2,'JMS 2.11','Jugendmusikschule','Saal 2.11','Hindenburgstr. 29','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(3,'Karlskaserene','Karlskaserene','Reithalle/Kl. Bühne','Hindenburgstr. 29','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(4,'Mörike-Gymn.-Aula','Mörike Gymnasium','Aula','Karlstraße 19','71638 Ludwigsburg',NULL);
+INSERT INTO "APP"."LOCATION" VALUES(5,'Mörike-Gymn.-Musiksaal','Mörike Gymnasium','Musiksaal 1','Karlstraße 19','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(6,'Goethe-Gymn.-Aula','Goethe Gymnasium','Aula','Seestraße 37','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(7,'Fr.-Schiller-Gymn.-Mensa','Friedrich-Schiller-Gymnasium','Feuerseemensa','Alleenstraße 16 ','71638 Ludwigsburg',NULL);
+INSERT INTO "APP"."LOCATION" VALUES(8,'Fr.-Schiller-Gymn.-Musiksaal','Friedrich-Schiller-Gymnasium','Musiksaal 2','Alleenstraße 16 ','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(9,'Ev. Hochschule','Evangelische Hochschule','Raum P5/P6','Paulusweg 6','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(10,'E.-H.-Knapp Real.','Elly-Heuss-Knapp Realschule','Musiksaal 2','Karlstr. 33','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(11,'Kulturzentrum Kl. Saal','Kulturzentrum','Kleiner Saal','Wilhelmstraße 9/1','71638 Ludwigsburg',NULL);
+INSERT INTO "APP"."LOCATION" VALUES(12,'Kulturzentrum Kl. Saal','Kulturzentrum','Raum 303','Wilhelmstraße 9/1','71638 Ludwigsburg',NULL);
+INSERT INTO "APP"."LOCATION" VALUES(13,'Kulturzentrum Kl. Saal','Kulturzentrum','Großer Saal','Wilhelmstraße 9/1','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(14,'Landratsamt','Landratsamt','Großer Sitzungssaal','Hindenburgstr. 40','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(15,'Staatsarchiv','Staatsarchiv','Vortragssaal','Arsenalplatz 3','71638 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(16,'Schloss','Schloss','Festinbau, Raum 1','Schlossstraße 30','71634 Ludwigsburg',NULL);
+
+INSERT INTO "APP"."LOCATION" VALUES(17,'ev. GH Stadtmitte','?','Saal','?','? Ludwigsburg',NULL);
+
+ALTER TABLE "APP"."CONTEST" ALTER COLUMN CONTESTID RESTART WITH 18;
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 --  T a b l e  C O N T E S T
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
-
+/**
 INSERT INTO "APP"."CONTEST" VALUES(1,'BLOCKFLOETE-1','BLOCKFLOETE',NULL,'Blockfl�te AG II & V & VI','Mensa','5','Mensa','/','10:00-19:00','10:00-16:20');
 --'GODEL'
 INSERT INTO "APP"."CONTEST" VALUES(2,'BLOCKFLOETE-2','BLOCKFLOETE',NULL,'Blockfl�te AG III & IV','Musikschule Saal 1.11','1','Kunstzentrum','10:00-17:40','10:00-17:45','/');
@@ -79,4 +118,4 @@ INSERT INTO "APP"."CONTEST" VALUES(25,'TUBA','TUBA',NULL,'Tenorhorn / Bar. / Eup
 ALTER TABLE "APP"."CONTEST" ALTER COLUMN CONTESTID RESTART WITH 26;
 
 
-
+**/
