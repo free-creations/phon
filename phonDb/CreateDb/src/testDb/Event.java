@@ -17,8 +17,9 @@
 package testDb;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,71 +29,73 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Harald Postner<harald at free-creations.de>
  */
 @Entity
-@Table(name = "AVAILABILITY")
+@Table(name = "EVENT")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Availability.findAll", query = "SELECT a FROM Availability a"),
-  @NamedQuery(name = "Availability.findByAvailabilityid", query = "SELECT a FROM Availability a WHERE a.availabilityid = :availabilityid"),
-  @NamedQuery(name = "Availability.findByAvailable", query = "SELECT a FROM Availability a WHERE a.available = :available"),
-  @NamedQuery(name = "Availability.findByLastchange", query = "SELECT a FROM Availability a WHERE a.lastchange = :lastchange")})
-public class Availability implements Serializable {
+  @NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e"),
+  @NamedQuery(name = "Event.findByEventid", query = "SELECT e FROM Event e WHERE e.eventid = :eventid"),
+  @NamedQuery(name = "Event.findByConfirmed", query = "SELECT e FROM Event e WHERE e.confirmed = :confirmed")})
+public class Event implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
-  @Column(name = "AVAILABILITYID")
-  private Integer availabilityid;
-  @Column(name = "AVAILABLE")
-  private Integer available;
-  @Column(name = "LASTCHANGE")
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date lastchange;
+  @Column(name = "EVENTID")
+  private Integer eventid;
+  @Column(name = "CONFIRMED")
+  private Integer confirmed;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+  private List<Allocation> allocationList;
   @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
   @ManyToOne(optional = false)
   private Timeslot timeslot;
-  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
+  @JoinColumn(name = "LOCATION", referencedColumnName = "LOCATIONID")
+  @ManyToOne
+  private Location location;
+  @JoinColumn(name = "CONTEST", referencedColumnName = "CONTESTID")
   @ManyToOne(optional = false)
-  private Person person;
+  private Contest contest;
 
-  public Availability() {
+  public Event() {
   }
 
-  public Availability(Integer availabilityid) {
-    this.availabilityid = availabilityid;
+  public Event(Integer eventid) {
+    this.eventid = eventid;
   }
 
-  public Integer getAvailabilityid() {
-    return availabilityid;
+  public Integer getEventid() {
+    return eventid;
   }
 
-  public void setAvailabilityid(Integer availabilityid) {
-    this.availabilityid = availabilityid;
+  public void setEventid(Integer eventid) {
+    this.eventid = eventid;
   }
 
-  public Integer getAvailable() {
-    return available;
+  public Integer getConfirmed() {
+    return confirmed;
   }
 
-  public void setAvailable(Integer available) {
-    this.available = available;
+  public void setConfirmed(Integer confirmed) {
+    this.confirmed = confirmed;
   }
 
-  public Date getLastchange() {
-    return lastchange;
+  @XmlTransient
+  public List<Allocation> getAllocationList() {
+    return allocationList;
   }
 
-  public void setLastchange(Date lastchange) {
-    this.lastchange = lastchange;
+  public void setAllocationList(List<Allocation> allocationList) {
+    this.allocationList = allocationList;
   }
 
   public Timeslot getTimeslot() {
@@ -103,29 +106,37 @@ public class Availability implements Serializable {
     this.timeslot = timeslot;
   }
 
-  public Person getPerson() {
-    return person;
+  public Location getLocation() {
+    return location;
   }
 
-  public void setPerson(Person person) {
-    this.person = person;
+  public void setLocation(Location location) {
+    this.location = location;
+  }
+
+  public Contest getContest() {
+    return contest;
+  }
+
+  public void setContest(Contest contest) {
+    this.contest = contest;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (availabilityid != null ? availabilityid.hashCode() : 0);
+    hash += (eventid != null ? eventid.hashCode() : 0);
     return hash;
   }
 
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Availability)) {
+    if (!(object instanceof Event)) {
       return false;
     }
-    Availability other = (Availability) object;
-    if ((this.availabilityid == null && other.availabilityid != null) || (this.availabilityid != null && !this.availabilityid.equals(other.availabilityid))) {
+    Event other = (Event) object;
+    if ((this.eventid == null && other.eventid != null) || (this.eventid != null && !this.eventid.equals(other.eventid))) {
       return false;
     }
     return true;
@@ -133,7 +144,7 @@ public class Availability implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Availability[ availabilityid=" + availabilityid + " ]";
+    return "testDb.Event[ eventid=" + eventid + " ]";
   }
   
 }

@@ -43,9 +43,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
   @NamedQuery(name = "Allocation.findAll", query = "SELECT a FROM Allocation a"),
   @NamedQuery(name = "Allocation.findByAllocationid", query = "SELECT a FROM Allocation a WHERE a.allocationid = :allocationid"),
-  @NamedQuery(name = "Allocation.findByLetzteaenderung", query = "SELECT a FROM Allocation a WHERE a.letzteaenderung = :letzteaenderung"),
-  @NamedQuery(name = "Allocation.findByPlaner", query = "SELECT a FROM Allocation a WHERE a.planer = :planer"),
-  @NamedQuery(name = "Allocation.findByErklaerung", query = "SELECT a FROM Allocation a WHERE a.erklaerung = :erklaerung")})
+  @NamedQuery(name = "Allocation.findByLastchange", query = "SELECT a FROM Allocation a WHERE a.lastchange = :lastchange"),
+  @NamedQuery(name = "Allocation.findByPlanner", query = "SELECT a FROM Allocation a WHERE a.planner = :planner"),
+  @NamedQuery(name = "Allocation.findByNote", query = "SELECT a FROM Allocation a WHERE a.note = :note")})
 public class Allocation implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
@@ -53,25 +53,22 @@ public class Allocation implements Serializable {
   @Basic(optional = false)
   @Column(name = "ALLOCATIONID")
   private Integer allocationid;
-  @Column(name = "LETZTEAENDERUNG")
+  @Column(name = "LASTCHANGE")
   @Temporal(TemporalType.TIMESTAMP)
-  private Date letzteaenderung;
-  @Column(name = "PLANER")
-  private String planer;
-  @Column(name = "ERKLAERUNG")
-  private String erklaerung;
-  @JoinColumn(name = "ZEITID", referencedColumnName = "ZEITID")
+  private Date lastchange;
+  @Column(name = "PLANNER")
+  private String planner;
+  @Column(name = "NOTE")
+  private String note;
+  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
   @ManyToOne(optional = false)
-  private Timeslot zeitid;
-  @JoinColumn(name = "PERSONID", referencedColumnName = "PERSONID")
+  private Person person;
+  @JoinColumn(name = "JOB", referencedColumnName = "JOBID")
+  @ManyToOne
+  private Job job;
+  @JoinColumn(name = "EVENT", referencedColumnName = "EVENTID")
   @ManyToOne(optional = false)
-  private Person personid;
-  @JoinColumn(name = "FUNKTIONID", referencedColumnName = "FUNKTIONID")
-  @ManyToOne(optional = false)
-  private Job funktionid;
-  @JoinColumn(name = "CONTESTID", referencedColumnName = "CONTESTID")
-  @ManyToOne(optional = false)
-  private Contest contestid;
+  private Event event;
 
   public Allocation() {
   }
@@ -88,60 +85,52 @@ public class Allocation implements Serializable {
     this.allocationid = allocationid;
   }
 
-  public Date getLetzteaenderung() {
-    return letzteaenderung;
+  public Date getLastchange() {
+    return lastchange;
   }
 
-  public void setLetzteaenderung(Date letzteaenderung) {
-    this.letzteaenderung = letzteaenderung;
+  public void setLastchange(Date lastchange) {
+    this.lastchange = lastchange;
   }
 
-  public String getPlaner() {
-    return planer;
+  public String getPlanner() {
+    return planner;
   }
 
-  public void setPlaner(String planer) {
-    this.planer = planer;
+  public void setPlanner(String planner) {
+    this.planner = planner;
   }
 
-  public String getErklaerung() {
-    return erklaerung;
+  public String getNote() {
+    return note;
   }
 
-  public void setErklaerung(String erklaerung) {
-    this.erklaerung = erklaerung;
+  public void setNote(String note) {
+    this.note = note;
   }
 
-  public Timeslot getZeitid() {
-    return zeitid;
+  public Person getPerson() {
+    return person;
   }
 
-  public void setZeitid(Timeslot zeitid) {
-    this.zeitid = zeitid;
+  public void setPerson(Person person) {
+    this.person = person;
   }
 
-  public Person getPersonid() {
-    return personid;
+  public Job getJob() {
+    return job;
   }
 
-  public void setPersonid(Person personid) {
-    this.personid = personid;
+  public void setJob(Job job) {
+    this.job = job;
   }
 
-  public Job getFunktionid() {
-    return funktionid;
+  public Event getEvent() {
+    return event;
   }
 
-  public void setFunktionid(Job funktionid) {
-    this.funktionid = funktionid;
-  }
-
-  public Contest getContestid() {
-    return contestid;
-  }
-
-  public void setContestid(Contest contestid) {
-    this.contestid = contestid;
+  public void setEvent(Event event) {
+    this.event = event;
   }
 
   @Override

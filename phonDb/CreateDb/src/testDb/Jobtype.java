@@ -19,11 +19,10 @@ package testDb;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -36,39 +35,41 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Harald Postner<harald at free-creations.de>
  */
 @Entity
-@Table(name = "JOB")
+@Table(name = "JOBTYPE")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Job.findAll", query = "SELECT j FROM Job j"),
-  @NamedQuery(name = "Job.findByJobid", query = "SELECT j FROM Job j WHERE j.jobid = :jobid"),
-  @NamedQuery(name = "Job.findByName", query = "SELECT j FROM Job j WHERE j.name = :name")})
-public class Job implements Serializable {
+  @NamedQuery(name = "Jobtype.findAll", query = "SELECT j FROM Jobtype j"),
+  @NamedQuery(name = "Jobtype.findByJobtypeid", query = "SELECT j FROM Jobtype j WHERE j.jobtypeid = :jobtypeid"),
+  @NamedQuery(name = "Jobtype.findByName", query = "SELECT j FROM Jobtype j WHERE j.name = :name"),
+  @NamedQuery(name = "Jobtype.findByIcon", query = "SELECT j FROM Jobtype j WHERE j.icon = :icon")})
+public class Jobtype implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @Column(name = "JOBID")
-  private String jobid;
+  @Column(name = "JOBTYPEID")
+  private String jobtypeid;
   @Column(name = "NAME")
   private String name;
-  @OneToMany(mappedBy = "job")
-  private List<Allocation> allocationList;
-  @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
-  @ManyToOne(optional = false)
-  private Jobtype jobtype;
+  @Column(name = "ICON")
+  private String icon;
+  @OneToMany(mappedBy = "jobtype")
+  private List<Person> personList;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "jobtype")
+  private List<Job> jobList;
 
-  public Job() {
+  public Jobtype() {
   }
 
-  public Job(String jobid) {
-    this.jobid = jobid;
+  public Jobtype(String jobtypeid) {
+    this.jobtypeid = jobtypeid;
   }
 
-  public String getJobid() {
-    return jobid;
+  public String getJobtypeid() {
+    return jobtypeid;
   }
 
-  public void setJobid(String jobid) {
-    this.jobid = jobid;
+  public void setJobtypeid(String jobtypeid) {
+    this.jobtypeid = jobtypeid;
   }
 
   public String getName() {
@@ -79,38 +80,47 @@ public class Job implements Serializable {
     this.name = name;
   }
 
+  public String getIcon() {
+    return icon;
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
+
   @XmlTransient
-  public List<Allocation> getAllocationList() {
-    return allocationList;
+  public List<Person> getPersonList() {
+    return personList;
   }
 
-  public void setAllocationList(List<Allocation> allocationList) {
-    this.allocationList = allocationList;
+  public void setPersonList(List<Person> personList) {
+    this.personList = personList;
   }
 
-  public Jobtype getJobtype() {
-    return jobtype;
+  @XmlTransient
+  public List<Job> getJobList() {
+    return jobList;
   }
 
-  public void setJobtype(Jobtype jobtype) {
-    this.jobtype = jobtype;
+  public void setJobList(List<Job> jobList) {
+    this.jobList = jobList;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (jobid != null ? jobid.hashCode() : 0);
+    hash += (jobtypeid != null ? jobtypeid.hashCode() : 0);
     return hash;
   }
 
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Job)) {
+    if (!(object instanceof Jobtype)) {
       return false;
     }
-    Job other = (Job) object;
-    if ((this.jobid == null && other.jobid != null) || (this.jobid != null && !this.jobid.equals(other.jobid))) {
+    Jobtype other = (Jobtype) object;
+    if ((this.jobtypeid == null && other.jobtypeid != null) || (this.jobtypeid != null && !this.jobtypeid.equals(other.jobtypeid))) {
       return false;
     }
     return true;
@@ -118,7 +128,7 @@ public class Job implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Job[ jobid=" + jobid + " ]";
+    return "testDb.Jobtype[ jobtypeid=" + jobtypeid + " ]";
   }
   
 }

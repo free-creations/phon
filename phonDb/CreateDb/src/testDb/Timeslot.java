@@ -17,8 +17,8 @@
 package testDb;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,74 +42,74 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Timeslot.findAll", query = "SELECT t FROM Timeslot t"),
-  @NamedQuery(name = "Timeslot.findByZeitid", query = "SELECT t FROM Timeslot t WHERE t.zeitid = :zeitid"),
-  @NamedQuery(name = "Timeslot.findByTag", query = "SELECT t FROM Timeslot t WHERE t.tag = :tag"),
-  @NamedQuery(name = "Timeslot.findByTageszeit", query = "SELECT t FROM Timeslot t WHERE t.tageszeit = :tageszeit"),
+  @NamedQuery(name = "Timeslot.findByTimeslotid", query = "SELECT t FROM Timeslot t WHERE t.timeslotid = :timeslotid"),
+  @NamedQuery(name = "Timeslot.findByDay", query = "SELECT t FROM Timeslot t WHERE t.day = :day"),
+  @NamedQuery(name = "Timeslot.findByTimeofday", query = "SELECT t FROM Timeslot t WHERE t.timeofday = :timeofday"),
   @NamedQuery(name = "Timeslot.findByDatum", query = "SELECT t FROM Timeslot t WHERE t.datum = :datum"),
-  @NamedQuery(name = "Timeslot.findByStartzeit", query = "SELECT t FROM Timeslot t WHERE t.startzeit = :startzeit"),
-  @NamedQuery(name = "Timeslot.findByEndezeit", query = "SELECT t FROM Timeslot t WHERE t.endezeit = :endezeit"),
+  @NamedQuery(name = "Timeslot.findByStart", query = "SELECT t FROM Timeslot t WHERE t.start = :start"),
+  @NamedQuery(name = "Timeslot.findByEnd", query = "SELECT t FROM Timeslot t WHERE t.end = :end"),
   @NamedQuery(name = "Timeslot.findByWochentag", query = "SELECT t FROM Timeslot t WHERE t.wochentag = :wochentag"),
   @NamedQuery(name = "Timeslot.findByLabel", query = "SELECT t FROM Timeslot t WHERE t.label = :label"),
-  @NamedQuery(name = "Timeslot.findByTageszeitprint", query = "SELECT t FROM Timeslot t WHERE t.tageszeitprint = :tageszeitprint")})
+  @NamedQuery(name = "Timeslot.findByTimeofdayprint", query = "SELECT t FROM Timeslot t WHERE t.timeofdayprint = :timeofdayprint")})
 public class Timeslot implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @Column(name = "ZEITID")
-  private Integer zeitid;
-  @Column(name = "TAG")
-  private Integer tag;
-  @Column(name = "TAGESZEIT")
-  private Integer tageszeit;
+  @Column(name = "TIMESLOTID")
+  private Integer timeslotid;
+  @Column(name = "DAY")
+  private Integer day;
+  @Column(name = "TIMEOFDAY")
+  private Integer timeofday;
   @Column(name = "DATUM")
   @Temporal(TemporalType.DATE)
   private Date datum;
-  @Column(name = "STARTZEIT")
+  @Column(name = "START")
   @Temporal(TemporalType.TIME)
-  private Date startzeit;
-  @Column(name = "ENDEZEIT")
+  private Date start;
+  @Column(name = "END")
   @Temporal(TemporalType.TIME)
-  private Date endezeit;
+  private Date end;
   @Column(name = "WOCHENTAG")
   private String wochentag;
   @Column(name = "LABEL")
   private String label;
-  @Column(name = "TAGESZEITPRINT")
-  private String tageszeitprint;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "zeitid")
-  private Collection<Availability> availabilityCollection;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "zeitid")
-  private Collection<Allocation> allocationCollection;
+  @Column(name = "TIMEOFDAYPRINT")
+  private String timeofdayprint;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "timeslot")
+  private List<Availability> availabilityList;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "timeslot")
+  private List<Event> eventList;
 
   public Timeslot() {
   }
 
-  public Timeslot(Integer zeitid) {
-    this.zeitid = zeitid;
+  public Timeslot(Integer timeslotid) {
+    this.timeslotid = timeslotid;
   }
 
-  public Integer getZeitid() {
-    return zeitid;
+  public Integer getTimeslotid() {
+    return timeslotid;
   }
 
-  public void setZeitid(Integer zeitid) {
-    this.zeitid = zeitid;
+  public void setTimeslotid(Integer timeslotid) {
+    this.timeslotid = timeslotid;
   }
 
-  public Integer getTag() {
-    return tag;
+  public Integer getDay() {
+    return day;
   }
 
-  public void setTag(Integer tag) {
-    this.tag = tag;
+  public void setDay(Integer day) {
+    this.day = day;
   }
 
-  public Integer getTageszeit() {
-    return tageszeit;
+  public Integer getTimeofday() {
+    return timeofday;
   }
 
-  public void setTageszeit(Integer tageszeit) {
-    this.tageszeit = tageszeit;
+  public void setTimeofday(Integer timeofday) {
+    this.timeofday = timeofday;
   }
 
   public Date getDatum() {
@@ -120,20 +120,20 @@ public class Timeslot implements Serializable {
     this.datum = datum;
   }
 
-  public Date getStartzeit() {
-    return startzeit;
+  public Date getStart() {
+    return start;
   }
 
-  public void setStartzeit(Date startzeit) {
-    this.startzeit = startzeit;
+  public void setStart(Date start) {
+    this.start = start;
   }
 
-  public Date getEndezeit() {
-    return endezeit;
+  public Date getEnd() {
+    return end;
   }
 
-  public void setEndezeit(Date endezeit) {
-    this.endezeit = endezeit;
+  public void setEnd(Date end) {
+    this.end = end;
   }
 
   public String getWochentag() {
@@ -152,36 +152,36 @@ public class Timeslot implements Serializable {
     this.label = label;
   }
 
-  public String getTageszeitprint() {
-    return tageszeitprint;
+  public String getTimeofdayprint() {
+    return timeofdayprint;
   }
 
-  public void setTageszeitprint(String tageszeitprint) {
-    this.tageszeitprint = tageszeitprint;
-  }
-
-  @XmlTransient
-  public Collection<Availability> getAvailabilityCollection() {
-    return availabilityCollection;
-  }
-
-  public void setAvailabilityCollection(Collection<Availability> availabilityCollection) {
-    this.availabilityCollection = availabilityCollection;
+  public void setTimeofdayprint(String timeofdayprint) {
+    this.timeofdayprint = timeofdayprint;
   }
 
   @XmlTransient
-  public Collection<Allocation> getAllocationCollection() {
-    return allocationCollection;
+  public List<Availability> getAvailabilityList() {
+    return availabilityList;
   }
 
-  public void setAllocationCollection(Collection<Allocation> allocationCollection) {
-    this.allocationCollection = allocationCollection;
+  public void setAvailabilityList(List<Availability> availabilityList) {
+    this.availabilityList = availabilityList;
+  }
+
+  @XmlTransient
+  public List<Event> getEventList() {
+    return eventList;
+  }
+
+  public void setEventList(List<Event> eventList) {
+    this.eventList = eventList;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (zeitid != null ? zeitid.hashCode() : 0);
+    hash += (timeslotid != null ? timeslotid.hashCode() : 0);
     return hash;
   }
 
@@ -192,7 +192,7 @@ public class Timeslot implements Serializable {
       return false;
     }
     Timeslot other = (Timeslot) object;
-    if ((this.zeitid == null && other.zeitid != null) || (this.zeitid != null && !this.zeitid.equals(other.zeitid))) {
+    if ((this.timeslotid == null && other.timeslotid != null) || (this.timeslotid != null && !this.timeslotid.equals(other.timeslotid))) {
       return false;
     }
     return true;
@@ -200,7 +200,7 @@ public class Timeslot implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Timeslot[ zeitid=" + zeitid + " ]";
+    return "testDb.Timeslot[ timeslotid=" + timeslotid + " ]";
   }
   
 }

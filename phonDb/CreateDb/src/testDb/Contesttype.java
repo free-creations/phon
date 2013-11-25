@@ -19,10 +19,9 @@ package testDb;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,37 +35,41 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Harald Postner<harald at free-creations.de>
  */
 @Entity
-@Table(name = "TEAM")
+@Table(name = "CONTESTTYPE")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Team.findAll", query = "SELECT t FROM Team t"),
-  @NamedQuery(name = "Team.findByTeamid", query = "SELECT t FROM Team t WHERE t.teamid = :teamid"),
-  @NamedQuery(name = "Team.findByName", query = "SELECT t FROM Team t WHERE t.name = :name")})
-public class Team implements Serializable {
+  @NamedQuery(name = "Contesttype.findAll", query = "SELECT c FROM Contesttype c"),
+  @NamedQuery(name = "Contesttype.findByContesttypeid", query = "SELECT c FROM Contesttype c WHERE c.contesttypeid = :contesttypeid"),
+  @NamedQuery(name = "Contesttype.findByName", query = "SELECT c FROM Contesttype c WHERE c.name = :name"),
+  @NamedQuery(name = "Contesttype.findByIcon", query = "SELECT c FROM Contesttype c WHERE c.icon = :icon")})
+public class Contesttype implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
-  @Column(name = "TEAMID")
-  private Integer teamid;
+  @Column(name = "CONTESTTYPEID")
+  private String contesttypeid;
   @Column(name = "NAME")
   private String name;
-  @OneToMany(mappedBy = "team")
+  @Column(name = "ICON")
+  private String icon;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "contesttype")
+  private List<Contest> contestList;
+  @OneToMany(mappedBy = "contesttype")
   private List<Person> personList;
 
-  public Team() {
+  public Contesttype() {
   }
 
-  public Team(Integer teamid) {
-    this.teamid = teamid;
+  public Contesttype(String contesttypeid) {
+    this.contesttypeid = contesttypeid;
   }
 
-  public Integer getTeamid() {
-    return teamid;
+  public String getContesttypeid() {
+    return contesttypeid;
   }
 
-  public void setTeamid(Integer teamid) {
-    this.teamid = teamid;
+  public void setContesttypeid(String contesttypeid) {
+    this.contesttypeid = contesttypeid;
   }
 
   public String getName() {
@@ -75,6 +78,23 @@ public class Team implements Serializable {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getIcon() {
+    return icon;
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
+
+  @XmlTransient
+  public List<Contest> getContestList() {
+    return contestList;
+  }
+
+  public void setContestList(List<Contest> contestList) {
+    this.contestList = contestList;
   }
 
   @XmlTransient
@@ -89,18 +109,18 @@ public class Team implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (teamid != null ? teamid.hashCode() : 0);
+    hash += (contesttypeid != null ? contesttypeid.hashCode() : 0);
     return hash;
   }
 
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Team)) {
+    if (!(object instanceof Contesttype)) {
       return false;
     }
-    Team other = (Team) object;
-    if ((this.teamid == null && other.teamid != null) || (this.teamid != null && !this.teamid.equals(other.teamid))) {
+    Contesttype other = (Contesttype) object;
+    if ((this.contesttypeid == null && other.contesttypeid != null) || (this.contesttypeid != null && !this.contesttypeid.equals(other.contesttypeid))) {
       return false;
     }
     return true;
@@ -108,7 +128,7 @@ public class Team implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Team[ teamid=" + teamid + " ]";
+    return "testDb.Contesttype[ contesttypeid=" + contesttypeid + " ]";
   }
   
 }

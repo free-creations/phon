@@ -10,6 +10,11 @@
     <class>testDb.Job</class>
     <class>testDb.GroupPreference</class>
     <class>testDb.Crew</class>
+    <class>testDb.Event</class>
+    <class>testDb.Contesttype</class>
+    <class>testDb.Location</class>
+    <class>testDb.Team</class>
+    <class>testDb.Jobtype</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/phonDb"/>
       <property name="javax.persistence.jdbc.password" value=""/>

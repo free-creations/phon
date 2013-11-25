@@ -17,7 +17,7 @@
 package testDb;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,15 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
   @NamedQuery(name = "Contest.findAll", query = "SELECT c FROM Contest c"),
   @NamedQuery(name = "Contest.findByContestid", query = "SELECT c FROM Contest c WHERE c.contestid = :contestid"),
-  @NamedQuery(name = "Contest.findByName", query = "SELECT c FROM Contest c WHERE c.name = :name"),
-  @NamedQuery(name = "Contest.findByWertungstyp", query = "SELECT c FROM Contest c WHERE c.wertungstyp = :wertungstyp"),
-  @NamedQuery(name = "Contest.findByWertung", query = "SELECT c FROM Contest c WHERE c.wertung = :wertung"),
-  @NamedQuery(name = "Contest.findByWertungsraum", query = "SELECT c FROM Contest c WHERE c.wertungsraum = :wertungsraum"),
-  @NamedQuery(name = "Contest.findByAustraggungsortplannr", query = "SELECT c FROM Contest c WHERE c.austraggungsortplannr = :austraggungsortplannr"),
-  @NamedQuery(name = "Contest.findByAustraggungsort", query = "SELECT c FROM Contest c WHERE c.austraggungsort = :austraggungsort"),
-  @NamedQuery(name = "Contest.findByZeitfreitag", query = "SELECT c FROM Contest c WHERE c.zeitfreitag = :zeitfreitag"),
-  @NamedQuery(name = "Contest.findByZeitsamstag", query = "SELECT c FROM Contest c WHERE c.zeitsamstag = :zeitsamstag"),
-  @NamedQuery(name = "Contest.findByZeitsonntag", query = "SELECT c FROM Contest c WHERE c.zeitsonntag = :zeitsonntag")})
+  @NamedQuery(name = "Contest.findByName", query = "SELECT c FROM Contest c WHERE c.name = :name")})
 public class Contest implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
@@ -62,27 +54,14 @@ public class Contest implements Serializable {
   private Integer contestid;
   @Column(name = "NAME")
   private String name;
-  @Column(name = "WERTUNGSTYP")
-  private String wertungstyp;
-  @Column(name = "WERTUNG")
-  private String wertung;
-  @Column(name = "WERTUNGSRAUM")
-  private String wertungsraum;
-  @Column(name = "AUSTRAGGUNGSORTPLANNR")
-  private String austraggungsortplannr;
-  @Column(name = "AUSTRAGGUNGSORT")
-  private String austraggungsort;
-  @Column(name = "ZEITFREITAG")
-  private String zeitfreitag;
-  @Column(name = "ZEITSAMSTAG")
-  private String zeitsamstag;
-  @Column(name = "ZEITSONNTAG")
-  private String zeitsonntag;
-  @JoinColumn(name = "VERANTWORTLICH", referencedColumnName = "PERSONID")
+  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
   @ManyToOne
-  private Person verantwortlich;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "contestid")
-  private Collection<Allocation> allocationCollection;
+  private Person person;
+  @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
+  @ManyToOne(optional = false)
+  private Contesttype contesttype;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "contest")
+  private List<Event> eventList;
 
   public Contest() {
   }
@@ -107,85 +86,29 @@ public class Contest implements Serializable {
     this.name = name;
   }
 
-  public String getWertungstyp() {
-    return wertungstyp;
+  public Person getPerson() {
+    return person;
   }
 
-  public void setWertungstyp(String wertungstyp) {
-    this.wertungstyp = wertungstyp;
+  public void setPerson(Person person) {
+    this.person = person;
   }
 
-  public String getWertung() {
-    return wertung;
+  public Contesttype getContesttype() {
+    return contesttype;
   }
 
-  public void setWertung(String wertung) {
-    this.wertung = wertung;
-  }
-
-  public String getWertungsraum() {
-    return wertungsraum;
-  }
-
-  public void setWertungsraum(String wertungsraum) {
-    this.wertungsraum = wertungsraum;
-  }
-
-  public String getAustraggungsortplannr() {
-    return austraggungsortplannr;
-  }
-
-  public void setAustraggungsortplannr(String austraggungsortplannr) {
-    this.austraggungsortplannr = austraggungsortplannr;
-  }
-
-  public String getAustraggungsort() {
-    return austraggungsort;
-  }
-
-  public void setAustraggungsort(String austraggungsort) {
-    this.austraggungsort = austraggungsort;
-  }
-
-  public String getZeitfreitag() {
-    return zeitfreitag;
-  }
-
-  public void setZeitfreitag(String zeitfreitag) {
-    this.zeitfreitag = zeitfreitag;
-  }
-
-  public String getZeitsamstag() {
-    return zeitsamstag;
-  }
-
-  public void setZeitsamstag(String zeitsamstag) {
-    this.zeitsamstag = zeitsamstag;
-  }
-
-  public String getZeitsonntag() {
-    return zeitsonntag;
-  }
-
-  public void setZeitsonntag(String zeitsonntag) {
-    this.zeitsonntag = zeitsonntag;
-  }
-
-  public Person getVerantwortlich() {
-    return verantwortlich;
-  }
-
-  public void setVerantwortlich(Person verantwortlich) {
-    this.verantwortlich = verantwortlich;
+  public void setContesttype(Contesttype contesttype) {
+    this.contesttype = contesttype;
   }
 
   @XmlTransient
-  public Collection<Allocation> getAllocationCollection() {
-    return allocationCollection;
+  public List<Event> getEventList() {
+    return eventList;
   }
 
-  public void setAllocationCollection(Collection<Allocation> allocationCollection) {
-    this.allocationCollection = allocationCollection;
+  public void setEventList(List<Event> eventList) {
+    this.eventList = eventList;
   }
 
   @Override

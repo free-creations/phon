@@ -17,8 +17,8 @@
 package testDb;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -47,68 +47,65 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
   @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
   @NamedQuery(name = "Person.findByPersonid", query = "SELECT p FROM Person p WHERE p.personid = :personid"),
-  @NamedQuery(name = "Person.findByFamilienname", query = "SELECT p FROM Person p WHERE p.familienname = :familienname"),
-  @NamedQuery(name = "Person.findByVorname", query = "SELECT p FROM Person p WHERE p.vorname = :vorname"),
-  @NamedQuery(name = "Person.findByHerrfrau", query = "SELECT p FROM Person p WHERE p.herrfrau = :herrfrau"),
-  @NamedQuery(name = "Person.findByPlz", query = "SELECT p FROM Person p WHERE p.plz = :plz"),
-  @NamedQuery(name = "Person.findByOrt", query = "SELECT p FROM Person p WHERE p.ort = :ort"),
-  @NamedQuery(name = "Person.findByStrasse", query = "SELECT p FROM Person p WHERE p.strasse = :strasse"),
-  @NamedQuery(name = "Person.findByTelnr", query = "SELECT p FROM Person p WHERE p.telnr = :telnr"),
-  @NamedQuery(name = "Person.findByHandy", query = "SELECT p FROM Person p WHERE p.handy = :handy"),
+  @NamedQuery(name = "Person.findBySurname", query = "SELECT p FROM Person p WHERE p.surname = :surname"),
+  @NamedQuery(name = "Person.findByGivenname", query = "SELECT p FROM Person p WHERE p.givenname = :givenname"),
+  @NamedQuery(name = "Person.findByGender", query = "SELECT p FROM Person p WHERE p.gender = :gender"),
+  @NamedQuery(name = "Person.findByZipcode", query = "SELECT p FROM Person p WHERE p.zipcode = :zipcode"),
+  @NamedQuery(name = "Person.findByCity", query = "SELECT p FROM Person p WHERE p.city = :city"),
+  @NamedQuery(name = "Person.findByStreet", query = "SELECT p FROM Person p WHERE p.street = :street"),
+  @NamedQuery(name = "Person.findByTelephone", query = "SELECT p FROM Person p WHERE p.telephone = :telephone"),
+  @NamedQuery(name = "Person.findByMobile", query = "SELECT p FROM Person p WHERE p.mobile = :mobile"),
   @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email"),
-  @NamedQuery(name = "Person.findByAltersgruppe", query = "SELECT p FROM Person p WHERE p.altersgruppe = :altersgruppe"),
-  @NamedQuery(name = "Person.findByNotiz", query = "SELECT p FROM Person p WHERE p.notiz = :notiz"),
-  @NamedQuery(name = "Person.findByGewuenschtewertung", query = "SELECT p FROM Person p WHERE p.gewuenschtewertung = :gewuenschtewertung"),
-  @NamedQuery(name = "Person.findByGewuenschterkollege", query = "SELECT p FROM Person p WHERE p.gewuenschterkollege = :gewuenschterkollege"),
-  @NamedQuery(name = "Person.findByLetzteaenderung", query = "SELECT p FROM Person p WHERE p.letzteaenderung = :letzteaenderung")})
+  @NamedQuery(name = "Person.findByAgegroup", query = "SELECT p FROM Person p WHERE p.agegroup = :agegroup"),
+  @NamedQuery(name = "Person.findByNotice", query = "SELECT p FROM Person p WHERE p.notice = :notice"),
+  @NamedQuery(name = "Person.findByLastchange", query = "SELECT p FROM Person p WHERE p.lastchange = :lastchange")})
 public class Person implements Serializable {
-  @JoinColumn(name = "TEAM", referencedColumnName = "TEAM")
-  @ManyToOne
-  private Team team;
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "PERSONID")
   private Integer personid;
-  @Column(name = "FAMILIENNAME")
-  private String familienname;
-  @Column(name = "VORNAME")
-  private String vorname;
-  @Column(name = "HERRFRAU")
-  private String herrfrau;
-  @Column(name = "PLZ")
-  private String plz;
-  @Column(name = "ORT")
-  private String ort;
-  @Column(name = "STRASSE")
-  private String strasse;
-  @Column(name = "TELNR")
-  private String telnr;
-  @Column(name = "HANDY")
-  private String handy;
+  @Column(name = "SURNAME")
+  private String surname;
+  @Column(name = "GIVENNAME")
+  private String givenname;
+  @Column(name = "GENDER")
+  private String gender;
+  @Column(name = "ZIPCODE")
+  private String zipcode;
+  @Column(name = "CITY")
+  private String city;
+  @Column(name = "STREET")
+  private String street;
+  @Column(name = "TELEPHONE")
+  private String telephone;
+  @Column(name = "MOBILE")
+  private String mobile;
   @Column(name = "EMAIL")
   private String email;
-  @Column(name = "ALTERSGRUPPE")
-  private String altersgruppe;
-  @Column(name = "NOTIZ")
-  private String notiz;
-  @Column(name = "GEWUENSCHTEWERTUNG")
-  private String gewuenschtewertung;
-  @Column(name = "GEWUENSCHTERKOLLEGE")
-  private Integer gewuenschterkollege;
-  @Column(name = "LETZTEAENDERUNG")
+  @Column(name = "AGEGROUP")
+  private String agegroup;
+  @Column(name = "NOTICE")
+  private String notice;
+  @Column(name = "LASTCHANGE")
   @Temporal(TemporalType.TIMESTAMP)
-  private Date letzteaenderung;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
-  private Collection<Availability> availabilityCollection;
-  @OneToMany(mappedBy = "verantwortlich")
-  private Collection<Contest> contestCollection;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
-  private Collection<Allocation> allocationCollection;
-  @JoinColumn(name = "GEWUENSCHTEFUNKTION", referencedColumnName = "FUNKTIONID")
+  private Date lastchange;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+  private List<Availability> availabilityList;
+  @OneToMany(mappedBy = "person")
+  private List<Contest> contestList;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+  private List<Allocation> allocationList;
+  @JoinColumn(name = "TEAM", referencedColumnName = "TEAMID")
   @ManyToOne
-  private Job gewuenschtefunktion;
+  private Team team;
+  @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
+  @ManyToOne
+  private Jobtype jobtype;
+  @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
+  @ManyToOne
+  private Contesttype contesttype;
 
   public Person() {
   }
@@ -125,68 +122,68 @@ public class Person implements Serializable {
     this.personid = personid;
   }
 
-  public String getFamilienname() {
-    return familienname;
+  public String getSurname() {
+    return surname;
   }
 
-  public void setFamilienname(String familienname) {
-    this.familienname = familienname;
+  public void setSurname(String surname) {
+    this.surname = surname;
   }
 
-  public String getVorname() {
-    return vorname;
+  public String getGivenname() {
+    return givenname;
   }
 
-  public void setVorname(String vorname) {
-    this.vorname = vorname;
+  public void setGivenname(String givenname) {
+    this.givenname = givenname;
   }
 
-  public String getHerrfrau() {
-    return herrfrau;
+  public String getGender() {
+    return gender;
   }
 
-  public void setHerrfrau(String herrfrau) {
-    this.herrfrau = herrfrau;
+  public void setGender(String gender) {
+    this.gender = gender;
   }
 
-  public String getPlz() {
-    return plz;
+  public String getZipcode() {
+    return zipcode;
   }
 
-  public void setPlz(String plz) {
-    this.plz = plz;
+  public void setZipcode(String zipcode) {
+    this.zipcode = zipcode;
   }
 
-  public String getOrt() {
-    return ort;
+  public String getCity() {
+    return city;
   }
 
-  public void setOrt(String ort) {
-    this.ort = ort;
+  public void setCity(String city) {
+    this.city = city;
   }
 
-  public String getStrasse() {
-    return strasse;
+  public String getStreet() {
+    return street;
   }
 
-  public void setStrasse(String strasse) {
-    this.strasse = strasse;
+  public void setStreet(String street) {
+    this.street = street;
   }
 
-  public String getTelnr() {
-    return telnr;
+  public String getTelephone() {
+    return telephone;
   }
 
-  public void setTelnr(String telnr) {
-    this.telnr = telnr;
+  public void setTelephone(String telephone) {
+    this.telephone = telephone;
   }
 
-  public String getHandy() {
-    return handy;
+  public String getMobile() {
+    return mobile;
   }
 
-  public void setHandy(String handy) {
-    this.handy = handy;
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
   }
 
   public String getEmail() {
@@ -197,79 +194,79 @@ public class Person implements Serializable {
     this.email = email;
   }
 
-  public String getAltersgruppe() {
-    return altersgruppe;
+  public String getAgegroup() {
+    return agegroup;
   }
 
-  public void setAltersgruppe(String altersgruppe) {
-    this.altersgruppe = altersgruppe;
+  public void setAgegroup(String agegroup) {
+    this.agegroup = agegroup;
   }
 
-  public String getNotiz() {
-    return notiz;
+  public String getNotice() {
+    return notice;
   }
 
-  public void setNotiz(String notiz) {
-    this.notiz = notiz;
+  public void setNotice(String notice) {
+    this.notice = notice;
   }
 
-  public String getGewuenschtewertung() {
-    return gewuenschtewertung;
+  public Date getLastchange() {
+    return lastchange;
   }
 
-  public void setGewuenschtewertung(String gewuenschtewertung) {
-    this.gewuenschtewertung = gewuenschtewertung;
-  }
-
-  public Integer getGewuenschterkollege() {
-    return gewuenschterkollege;
-  }
-
-  public void setGewuenschterkollege(Integer gewuenschterkollege) {
-    this.gewuenschterkollege = gewuenschterkollege;
-  }
-
-  public Date getLetzteaenderung() {
-    return letzteaenderung;
-  }
-
-  public void setLetzteaenderung(Date letzteaenderung) {
-    this.letzteaenderung = letzteaenderung;
+  public void setLastchange(Date lastchange) {
+    this.lastchange = lastchange;
   }
 
   @XmlTransient
-  public Collection<Availability> getAvailabilityCollection() {
-    return availabilityCollection;
+  public List<Availability> getAvailabilityList() {
+    return availabilityList;
   }
 
-  public void setAvailabilityCollection(Collection<Availability> availabilityCollection) {
-    this.availabilityCollection = availabilityCollection;
-  }
-
-  @XmlTransient
-  public Collection<Contest> getContestCollection() {
-    return contestCollection;
-  }
-
-  public void setContestCollection(Collection<Contest> contestCollection) {
-    this.contestCollection = contestCollection;
+  public void setAvailabilityList(List<Availability> availabilityList) {
+    this.availabilityList = availabilityList;
   }
 
   @XmlTransient
-  public Collection<Allocation> getAllocationCollection() {
-    return allocationCollection;
+  public List<Contest> getContestList() {
+    return contestList;
   }
 
-  public void setAllocationCollection(Collection<Allocation> allocationCollection) {
-    this.allocationCollection = allocationCollection;
+  public void setContestList(List<Contest> contestList) {
+    this.contestList = contestList;
   }
 
-  public Job getGewuenschtefunktion() {
-    return gewuenschtefunktion;
+  @XmlTransient
+  public List<Allocation> getAllocationList() {
+    return allocationList;
   }
 
-  public void setGewuenschtefunktion(Job gewuenschtefunktion) {
-    this.gewuenschtefunktion = gewuenschtefunktion;
+  public void setAllocationList(List<Allocation> allocationList) {
+    this.allocationList = allocationList;
+  }
+
+  public Team getTeam() {
+    return team;
+  }
+
+  public void setTeam(Team team) {
+    this.team = team;
+  }
+
+  public Jobtype getJobtype() {
+    return jobtype;
+  }
+
+  public void setJobtype(Jobtype jobtype) {
+    this.jobtype = jobtype;
+  }
+
+  public Contesttype getContesttype() {
+    return contesttype;
+  }
+
+  public void setContesttype(Contesttype contesttype) {
+    this.contesttype = contesttype;
   }
 
   @Override
@@ -295,14 +292,6 @@ public class Person implements Serializable {
   @Override
   public String toString() {
     return "testDb.Person[ personid=" + personid + " ]";
-  }
-
-  public Team getTeam() {
-    return team;
-  }
-
-  public void setTeam(Team team) {
-    this.team = team;
   }
   
 }
