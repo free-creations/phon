@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Contest.findAll", query = "SELECT c FROM Contest c"),
-  @NamedQuery(name = "Contest.findByContestid", query = "SELECT c FROM Contest c WHERE c.contestid = :contestid"),
+  @NamedQuery(name = "Contest.findByContestId", query = "SELECT c FROM Contest c WHERE c.contestId = :contestId"),
   @NamedQuery(name = "Contest.findByName", query = "SELECT c FROM Contest c WHERE c.name = :name")})
 public class Contest implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -51,7 +51,7 @@ public class Contest implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "CONTESTID")
-  private Integer contestid;
+  private Integer contestId;
   @Column(name = "NAME")
   private String name;
   @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
@@ -59,23 +59,23 @@ public class Contest implements Serializable {
   private Person person;
   @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
   @ManyToOne(optional = false)
-  private Contesttype contesttype;
+  private ContestType contestType;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "contest")
   private List<Event> eventList;
 
   public Contest() {
   }
 
-  public Contest(Integer contestid) {
-    this.contestid = contestid;
+  public Contest(Integer contestId) {
+    this.contestId = contestId;
   }
 
-  public Integer getContestid() {
-    return contestid;
+  public Integer getContestId() {
+    return contestId;
   }
 
-  public void setContestid(Integer contestid) {
-    this.contestid = contestid;
+  public void setContestId(Integer contestId) {
+    this.contestId = contestId;
   }
 
   public String getName() {
@@ -94,12 +94,12 @@ public class Contest implements Serializable {
     this.person = person;
   }
 
-  public Contesttype getContesttype() {
-    return contesttype;
+  public ContestType getContestType() {
+    return contestType;
   }
 
-  public void setContesttype(Contesttype contesttype) {
-    this.contesttype = contesttype;
+  public void setContestType(ContestType contestType) {
+    this.contestType = contestType;
   }
 
   @XmlTransient
@@ -114,7 +114,7 @@ public class Contest implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (contestid != null ? contestid.hashCode() : 0);
+    hash += (contestId != null ? contestId.hashCode() : 0);
     return hash;
   }
 
@@ -125,7 +125,7 @@ public class Contest implements Serializable {
       return false;
     }
     Contest other = (Contest) object;
-    if ((this.contestid == null && other.contestid != null) || (this.contestid != null && !this.contestid.equals(other.contestid))) {
+    if ((this.contestId == null && other.contestId != null) || (this.contestId != null && !this.contestId.equals(other.contestId))) {
       return false;
     }
     return true;
@@ -133,7 +133,7 @@ public class Contest implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Contest[ contestid=" + contestid + " ]";
+    return "testDb.Contest[ contestId=" + contestId + " ]";
   }
   
 }

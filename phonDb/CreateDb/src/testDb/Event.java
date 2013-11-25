@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e"),
-  @NamedQuery(name = "Event.findByEventid", query = "SELECT e FROM Event e WHERE e.eventid = :eventid"),
+  @NamedQuery(name = "Event.findByEventId", query = "SELECT e FROM Event e WHERE e.eventId = :eventId"),
   @NamedQuery(name = "Event.findByConfirmed", query = "SELECT e FROM Event e WHERE e.confirmed = :confirmed")})
 public class Event implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -51,14 +51,14 @@ public class Event implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "EVENTID")
-  private Integer eventid;
+  private Integer eventId;
   @Column(name = "CONFIRMED")
   private Integer confirmed;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
   private List<Allocation> allocationList;
   @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
   @ManyToOne(optional = false)
-  private Timeslot timeslot;
+  private TimeSlot timeSlot;
   @JoinColumn(name = "LOCATION", referencedColumnName = "LOCATIONID")
   @ManyToOne
   private Location location;
@@ -69,16 +69,16 @@ public class Event implements Serializable {
   public Event() {
   }
 
-  public Event(Integer eventid) {
-    this.eventid = eventid;
+  public Event(Integer eventId) {
+    this.eventId = eventId;
   }
 
-  public Integer getEventid() {
-    return eventid;
+  public Integer getEventId() {
+    return eventId;
   }
 
-  public void setEventid(Integer eventid) {
-    this.eventid = eventid;
+  public void setEventId(Integer eventId) {
+    this.eventId = eventId;
   }
 
   public Integer getConfirmed() {
@@ -98,12 +98,12 @@ public class Event implements Serializable {
     this.allocationList = allocationList;
   }
 
-  public Timeslot getTimeslot() {
-    return timeslot;
+  public TimeSlot getTimeSlot() {
+    return timeSlot;
   }
 
-  public void setTimeslot(Timeslot timeslot) {
-    this.timeslot = timeslot;
+  public void setTimeSlot(TimeSlot timeSlot) {
+    this.timeSlot = timeSlot;
   }
 
   public Location getLocation() {
@@ -125,7 +125,7 @@ public class Event implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (eventid != null ? eventid.hashCode() : 0);
+    hash += (eventId != null ? eventId.hashCode() : 0);
     return hash;
   }
 
@@ -136,7 +136,7 @@ public class Event implements Serializable {
       return false;
     }
     Event other = (Event) object;
-    if ((this.eventid == null && other.eventid != null) || (this.eventid != null && !this.eventid.equals(other.eventid))) {
+    if ((this.eventId == null && other.eventId != null) || (this.eventId != null && !this.eventId.equals(other.eventId))) {
       return false;
     }
     return true;
@@ -144,7 +144,7 @@ public class Event implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Event[ eventid=" + eventid + " ]";
+    return "testDb.Event[ eventId=" + eventId + " ]";
   }
   
 }

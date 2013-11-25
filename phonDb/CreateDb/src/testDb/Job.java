@@ -40,35 +40,35 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Job.findAll", query = "SELECT j FROM Job j"),
-  @NamedQuery(name = "Job.findByJobid", query = "SELECT j FROM Job j WHERE j.jobid = :jobid"),
+  @NamedQuery(name = "Job.findByJobId", query = "SELECT j FROM Job j WHERE j.jobId = :jobId"),
   @NamedQuery(name = "Job.findByName", query = "SELECT j FROM Job j WHERE j.name = :name")})
 public class Job implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
   @Column(name = "JOBID")
-  private String jobid;
+  private String jobId;
   @Column(name = "NAME")
   private String name;
   @OneToMany(mappedBy = "job")
   private List<Allocation> allocationList;
   @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
   @ManyToOne(optional = false)
-  private Jobtype jobtype;
+  private JobType jobType;
 
   public Job() {
   }
 
-  public Job(String jobid) {
-    this.jobid = jobid;
+  public Job(String jobId) {
+    this.jobId = jobId;
   }
 
-  public String getJobid() {
-    return jobid;
+  public String getJobId() {
+    return jobId;
   }
 
-  public void setJobid(String jobid) {
-    this.jobid = jobid;
+  public void setJobId(String jobId) {
+    this.jobId = jobId;
   }
 
   public String getName() {
@@ -88,18 +88,18 @@ public class Job implements Serializable {
     this.allocationList = allocationList;
   }
 
-  public Jobtype getJobtype() {
-    return jobtype;
+  public JobType getJobtype() {
+    return jobType;
   }
 
-  public void setJobtype(Jobtype jobtype) {
-    this.jobtype = jobtype;
+  public void setJobtype(JobType jobType) {
+    this.jobType = jobType;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (jobid != null ? jobid.hashCode() : 0);
+    hash += (jobId != null ? jobId.hashCode() : 0);
     return hash;
   }
 
@@ -110,7 +110,7 @@ public class Job implements Serializable {
       return false;
     }
     Job other = (Job) object;
-    if ((this.jobid == null && other.jobid != null) || (this.jobid != null && !this.jobid.equals(other.jobid))) {
+    if ((this.jobId == null && other.jobId != null) || (this.jobId != null && !this.jobId.equals(other.jobId))) {
       return false;
     }
     return true;
@@ -118,7 +118,7 @@ public class Job implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Job[ jobid=" + jobid + " ]";
+    return "testDb.Job[ jobId=" + jobId + " ]";
   }
   
 }

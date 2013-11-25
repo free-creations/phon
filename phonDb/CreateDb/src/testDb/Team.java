@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Team.findAll", query = "SELECT t FROM Team t"),
-  @NamedQuery(name = "Team.findByTeamid", query = "SELECT t FROM Team t WHERE t.teamid = :teamid"),
+  @NamedQuery(name = "Team.findByTeamId", query = "SELECT t FROM Team t WHERE t.teamId = :teamId"),
   @NamedQuery(name = "Team.findByName", query = "SELECT t FROM Team t WHERE t.name = :name")})
 public class Team implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -48,7 +48,7 @@ public class Team implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "TEAMID")
-  private Integer teamid;
+  private Integer teamId;
   @Column(name = "NAME")
   private String name;
   @OneToMany(mappedBy = "team")
@@ -57,16 +57,16 @@ public class Team implements Serializable {
   public Team() {
   }
 
-  public Team(Integer teamid) {
-    this.teamid = teamid;
+  public Team(Integer teamId) {
+    this.teamId = teamId;
   }
 
-  public Integer getTeamid() {
-    return teamid;
+  public Integer getTeamId() {
+    return teamId;
   }
 
-  public void setTeamid(Integer teamid) {
-    this.teamid = teamid;
+  public void setTeamId(Integer teamId) {
+    this.teamId = teamId;
   }
 
   public String getName() {
@@ -89,7 +89,7 @@ public class Team implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (teamid != null ? teamid.hashCode() : 0);
+    hash += (teamId != null ? teamId.hashCode() : 0);
     return hash;
   }
 
@@ -100,7 +100,7 @@ public class Team implements Serializable {
       return false;
     }
     Team other = (Team) object;
-    if ((this.teamid == null && other.teamid != null) || (this.teamid != null && !this.teamid.equals(other.teamid))) {
+    if ((this.teamId == null && other.teamId != null) || (this.teamId != null && !this.teamId.equals(other.teamId))) {
       return false;
     }
     return true;
@@ -108,7 +108,7 @@ public class Team implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Team[ teamid=" + teamid + " ]";
+    return "testDb.Team[ teamId=" + teamId + " ]";
   }
   
 }

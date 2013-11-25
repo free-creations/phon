@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Location.findAll", query = "SELECT l FROM Location l"),
-  @NamedQuery(name = "Location.findByLocationid", query = "SELECT l FROM Location l WHERE l.locationid = :locationid"),
+  @NamedQuery(name = "Location.findByLocationId", query = "SELECT l FROM Location l WHERE l.locationId = :locationId"),
   @NamedQuery(name = "Location.findByName", query = "SELECT l FROM Location l WHERE l.name = :name"),
   @NamedQuery(name = "Location.findByBuilding", query = "SELECT l FROM Location l WHERE l.building = :building"),
   @NamedQuery(name = "Location.findByRoom", query = "SELECT l FROM Location l WHERE l.room = :room"),
@@ -53,7 +53,7 @@ public class Location implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "LOCATIONID")
-  private Integer locationid;
+  private Integer locationId;
   @Column(name = "NAME")
   private String name;
   @Column(name = "BUILDING")
@@ -72,16 +72,16 @@ public class Location implements Serializable {
   public Location() {
   }
 
-  public Location(Integer locationid) {
-    this.locationid = locationid;
+  public Location(Integer locationId) {
+    this.locationId = locationId;
   }
 
-  public Integer getLocationid() {
-    return locationid;
+  public Integer getLocationId() {
+    return locationId;
   }
 
-  public void setLocationid(Integer locationid) {
-    this.locationid = locationid;
+  public void setLocationId(Integer locationId) {
+    this.locationId = locationId;
   }
 
   public String getName() {
@@ -144,7 +144,7 @@ public class Location implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (locationid != null ? locationid.hashCode() : 0);
+    hash += (locationId != null ? locationId.hashCode() : 0);
     return hash;
   }
 
@@ -155,7 +155,7 @@ public class Location implements Serializable {
       return false;
     }
     Location other = (Location) object;
-    if ((this.locationid == null && other.locationid != null) || (this.locationid != null && !this.locationid.equals(other.locationid))) {
+    if ((this.locationId == null && other.locationId != null) || (this.locationId != null && !this.locationId.equals(other.locationId))) {
       return false;
     }
     return true;
@@ -163,7 +163,7 @@ public class Location implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Location[ locationid=" + locationid + " ]";
+    return "testDb.Location[ locationId=" + locationId + " ]";
   }
   
 }

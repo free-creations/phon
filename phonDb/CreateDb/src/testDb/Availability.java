@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Availability.findAll", query = "SELECT a FROM Availability a"),
-  @NamedQuery(name = "Availability.findByAvailabilityid", query = "SELECT a FROM Availability a WHERE a.availabilityid = :availabilityid"),
+  @NamedQuery(name = "Availability.findByAvailabilityId", query = "SELECT a FROM Availability a WHERE a.availabilityId = :availabilityId"),
   @NamedQuery(name = "Availability.findByAvailable", query = "SELECT a FROM Availability a WHERE a.available = :available"),
   @NamedQuery(name = "Availability.findByLastchange", query = "SELECT a FROM Availability a WHERE a.lastchange = :lastchange")})
 public class Availability implements Serializable {
@@ -51,7 +51,7 @@ public class Availability implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "AVAILABILITYID")
-  private Integer availabilityid;
+  private Integer availabilityId;
   @Column(name = "AVAILABLE")
   private Integer available;
   @Column(name = "LASTCHANGE")
@@ -59,7 +59,7 @@ public class Availability implements Serializable {
   private Date lastchange;
   @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
   @ManyToOne(optional = false)
-  private Timeslot timeslot;
+  private TimeSlot timeSlot;
   @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
   @ManyToOne(optional = false)
   private Person person;
@@ -67,16 +67,16 @@ public class Availability implements Serializable {
   public Availability() {
   }
 
-  public Availability(Integer availabilityid) {
-    this.availabilityid = availabilityid;
+  public Availability(Integer availabilityId) {
+    this.availabilityId = availabilityId;
   }
 
-  public Integer getAvailabilityid() {
-    return availabilityid;
+  public Integer getAvailabilityId() {
+    return availabilityId;
   }
 
-  public void setAvailabilityid(Integer availabilityid) {
-    this.availabilityid = availabilityid;
+  public void setAvailabilityId(Integer availabilityId) {
+    this.availabilityId = availabilityId;
   }
 
   public Integer getAvailable() {
@@ -95,12 +95,12 @@ public class Availability implements Serializable {
     this.lastchange = lastchange;
   }
 
-  public Timeslot getTimeslot() {
-    return timeslot;
+  public TimeSlot getTimeSlot() {
+    return timeSlot;
   }
 
-  public void setTimeslot(Timeslot timeslot) {
-    this.timeslot = timeslot;
+  public void setTimeSlot(TimeSlot timeSlot) {
+    this.timeSlot = timeSlot;
   }
 
   public Person getPerson() {
@@ -114,7 +114,7 @@ public class Availability implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (availabilityid != null ? availabilityid.hashCode() : 0);
+    hash += (availabilityId != null ? availabilityId.hashCode() : 0);
     return hash;
   }
 
@@ -125,7 +125,7 @@ public class Availability implements Serializable {
       return false;
     }
     Availability other = (Availability) object;
-    if ((this.availabilityid == null && other.availabilityid != null) || (this.availabilityid != null && !this.availabilityid.equals(other.availabilityid))) {
+    if ((this.availabilityId == null && other.availabilityId != null) || (this.availabilityId != null && !this.availabilityId.equals(other.availabilityId))) {
       return false;
     }
     return true;
@@ -133,7 +133,7 @@ public class Availability implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Availability[ availabilityid=" + availabilityid + " ]";
+    return "testDb.Availability[ availabilityId=" + availabilityId + " ]";
   }
   
 }

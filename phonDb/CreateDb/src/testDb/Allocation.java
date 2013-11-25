@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Allocation.findAll", query = "SELECT a FROM Allocation a"),
-  @NamedQuery(name = "Allocation.findByAllocationid", query = "SELECT a FROM Allocation a WHERE a.allocationid = :allocationid"),
+  @NamedQuery(name = "Allocation.findByAllocationId", query = "SELECT a FROM Allocation a WHERE a.allocationId = :allocationId"),
   @NamedQuery(name = "Allocation.findByLastchange", query = "SELECT a FROM Allocation a WHERE a.lastchange = :lastchange"),
   @NamedQuery(name = "Allocation.findByPlanner", query = "SELECT a FROM Allocation a WHERE a.planner = :planner"),
   @NamedQuery(name = "Allocation.findByNote", query = "SELECT a FROM Allocation a WHERE a.note = :note")})
@@ -52,7 +52,7 @@ public class Allocation implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "ALLOCATIONID")
-  private Integer allocationid;
+  private Integer allocationId;
   @Column(name = "LASTCHANGE")
   @Temporal(TemporalType.TIMESTAMP)
   private Date lastchange;
@@ -73,16 +73,16 @@ public class Allocation implements Serializable {
   public Allocation() {
   }
 
-  public Allocation(Integer allocationid) {
-    this.allocationid = allocationid;
+  public Allocation(Integer allocationId) {
+    this.allocationId = allocationId;
   }
 
-  public Integer getAllocationid() {
-    return allocationid;
+  public Integer getAllocationId() {
+    return allocationId;
   }
 
-  public void setAllocationid(Integer allocationid) {
-    this.allocationid = allocationid;
+  public void setAllocationId(Integer allocationId) {
+    this.allocationId = allocationId;
   }
 
   public Date getLastchange() {
@@ -136,7 +136,7 @@ public class Allocation implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (allocationid != null ? allocationid.hashCode() : 0);
+    hash += (allocationId != null ? allocationId.hashCode() : 0);
     return hash;
   }
 
@@ -147,7 +147,7 @@ public class Allocation implements Serializable {
       return false;
     }
     Allocation other = (Allocation) object;
-    if ((this.allocationid == null && other.allocationid != null) || (this.allocationid != null && !this.allocationid.equals(other.allocationid))) {
+    if ((this.allocationId == null && other.allocationId != null) || (this.allocationId != null && !this.allocationId.equals(other.allocationId))) {
       return false;
     }
     return true;
@@ -155,7 +155,7 @@ public class Allocation implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Allocation[ allocationid=" + allocationid + " ]";
+    return "testDb.Allocation[ allocationId=" + allocationId + " ]";
   }
   
 }

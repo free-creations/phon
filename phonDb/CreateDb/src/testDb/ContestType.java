@@ -38,38 +38,38 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CONTESTTYPE")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Contesttype.findAll", query = "SELECT c FROM Contesttype c"),
-  @NamedQuery(name = "Contesttype.findByContesttypeid", query = "SELECT c FROM Contesttype c WHERE c.contesttypeid = :contesttypeid"),
-  @NamedQuery(name = "Contesttype.findByName", query = "SELECT c FROM Contesttype c WHERE c.name = :name"),
-  @NamedQuery(name = "Contesttype.findByIcon", query = "SELECT c FROM Contesttype c WHERE c.icon = :icon")})
-public class Contesttype implements Serializable {
+  @NamedQuery(name = "ContestType.findAll", query = "SELECT c FROM ContestType c"),
+  @NamedQuery(name = "ContestType.findByContestTypeId", query = "SELECT c FROM ContestType c WHERE c.contestTypeId = :contestTypeId"),
+  @NamedQuery(name = "ContestType.findByName", query = "SELECT c FROM ContestType c WHERE c.name = :name"),
+  @NamedQuery(name = "ContestType.findByIcon", query = "SELECT c FROM ContestType c WHERE c.icon = :icon")})
+public class ContestType implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
   @Column(name = "CONTESTTYPEID")
-  private String contesttypeid;
+  private String contestTypeId;
   @Column(name = "NAME")
   private String name;
   @Column(name = "ICON")
   private String icon;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "contesttype")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "contestType")
   private List<Contest> contestList;
-  @OneToMany(mappedBy = "contesttype")
+  @OneToMany(mappedBy = "contestType")
   private List<Person> personList;
 
-  public Contesttype() {
+  public ContestType() {
   }
 
-  public Contesttype(String contesttypeid) {
-    this.contesttypeid = contesttypeid;
+  public ContestType(String contestTypeId) {
+    this.contestTypeId = contestTypeId;
   }
 
-  public String getContesttypeid() {
-    return contesttypeid;
+  public String getContestTypeId() {
+    return contestTypeId;
   }
 
-  public void setContesttypeid(String contesttypeid) {
-    this.contesttypeid = contesttypeid;
+  public void setContestTypeId(String contestTypeId) {
+    this.contestTypeId = contestTypeId;
   }
 
   public String getName() {
@@ -109,18 +109,18 @@ public class Contesttype implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (contesttypeid != null ? contesttypeid.hashCode() : 0);
+    hash += (contestTypeId != null ? contestTypeId.hashCode() : 0);
     return hash;
   }
 
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Contesttype)) {
+    if (!(object instanceof ContestType)) {
       return false;
     }
-    Contesttype other = (Contesttype) object;
-    if ((this.contesttypeid == null && other.contesttypeid != null) || (this.contesttypeid != null && !this.contesttypeid.equals(other.contesttypeid))) {
+    ContestType other = (ContestType) object;
+    if ((this.contestTypeId == null && other.contestTypeId != null) || (this.contestTypeId != null && !this.contestTypeId.equals(other.contestTypeId))) {
       return false;
     }
     return true;
@@ -128,7 +128,7 @@ public class Contesttype implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Contesttype[ contesttypeid=" + contesttypeid + " ]";
+    return "testDb.ContestType[ contestTypeId=" + contestTypeId + " ]";
   }
   
 }

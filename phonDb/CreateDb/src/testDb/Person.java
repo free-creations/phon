@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
-  @NamedQuery(name = "Person.findByPersonid", query = "SELECT p FROM Person p WHERE p.personid = :personid"),
+  @NamedQuery(name = "Person.findByPersonId", query = "SELECT p FROM Person p WHERE p.personId = :personId"),
   @NamedQuery(name = "Person.findBySurname", query = "SELECT p FROM Person p WHERE p.surname = :surname"),
   @NamedQuery(name = "Person.findByGivenname", query = "SELECT p FROM Person p WHERE p.givenname = :givenname"),
   @NamedQuery(name = "Person.findByGender", query = "SELECT p FROM Person p WHERE p.gender = :gender"),
@@ -65,7 +65,7 @@ public class Person implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "PERSONID")
-  private Integer personid;
+  private Integer personId;
   @Column(name = "SURNAME")
   private String surname;
   @Column(name = "GIVENNAME")
@@ -102,24 +102,24 @@ public class Person implements Serializable {
   private Team team;
   @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
   @ManyToOne
-  private Jobtype jobtype;
+  private JobType jobType;
   @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
   @ManyToOne
-  private Contesttype contesttype;
+  private ContestType contestType;
 
   public Person() {
   }
 
-  public Person(Integer personid) {
-    this.personid = personid;
+  public Person(Integer personId) {
+    this.personId = personId;
   }
 
-  public Integer getPersonid() {
-    return personid;
+  public Integer getPersonId() {
+    return personId;
   }
 
-  public void setPersonid(Integer personid) {
-    this.personid = personid;
+  public void setPersonId(Integer personId) {
+    this.personId = personId;
   }
 
   public String getSurname() {
@@ -253,26 +253,26 @@ public class Person implements Serializable {
     this.team = team;
   }
 
-  public Jobtype getJobtype() {
-    return jobtype;
+  public JobType getJobtype() {
+    return jobType;
   }
 
-  public void setJobtype(Jobtype jobtype) {
-    this.jobtype = jobtype;
+  public void setJobtype(JobType jobType) {
+    this.jobType = jobType;
   }
 
-  public Contesttype getContesttype() {
-    return contesttype;
+  public ContestType getContestType() {
+    return contestType;
   }
 
-  public void setContesttype(Contesttype contesttype) {
-    this.contesttype = contesttype;
+  public void setContestType(ContestType contestType) {
+    this.contestType = contestType;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (personid != null ? personid.hashCode() : 0);
+    hash += (personId != null ? personId.hashCode() : 0);
     return hash;
   }
 
@@ -283,7 +283,7 @@ public class Person implements Serializable {
       return false;
     }
     Person other = (Person) object;
-    if ((this.personid == null && other.personid != null) || (this.personid != null && !this.personid.equals(other.personid))) {
+    if ((this.personId == null && other.personId != null) || (this.personId != null && !this.personId.equals(other.personId))) {
       return false;
     }
     return true;
@@ -291,7 +291,7 @@ public class Person implements Serializable {
 
   @Override
   public String toString() {
-    return "testDb.Person[ personid=" + personid + " ]";
+    return "testDb.Person[ personId=" + personId + " ]";
   }
   
 }

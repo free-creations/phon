@@ -2,19 +2,17 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="TestDbPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>testDb.Job</class>
+    <class>testDb.ContestType</class>
+    <class>testDb.Event</class>
+    <class>testDb.Person</class>
+    <class>testDb.TimeSlot</class>
     <class>testDb.Availability</class>
+    <class>testDb.Team</class>
+    <class>testDb.JobType</class>
     <class>testDb.Contest</class>
     <class>testDb.Allocation</class>
-    <class>testDb.Timeslot</class>
-    <class>testDb.Person</class>
-    <class>testDb.Job</class>
-    <class>testDb.GroupPreference</class>
-    <class>testDb.Crew</class>
-    <class>testDb.Event</class>
-    <class>testDb.Contesttype</class>
     <class>testDb.Location</class>
-    <class>testDb.Team</class>
-    <class>testDb.Jobtype</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/phonDb"/>
       <property name="javax.persistence.jdbc.password" value=""/>
