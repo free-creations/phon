@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Harald Postner <Harald at free-creations.de>.
+ * Copyright 2013 Harald Postner<harald at free-creations.de>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,32 @@
  */
 package de.free_creations.dbEntities;
 
+import static de.free_creations.dbEntities.JobTypeNGTest.PersistenceUnitName;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
+import static org.testng.Assert.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  *
- * @author Harald Postner <Harald at free-creations.de>
+ * @author Harald Postner<harald at free-creations.de>
  */
-public class TeamTest {
+public class JobNGTest {
 
   static final String PersistenceUnitName = "DbEntitiesPU";
   private static EntityManager entityManager = null;
 
+  private Job testJob;
+
   @BeforeClass
-  public static void setUpClass() {
+  public static void setUpClass() throws Exception {
     try {
       EntityManagerFactory factory = Persistence.createEntityManagerFactory(PersistenceUnitName);
       entityManager = factory.createEntityManager();
@@ -48,52 +51,40 @@ public class TeamTest {
   }
 
   @AfterClass
-  public static void tearDownClass() {
+  public static void tearDownClass() throws Exception {
     if (entityManager != null) {
       entityManager.close();
     }
   }
-  private Team testTeam;
-  private Person testPerson;
 
-  @Before
-  public void setUp() {
+  @BeforeMethod
+  public void setUpMethod() throws Exception {
     entityManager.getTransaction().begin();
-    TypedQuery<Team> qt = entityManager.createNamedQuery("Team.findAll", Team.class);
-    List<Team> cc = qt.getResultList();
-    assertNotNull(cc);
-    assertFalse(cc.isEmpty());
-    testTeam = cc.get(0);
+    TypedQuery<Job> q = entityManager.createNamedQuery("Job.findAll", Job.class);
+    List<Job> jj = q.getResultList();
+    assertNotNull(jj);
+    assertFalse(jj.isEmpty());
+    testJob = jj.get(0);
+
+    JobType jobType = testJob.getJobType();
+    List<Job> jobList = jobType.getJobList();
+    assertNotNull(jobList);
+    assertFalse(jobList.isEmpty());
+    assertTrue(jobList.contains(testJob));
   }
 
-  @After
-  public void tearDown() {
+  @AfterMethod
+  public void tearDownMethod() throws Exception {
     entityManager.getTransaction().rollback();
-    testTeam = null;
   }
 
   /**
-   * Test of identity method, of class Allocation.
+   * Test of identity method, of class JobType.
    */
   @Test
   public void testIdentity() {
-    EntityIdentity expected = new EntityIdentity(testTeam.getClass(), testTeam.getTeamId());
-    assertEquals(expected, testTeam.identity());
-  }
-
-  @Test
-  public void testSetGetPerson() {
-    Person p = new Person();
-    entityManager.persist(p);
-    entityManager.flush(); // give p its primary keys.
-    assertFalse(testTeam.getPersonList().contains(p));
-
-    p.setTeam(testTeam);
-    assertTrue(testTeam.getPersonList().contains(p));    
-    
-    p.setTeam(null);
-    assertFalse(testTeam.getPersonList().contains(p));
-    
+    EntityIdentity expected = new EntityIdentity(testJob.getClass(), testJob.getJobId());
+    assertEquals(expected, testJob.identity());
   }
 
 }

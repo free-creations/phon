@@ -17,6 +17,7 @@ package de.free_creations.dbEntities;
 
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -30,6 +31,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -41,187 +43,124 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "TIMESLOT")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "TimeSlot.findAll", query = "SELECT z FROM TimeSlot z"),
-  @NamedQuery(name = "TimeSlot.findByZeitid", query = "SELECT z FROM TimeSlot z WHERE z.zeitid = :zeitid"),
-  @NamedQuery(name = "TimeSlot.findByTag", query = "SELECT z FROM TimeSlot z WHERE z.tag = :tag"),
-  @NamedQuery(name = "TimeSlot.findByTageszeit", query = "SELECT z FROM TimeSlot z WHERE z.tageszeit = :tageszeit"),
-  @NamedQuery(name = "TimeSlot.findByDatum", query = "SELECT z FROM TimeSlot z WHERE z.datum = :datum"),
-  @NamedQuery(name = "TimeSlot.findByStartzeit", query = "SELECT z FROM TimeSlot z WHERE z.startzeit = :startzeit"),
-  @NamedQuery(name = "TimeSlot.findByEndezeit", query = "SELECT z FROM TimeSlot z WHERE z.endezeit = :endezeit"),
-  @NamedQuery(name = "TimeSlot.findByWochentag", query = "SELECT z FROM TimeSlot z WHERE z.wochentag = :wochentag"),
-  @NamedQuery(name = "TimeSlot.findByLabel", query = "SELECT z FROM TimeSlot z WHERE z.label = :label"),
-  @NamedQuery(name = "TimeSlot.findByTageszeitprint", query = "SELECT z FROM TimeSlot z WHERE z.tageszeitprint = :tageszeitprint")})
+  @NamedQuery(name = "TimeSlot.findAll", query = "SELECT t FROM TimeSlot t"),
+  @NamedQuery(name = "TimeSlot.findByTimeSlotId", query = "SELECT t FROM TimeSlot t WHERE t.timeSlotId = :timeSlotId"),
+  @NamedQuery(name = "TimeSlot.findByDayIdx", query = "SELECT t FROM TimeSlot t WHERE t.dayIdx = :dayIdx"),
+  @NamedQuery(name = "TimeSlot.findByTimeOfDayIdx", query = "SELECT t FROM TimeSlot t WHERE t.timeOfDayIdx = :timeOfDayIdx"),
+  @NamedQuery(name = "TimeSlot.findByDatum", query = "SELECT t FROM TimeSlot t WHERE t.datum = :datum"),
+  @NamedQuery(name = "TimeSlot.findByStartTime", query = "SELECT t FROM TimeSlot t WHERE t.startTime = :startTime"),
+  @NamedQuery(name = "TimeSlot.findByEndtime", query = "SELECT t FROM TimeSlot t WHERE t.endTime = :endTime"),
+  @NamedQuery(name = "TimeSlot.findByDayOfWeek", query = "SELECT t FROM TimeSlot t WHERE t.dayOfWeek = :dayOfWeek"),
+  @NamedQuery(name = "TimeSlot.findByLabel", query = "SELECT t FROM TimeSlot t WHERE t.label = :label"),
+  @NamedQuery(name = "TimeSlot.findByTimeOfDayPrint", query = "SELECT t FROM TimeSlot t WHERE t.timeOfDayPrint = :timeOfDayPrint")})
 public class TimeSlot implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @Column(name = "ZEITID")
-  private Integer zeitid;
-  @Column(name = "TAG")
-  private Integer tag;
-  @Column(name = "TAGESZEIT")
-  private Integer tageszeit;
+  @Column(name = "TIMESLOTID")
+  private Integer timeSlotId;
+  @Column(name = "DAYIDX")
+  private Integer dayIdx;
+  @Column(name = "TIMEOFDAYIDX")
+  private Integer timeOfDayIdx;
   @Column(name = "DATUM")
   @Temporal(TemporalType.DATE)
   private Date datum;
-  @Column(name = "STARTZEIT")
+  @Column(name = "STARTTIME")
   @Temporal(TemporalType.TIME)
-  private Date startzeit;
-  @Column(name = "ENDEZEIT")
+  private Date startTime;
+  @Column(name = "ENDTIME")
   @Temporal(TemporalType.TIME)
-  private Date endezeit;
-  @Column(name = "WOCHENTAG")
-  private String wochentag;
+  private Date endTime;
+  @Column(name = "DAYOFWEEK")
+  private String dayOfWeek;
   @Column(name = "LABEL")
   private String label;
-  @Column(name = "TAGESZEITPRINT")
-  private String tageszeitprint;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "zeit")
-  private List<Allocation> teameinteilungList;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "zeitid")
-  private List<Availability> verfuegbarkeitList;
-  public static final String PROP_VERFUEGBARKEIT = "verfuegbarkeit";
-  public static final String PROP_ADD_TEAMEINTEILUNG = "addTeameinteilung";
-  public static final String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
+  @Column(name = "TIMEOFDAYPRINT")
+  private String timeOfDayPrint;
+  //@OneToMany(cascade = CascadeType.ALL, mappedBy = "timeSlot")
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private List<Availability> availabilityList;
+  //@OneToMany(cascade = CascadeType.ALL, mappedBy = "timeSlot")
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private List<Event> eventList;
 
   public TimeSlot() {
   }
 
-  /**
-   * Can be used in tests to create an initialized item.
-   *
-   * @param tag
-   * @param tageszeit
-   * @param wochentag
-   * @param label
-   * @param tageszeitprint
-   * @deprecated use only for tests.
-   */
-  public TimeSlot(Integer zeitid, Integer tag, Integer tageszeit, String wochentag, String label, String tageszeitprint) {
-    this.zeitid = zeitid;
-    this.tag = tag;
-    this.tageszeit = tageszeit;
-    this.wochentag = wochentag;
-    this.label = label;
-    this.tageszeitprint = tageszeitprint;
+  public TimeSlot(Integer timeSlotId) {
+    this.timeSlotId = timeSlotId;
   }
 
-  public TimeSlot(Integer zeitid) {
-    this.zeitid = zeitid;
+  public Integer getTimeSlotId() {
+    return timeSlotId;
   }
 
-  public Integer getZeitid() {
-    return zeitid;
+  public Integer getDayIdx() {
+    return dayIdx;
   }
 
-  protected void setZeitid(Integer zeitid) {
-    this.zeitid = zeitid;
+
+
+  public Integer getTimeOfDayIdx() {
+    return timeOfDayIdx;
   }
 
-  public Integer getTag() {
-    return tag;
-  }
-
-  public Integer getTageszeit() {
-    return tageszeit;
-  }
 
   public Date getDatum() {
     return datum;
   }
 
-  public Date getStartzeit() {
-    return startzeit;
+
+  public Date getStartTime() {
+    return startTime;
   }
 
-  public Date getEndezeit() {
-    return endezeit;
+
+
+  public Date getEndTime() {
+    return endTime;
   }
 
-  public String getWochentag() {
-    return wochentag;
+
+
+  public String getDayOfWeek() {
+    return dayOfWeek;
   }
+
+
 
   public String getLabel() {
     return label;
   }
 
-  public String getTageszeitprint() {
-    return tageszeitprint;
+
+
+  public String getTimeOfDayPrint() {
+    return timeOfDayPrint;
   }
+
+
 
   @XmlTransient
-  public List<Allocation> getTeameinteilungList() {
-    return teameinteilungList;
+  public List<Availability> getAvailabilityList() {
+    return availabilityList;
   }
 
-  public void setTeameinteilungList(List<Allocation> teameinteilungList) {
-    this.teameinteilungList = teameinteilungList;
-  }
 
-  void addTeameinteilung(Allocation t) {
-    assert (t != null);
-    if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Allocation to this Time-Slot. Record must be persited");
-    }
-    if (teameinteilungList.contains(t)) {
-      return;
-    }
-    if (t.getZeit() != this) {
-      throw new RuntimeException("Cannot add Allocation for an other Time-Slot.");
-    }
-    teameinteilungList.add(t);
-    firePropertyChange(PROP_ADD_TEAMEINTEILUNG, null, t.identity());
-  }
-
-  void removeTeameinteilung(Allocation t) {
-    if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Allocation to this Time-Slot. Record must be persited");
-    }
-    if (!teameinteilungList.contains(t)) {
-      return;
-    }
-    teameinteilungList.remove(t);
-    assert (t != null);
-    firePropertyChange(PROP_REMOVE_TEAMEINTEILUNG, t.identity(), null);
-  }
 
   @XmlTransient
-  public List<Availability> getVerfuegbarkeitList() {
-    return verfuegbarkeitList;
+  public List<Event> getEventList() {
+    return eventList;
   }
 
-  /**
-   * Adds a VERFUEGBARKEIT to this time-slot.
-   *
-   * @param v a new VERFUEGBARKEIT record. It is assumed that this record is not
-   * assigned to an other time-slot and that the this entity has been persisted.
-   */
-  protected void addVerfuegbarkeit(Availability v) {
-    assert (v != null);
-    if (verfuegbarkeitList == null) {
-      throw new RuntimeException("Cannot add Verfügbarkeit. Record must be persited");
-    }
-    if (verfuegbarkeitList.contains(v)) {
-      return;
-    }
-    if (v.getZeitid() != this) {
-      throw new RuntimeException("Cannot add Verfügbarkeit used for other time-slot.");
-    }
 
-    verfuegbarkeitList.add(v);
-    firePropertyChange(PROP_VERFUEGBARKEIT, null, v);
-  }
-
-  void removeVerfuegbarkeit(Availability v) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (zeitid != null ? zeitid.hashCode() : 0);
+    hash += (timeSlotId != null ? timeSlotId.hashCode() : 0);
     return hash;
   }
 
@@ -232,7 +171,7 @@ public class TimeSlot implements Serializable, DbEntity {
       return false;
     }
     TimeSlot other = (TimeSlot) object;
-    if ((this.zeitid == null && other.zeitid != null) || (this.zeitid != null && !this.zeitid.equals(other.zeitid))) {
+    if ((this.timeSlotId == null && other.timeSlotId != null) || (this.timeSlotId != null && !this.timeSlotId.equals(other.timeSlotId))) {
       return false;
     }
     return true;
@@ -240,16 +179,25 @@ public class TimeSlot implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "de.free_creations.dbEntities.TimeSlot[ zeitid=" + zeitid + " ]";
+    return "testDb.TimeSlot[ timeSlotId=" + timeSlotId + " ]";
+  }
+
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    addPropertyChangeListener(listener, this.timeSlotId);
+  }
+
+  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer timeSlotId) {
+    PropertyChangeManager.instance().addPropertyChangeListener(listener,
+            new EntityIdentity(TimeSlot.class, timeSlotId));
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    removePropertyChangeListener(listener, this.zeitid);
+    removePropertyChangeListener(listener, this.timeSlotId);
   }
 
-  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer zeitid) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer timeSlotId) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Person.class, zeitid));
+            new EntityIdentity(TimeSlot.class, timeSlotId));
 
   }
 
@@ -261,6 +209,6 @@ public class TimeSlot implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(TimeSlot.class, zeitid);
+    return new EntityIdentity(TimeSlot.class, timeSlotId);
   }
 }

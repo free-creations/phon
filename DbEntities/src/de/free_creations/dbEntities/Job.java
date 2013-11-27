@@ -23,10 +23,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -38,152 +41,53 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "JOB")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Job.findAll", query = "SELECT f FROM Job f"),
-  @NamedQuery(name = "Job.findByFunktionid", query = "SELECT f FROM Job f WHERE f.funktionid = :funktionid"),
-  @NamedQuery(name = "Job.findByFunktionname", query = "SELECT f FROM Job f WHERE f.funktionname = :funktionname"),
-  @NamedQuery(name = "Job.findBySortvalue", query = "SELECT f FROM Job f WHERE f.sortvalue = :sortvalue")})
+  @NamedQuery(name = "Job.findAll", query = "SELECT j FROM Job j"),
+  @NamedQuery(name = "Job.findByJobId", query = "SELECT j FROM Job j WHERE j.jobId = :jobId"),
+  @NamedQuery(name = "Job.findByName", query = "SELECT j FROM Job j WHERE j.name = :name")})
 public class Job implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @Column(name = "FUNKTIONID")
-  private String funktionid;
-  @Column(name = "FUNKTIONNAME")
-  private String funktionname;
-  @Column(name = "SORTVALUE")
-  private Integer sortvalue;
-  public final static String PROP_ADD_PREFERING_PERSON = "add_prefering_person";
-  public final static String PROP_REMOVE_PREFERING_PERSON = "remove_prefering_person";
-  @OneToMany(mappedBy = "gewuenschtefunktion")
-  private List<Person> personenList;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "funktionen")
-  private List<Allocation> teameinteilungList;
-  public final static String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
-  public final static String  PROP_ADD_TEAMEINTEILUNG  = "addTeameinteilung";
+  @Column(name = "JOBID")
+  private String jobId;
+  @Column(name = "NAME")
+  private String name;
+  // @OneToMany(mappedBy = "job")
+  @Transient
+  private List<Allocation> allocationList;
+  @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
+  @ManyToOne(optional = false)
+  private JobType jobType;
 
   public Job() {
   }
 
-  public Job(String funktionid, String funktionname, Integer sortvalue) {
-    this.funktionid = funktionid;
-    this.funktionname = funktionname;
-    this.sortvalue = sortvalue;
+  public Job(String jobId) {
+    this.jobId = jobId;
   }
 
-  public Job(String funktionid) {
-    this.funktionid = funktionid;
+  public String getJobId() {
+    return jobId;
   }
 
-  public String getFunktionid() {
-    return funktionid;
-  }
-
-  public String getFunktionname() {
-    return funktionname;
-  }
-
-  public Integer getSortvalue() {
-    return sortvalue;
-  }
-
-  /**
-   * The list of all persons who prefer to be assigned to this function.
-   *
-   * @return the list of all persons who prefer to be assigned to this function.
-   */
-  @XmlTransient
-  public List<Person> getPersonenList() {
-    return personenList;
-  }
-
-  /**
-   * Adds a person who prefers to be assigned to this function.
-   *
-   * @param p
-   */
-  protected void addPreferingPerson(Person p) {
-    assert (p != null);
-    if (personenList == null) {
-      throw new RuntimeException("Cannot add a Person to this Function. Record must be persited");
-    }
-    if (personenList.contains(p)) {
-      return;
-    }
-    if (p.getGewuenschtefunktion() != this) {
-      throw new RuntimeException("Cannot add Person whishing an other function.");
-    }
-    personenList.add(p);
-    firePropertyChange(PROP_ADD_PREFERING_PERSON, null, p.identity());
-  }
-
-  /**
-   * Removes a person from the list of persons who want to be assigned to this
-   * function.
-   *
-   * @param p
-   */
-  protected void removePreferingPerson(Person p) {
-    if (personenList == null) {
-      throw new RuntimeException("Cannot remove Person from Function. Record must be persited");
-    }
-    if (!personenList.contains(p)) {
-      return;
-    }
-    personenList.remove(p);
-    assert (p != null);
-    firePropertyChange(PROP_REMOVE_PREFERING_PERSON, p.identity(), null);
-  }
-
-  private void setPersonenList(List<Person> personenList) {
-    this.personenList = personenList;
+  public String getName() {
+    return name;
   }
 
   @XmlTransient
-  public List<Allocation> getTeameinteilungList() {
-    return teameinteilungList;
+  public List<Allocation> getAllocationList() {
+    return allocationList;
   }
 
-  /**
-   * Use this function only within package dbEntities and use it only for test.
-   *
-   * @param teameinteilungList
-   */
-  protected void setTeameinteilungList(List<Allocation> teameinteilungList) {
-    this.teameinteilungList = teameinteilungList;
-  }
-
-  void removeTeameinteilung(Allocation t) {
-    if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot remove Allocation from Function. Record must be persited");
-    }
-    if (!teameinteilungList.contains(t)) {
-      return;
-    }
-    teameinteilungList.remove(t);
-    assert (t != null);
-    firePropertyChange(PROP_REMOVE_TEAMEINTEILUNG, t.identity(), null);
-  }
-
-  void addTeameinteilung(Allocation t) {
-    assert (t != null);
-    if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Allocation to this Function. Record must be persited");
-    }
-    if (teameinteilungList.contains(t)) {
-      return;
-    }
-    if (t.getFunktionen() != this) {
-      throw new RuntimeException("Cannot add Allocation for an other function.");
-    }
-    teameinteilungList.add(t);
-    firePropertyChange(PROP_ADD_TEAMEINTEILUNG, null, t.identity());
+  public JobType getJobType() {
+    return jobType;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (funktionid != null ? funktionid.hashCode() : 0);
+    hash += (jobId != null ? jobId.hashCode() : 0);
     return hash;
   }
 
@@ -194,7 +98,7 @@ public class Job implements Serializable, DbEntity {
       return false;
     }
     Job other = (Job) object;
-    if ((this.funktionid == null && other.funktionid != null) || (this.funktionid != null && !this.funktionid.equals(other.funktionid))) {
+    if ((this.jobId == null && other.jobId != null) || (this.jobId != null && !this.jobId.equals(other.jobId))) {
       return false;
     }
     return true;
@@ -202,63 +106,11 @@ public class Job implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return getFunktionname();
-  }
-
-  /**
-   * Add a PropertyChangeListener for the entity represented by this instance.
-   *
-   * @param listener
-   */
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
-    addPropertyChangeListener(listener, this.funktionid);
-  }
-
-  /**
-   * Add a PropertyChangeListener for the entity represented by this
-   * <em>Class</em>
-   * and the given primary key.
-   *
-   * @param listener
-   * @param funktionid
-   */
-  public static void addPropertyChangeListener(PropertyChangeListener listener, String funktionid) {
-    PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Job.class, funktionid));
-  }
-
-  /**
-   * Remove a PropertyChangeListener for the entity represented by this
-   * instance.
-   *
-   * @param listener
-   */
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    removePropertyChangeListener(listener, this.funktionid);
-  }
-
-  /**
-   * Remove a PropertyChangeListener for the entity represented by this
-   * <em>Class</em>
-   * and the given primary key.
-   *
-   * @param listener the listener to be removed.
-   * @param funktionid the primary key
-   */
-  public static void removePropertyChangeListener(PropertyChangeListener listener, String funktionid) {
-    PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Job.class, funktionid));
-
-  }
-
-  private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-    PropertyChangeManager.instance().firePropertyChange(
-            identity(),
-            propertyName, oldValue, newValue);
+    return "Job[ jobId=" + jobId + " ]";
   }
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Job.class, funktionid);
+    return new EntityIdentity(Job.class, jobId);
   }
 }

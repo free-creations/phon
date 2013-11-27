@@ -43,13 +43,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ALLOCATION")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Allocation.findAll", query = "SELECT t FROM Allocation t"),
-  @NamedQuery(name = "Allocation.findByZeitid", query = "SELECT t FROM Allocation t WHERE t.zeit = :zeitid"),
-  @NamedQuery(name = "Allocation.findByJuryid", query = "SELECT t FROM Allocation t WHERE t.contestid = :juryid"),
-  @NamedQuery(name = "Allocation.findByFunktionid", query = "SELECT t FROM Allocation t WHERE t.funktionen = :funktionid"),
-  @NamedQuery(name = "Allocation.findByLetzteaenderung", query = "SELECT t FROM Allocation t WHERE t.letzteaenderung = :letzteaenderung"),
-  @NamedQuery(name = "Allocation.findByPlaner", query = "SELECT t FROM Allocation t WHERE t.planer = :planer"),
-  @NamedQuery(name = "Allocation.findByErklaerung", query = "SELECT t FROM Allocation t WHERE t.erklaerung = :erklaerung"),})
+  @NamedQuery(name = "Allocation.findAll", query = "SELECT a FROM Allocation a"),
+  @NamedQuery(name = "Allocation.findByAllocationId", query = "SELECT a FROM Allocation a WHERE a.allocationId = :allocationId"),
+  @NamedQuery(name = "Allocation.findByLastchange", query = "SELECT a FROM Allocation a WHERE a.lastchange = :lastchange"),
+  @NamedQuery(name = "Allocation.findByPlanner", query = "SELECT a FROM Allocation a WHERE a.planner = :planner"),
+  @NamedQuery(name = "Allocation.findByNote", query = "SELECT a FROM Allocation a WHERE a.note = :note")})
 public class Allocation implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
@@ -57,173 +55,100 @@ public class Allocation implements Serializable, DbEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "ALLOCATIONID")
-  private Integer allocationid;
-  @Column(name = "LETZTEAENDERUNG")
+  private Integer allocationId;
+  @Column(name = "LASTCHANGE")
   @Temporal(TemporalType.TIMESTAMP)
-  private Date letzteaenderung;
-  @Column(name = "PLANER")
-  private String planer;
-  @Column(name = "ERKLAERUNG")
-  private String erklaerung;
-  @JoinColumn(name = "ZEITID", referencedColumnName = "ZEITID")
-  @ManyToOne(optional = false)
-  private TimeSlot zeit;
-  @JoinColumn(name = "PERSONID", referencedColumnName = "PERSONID")
-  @ManyToOne(optional = false)
-  private Person personid;
-  @JoinColumn(name = "FUNKTIONID", referencedColumnName = "FUNKTIONID")
-  @ManyToOne(optional = false)
-  private Job funktionen;
-  @JoinColumn(name = "CONTESTID", referencedColumnName = "CONTESTID")
-  @ManyToOne(optional = false)
-  private Contest contestid;
-
-//  public final static String PROP_FUNCTION = "function";
-//  public final static String PROP_JURY = "jury";
-//  public final static String PROP_ZEIT = "zeit";
-  public final static String PROP_PERSON = "person";
-  public final static String PROP_SELF_REMOVED = "selfRemoved";
+  private Date lastchange;
+  @Column(name = "PLANNER")
+  private String planner;
+  @Column(name = "NOTE")
+  private String note;
+//  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
+//  @ManyToOne(optional = false)
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private Person person;
+//  @JoinColumn(name = "JOB", referencedColumnName = "JOBID")
+//  @ManyToOne
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private Job job;
+//  @JoinColumn(name = "EVENT", referencedColumnName = "EVENTID")
+//  @ManyToOne(optional = false)
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private Event event;
+  public static final String PROP_NOTE = "PROP_NOTE";
+  public static final String PROP_PLANNER = "PROP_PLANNER";
 
   public Allocation() {
   }
 
-  public Allocation(Integer allocationid) {
-    this.allocationid = allocationid;
+  public Allocation(Integer allocationId) {
+    this.allocationId = allocationId;
   }
 
-  public Integer getAllocationid() {
-    return allocationid;
+  public Integer getAllocationId() {
+    return allocationId;
   }
 
-  public Allocation(TimeSlot z, Contest j, Job f) {
-    this();
-    setZeit(z);
-    setJury(j);
-    setFunktionen(f);
+  public Date getLastchange() {
+    return lastchange;
   }
 
-  public void prepareRemoval() {
-    setZeit(null);
-    setJury(null);
-    setFunktionen(null);
-    setPersonid(null);
-    firePropertyChange(PROP_SELF_REMOVED, null, null);
-    PropertyChangeManager.instance().removeAllListeners(identity());
+  public void setLastchange(Date lastchange) {
+    this.lastchange = lastchange;
   }
 
-  public Date getLetzteaenderung() {
-    return letzteaenderung;
+  public String getPlanner() {
+    return planner;
   }
 
-  public void setLetzteaenderung(Date letzteaenderung) {
-    this.letzteaenderung = letzteaenderung;
-  }
-
-  public String getPlaner() {
-    return planer;
-  }
-
-  public void setPlaner(String planer) {
-    this.planer = planer;
-  }
-
-  public String getErklaerung() {
-    return erklaerung;
-  }
-
-  public void setErklaerung(String erklaerung) {
-    this.erklaerung = erklaerung;
-  }
-
-  public TimeSlot getZeit() {
-    return zeit;
-  }
-
-  public final void setZeit(TimeSlot zeit) {
-    TimeSlot old = this.zeit;
-    this.zeit = zeit;
-//    EntityIdentity newId = (zeit == null) ? null : zeit.identity();
-//    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(old, zeit)) {
-      //firePropertyChange(PROP_ZEIT, oldId, newId);
-      if (old != null) {
-        old.removeTeameinteilung(this);
-      }
-      if (zeit != null) {
-        zeit.addTeameinteilung(this);
-      }
+  public void setPlanner(String value) {
+    String old = this.planner;
+    this.planner = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_PLANNER, old, value);
     }
   }
 
-  public Person getPersonid() {
-    return personid;
+  public String getNote() {
+    return note;
   }
 
-  public void setPersonid(Person personid) {
-    Person old = this.personid;
-    this.personid = personid;
-    EntityIdentity newId = (personid == null) ? null : personid.identity();
-    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(old, personid)) {
-      firePropertyChange(PROP_PERSON, oldId, newId);
-      if (old != null) {
-        old.removeTeameinteilung(this);
-      }
-      if (personid != null) {
-        personid.addTeameinteilung(this);
-      }
+  public void setNote(String value) {
+    String old = this.note;
+    this.note = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_NOTE, old, value);
     }
   }
 
-  public Contest getJury() {
-    return contestid;
+  public Person getPerson() {
+    return person;
   }
 
-  public final void setJury(Contest jury) {
-    Contest old = this.contestid;
-    this.contestid = jury;
-//    EntityIdentity newId = (jury == null) ? null : jury.identity();
-//    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(old, jury)) {
-      //firePropertyChange(PROP_JURY, oldId, newId);
-      if (old != null) {
-        old.removeTeameinteilung(this);
-      }
-      if (jury != null) {
-        jury.addTeameinteilung(this);
-      }
-    }
-
+  public void setPerson(Person person) {
+    this.person = person;
   }
 
-  public Job getFunktionen() {
-    return funktionen;
+  public Job getJob() {
+    return job;
   }
 
-  public final void setFunktionen(Job funktionen) {
-    Job old = this.funktionen;
-    this.funktionen = funktionen;
-//    EntityIdentity newId = (funktionen == null) ? null : funktionen.identity();
-//    EntityIdentity oldId = (old == null) ? null : old.identity();
+  public void setJob(Job job) {
+    this.job = job;
+  }
 
-    if (!Objects.equals(old, funktionen)) {
-      //firePropertyChange(PROP_FUNCTION, oldId, newId);
-      if (old != null) {
-        old.removeTeameinteilung(this);
-      }
-      if (funktionen != null) {
-        funktionen.addTeameinteilung(this);
-      }
-    }
+  public Event getEvent() {
+    return event;
+  }
+
+  public void setEvent(Event event) {
+    this.event = event;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (allocationid != null ? allocationid.hashCode() : 0);
+    hash += (allocationId != null ? allocationId.hashCode() : 0);
     return hash;
   }
 
@@ -234,7 +159,7 @@ public class Allocation implements Serializable, DbEntity {
       return false;
     }
     Allocation other = (Allocation) object;
-    if ((this.allocationid == null && other.allocationid != null) || (this.allocationid != null && !this.allocationid.equals(other.allocationid))) {
+    if ((this.allocationId == null && other.allocationId != null) || (this.allocationId != null && !this.allocationId.equals(other.allocationId))) {
       return false;
     }
     return true;
@@ -242,12 +167,12 @@ public class Allocation implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Allocation" + allocationid;
+    return "Allocation" + allocationId;
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    assert (this.allocationid != null);
-    addPropertyChangeListener(listener, this.allocationid);
+    assert (this.allocationId != null);
+    addPropertyChangeListener(listener, this.allocationId);
   }
 
   /**
@@ -270,7 +195,7 @@ public class Allocation implements Serializable, DbEntity {
    * @param listener
    */
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    removePropertyChangeListener(listener, this.allocationid);
+    removePropertyChangeListener(listener, this.allocationId);
   }
 
   /**
@@ -279,11 +204,11 @@ public class Allocation implements Serializable, DbEntity {
    * and the given primary key.
    *
    * @param listener the listener to be removed.
-   * @param allocationid the primary key
+   * @param allocationId
    */
-  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer allocationid) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer allocationId) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Allocation.class, allocationid));
+            new EntityIdentity(Allocation.class, allocationId));
 
   }
 
@@ -295,6 +220,6 @@ public class Allocation implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Allocation.class, allocationid);
+    return new EntityIdentity(Allocation.class, allocationId);
   }
 }

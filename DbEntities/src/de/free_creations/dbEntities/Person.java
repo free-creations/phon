@@ -15,29 +15,26 @@
  */
 package de.free_creations.dbEntities;
 
+import static de.free_creations.dbEntities.Location.PROP_STREET;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -51,229 +48,190 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
-  @NamedQuery(name = "Person.findByPersonid", query = "SELECT p FROM Person p WHERE p.personid = :personid"),
-  @NamedQuery(name = "Person.findByFamilienname", query = "SELECT p FROM Person p WHERE p.familienname = :familienname"),
-  @NamedQuery(name = "Person.findByVorname", query = "SELECT p FROM Person p WHERE p.vorname = :vorname"),
-  @NamedQuery(name = "Person.findByHerrfrau", query = "SELECT p FROM Person p WHERE p.herrfrau = :herrfrau"),
-  @NamedQuery(name = "Person.findByPlz", query = "SELECT p FROM Person p WHERE p.plz = :plz"),
-  @NamedQuery(name = "Person.findByOrt", query = "SELECT p FROM Person p WHERE p.ort = :ort"),
-  @NamedQuery(name = "Person.findByStrasse", query = "SELECT p FROM Person p WHERE p.strasse = :strasse"),
-  @NamedQuery(name = "Person.findByTelnr", query = "SELECT p FROM Person p WHERE p.telnr = :telnr"),
-  @NamedQuery(name = "Person.findByHandy", query = "SELECT p FROM Person p WHERE p.handy = :handy"),
+  @NamedQuery(name = "Person.findByPersonId", query = "SELECT p FROM Person p WHERE p.personId = :personId"),
+  @NamedQuery(name = "Person.findBySurname", query = "SELECT p FROM Person p WHERE p.surname = :surname"),
+  @NamedQuery(name = "Person.findByGivenname", query = "SELECT p FROM Person p WHERE p.givenname = :givenname"),
+  @NamedQuery(name = "Person.findByGender", query = "SELECT p FROM Person p WHERE p.gender = :gender"),
+  @NamedQuery(name = "Person.findByZipcode", query = "SELECT p FROM Person p WHERE p.zipcode = :zipcode"),
+  @NamedQuery(name = "Person.findByCity", query = "SELECT p FROM Person p WHERE p.city = :city"),
+  @NamedQuery(name = "Person.findByStreet", query = "SELECT p FROM Person p WHERE p.street = :street"),
+  @NamedQuery(name = "Person.findByTelephone", query = "SELECT p FROM Person p WHERE p.telephone = :telephone"),
+  @NamedQuery(name = "Person.findByMobile", query = "SELECT p FROM Person p WHERE p.mobile = :mobile"),
   @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email"),
-  @NamedQuery(name = "Person.findByAltersgruppe", query = "SELECT p FROM Person p WHERE p.altersgruppe = :altersgruppe"),
-  @NamedQuery(name = "Person.findByNotiz", query = "SELECT p FROM Person p WHERE p.notiz = :notiz"),
-  @NamedQuery(name = "Person.findByGewuenschtewertung", query = "SELECT p FROM Person p WHERE p.gewuenschtewertung = :gewuenschtewertung"),
-  @NamedQuery(name = "Person.findByLetzteaenderung", query = "SELECT p FROM Person p WHERE p.letzteaenderung = :letzteaenderung")})
+  @NamedQuery(name = "Person.findByAgegroup", query = "SELECT p FROM Person p WHERE p.agegroup = :agegroup"),
+  @NamedQuery(name = "Person.findByNotice", query = "SELECT p FROM Person p WHERE p.notice = :notice"),
+  @NamedQuery(name = "Person.findByLastchange", query = "SELECT p FROM Person p WHERE p.lastchange = :lastchange")})
 public class Person implements Serializable, DbEntity {
-
-  @JoinColumn(name = "TEAM", referencedColumnName = "TEAM")
-  @ManyToOne
-  private Team team;
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "PERSONID")
-  private Integer personid;
-  @Column(name = "FAMILIENNAME")
-  private String familienname;
-  public static final String PROP_FAMILIENNAME = "FAMILIENNAME";
-  @Column(name = "VORNAME")
-  private String vorname;
-  public static final String PROP_VORNAME = "VORNAME";
-  //
-  @Column(name = "HERRFRAU")
-  private String herrfrau;
-  public static final String PROP_HERRFRAU = "HERRFRAU";
-  //
-  @Column(name = "PLZ")
-  private String plz;
-  public static final String PROP_PLZ = "PLZ";
-  //
-  @Column(name = "ORT")
-  private String ort;
-  public static final String PROP_ORT = "ORT";
-  //
-  @Column(name = "STRASSE")
-  private String strasse;
-  public static final String PROP_STRASSE = "STRASSE";
-  //
-  @Column(name = "TELNR")
-  private String telnr;
-  public static final String PROP_TELNR = "TELNR";
-  //
-  @Column(name = "HANDY")
-  private String handy;
-  public static final String PROP_HANDY = "HANDY";
-  //
+  private Integer personId;
+  @Column(name = "SURNAME")
+  private String surname;
+  @Column(name = "GIVENNAME")
+  private String givenname;
+  @Column(name = "GENDER")
+  private String gender;
+  @Column(name = "ZIPCODE")
+  private String zipcode;
+  @Column(name = "CITY")
+  private String city;
+  @Column(name = "STREET")
+  private String street;
+  @Column(name = "TELEPHONE")
+  private String telephone;
+  @Column(name = "MOBILE")
+  private String mobile;
   @Column(name = "EMAIL")
   private String email;
-  public static final String PROP_EMAIL = "EMAIL";
-  //
-  @Column(name = "ALTERSGRUPPE")
-  private String altersgruppe;
-  public static final String PROP_ALTERSGRUPPE = "ALTERSGRUPPE";
-  //
-  @Column(name = "NOTIZ")
-  private String notiz;
-  public static final String PROP_NOTIZ = "NOTIZ";
-  //
-  @Column(name = "GEWUENSCHTEWERTUNG")
-  private String gewuenschtewertung;
-  public static final String PROP_GEWUENSCHTEWERTUNG = "GEWUENSCHTEWERTUNG";
-  //
-  @Column(name = "LETZTEAENDERUNG")
+  @Column(name = "AGEGROUP")
+  private String agegroup;
+  @Column(name = "NOTICE")
+  private String notice;
+  @Column(name = "LASTCHANGE")
   @Temporal(TemporalType.TIMESTAMP)
-  private Date letzteaenderung;
-  public static final String PROP_LETZTEAENDERUNG = "LETZTEAENDERUNG";
-  //
-  @OneToMany(mappedBy = "gewuenschterkollege")
-  private List<Person> personenList;
-  @JoinColumn(name = "GEWUENSCHTERKOLLEGE", referencedColumnName = "PERSONID")
-  @ManyToOne
-  private Person gewuenschterkollege;
-  public static final String PROP_FAVOREDGROUPLEADER = "FAVOREDGROUPLEADER";
-  public static final String PROP_REMOVE_GROUPMEMBER = "REMOVE_GROUPMEMBER";
-  public static final String PROP_ADD_GROUPMEMBER = "PROP_ADD_GROUPMEMBER";
-  //
-  @JoinColumn(name = "GEWUENSCHTEFUNKTION", referencedColumnName = "FUNKTIONID")
-  @ManyToOne
-  private Job gewuenschtefunktion;
-  public static final String PROP_GEWUENSCHTEFUNKTION = "GEWUENSCHTEFUNKTION";
-  //
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
-  private List<Allocation> teameinteilungList;
-  //
-  @OneToMany(mappedBy = "verantwortlich")
+  private Date lastchange;
+
+  // @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private List<Availability> availabilityList;
+  // @OneToMany(mappedBy = "person")
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
   private List<Contest> contestList;
-  //
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "personid")
-  private List<Availability> verfuegbarkeitList;
-  public static final String PROP_VERFUEGBARKEIT = "VERFUEGBARKEIT";
-  public static final String PROP_ADD_TEAMEINTEILUNG = "PROP_ADD_TEAMEINTEILUNG";
-  public static final String PROP_REMOVE_TEAMEINTEILUNG = "PROP_REMOVE_TEAMEINTEILUNG";
-  public static final String PROP_REMOVE_JURY = "PROP_REMOVE_JURY";
-  public static final String PROP_ADD_JURY = "PROP_ADD_JURY";
-  public static final String PROP_TEAMMEMBER = "PROP_TEAMMEMBER";
+  //@OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private List<Allocation> allocationList;
+//  @JoinColumn(name = "TEAM", referencedColumnName = "TEAMID")
+//  @ManyToOne
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private Team team;
+//  @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
+//  @ManyToOne
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private JobType jobType;
+//  @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
+//  @ManyToOne
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private ContestType contestType;
+  public static final String PROP_SURNAME = "PROP_SURNAME";
+  public static final String PROP_GENDER = "PROP_GENDER";
+  public static final String PROP_ZIPCODE = "PROP_ZIPCODE";
+  public static final String PROP_CITY = "PROP_CITY";
+  public static final String PROP_TELEPHONE = "PROP_TELEPHONE";
+  public static final String PROP_MOBILE = "PROP_MOBILE";
+  public static final String PROP_EMAIL = "PROP_EMAIL";
+  public static final String PROP_AGEGROUP = "PROP_AGEGROUP";
+  public static final String PROP_NOTICE = "PROP_NOTICE";
+  public static final String PROP_LASTCHANGE = "PROP_LASTCHANGE";
 
   public Person() {
   }
 
-  /**
-   * A constructor that permits to setup a Person object with some fields
-   * initialized as the entity manager would do. This constructor is used
-   * exclusively in tests.
-   *
-   * @param personid
-   */
-  public Person(Integer personid) {
-    this.personid = personid;
-    this.personenList = new ArrayList<>();
+  public Person(Integer personId) {
+    this.personId = personId;
   }
 
-  public Integer getPersonid() {
-    return personid;
+  public Integer getPersonId() {
+    return personId;
   }
 
-  public void setPersonid(Integer personid) {
-    this.personid = personid;
+  public String getSurname() {
+    return surname;
+
   }
 
-  public String getFamilienname() {
-    return familienname;
-  }
-
-  public void setFamilienname(String familienname) {
-    String old = this.familienname;
-    this.familienname = familienname;
-    if (!Objects.equals(old, familienname)) {
-      firePropertyChange(PROP_FAMILIENNAME, old, familienname);
+  public void setSurname(String value) {
+    String old = this.surname;
+    this.surname = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_SURNAME, old, value);
     }
   }
 
-  public String getVorname() {
-    return vorname;
+  public String getGivenname() {
+    return givenname;
   }
 
-  public void setVorname(String vorname) {
-    String old = this.vorname;
-    this.vorname = vorname;
-    if (!Objects.equals(old, vorname)) {
-      firePropertyChange(PROP_VORNAME, old, vorname);
+  public void setGivenname(String value) {
+    String old = this.givenname;
+    this.givenname = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_SURNAME, old, value);
     }
   }
 
-  public String getHerrfrau() {
-    return herrfrau;
+  public String getGender() {
+    return gender;
   }
 
-  public void setHerrfrau(String herrfrau) {
-    String old = this.herrfrau;
-    this.herrfrau = herrfrau;
-    if (!Objects.equals(old, herrfrau)) {
-      firePropertyChange(PROP_HERRFRAU, old, herrfrau);
+  public void setGender(String value) {
+    String old = this.gender;
+    this.gender = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_GENDER, old, value);
     }
   }
 
-  public String getPlz() {
-    return plz;
+  public String getZipcode() {
+    return zipcode;
   }
 
-  public void setPlz(String plz) {
-    String old = this.plz;
-    this.plz = plz;
-    if (!Objects.equals(old, plz)) {
-      firePropertyChange(PROP_PLZ, old, plz);
+  public void setZipcode(String value) {
+    String old = this.zipcode;
+    this.zipcode = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_ZIPCODE, old, value);
     }
   }
 
-  public String getOrt() {
-    return ort;
+  public String getCity() {
+    return city;
   }
 
-  public void setOrt(String ort) {
-    String old = this.ort;
-    this.ort = ort;
-    if (!Objects.equals(old, ort)) {
-      firePropertyChange(PROP_ORT, old, ort);
+  public void setCity(String value) {
+    String old = this.city;
+    this.city = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_CITY, old, value);
     }
   }
 
-  public String getStrasse() {
-    return strasse;
+  public String getStreet() {
+    return street;
   }
 
-  public void setStrasse(String strasse) {
-    String old = this.strasse;
-    this.strasse = strasse;
-    if (!Objects.equals(old, strasse)) {
-      firePropertyChange(PROP_STRASSE, old, strasse);
+  public void setStreet(String value) {
+    String old = this.street;
+    this.street = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_STREET, old, value);
     }
   }
 
-  public String getTelnr() {
-    return telnr;
+  public String getTelephone() {
+    return telephone;
   }
 
-  public void setTelnr(String telnr) {
-    String old = this.telnr;
-    this.telnr = telnr;
-    if (!Objects.equals(old, telnr)) {
-      firePropertyChange(PROP_TELNR, old, telnr);
+  public void setTelephone(String value) {
+    String old = this.telephone;
+    this.telephone = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_TELEPHONE, old, value);
     }
   }
 
-  public String getHandy() {
-    return handy;
+  public String getMobile() {
+    return mobile;
   }
 
-  public void setHandy(String handy) {
-    String old = this.handy;
-    this.handy = handy;
-    if (!Objects.equals(old, handy)) {
-      firePropertyChange(PROP_HANDY, old, handy);
+  public void setMobile(String value) {
+    String old = this.mobile;
+    this.mobile = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_MOBILE, old, value);
     }
   }
 
@@ -281,250 +239,101 @@ public class Person implements Serializable, DbEntity {
     return email;
   }
 
-  public void setEmail(String email) {
+  public void setEmail(String value) {
     String old = this.email;
-    this.email = email;
-    if (!Objects.equals(old, email)) {
-      firePropertyChange(PROP_EMAIL, old, email);
+    this.email = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_EMAIL, old, value);
     }
   }
 
-  public String getAltersgruppe() {
-    return altersgruppe;
+  public String getAgegroup() {
+    return agegroup;
   }
 
-  public void setAltersgruppe(String altersgruppe) {
-    String old = this.altersgruppe;
-    this.altersgruppe = altersgruppe;
-    if (!Objects.equals(old, altersgruppe)) {
-      firePropertyChange(PROP_ALTERSGRUPPE, old, altersgruppe);
+  public void setAgegroup(String value) {
+    String old = this.agegroup;
+    this.agegroup = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_AGEGROUP, old, value);
     }
   }
 
-  public String getNotiz() {
-    return notiz;
+  public String getNotice() {
+    return notice;
   }
 
-  public void setNotiz(String notiz) {
-    String old = this.notiz;
-    this.notiz = notiz;
-    if (!Objects.equals(old, notiz)) {
-      firePropertyChange(PROP_NOTIZ, old, notiz);
+  public void setNotice(String value) {
+    String old = this.notice;
+    this.notice = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_NOTICE, old, value);
     }
   }
 
-  public String getGewuenschtewertung() {
-    return gewuenschtewertung;
+  public Date getLastchange() {
+    return lastchange;
   }
 
-  public void setGewuenschtewertung(String gewuenschtewertung) {
-    String old = this.gewuenschtewertung;
-    this.gewuenschtewertung = gewuenschtewertung;
-    if (!Objects.equals(old, gewuenschtewertung)) {
-      firePropertyChange(PROP_GEWUENSCHTEWERTUNG, old, gewuenschtewertung);
-    }
-  }
-
-  public Date getLetzteaenderung() {
-    return letzteaenderung;
-  }
-
-  public void setLetzteaenderung(Date letzteaenderung) {
-    this.letzteaenderung = letzteaenderung;
-  }
-
-  /**
-   * Get the list of all persons who favor this person as group-leader
-   * (=Gewuenschterkollege).
-   *
-   * @return the list of all persons who favor this person as group-leader.
-   */
-  @XmlTransient
-  public List<Person> getGroupList() {
-    return personenList;
-  }
-
-  @Deprecated
-  private void setPersonenList(List<Person> personenList) {
-    this.personenList = personenList;
-  }
-
-  @Deprecated
-  public Person getGewuenschterkollege() {
-    return gewuenschterkollege;
-  }
-
-  @Deprecated
-  public void setGewuenschterkollege(Person p) {
-    Person old = this.gewuenschterkollege;
-    this.gewuenschterkollege = p;
-
-    EntityIdentity newId = (p == null) ? null : p.identity();
-    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(oldId, newId)) {
-      firePropertyChange(PROP_FAVOREDGROUPLEADER, oldId, newId);
-      if (old != null) {
-        old.removeGroupmember(this);
-      }
-      if (p != null) {
-        p.addGroupmember(this);
-      }
-    }
-
-  }
-
-  public Job getGewuenschtefunktion() {
-    return gewuenschtefunktion;
-  }
-
-  public void setGewuenschtefunktion(Job gewuenschtefunktion) {
-    Job old = this.gewuenschtefunktion;
-    this.gewuenschtefunktion = gewuenschtefunktion;
-
-    EntityIdentity newId = (gewuenschtefunktion == null) ? null : gewuenschtefunktion.identity();
-    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(oldId, newId)) {
-      firePropertyChange(PROP_GEWUENSCHTEFUNKTION, oldId, newId);
-      if (old != null) {
-        old.removePreferingPerson(this);
-      }
-      if (gewuenschtefunktion != null) {
-        gewuenschtefunktion.addPreferingPerson(this);
-      }
+  public void setLastchange(Date value) {
+    Date old = this.lastchange;
+    this.lastchange = value;
+    if (!Objects.equals(old, value)) {
+      firePropertyChange(PROP_LASTCHANGE, old, value);
     }
   }
 
   @XmlTransient
-  public List<Allocation> getTeameinteilungList() {
-    return teameinteilungList;
+  public List<Availability> getAvailabilityList() {
+    return availabilityList;
   }
 
-  public void setTeameinteilungList(List<Allocation> teameinteilungList) {
-    this.teameinteilungList = teameinteilungList;
-  }
-
-  void removeTeameinteilung(Allocation t) {
-    if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot remove Allocation from Person. Record must be persited");
-    }
-    if (!teameinteilungList.contains(t)) {
-      return;
-    }
-    teameinteilungList.remove(t);
-    assert (t != null);
-    firePropertyChange(PROP_REMOVE_TEAMEINTEILUNG, t.identity(), null);
-  }
-
-  void addTeameinteilung(Allocation t) {
-    assert (t != null);
-    if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add Allocation. Record must be persited");
-    }
-    if (teameinteilungList.contains(t)) {
-      return;
-    }
-    if (t.getPersonid() != this) {
-      throw new RuntimeException("Cannot add Allocation used for other person.");
-    }
-    teameinteilungList.add(t);
-    firePropertyChange(PROP_ADD_TEAMEINTEILUNG, null, t.identity());
+  public void setAvailabilityList(List<Availability> availabilityList) {
+    this.availabilityList = availabilityList;
   }
 
   @XmlTransient
-  public List<Contest> getJuryList() {
+  public List<Contest> getContestList() {
     return contestList;
   }
 
-  void removeJuryResponsability(Contest j) {
-    if (contestList == null) {
-      throw new RuntimeException("Cannot remove Contest from Person. Record must be persited");
-    }
-    if (!contestList.contains(j)) {
-      return;
-    }
-    contestList.remove(j);
-    assert (j != null);
-    firePropertyChange(PROP_REMOVE_JURY, j.identity(), null);
-  }
-
-  void addJuryResponsability(Contest j) {
-    assert (j != null);
-    if (contestList == null) {
-      throw new RuntimeException("Cannot add Contest to Person. Record must be persited");
-    }
-    if (contestList.contains(j)) {
-      return;
-    }
-    if (j.getVerantwortlich() != this) {
-      throw new RuntimeException("Cannot add Contest used for other person.");
-    }
-    contestList.add(j);
-    firePropertyChange(PROP_ADD_JURY, null, j.identity());
-  }
-
-  public void setJuryList(List<Contest> juryList) {
-    this.contestList = juryList;
-  }
-
-  /**
-   *
-   * @return true if this person is available for at least one time-slot.
-   */
-  public boolean isAvailable() {
-    List<Availability> vv = getVerfuegbarkeitList();
-    if (vv == null) {
-      return false;
-    }
-    for (Availability v : vv) {
-      if (v.isVerfuegbar()) {
-        return true;
-      }
-    }
-    return false;
+  public void setContestList(List<Contest> contestList) {
+    this.contestList = contestList;
   }
 
   @XmlTransient
-  public List<Availability> getVerfuegbarkeitList() {
-    return verfuegbarkeitList;
+  public List<Allocation> getAllocationList() {
+    return allocationList;
   }
 
-  private void setVerfuegbarkeitList(List<Availability> verfuegbarkeitList) {
-    this.verfuegbarkeitList = verfuegbarkeitList;
+  public void setAllocationList(List<Allocation> allocationList) {
+    this.allocationList = allocationList;
   }
 
-  /**
-   * Adds a Availability to this person.
-   *
-   * This method is protected, use {@link Availability#setPersonid() }
-   *
-   * @param v a new Availability record. It is assumed that this record is not
-   * assigned to an other person.
-   */
-  protected void addVerfuegbarkeit(Availability v) {
-    assert (v != null);
-    if (verfuegbarkeitList == null) {
-      throw new RuntimeException("Cannot add Verfügbarkeit. Record must be persited");
-    }
-    if (verfuegbarkeitList.contains(v)) {
-      return;
-    }
-    if (v.getPersonid() != this) {
-      throw new RuntimeException("Cannot add Verfügbarkeit used for other person.");
-    }
-    verfuegbarkeitList.add(v);
-    firePropertyChange(PROP_VERFUEGBARKEIT, null, v.identity());
+  public Team getTeam() {
+    return team;
   }
 
-  protected void removeVerfuegbarkeit(Availability v) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//  public void setTeam(Team value) {
+//    this.team = value;
+//  }
+  public JobType getJobtype() {
+    return jobType;
   }
 
+//  public void setJobtype(JobType value) {
+//    this.jobType = value;
+//  }
+//  public ContestType getContestType() {
+//    return contestType;
+//  }
+//  public void setContestType(ContestType value) {
+//    this.contestType = value;
+//  }
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (personid != null ? personid.hashCode() : 0);
+    hash += (personId != null ? personId.hashCode() : 0);
     return hash;
   }
 
@@ -535,7 +344,7 @@ public class Person implements Serializable, DbEntity {
       return false;
     }
     Person other = (Person) object;
-    if ((this.personid == null && other.personid != null) || (this.personid != null && !this.personid.equals(other.personid))) {
+    if ((this.personId == null && other.personId != null) || (this.personId != null && !this.personId.equals(other.personId))) {
       return false;
     }
     return true;
@@ -543,43 +352,20 @@ public class Person implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    if (getFamilienname() != null) {
-      return String.format("%s, %s", getFamilienname(), getVorname());
-    } else {
-      return String.format("Person[%s]", getPersonid());
-    }
+    return "testDb.Person[ personId=" + personId + " ]";
   }
 
-  /**
-   * Add a PropertyChangeListener for the entity represented by this instance.
-   *
-   * @param listener
-   */
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    addPropertyChangeListener(listener, this.personid);
+    addPropertyChangeListener(listener, this.personId);
   }
 
-  /**
-   * Add a PropertyChangeListener for the entity represented by this
-   * <em>Class</em>
-   * and the given primary key.
-   *
-   * @param listener
-   * @param personid
-   */
-  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer personid) {
+  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer personId) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Person.class, personid));
+            new EntityIdentity(Person.class, personId));
   }
 
-  /**
-   * Remove a PropertyChangeListener for the entity represented by this
-   * instance.
-   *
-   * @param listener
-   */
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    removePropertyChangeListener(listener, this.personid);
+    removePropertyChangeListener(listener, this.personId);
   }
 
   /**
@@ -588,75 +374,21 @@ public class Person implements Serializable, DbEntity {
    * and the given primary key.
    *
    * @param listener
-   * @param personid
+   * @param personId
    */
-  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer personid) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer personId) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Person.class, personid));
-
+            new EntityIdentity(Person.class, personId));
   }
 
   private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
     PropertyChangeManager.instance().firePropertyChange(
-            new EntityIdentity(getClass(), personid),
+            identity(),
             propertyName, oldValue, newValue);
   }
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Person.class, personid);
-  }
-
-  @Deprecated
-  private void removeGroupmember(Person p) {
-    assert (p != null);
-    if (personenList == null) {
-      throw new RuntimeException("Cannot remove Person from Group-list. Record must be persited");
-    }
-    if (!personenList.contains(p)) {
-      return;
-    }
-    personenList.remove(p);
-
-    firePropertyChange(PROP_REMOVE_GROUPMEMBER, p.identity(), null);
-  }
-
-  @Deprecated
-  private void addGroupmember(Person p) {
-    assert (p != null);
-    if (personenList == null) {
-      throw new RuntimeException("Cannot add Person to Group-list. Record must be persited");
-    }
-    if (personenList.contains(p)) {
-      return;
-    }
-    if (p.getGewuenschterkollege() != this) {
-      throw new RuntimeException("Cannot add Person to Group-list favoring an other group-list.");
-    }
-    personenList.add(p);
-    firePropertyChange(PROP_ADD_GROUPMEMBER, null, p.identity());
-  }
-
-  public Team getTeam() {
-    return team;
-  }
-
-  public void setTeam(Team team) {
-
-    Team old = this.team;
-    this.team = team;
-
-    EntityIdentity newId = (team == null) ? null : team.identity();
-    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(oldId, newId)) {
-      firePropertyChange(PROP_TEAMMEMBER, oldId, newId);
-      if (old != null) {
-        old.removePerson(this);
-      }
-      if (team != null) {
-        team.addPerson(this);
-      }
-    }
+    return new EntityIdentity(Person.class, personId);
   }
 }

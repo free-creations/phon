@@ -18,6 +18,7 @@ package de.free_creations.dbEntities;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +29,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -39,23 +41,25 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "TEAM")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Team.findAll", query = "SELECT c FROM Team c"),
-  @NamedQuery(name = "Team.findByTeam", query = "SELECT c FROM Team c WHERE c.teamId = :team"),
-  @NamedQuery(name = "Team.findByName", query = "SELECT c FROM Team c WHERE c.name = :name")})
+  @NamedQuery(name = "Team.findAll", query = "SELECT t FROM Team t"),
+  @NamedQuery(name = "Team.findByTeamId", query = "SELECT t FROM Team t WHERE t.teamId = :teamId"),
+  @NamedQuery(name = "Team.findByName", query = "SELECT t FROM Team t WHERE t.name = :name")})
 public class Team implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
-  @Column(name = "TEAM")
+  @Column(name = "TEAMID")
   private Integer teamId;
   @Column(name = "NAME")
   private String name;
-  @OneToMany(mappedBy = "team")
+  //@OneToMany(mappedBy = "team")
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
   private List<Person> personList;
   public static final String PROP_ADD_PERSON = "addPerson";
   public static final String PROP_REMOVE_PERSON = "removePerson";
+  public static final String PROP_NAME = "PROP_NAME";
 
   public Team() {
   }
@@ -77,7 +81,11 @@ public class Team implements Serializable, DbEntity {
   }
 
   public void setName(String name) {
+    String old = this.name;
     this.name = name;
+    if (!Objects.equals(old, name)) {
+      firePropertyChange(PROP_NAME, old, name);
+    }
   }
 
   @XmlTransient
@@ -108,8 +116,8 @@ public class Team implements Serializable, DbEntity {
     personList.add(p);
     firePropertyChange(PROP_ADD_PERSON, null, p.identity());
   }
-  
-    /**
+
+  /**
    * Removes a person from the list of persons who want to be assigned to this
    * function.
    *

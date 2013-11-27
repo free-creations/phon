@@ -32,6 +32,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -42,143 +43,88 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "AVAILABILITY")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Availability.findAll", query = "SELECT v FROM Availability v"),
-  @NamedQuery(name = "Availability.findByVerfuegid", query = "SELECT v FROM Availability v WHERE v.verfuegid = :verfuegid"),
-  @NamedQuery(name = "Availability.findByVerfuegbar", query = "SELECT v FROM Availability v WHERE v.verfuegbar = :verfuegbar"),
-  @NamedQuery(name = "Availability.findByLetzteaenderung", query = "SELECT v FROM Availability v WHERE v.letzteaenderung = :letzteaenderung")})
-public class Availability implements Serializable , DbEntity {
+  @NamedQuery(name = "Availability.findAll", query = "SELECT a FROM Availability a"),
+  @NamedQuery(name = "Availability.findByAvailabilityId", query = "SELECT a FROM Availability a WHERE a.availabilityId = :availabilityId"),
+  @NamedQuery(name = "Availability.findByAvailable", query = "SELECT a FROM Availability a WHERE a.available = :available"),
+  @NamedQuery(name = "Availability.findByLastchange", query = "SELECT a FROM Availability a WHERE a.lastchange = :lastchange")})
+public class Availability implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
-  @Column(name = "VERFUEGID")
-  private Integer verfuegid;
-  @Column(name = "VERFUEGBAR")
-  private Integer verfuegbar;
-  @Column(name = "LETZTEAENDERUNG")
+  @Column(name = "AVAILABILITYID")
+  private Integer availabilityId;
+  @Column(name = "AVAILABLE")
+  private Integer available;
+  @Column(name = "LASTCHANGE")
   @Temporal(TemporalType.TIMESTAMP)
-  private Date letzteaenderung;
-  private final static String PROP_ZEIT = "zeit";
-  @JoinColumn(name = "ZEITID", referencedColumnName = "ZEITID")
+  private Date lastchange;
+  @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
   @ManyToOne(optional = false)
-  private TimeSlot zeitid;
-  final private static String PROP_PERSON = "person";
-  @JoinColumn(name = "PERSONID", referencedColumnName = "PERSONID")
-  @ManyToOne(optional = false)
-  private Person personid;
+  private TimeSlot timeSlot;
+//  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
+//  @ManyToOne(optional = false)
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private Person person;
+  public static final String PROP_AVAILABLE = "PROP_AVAILABLE";
 
   public Availability() {
   }
 
-  public Availability(Integer verfuegid) {
-    this.verfuegid = verfuegid;
+  public Availability(Integer availabilityId) {
+    this.availabilityId = availabilityId;
   }
 
-  public Integer getVerfuegid() {
-    return verfuegid;
+  public Integer getAvailabilityId() {
+    return availabilityId;
   }
 
-  public void setVerfuegid(Integer verfuegid) {
-    this.verfuegid = verfuegid;
-  }
-
-  public Integer getVerfuegbar() {
-    return verfuegbar;
-  }
-
-  /**
-   * 
-   * @return true if the person is available for the given time
-   */
-  public boolean isVerfuegbar() {
-    return (verfuegbar == null) ? false : verfuegbar != 0;
-  }
-
-  public void setVerfuegbar(Integer verfuegbar) {
-    Integer old = this.verfuegbar;
-    this.verfuegbar = verfuegbar;
-    if (!Objects.equals(old, verfuegbar)) {
-      firePropertyChangeOnSelf(Person.PROP_VERFUEGBARKEIT, old, verfuegbar);
-      if (personid != null) {
-        firePropertyChangeOnPerson(personid.getPersonid(), Person.PROP_VERFUEGBARKEIT, old, verfuegbar);
-      }
-    }
-  }
-
-  public void setVerfuegbar(boolean isVerfuegbar) {
-    if (isVerfuegbar) {
-      setVerfuegbar(1);
+  public boolean isAvailable() {
+    if (available == null) {
+      return false;
     } else {
-      setVerfuegbar(0);
+      return !available.equals(0);
+    }
+
+  }
+
+  public void setAvailable(boolean value) {
+    if (isAvailable() != value) {
+      boolean old = isAvailable();
+      this.available = value ? 1 : 0;
+      firePropertyChange(PROP_AVAILABLE, old, value);
     }
   }
 
-  public Date getLetzteaenderung() {
-    return letzteaenderung;
+  public Date getLastchange() {
+    return lastchange;
   }
 
-  public void setLetzteaenderung(Date letzteaenderung) {
-    this.letzteaenderung = letzteaenderung;
+  public void setLastchange(Date lastchange) {
+    this.lastchange = lastchange;
   }
 
-  public TimeSlot getZeitid() {
-    return zeitid;
+  public TimeSlot getTimeSlot() {
+    return timeSlot;
   }
 
-  /**
-   * Set the time-slot for which this disponibility record holds.
-   * @param zeitid 
-   */
-  public void setZeitid(TimeSlot zeitid) {
-    TimeSlot old = this.zeitid;
-    this.zeitid = zeitid;
-    EntityIdentity newId = (zeitid == null) ? null : zeitid.identity();
-    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(old, zeitid)) {
-      firePropertyChangeOnSelf(Availability.PROP_ZEIT, oldId, newId);
-      if (old != null) {
-        old.removeVerfuegbarkeit(this);
-      }
-      if (zeitid != null) {
-        zeitid.addVerfuegbarkeit(this);
-      }
-    }
+  public void setTimeSlot(TimeSlot timeSlot) {
+    this.timeSlot = timeSlot;
   }
 
-  public Person getPersonid() {
-    return personid;
+  public Person getPerson() {
+    return person;
   }
 
-  /**
-   * Note: before deleting an existing "VERFUEGBARKEIT" record, set the foreign
-   * key "person" to null. This will ensure that the Person entity is informed
-   * about the property change.
-   *
-   * @param person
-   */
-  public void setPersonid(Person person) {
-    Person old = this.personid;
-    this.personid = person;
-    EntityIdentity newId = (person == null) ? null : person.identity();
-    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(old, person)) {
-      firePropertyChangeOnSelf(Availability.PROP_PERSON, oldId, newId);
-      if (old != null) {
-        old.removeVerfuegbarkeit(this);
-      }
-      if (person != null) {
-        person.addVerfuegbarkeit(this);
-      }
-    }
+  public void setPerson(Person person) {
+    this.person = person;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (verfuegid != null ? verfuegid.hashCode() : 0);
+    hash += (availabilityId != null ? availabilityId.hashCode() : 0);
     return hash;
   }
 
@@ -189,7 +135,7 @@ public class Availability implements Serializable , DbEntity {
       return false;
     }
     Availability other = (Availability) object;
-    if ((this.verfuegid == null && other.verfuegid != null) || (this.verfuegid != null && !this.verfuegid.equals(other.verfuegid))) {
+    if ((this.availabilityId == null && other.availabilityId != null) || (this.availabilityId != null && !this.availabilityId.equals(other.availabilityId))) {
       return false;
     }
     return true;
@@ -197,44 +143,43 @@ public class Availability implements Serializable , DbEntity {
 
   @Override
   public String toString() {
-    return "de.free_creations.dbEntities.Availability[ verfuegid=" + verfuegid + " ]";
+    return "testDb.Availability[ availabilityId=" + availabilityId + " ]";
   }
 
-  /**
-   * Add PropertyChangeListener.
-   *
-   * @param listener property change listener
-   */
   public void addPropertyChangeListener(PropertyChangeListener listener) {
+    addPropertyChangeListener(listener, this.availabilityId);
+  }
+
+  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer availabilityId) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(getClass(), verfuegid));
+            new EntityIdentity(Availability.class, availabilityId));
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    removePropertyChangeListener(listener, this.availabilityId);
   }
 
   /**
-   * Remove PropertyChangeListener.
+   * Remove a PropertyChangeListener for the entity represented by this
+   * <em>Class</em>
+   * and the given primary key.
    *
-   * @param listener property change listener
+   * @param listener
+   * @param availabilityId
    */
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer availabilityId) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(getClass(), verfuegid));
-
+            new EntityIdentity(Availability.class, availabilityId));
   }
 
-  private void firePropertyChangeOnSelf(String propertyName, Object oldValue, Object newValue) {
+  private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
     PropertyChangeManager.instance().firePropertyChange(
-            new EntityIdentity(getClass(), verfuegid),
-            propertyName, oldValue, newValue);
-  }
-
-  private void firePropertyChangeOnPerson(Integer personenId, String propertyName, Object oldValue, Object newValue) {
-    PropertyChangeManager.instance().firePropertyChange(
-            new EntityIdentity(Person.class, personenId),
+            identity(),
             propertyName, oldValue, newValue);
   }
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Availability.class, verfuegid);
+    return new EntityIdentity(Availability.class, availabilityId);
   }
 }

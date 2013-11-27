@@ -32,6 +32,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -43,16 +44,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CONTEST")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Contest.findAll", query = "SELECT j FROM Contest j"),
-  @NamedQuery(name = "Contest.findByJuryid", query = "SELECT j FROM Contest j WHERE j.contestid = :juryid"),
-  @NamedQuery(name = "Contest.findByWertungstyp", query = "SELECT j FROM Contest j WHERE j.wertungstyp = :wertungstyp"),
-  @NamedQuery(name = "Contest.findByWertung", query = "SELECT j FROM Contest j WHERE j.wertung = :wertung"),
-  @NamedQuery(name = "Contest.findByWertungsraum", query = "SELECT j FROM Contest j WHERE j.wertungsraum = :wertungsraum"),
-  @NamedQuery(name = "Contest.findByAustraggungsortplannr", query = "SELECT j FROM Contest j WHERE j.austraggungsortplannr = :austraggungsortplannr"),
-  @NamedQuery(name = "Contest.findByAustraggungsort", query = "SELECT j FROM Contest j WHERE j.austraggungsort = :austraggungsort"),
-  @NamedQuery(name = "Contest.findByZeitfreitag", query = "SELECT j FROM Contest j WHERE j.zeitfreitag = :zeitfreitag"),
-  @NamedQuery(name = "Contest.findByZeitsamstag", query = "SELECT j FROM Contest j WHERE j.zeitsamstag = :zeitsamstag"),
-  @NamedQuery(name = "Contest.findByZeitsonntag", query = "SELECT j FROM Contest j WHERE j.zeitsonntag = :zeitsonntag")})
+  @NamedQuery(name = "Contest.findAll", query = "SELECT c FROM Contest c"),
+  @NamedQuery(name = "Contest.findByContestId", query = "SELECT c FROM Contest c WHERE c.contestId = :contestId"),
+  @NamedQuery(name = "Contest.findByName", query = "SELECT c FROM Contest c WHERE c.name = :name")})
 public class Contest implements Serializable, DbEntity {
 
   private static final long serialVersionUID = 1L;
@@ -60,48 +54,32 @@ public class Contest implements Serializable, DbEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "CONTESTID")
-  private Integer contestid;
+  private Integer contestId;
   @Column(name = "NAME")
   private String name;
-  @Column(name = "WERTUNGSTYP")
-  private String wertungstyp;
-  @Column(name = "WERTUNG")
-  private String wertung;
-  @Column(name = "WERTUNGSRAUM")
-  private String wertungsraum;
-  @Column(name = "AUSTRAGGUNGSORTPLANNR")
-  private String austraggungsortplannr;
-  @Column(name = "AUSTRAGGUNGSORT")
-  private String austraggungsort;
-  @Column(name = "ZEITFREITAG")
-  private String zeitfreitag;
-  @Column(name = "ZEITSAMSTAG")
-  private String zeitsamstag;
-  @Column(name = "ZEITSONNTAG")
-  private String zeitsonntag;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "contestid")
-  private List<Allocation> teameinteilungList;
-  @JoinColumn(name = "VERANTWORTLICH", referencedColumnName = "PERSONID")
-  @ManyToOne
-  private Person verantwortlich;
-  public static final String PROP_WERUNGSTYP = "wertungstyp";
-  public static final String PROP_WERUNG = "wertung";
-  public static final String PROP_WERUNGSRAUM = "wertungsraum";
-  public static final String PROP_AUSTRAGUNGSORTPLANNR = "austraggungsortplannr";
-  public static final String PROP_AUSTRAGUNGSORT = "austraggungsort";
-  public static final String PROP_VERATWORTLICH = "verantwortlich";
-  public static final String PROP_ADD_TEAMEINTEILUNG = "addTeameinteilung";
-  public static final String PROP_REMOVE_TEAMEINTEILUNG = "removeTeameinteilung";
+  // @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
+  // @ManyToOne
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private Person person;
+  @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
+  @ManyToOne(optional = false)
+  private ContestType contestType;
+  //@OneToMany(cascade = CascadeType.ALL, mappedBy = "contest")
+  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  private List<Event> eventList;
+
+  public static final String PROP_NAME = "PROP_NAME";
+  public static final String PROP_CONTESTTYPE = "PROP_CONTESTTYPE";
 
   public Contest() {
   }
 
-  public Contest(int contestid) {
-    this.contestid = contestid;
+  public Contest(Integer contestId) {
+    this.contestId = contestId;
   }
 
-  public int getJuryid() {
-    return contestid;
+  public Integer getContestId() {
+    return contestId;
   }
 
   public String getName() {
@@ -109,174 +87,54 @@ public class Contest implements Serializable, DbEntity {
   }
 
   public void setName(String name) {
+    String old = this.name;
     this.name = name;
-  }
-
-//  public void setJuryid(String juryid) {
-//    this.juryid = juryid;
-//  }
-  public String getWertungstyp() {
-    return wertungstyp;
-  }
-
-  public void setWertungstyp(String wertungstyp) {
-    String old = this.wertungstyp;
-    this.wertungstyp = wertungstyp;
-    if (!Objects.equals(old, wertungstyp)) {
-      firePropertyChange(PROP_WERUNGSTYP, old, wertungstyp);
+    if (!Objects.equals(old, name)) {
+      firePropertyChange(PROP_NAME, old, name);
     }
   }
 
-  public String getWertung() {
-    return wertung;
+  public Person getPerson() {
+    return person;
   }
 
-  public void setWertung(String wertung) {
-    String old = this.wertung;
-    this.wertung = wertung;
-    if (!Objects.equals(old, wertung)) {
-      firePropertyChange(PROP_WERUNG, old, wertung);
+  public void setPerson(Person person) {
+    this.person = person;
+  }
+
+  public ContestType getContestType() {
+    return contestType;
+  }
+
+  public void setContestType(ContestType contestType) {
+    ContestType old = this.contestType;
+    this.contestType = contestType;
+    if (!Objects.equals(old, contestType)) {
+      if (old != null) {
+        old.removeContest(this);
+      }
+      if (contestType != null) {
+        contestType.addContest(this);
+      }
+      EntityIdentity newId = (contestType == null) ? null : contestType.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_CONTESTTYPE, oldId, newId);
     }
-  }
-
-  public String getWertungsraum() {
-    return wertungsraum;
-  }
-
-  public void setWertungsraum(String wertungsraum) {
-    String old = this.wertungsraum;
-    this.wertungsraum = wertungsraum;
-    if (!Objects.equals(old, wertungsraum)) {
-      firePropertyChange(PROP_WERUNGSRAUM, old, wertungsraum);
-    }
-  }
-
-  public String getAustraggungsortplannr() {
-    return austraggungsortplannr;
-
-  }
-
-  public void setAustraggungsortplannr(String austraggungsortplannr) {
-    String old = this.austraggungsortplannr;
-    this.austraggungsortplannr = austraggungsortplannr;
-    if (!Objects.equals(old, austraggungsortplannr)) {
-      firePropertyChange(PROP_AUSTRAGUNGSORTPLANNR, old, austraggungsortplannr);
-    }
-  }
-
-  public String getAustraggungsort() {
-    return austraggungsort;
-  }
-
-  public void setAustraggungsort(String austraggungsort) {
-    String old = this.austraggungsort;
-    this.austraggungsort = austraggungsort;
-    if (!Objects.equals(old, austraggungsort)) {
-      firePropertyChange(PROP_AUSTRAGUNGSORT, old, austraggungsort);
-    }
-  }
-
-  public String getZeitfreitag() {
-    return zeitfreitag;
-  }
-
-  public void setZeitfreitag(String zeitfreitag) {
-    /**
-     * @ToDo redesign
-     */
-    this.zeitfreitag = zeitfreitag;
-  }
-
-  public String getZeitsamstag() {
-    /**
-     * @ToDo redesign
-     */
-    return zeitsamstag;
-  }
-
-  public void setZeitsamstag(String zeitsamstag) {
-    /**
-     * @ToDo redesign
-     */
-    this.zeitsamstag = zeitsamstag;
-  }
-
-  public String getZeitsonntag() {
-    /**
-     * @ToDo redesign
-     */
-    return zeitsonntag;
-  }
-
-  public void setZeitsonntag(String zeitsonntag) {
-    /**
-     * @ToDo redesign
-     */
-    this.zeitsonntag = zeitsonntag;
   }
 
   @XmlTransient
-  public List<Allocation> getTeameinteilungList() {
-    return teameinteilungList;
+  public List<Event> getEventList() {
+    return eventList;
   }
 
-  protected void addTeameinteilung(Allocation t) {
-    assert (t != null);
-    if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot add a Allocation to this Contest. Record must be persited");
-    }
-    if (teameinteilungList.contains(t)) {
-      return;
-    }
-    if (t.getJury() != this) {
-      throw new RuntimeException("Cannot add Allocation for an other jury.");
-    }
-    teameinteilungList.add(t);
-    firePropertyChange(PROP_ADD_TEAMEINTEILUNG, null, t.identity());
-  }
-
-  protected void removeTeameinteilung(Allocation t) {
-    if (teameinteilungList == null) {
-      throw new RuntimeException("Cannot remove Allocation from Contest. Record must be persited");
-    }
-    if (!teameinteilungList.contains(t)) {
-      return;
-    }
-    teameinteilungList.remove(t);
-    assert (t != null);
-    firePropertyChange(PROP_REMOVE_TEAMEINTEILUNG, t.identity(), null);
-  }
-
-  protected void setTeameinteilungList(List<Allocation> teameinteilungList) {
-    this.teameinteilungList = teameinteilungList;
-  }
-
-  public Person getVerantwortlich() {
-    return verantwortlich;
-  }
-
-  public void setVerantwortlich(Person p) {
-    Person old = this.verantwortlich;
-    this.verantwortlich = p;
-
-    EntityIdentity newId = (p == null) ? null : p.identity();
-    EntityIdentity oldId = (old == null) ? null : old.identity();
-
-    if (!Objects.equals(oldId, newId)) {
-      firePropertyChange(PROP_VERATWORTLICH, oldId, newId);
-      if (old != null) {
-        old.removeJuryResponsability(this);
-      }
-      if (p != null) {
-        p.addJuryResponsability(this);
-      }
-    }
+  public void setEventList(List<Event> eventList) {
+    this.eventList = eventList;
   }
 
   @Override
   public int hashCode() {
     int hash = 0;
-    hash += (contestid != null ? contestid.hashCode() : 0);
+    hash += (contestId != null ? contestId.hashCode() : 0);
     return hash;
   }
 
@@ -287,7 +145,7 @@ public class Contest implements Serializable, DbEntity {
       return false;
     }
     Contest other = (Contest) object;
-    if ((this.contestid == null && other.contestid != null) || (this.contestid != null && !this.contestid.equals(other.contestid))) {
+    if ((this.contestId == null && other.contestId != null) || (this.contestId != null && !this.contestId.equals(other.contestId))) {
       return false;
     }
     return true;
@@ -295,20 +153,20 @@ public class Contest implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Contest[ juryid=" + contestid + " ]";
+    return "testDb.Contest[ contestId=" + contestId + " ]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    addPropertyChangeListener(listener, this.contestid);
+    addPropertyChangeListener(listener, this.contestId);
   }
 
-  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer juryid) {
+  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer contestId) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
-            new EntityIdentity(Contest.class, juryid));
+            new EntityIdentity(Contest.class, contestId));
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    removePropertyChangeListener(listener, this.contestid);
+    removePropertyChangeListener(listener, this.contestId);
   }
 
   /**
@@ -317,11 +175,11 @@ public class Contest implements Serializable, DbEntity {
    * and the given primary key.
    *
    * @param listener
-   * @param juryid
+   * @param contestId
    */
-  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer juryid) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer contestId) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
-            new EntityIdentity(Contest.class, juryid));
+            new EntityIdentity(Contest.class, contestId));
   }
 
   private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
@@ -332,6 +190,6 @@ public class Contest implements Serializable, DbEntity {
 
   @Override
   public EntityIdentity identity() {
-    return new EntityIdentity(Contest.class, contestid);
+    return new EntityIdentity(Contest.class, contestId);
   }
 }
