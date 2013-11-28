@@ -31,6 +31,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -98,8 +99,7 @@ public class Person implements Serializable, DbEntity {
   // @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
   @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
   private List<Availability> availabilityList;
-  // @OneToMany(mappedBy = "person")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(mappedBy = "person")
   private List<Contest> contestList;
   //@OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
   @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
@@ -126,6 +126,8 @@ public class Person implements Serializable, DbEntity {
   public static final String PROP_AGEGROUP = "PROP_AGEGROUP";
   public static final String PROP_NOTICE = "PROP_NOTICE";
   public static final String PROP_LASTCHANGE = "PROP_LASTCHANGE";
+  public static final String PROP_CONTESTREMOVED = "PROP_CONTESTREMOVED";
+  public static final String PROP_CONTESTADDED = "PROP_CONTESTADDED";
 
   public Person() {
   }
@@ -292,13 +294,14 @@ public class Person implements Serializable, DbEntity {
     this.availabilityList = availabilityList;
   }
 
+  /**
+   * Get the list of contests for which this person is responsible.
+   *
+   * @return
+   */
   @XmlTransient
   public List<Contest> getContestList() {
     return contestList;
-  }
-
-  public void setContestList(List<Contest> contestList) {
-    this.contestList = contestList;
   }
 
   @XmlTransient
@@ -390,5 +393,41 @@ public class Person implements Serializable, DbEntity {
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(Person.class, personId);
+  }
+
+  /**
+   * Remove a contest for which this person is responsible.
+   *
+   * @param c
+   */
+  protected void removeContest(Contest c) {
+    if (contestList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!contestList.contains(c)) {
+      return;
+    }
+    contestList.remove(c);
+    firePropertyChange(PROP_CONTESTREMOVED, c.identity(), null);
+  }
+
+  /**
+   * Add a contest for which this person is responsible.
+   *
+   * @param c
+   */
+  protected void addContest(Contest c) {
+    assert (c != null);
+    if (contestList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (contestList.contains(c)) {
+      return;
+    }
+    if (this != c.getPerson()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    contestList.add(c);
+    firePropertyChange(PROP_CONTESTADDED, null, c.identity());
   }
 }

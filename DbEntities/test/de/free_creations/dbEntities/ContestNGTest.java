@@ -136,4 +136,34 @@ public class ContestNGTest {
 
   }
 
+  @Test
+  public void testSetPerson() throws InterruptedException, InvocationTargetException {
+    Person testPerson = new Person();
+    Contest testItem = new Contest(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.persist(testItem);
+    entityManager.flush();
+    // verify that the one to many relations is correctly updated
+
+    testItem.setPerson(testPerson);
+    assertTrue(testPerson.getContestList().contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener contestListener = new TestListener();
+    testItem.addPropertyChangeListener(contestListener);
+    final TestListener personListener = new TestListener();
+    testPerson.addPropertyChangeListener(personListener);
+    
+    testItem.setPerson(null);
+    
+    assertFalse(testPerson.getContestList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(contestListener.called ,1);
+        assertEquals(personListener.called ,1);
+      }
+    });
+  }
+
 }

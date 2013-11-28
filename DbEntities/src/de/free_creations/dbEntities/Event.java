@@ -67,17 +67,22 @@ public class Event implements Serializable, DbEntity {
 //  @ManyToOne
   @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
   private Location location;
-//  @JoinColumn(name = "CONTEST", referencedColumnName = "CONTESTID")
-//  @ManyToOne(optional = false)
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "CONTEST", referencedColumnName = "CONTESTID")
+  @ManyToOne(optional = false)
   private Contest contest;
   public static final String PROP_CONFIRMED = "PROP_CONFIRMED";
 
-  public Event() {
+  protected Event() {
   }
 
-  public Event(Integer eventId) {
+  public Event(Integer eventId, Contest contest, TimeSlot timeSlot) {
+    this(contest, timeSlot);
     this.eventId = eventId;
+  }
+
+  public Event(Contest contest, TimeSlot timeSlot) {
+    setContest(contest);
+    setTimeSlot(timeSlot);
   }
 
   public Integer getEventId() {
@@ -113,7 +118,7 @@ public class Event implements Serializable, DbEntity {
     return timeSlot;
   }
 
-  public void setTimeSlot(TimeSlot timeSlot) {
+  public final void setTimeSlot(TimeSlot timeSlot) {
     this.timeSlot = timeSlot;
   }
 
@@ -129,7 +134,7 @@ public class Event implements Serializable, DbEntity {
     return contest;
   }
 
-  public void setContest(Contest contest) {
+  public final void setContest(Contest contest) {
     this.contest = contest;
   }
 

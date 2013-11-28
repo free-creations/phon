@@ -57,9 +57,8 @@ public class Contest implements Serializable, DbEntity {
   private Integer contestId;
   @Column(name = "NAME")
   private String name;
-  // @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
-  // @ManyToOne
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
+  @ManyToOne
   private Person person;
   @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
   @ManyToOne(optional = false)
@@ -70,6 +69,7 @@ public class Contest implements Serializable, DbEntity {
 
   public static final String PROP_NAME = "PROP_NAME";
   public static final String PROP_CONTESTTYPE = "PROP_CONTESTTYPE";
+  public static final String PROP_PERSON = "PROP_PERSON";
 
   public Contest() {
   }
@@ -98,8 +98,20 @@ public class Contest implements Serializable, DbEntity {
     return person;
   }
 
-  public void setPerson(Person person) {
-    this.person = person;
+  public void setPerson(Person newValue) {
+    Person old = this.person;
+    this.person = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeContest(this);
+      }
+      if (newValue != null) {
+        newValue.addContest(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_PERSON, oldId, newId);
+    }
   }
 
   public ContestType getContestType() {

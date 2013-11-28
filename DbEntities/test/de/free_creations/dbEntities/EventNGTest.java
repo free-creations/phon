@@ -101,7 +101,7 @@ public class EventNGTest {
   @Test
   public void testPropertyChangeCallback() throws InterruptedException, InvocationTargetException {
 
-    Event testItem = new Event(Integer.MAX_VALUE);
+    Event testItem = new Event(Integer.MAX_VALUE,null,null);
     final TestListener testListener = new TestListener();
     testItem.addPropertyChangeListener(testListener);
 
