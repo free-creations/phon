@@ -24,6 +24,7 @@ import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -96,8 +97,7 @@ public class Person implements Serializable, DbEntity {
   @Temporal(TemporalType.TIMESTAMP)
   private Date lastchange;
 
-  // @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
   private List<Availability> availabilityList;
   @OneToMany(mappedBy = "person")
   private List<Contest> contestList;
@@ -128,6 +128,8 @@ public class Person implements Serializable, DbEntity {
   public static final String PROP_LASTCHANGE = "PROP_LASTCHANGE";
   public static final String PROP_CONTESTREMOVED = "PROP_CONTESTREMOVED";
   public static final String PROP_CONTESTADDED = "PROP_CONTESTADDED";
+  public static final String PROP_AVAILABILITYREMOVED = "PROP_AVAILABILITYREMOVED";
+  public static final String PROP_AVAILABILITYADDED = "PROP_AVAILABILITYADDED";
 
   public Person() {
   }
@@ -429,5 +431,31 @@ public class Person implements Serializable, DbEntity {
     }
     contestList.add(c);
     firePropertyChange(PROP_CONTESTADDED, null, c.identity());
+  }
+
+  protected void removeAvailability(Availability a) {
+    if (availabilityList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!availabilityList.contains(a)) {
+      return;
+    }
+    availabilityList.remove(a);
+    firePropertyChange(PROP_AVAILABILITYREMOVED, a.identity(), null);
+  }
+
+  protected void addAvailability(Availability a) {
+    assert (a != null);
+    if (availabilityList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (availabilityList.contains(a)) {
+      return;
+    }
+    if (this != a.getPerson()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    availabilityList.add(a);
+    firePropertyChange(PROP_AVAILABILITYADDED, null, a.identity());
   }
 }

@@ -69,6 +69,8 @@ public class Contest implements Serializable, DbEntity {
   public static final String PROP_NAME = "PROP_NAME";
   public static final String PROP_CONTESTTYPE = "PROP_CONTESTTYPE";
   public static final String PROP_PERSON = "PROP_PERSON";
+  public static final String PROP_EVENTREMOVED = "PROP_EVENTREMOVED";
+  public static final String PROP_EVENTADDED = "PROP_EVENTADDED";
 
   public Contest() {
   }
@@ -202,5 +204,31 @@ public class Contest implements Serializable, DbEntity {
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(Contest.class, contestId);
+  }
+
+  protected void removeEvent(Event e) {
+    if (eventList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!eventList.contains(e)) {
+      return;
+    }
+    eventList.remove(e);
+    firePropertyChange(PROP_EVENTREMOVED, e.identity(), null);
+  }
+
+ protected void addEvent(Event e) {
+    assert (e != null);
+    if (eventList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (eventList.contains(e)) {
+      return;
+    }
+    if (this != e.getContest()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    eventList.add(e);
+    firePropertyChange(PROP_EVENTADDED, null, e.identity());
   }
 }

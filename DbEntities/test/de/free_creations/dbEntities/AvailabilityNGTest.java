@@ -54,7 +54,6 @@ public class AvailabilityNGTest {
 
   private Availability testAvailability;
 
-
   @BeforeClass
   public static void setUpClass() throws Exception {
     try {
@@ -84,7 +83,6 @@ public class AvailabilityNGTest {
 
     // the first item will be used for further testing (we assume that a suitable test-database is used)
     testAvailability = aa.get(0);
-
 
   }
 
@@ -119,5 +117,66 @@ public class AvailabilityNGTest {
     });
   }
 
+  @Test
+  public void testSetPerson() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations is correctly updated
+    Availability testItem = new Availability(Integer.MAX_VALUE);
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.flush();
+
+    testItem.setPerson(testPerson);
+    List<Availability> availabilityList = testPerson.getAvailabilityList();
+    assertNotNull(availabilityList);
+    assertTrue(availabilityList.contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener availabilityListener = new TestListener();
+    testItem.addPropertyChangeListener(availabilityListener);
+    final TestListener locationListener = new TestListener();
+    testPerson.addPropertyChangeListener(locationListener);
+
+    testItem.setPerson(null);
+
+    assertFalse(testPerson.getAvailabilityList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(availabilityListener.called, 1);
+        assertEquals(locationListener.called, 1);
+      }
+    });
+  }
+
+  @Test
+  public void testSetTimeSlot() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations is correctly updated
+    Availability testItem = new Availability(Integer.MAX_VALUE);
+    TimeSlot testTimeSlot = new TimeSlot(Integer.MAX_VALUE);
+    entityManager.persist(testTimeSlot);
+    entityManager.flush();
+
+    testItem.setTimeSlot(testTimeSlot);
+    List<Availability> availabilityList = testTimeSlot.getAvailabilityList();
+    assertNotNull(availabilityList);
+    assertTrue(availabilityList.contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener availabilityListener = new TestListener();
+    testItem.addPropertyChangeListener(availabilityListener);
+    final TestListener locationListener = new TestListener();
+    testTimeSlot.addPropertyChangeListener(locationListener);
+
+    testItem.setTimeSlot(null);
+
+    assertFalse(testTimeSlot.getAvailabilityList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(availabilityListener.called, 1);
+        assertEquals(locationListener.called, 1);
+      }
+    });
+  }
 
 }

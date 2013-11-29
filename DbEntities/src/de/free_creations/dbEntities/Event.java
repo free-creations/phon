@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Event.findByEventId", query = "SELECT e FROM Event e WHERE e.eventId = :eventId"),
   @NamedQuery(name = "Event.findByScheduled", query = "SELECT e FROM Event e WHERE e.scheduled = :scheduled")})
 public class Event implements Serializable, DbEntity {
-  
+
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,9 +61,8 @@ public class Event implements Serializable, DbEntity {
 //  @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
   @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
   private List<Allocation> allocationList;
-//  @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
-//  @ManyToOne(optional = false)
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
+  @ManyToOne(optional = false)
   private TimeSlot timeSlot;
   @JoinColumn(name = "LOCATION", referencedColumnName = "LOCATIONID")
   @ManyToOne
@@ -73,39 +72,38 @@ public class Event implements Serializable, DbEntity {
   private Contest contest;
   public static final String PROP_SCHEDULED = "PROP_CONFIRMED";
   public static final String PROP_LOCATION = "PROP_LOCATION";
-  
+  public static final String PROP_CONTEST = "PROP_CONTEST";
+
   protected Event() {
   }
-  
+
   protected Event(Integer eventId, Contest contest, TimeSlot timeSlot) {
     this(contest, timeSlot);
     this.eventId = eventId;
   }
-  
+
   protected Event(Contest contest, TimeSlot timeSlot) {
     setContest(contest);
     setTimeSlot(timeSlot);
   }
-  
+
   public static Event newEvent(EntityManager entityManager, Contest contest, TimeSlot timeSlot) {
     assert (entityManager != null);
     assert (contest != null);
     assert (timeSlot != null);
     assert (entityManager.contains(contest));
     assert (entityManager.contains(timeSlot));
-    
+
     Event newEvent = new Event(contest, timeSlot);
     entityManager.persist(newEvent);
     entityManager.flush();
     return newEvent;
   }
-  
 
-  
   public Integer getEventId() {
     return eventId;
   }
-  
+
   public boolean isScheduled() {
     if (scheduled == null) {
       return false;
@@ -113,7 +111,7 @@ public class Event implements Serializable, DbEntity {
       return !scheduled.equals(0);
     }
   }
-  
+
   public void setScheduled(boolean value) {
     if (isScheduled() != value) {
       boolean old = isScheduled();
@@ -121,28 +119,24 @@ public class Event implements Serializable, DbEntity {
       firePropertyChange(PROP_SCHEDULED, old, value);
     }
   }
-  
+
   @XmlTransient
   public List<Allocation> getAllocationList() {
     return allocationList;
   }
-  
+
   public void setAllocationList(List<Allocation> allocationList) {
     this.allocationList = allocationList;
   }
-  
+
   public TimeSlot getTimeSlot() {
     return timeSlot;
   }
-  
-  public final void setTimeSlot(TimeSlot timeSlot) {
-    this.timeSlot = timeSlot;
-  }
-  
+
   public Location getLocation() {
     return location;
   }
-  
+
   public void setLocation(Location newValue) {
     Location old = this.location;
     this.location = newValue;
@@ -158,22 +152,50 @@ public class Event implements Serializable, DbEntity {
       firePropertyChange(PROP_LOCATION, oldId, newId);
     }
   }
-  
+
+  public final void setContest(Contest newValue) {
+    Contest old = this.contest;
+    this.contest = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeEvent(this);
+      }
+      if (newValue != null) {
+        newValue.addEvent(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_CONTEST, oldId, newId);
+    }
+  }
+
+  public final void setTimeSlot(TimeSlot newValue) {
+    TimeSlot old = this.timeSlot;
+    this.timeSlot = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeEvent(this);
+      }
+      if (newValue != null) {
+        newValue.addEvent(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_CONTEST, oldId, newId);
+    }
+  }
+
   public Contest getContest() {
     return contest;
   }
-  
-  public final void setContest(Contest contest) {
-    this.contest = contest;
-  }
-  
+
   @Override
   public int hashCode() {
     int hash = 0;
     hash += (eventId != null ? eventId.hashCode() : 0);
     return hash;
   }
-  
+
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
@@ -186,21 +208,21 @@ public class Event implements Serializable, DbEntity {
     }
     return true;
   }
-  
+
   @Override
   public String toString() {
     return "testDb.Event[ eventId=" + eventId + " ]";
   }
-  
+
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     addPropertyChangeListener(listener, this.eventId);
   }
-  
+
   public static void addPropertyChangeListener(PropertyChangeListener listener, Integer eventId) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
             new EntityIdentity(Event.class, eventId));
   }
-  
+
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     removePropertyChangeListener(listener, this.eventId);
   }
@@ -217,13 +239,13 @@ public class Event implements Serializable, DbEntity {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
             new EntityIdentity(Event.class, eventId));
   }
-  
+
   private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
     PropertyChangeManager.instance().firePropertyChange(
             identity(),
             propertyName, oldValue, newValue);
   }
-  
+
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(Event.class, eventId);

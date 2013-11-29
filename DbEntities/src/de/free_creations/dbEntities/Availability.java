@@ -63,11 +63,12 @@ public class Availability implements Serializable, DbEntity {
   @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
   @ManyToOne(optional = false)
   private TimeSlot timeSlot;
-//  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
-//  @ManyToOne(optional = false)
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
+  @ManyToOne(optional = false)
   private Person person;
   public static final String PROP_AVAILABLE = "PROP_AVAILABLE";
+  public static final String PROP_PERSON = "PROP_PERSON";
+  public static final String PROP_TIMESLOT = "PROP_TIMESLOT";
 
   public Availability() {
   }
@@ -109,16 +110,40 @@ public class Availability implements Serializable, DbEntity {
     return timeSlot;
   }
 
-  public void setTimeSlot(TimeSlot timeSlot) {
-    this.timeSlot = timeSlot;
+ public final void setTimeSlot(TimeSlot newValue) {
+    TimeSlot old = this.timeSlot;
+    this.timeSlot = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeAvailability(this);
+      }
+      if (newValue != null) {
+        newValue.addAvailability(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_TIMESLOT, oldId, newId);
+    }
   }
 
   public Person getPerson() {
     return person;
   }
 
-  public void setPerson(Person person) {
-    this.person = person;
+  public final void setPerson(Person newValue) {
+    Person old = this.person;
+    this.person = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeAvailability(this);
+      }
+      if (newValue != null) {
+        newValue.addAvailability(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_PERSON, oldId, newId);
+    }
   }
 
   @Override

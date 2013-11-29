@@ -51,8 +51,7 @@ public class EventNGTest {
   private static EntityManager entityManager = null;
 
   private Event testEvent;
-  private Contest testContest;
-  private TimeSlot testTimeSlot;
+
 
   @BeforeClass
   public static void setUpClass() throws Exception {
@@ -83,15 +82,7 @@ public class EventNGTest {
 
     // the first item will be used for further testing (we assume that a suitable test-database is used)
     testEvent = ee.get(0);
-    // verify that the many to one reations are correctly implemented (we assume that a suitable test-database is used)
-    testContest = testEvent.getContest();
-    assertNotNull(testContest);
-    List<Event> eventList = testContest.getEventList();
-    assertNotNull(eventList);
-    assertTrue(eventList.contains(testEvent));
 
-//    testTimeSlot = testEvent.getTimeSlot();
-//    assertNotNull(testTimeSlot);
   }
 
   @AfterMethod
@@ -126,7 +117,7 @@ public class EventNGTest {
   }
 
   @Test
-  public void testSetLocationType() throws InterruptedException, InvocationTargetException {
+  public void testSetLocation() throws InterruptedException, InvocationTargetException {
     // verify that the one to many relations is correctly updated
     Event testItem = new Event(Integer.MAX_VALUE, null, null);
     Location testLocation = new Location(Integer.MAX_VALUE);
@@ -155,6 +146,68 @@ public class EventNGTest {
       }
     });
 
+  }
+
+  @Test
+  public void testSetContest() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations is correctly updated
+    Event testItem = new Event(Integer.MAX_VALUE, null, null);
+    Contest testContest = new Contest(Integer.MAX_VALUE);
+    entityManager.persist(testContest);
+    entityManager.flush();
+
+    testItem.setContest(testContest);
+    List<Event> eventList = testContest.getEventList();
+    assertNotNull(eventList);
+    assertTrue(eventList.contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener eventListener = new TestListener();
+    testItem.addPropertyChangeListener(eventListener);
+    final TestListener locationListener = new TestListener();
+    testContest.addPropertyChangeListener(locationListener);
+
+    testItem.setContest(null);
+
+    assertFalse(testContest.getEventList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(eventListener.called, 1);
+        assertEquals(locationListener.called, 1);
+      }
+    });
+  }
+
+  @Test
+  public void testSetTimeSlot() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations is correctly updated
+    Event testItem = new Event(Integer.MAX_VALUE, null, null);
+    TimeSlot testTimeSlot = new TimeSlot(Integer.MAX_VALUE);
+    entityManager.persist(testTimeSlot);
+    entityManager.flush();
+
+    testItem.setTimeSlot(testTimeSlot);
+    List<Event> eventList = testTimeSlot.getEventList();
+    assertNotNull(eventList);
+    assertTrue(eventList.contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener eventListener = new TestListener();
+    testItem.addPropertyChangeListener(eventListener);
+    final TestListener locationListener = new TestListener();
+    testTimeSlot.addPropertyChangeListener(locationListener);
+
+    testItem.setTimeSlot(null);
+
+    assertFalse(testTimeSlot.getEventList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(eventListener.called, 1);
+        assertEquals(locationListener.called, 1);
+      }
+    });
   }
 
 }

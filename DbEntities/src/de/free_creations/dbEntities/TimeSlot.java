@@ -79,12 +79,14 @@ public class TimeSlot implements Serializable, DbEntity {
   private String label;
   @Column(name = "TIMEOFDAYPRINT")
   private String timeOfDayPrint;
-  //@OneToMany(cascade = CascadeType.ALL, mappedBy = "timeSlot")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "timeSlot")
   private List<Availability> availabilityList;
-  //@OneToMany(cascade = CascadeType.ALL, mappedBy = "timeSlot")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "timeSlot")
   private List<Event> eventList;
+  public static final String PROP_EVENTREMOVED = "PROP_EVENTREMOVED";
+  public static final String PROP_EVENTADDED = "PROP_EVENTADDED";
+  public static final String PROP_AVAILABILITYREMOVED = "PROP_AVAILABILITYREMOVED";
+  public static final String PROP_AVAILABILITYADDED = "PROP_AVAILABILITYADDED";
 
   public TimeSlot() {
   }
@@ -101,61 +103,43 @@ public class TimeSlot implements Serializable, DbEntity {
     return dayIdx;
   }
 
-
-
   public Integer getTimeOfDayIdx() {
     return timeOfDayIdx;
   }
-
 
   public Date getDatum() {
     return datum;
   }
 
-
   public Date getStartTime() {
     return startTime;
   }
-
-
 
   public Date getEndTime() {
     return endTime;
   }
 
-
-
   public String getDayOfWeek() {
     return dayOfWeek;
   }
-
-
 
   public String getLabel() {
     return label;
   }
 
-
-
   public String getTimeOfDayPrint() {
     return timeOfDayPrint;
   }
-
-
 
   @XmlTransient
   public List<Availability> getAvailabilityList() {
     return availabilityList;
   }
 
-
-
   @XmlTransient
   public List<Event> getEventList() {
     return eventList;
   }
-
-
 
   @Override
   public int hashCode() {
@@ -210,5 +194,57 @@ public class TimeSlot implements Serializable, DbEntity {
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(TimeSlot.class, timeSlotId);
+  }
+
+  protected void removeEvent(Event e) {
+    if (eventList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!eventList.contains(e)) {
+      return;
+    }
+    eventList.remove(e);
+    firePropertyChange(PROP_EVENTREMOVED, e.identity(), null);
+  }
+
+  protected void addEvent(Event e) {
+    assert (e != null);
+    if (eventList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (eventList.contains(e)) {
+      return;
+    }
+    if (this != e.getTimeSlot()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    eventList.add(e);
+    firePropertyChange(PROP_EVENTADDED, null, e.identity());
+  }
+
+  void removeAvailability(Availability a) {
+    if (availabilityList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!availabilityList.contains(a)) {
+      return;
+    }
+    availabilityList.remove(a);
+    firePropertyChange(PROP_AVAILABILITYREMOVED, a.identity(), null);
+  }
+
+  void addAvailability(Availability a) {
+    assert (a != null);
+    if (availabilityList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (availabilityList.contains(a)) {
+      return;
+    }
+    if (this != a.getTimeSlot()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    availabilityList.add(a);
+    firePropertyChange(PROP_AVAILABILITYADDED, null, a.identity());
   }
 }
