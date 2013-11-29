@@ -69,16 +69,16 @@ public class Location implements Serializable, DbEntity {
   private String town;
   @Column(name = "GRIDNUMBER")
   private String gridnumber;
-  // @OneToMany(mappedBy = "location")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(mappedBy = "location")
   private List<Event> eventList;
   public static final String PROP_NAME = "PROP_NAME";
-  public static final  String PROP_BUILDING = "PROP_BUILDING";
-  public static final  String PROP_STREET = "PROP_STREET";
-  public static final  String PROP_TOWN = "PROP_TOWN";
-  public static final  String PROP_GRIDNUMBER = "PROP_GRIDNUMBER";
-  public static final  String PROP_ROOM = "PROP_ROOM";
-
+  public static final String PROP_BUILDING = "PROP_BUILDING";
+  public static final String PROP_STREET = "PROP_STREET";
+  public static final String PROP_TOWN = "PROP_TOWN";
+  public static final String PROP_GRIDNUMBER = "PROP_GRIDNUMBER";
+  public static final String PROP_ROOM = "PROP_ROOM";
+  public static final String PROP_EVENTREMOVED = "PROP_EVENTREMOVED";
+  public static final String PROP_EVENTADDED = "PROP_EVENTADDED";
 
   public Location() {
   }
@@ -232,6 +232,32 @@ public class Location implements Serializable, DbEntity {
   @Override
   public String toString() {
     return "testDb.Location[ locationid=" + locationId + " ]";
+  }
+
+  void removeEvent(Event e) {
+    if (eventList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!eventList.contains(e)) {
+      return;
+    }
+    eventList.remove(e);
+    firePropertyChange(PROP_EVENTREMOVED, e.identity(), null);
+  }
+
+  void addEvent(Event e) {
+    assert (e != null);
+    if (eventList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (eventList.contains(e)) {
+      return;
+    }
+    if (this != e.getLocation()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    eventList.add(e);
+    firePropertyChange(PROP_EVENTADDED, null, e.identity());
   }
 
 }

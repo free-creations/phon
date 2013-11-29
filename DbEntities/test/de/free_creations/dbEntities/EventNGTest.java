@@ -51,6 +51,8 @@ public class EventNGTest {
   private static EntityManager entityManager = null;
 
   private Event testEvent;
+  private Contest testContest;
+  private TimeSlot testTimeSlot;
 
   @BeforeClass
   public static void setUpClass() throws Exception {
@@ -75,13 +77,21 @@ public class EventNGTest {
     entityManager.getTransaction().begin();
     // verify that we can retrieve the enties from the database (we assume that a suitable test-database is used)
     TypedQuery<Event> q = entityManager.createNamedQuery("Event.findAll", Event.class);
-    List<Event> aa = q.getResultList();
-    assertNotNull(aa);
-    assertFalse(aa.isEmpty());
+    List<Event> ee = q.getResultList();
+    assertNotNull(ee);
+    assertFalse(ee.isEmpty());
 
     // the first item will be used for further testing (we assume that a suitable test-database is used)
-    testEvent = aa.get(0);
+    testEvent = ee.get(0);
+    // verify that the many to one reations are correctly implemented (we assume that a suitable test-database is used)
+    testContest = testEvent.getContest();
+    assertNotNull(testContest);
+    List<Event> eventList = testContest.getEventList();
+    assertNotNull(eventList);
+    assertTrue(eventList.contains(testEvent));
 
+//    testTimeSlot = testEvent.getTimeSlot();
+//    assertNotNull(testTimeSlot);
   }
 
   @AfterMethod
@@ -101,11 +111,11 @@ public class EventNGTest {
   @Test
   public void testPropertyChangeCallback() throws InterruptedException, InvocationTargetException {
 
-    Event testItem = new Event(Integer.MAX_VALUE,null,null);
+    Event testItem = new Event(Integer.MAX_VALUE, null, null);
     final TestListener testListener = new TestListener();
     testItem.addPropertyChangeListener(testListener);
 
-    testItem.setConfirmed(true);
+    testItem.setScheduled(true);
 
     EventQueue.invokeAndWait(new Runnable() {
       @Override
@@ -113,6 +123,38 @@ public class EventNGTest {
         assertTrue(testListener.called > 0);
       }
     });
+  }
+
+  @Test
+  public void testSetLocationType() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations is correctly updated
+    Event testItem = new Event(Integer.MAX_VALUE, null, null);
+    Location testLocation = new Location(Integer.MAX_VALUE);
+    entityManager.persist(testLocation);
+    entityManager.flush();
+
+    testItem.setLocation(testLocation);
+    List<Event> eventList = testLocation.getEventList();
+    assertNotNull(eventList);
+    assertTrue(eventList.contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener eventListener = new TestListener();
+    testItem.addPropertyChangeListener(eventListener);
+    final TestListener locationListener = new TestListener();
+    testLocation.addPropertyChangeListener(locationListener);
+
+    testItem.setLocation(null);
+
+    assertFalse(testLocation.getEventList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(eventListener.called, 1);
+        assertEquals(locationListener.called, 1);
+      }
+    });
+
   }
 
 }

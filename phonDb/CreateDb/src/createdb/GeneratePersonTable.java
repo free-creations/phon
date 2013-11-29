@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 /**
  *
@@ -156,7 +157,7 @@ public class GeneratePersonTable {
 
   private void makePrologue(PrintWriter output) {
     output.println("/*");
-    output.println("File generated with \"GeneratePersonTable.java\"");
+    output.println("File generated with \"GeneratePersonTable.java\" "+(new Date()));
     output.println("*/");
     output.println("DELETE FROM \"APP\".\"AVAILABILITY\";");
     output.println("DELETE FROM \"APP\".\"ALLOCATION\";");
@@ -175,7 +176,7 @@ public class GeneratePersonTable {
               ");");
     }
     output.println("ALTER TABLE \"APP\".\"TEAM\" "
-            + "ALTER COLUMN \"TEAM\" RESTART WITH " + (teamMemberCount + 1) + ";");
+            + "ALTER COLUMN \"TEAMID\" RESTART WITH " + (teamMemberCount + 1) + ";");
     output.println("");
     output.println("");
   }

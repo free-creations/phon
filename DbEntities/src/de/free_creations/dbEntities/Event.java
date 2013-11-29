@@ -18,10 +18,12 @@ package de.free_creations.dbEntities;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,17 +47,17 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
   @NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e"),
   @NamedQuery(name = "Event.findByEventId", query = "SELECT e FROM Event e WHERE e.eventId = :eventId"),
-  @NamedQuery(name = "Event.findByConfirmed", query = "SELECT e FROM Event e WHERE e.confirmed = :confirmed")})
+  @NamedQuery(name = "Event.findByScheduled", query = "SELECT e FROM Event e WHERE e.scheduled = :scheduled")})
 public class Event implements Serializable, DbEntity {
-
+  
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "EVENTID")
   private Integer eventId;
-  @Column(name = "CONFIRMED")
-  private Integer confirmed;
+  @Column(name = "SCHEDULED")
+  private Integer scheduled;
 //  @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
   @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
   private List<Allocation> allocationList;
@@ -63,88 +65,115 @@ public class Event implements Serializable, DbEntity {
 //  @ManyToOne(optional = false)
   @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
   private TimeSlot timeSlot;
-//  @JoinColumn(name = "LOCATION", referencedColumnName = "LOCATIONID")
-//  @ManyToOne
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "LOCATION", referencedColumnName = "LOCATIONID")
+  @ManyToOne
   private Location location;
   @JoinColumn(name = "CONTEST", referencedColumnName = "CONTESTID")
   @ManyToOne(optional = false)
   private Contest contest;
-  public static final String PROP_CONFIRMED = "PROP_CONFIRMED";
-
+  public static final String PROP_SCHEDULED = "PROP_CONFIRMED";
+  public static final String PROP_LOCATION = "PROP_LOCATION";
+  
   protected Event() {
   }
-
-  public Event(Integer eventId, Contest contest, TimeSlot timeSlot) {
+  
+  protected Event(Integer eventId, Contest contest, TimeSlot timeSlot) {
     this(contest, timeSlot);
     this.eventId = eventId;
   }
-
-  public Event(Contest contest, TimeSlot timeSlot) {
+  
+  protected Event(Contest contest, TimeSlot timeSlot) {
     setContest(contest);
     setTimeSlot(timeSlot);
   }
+  
+  public static Event newEvent(EntityManager entityManager, Contest contest, TimeSlot timeSlot) {
+    assert (entityManager != null);
+    assert (contest != null);
+    assert (timeSlot != null);
+    assert (entityManager.contains(contest));
+    assert (entityManager.contains(timeSlot));
+    
+    Event newEvent = new Event(contest, timeSlot);
+    entityManager.persist(newEvent);
+    entityManager.flush();
+    return newEvent;
+  }
+  
 
+  
   public Integer getEventId() {
     return eventId;
   }
-
-  public boolean isConfirmed() {
-    if (confirmed == null) {
+  
+  public boolean isScheduled() {
+    if (scheduled == null) {
       return false;
     } else {
-      return !confirmed.equals(0);
+      return !scheduled.equals(0);
     }
   }
-
-  public void setConfirmed(boolean value) {
-    if (isConfirmed() != value) {
-      boolean old = isConfirmed();
-      this.confirmed = value ? 1 : 0;
-      firePropertyChange(PROP_CONFIRMED, old, value);
+  
+  public void setScheduled(boolean value) {
+    if (isScheduled() != value) {
+      boolean old = isScheduled();
+      this.scheduled = value ? 1 : 0;
+      firePropertyChange(PROP_SCHEDULED, old, value);
     }
   }
-
+  
   @XmlTransient
   public List<Allocation> getAllocationList() {
     return allocationList;
   }
-
+  
   public void setAllocationList(List<Allocation> allocationList) {
     this.allocationList = allocationList;
   }
-
+  
   public TimeSlot getTimeSlot() {
     return timeSlot;
   }
-
+  
   public final void setTimeSlot(TimeSlot timeSlot) {
     this.timeSlot = timeSlot;
   }
-
+  
   public Location getLocation() {
     return location;
   }
-
-  public void setLocation(Location location) {
-    this.location = location;
+  
+  public void setLocation(Location newValue) {
+    Location old = this.location;
+    this.location = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeEvent(this);
+      }
+      if (newValue != null) {
+        newValue.addEvent(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_LOCATION, oldId, newId);
+    }
   }
-
+  
   public Contest getContest() {
     return contest;
   }
-
+  
   public final void setContest(Contest contest) {
     this.contest = contest;
   }
-
+  
   @Override
   public int hashCode() {
     int hash = 0;
     hash += (eventId != null ? eventId.hashCode() : 0);
     return hash;
   }
-
+  
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
@@ -157,21 +186,21 @@ public class Event implements Serializable, DbEntity {
     }
     return true;
   }
-
+  
   @Override
   public String toString() {
     return "testDb.Event[ eventId=" + eventId + " ]";
   }
-
+  
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     addPropertyChangeListener(listener, this.eventId);
   }
-
+  
   public static void addPropertyChangeListener(PropertyChangeListener listener, Integer eventId) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
             new EntityIdentity(Event.class, eventId));
   }
-
+  
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     removePropertyChangeListener(listener, this.eventId);
   }
@@ -188,13 +217,13 @@ public class Event implements Serializable, DbEntity {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
             new EntityIdentity(Event.class, eventId));
   }
-
+  
   private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
     PropertyChangeManager.instance().firePropertyChange(
             identity(),
             propertyName, oldValue, newValue);
   }
-
+  
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(Event.class, eventId);

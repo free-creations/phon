@@ -44,16 +44,16 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
   @NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e"),
   @NamedQuery(name = "Event.findByEventId", query = "SELECT e FROM Event e WHERE e.eventId = :eventId"),
-  @NamedQuery(name = "Event.findByConfirmed", query = "SELECT e FROM Event e WHERE e.confirmed = :confirmed")})
+  @NamedQuery(name = "Event.findByScheduled", query = "SELECT e FROM Event e WHERE e.scheduled = :scheduled")})
 public class Event implements Serializable {
+  @Column(name = "SCHEDULED")
+  private Integer scheduled;
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Basic(optional = false)
   @Column(name = "EVENTID")
   private Integer eventId;
-  @Column(name = "CONFIRMED")
-  private Integer confirmed;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
   private List<Allocation> allocationList;
   @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
@@ -81,13 +81,7 @@ public class Event implements Serializable {
     this.eventId = eventId;
   }
 
-  public Integer getConfirmed() {
-    return confirmed;
-  }
 
-  public void setConfirmed(Integer confirmed) {
-    this.confirmed = confirmed;
-  }
 
   @XmlTransient
   public List<Allocation> getAllocationList() {
@@ -145,6 +139,14 @@ public class Event implements Serializable {
   @Override
   public String toString() {
     return "testDb.Event[ eventId=" + eventId + " ]";
+  }
+
+  public Integer getScheduled() {
+    return scheduled;
+  }
+
+  public void setScheduled(Integer scheduled) {
+    this.scheduled = scheduled;
   }
   
 }

@@ -63,8 +63,7 @@ public class Contest implements Serializable, DbEntity {
   @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
   @ManyToOne(optional = false)
   private ContestType contestType;
-  //@OneToMany(cascade = CascadeType.ALL, mappedBy = "contest")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "contest")
   private List<Event> eventList;
 
   public static final String PROP_NAME = "PROP_NAME";
