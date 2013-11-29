@@ -101,8 +101,7 @@ public class Person implements Serializable, DbEntity {
   private List<Availability> availabilityList;
   @OneToMany(mappedBy = "person")
   private List<Contest> contestList;
-  //@OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
   private List<Allocation> allocationList;
 //  @JoinColumn(name = "TEAM", referencedColumnName = "TEAMID")
 //  @ManyToOne
@@ -130,6 +129,8 @@ public class Person implements Serializable, DbEntity {
   public static final String PROP_CONTESTADDED = "PROP_CONTESTADDED";
   public static final String PROP_AVAILABILITYREMOVED = "PROP_AVAILABILITYREMOVED";
   public static final String PROP_AVAILABILITYADDED = "PROP_AVAILABILITYADDED";
+  public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
+  public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
 
   public Person() {
   }
@@ -457,5 +458,31 @@ public class Person implements Serializable, DbEntity {
     }
     availabilityList.add(a);
     firePropertyChange(PROP_AVAILABILITYADDED, null, a.identity());
+  }
+
+  void removeAllocation(Allocation a) {
+    if (allocationList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!allocationList.contains(a)) {
+      return;
+    }
+    allocationList.remove(a);
+    firePropertyChange(PROP_ALLOCATIONREMOVED, a.identity(), null);
+  }
+
+  void addAllocation(Allocation a) {
+    assert (a != null);
+    if (allocationList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (allocationList.contains(a)) {
+      return;
+    }
+    if (this != a.getPerson()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    allocationList.add(a);
+    firePropertyChange(PROP_ALLOCATIONADDED, null, a.identity());
   }
 }

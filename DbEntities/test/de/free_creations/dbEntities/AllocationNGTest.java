@@ -51,6 +51,8 @@ public class AllocationNGTest {
   private static EntityManager entityManager = null;
 
   private Allocation testAllocation;
+  private Job testJob;
+  private Event testEvent;
 
   @BeforeClass
   public static void setUpClass() throws Exception {
@@ -81,6 +83,10 @@ public class AllocationNGTest {
 
     // the first item will be used for further testing (we assume that a suitable test-database is used)
     testAllocation = aa.get(0);
+    testJob = testAllocation.getJob();
+    assertNotNull(testJob);
+    testEvent = testAllocation.getEvent();
+    assertNotNull(testEvent);
 
   }
 
@@ -113,6 +119,93 @@ public class AllocationNGTest {
       @Override
       public void run() {
         assertEquals(testListener.called, expectedCallbacks);
+      }
+    });
+  }
+
+  @Test
+  public void testSetJob() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations is correctly updated
+    Allocation testItem = new Allocation(Integer.MAX_VALUE);
+
+    testItem.setJob(testJob);
+    List<Allocation> allocationList = testJob.getAllocationList();
+    assertNotNull(allocationList);
+    assertTrue(allocationList.contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener allocationListener = new TestListener();
+    testItem.addPropertyChangeListener(allocationListener);
+    final TestListener jobListener = new TestListener();
+    testJob.addPropertyChangeListener(jobListener);
+
+    testItem.setJob(null);
+
+    assertFalse(testJob.getAllocationList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(allocationListener.called, 1);
+        assertEquals(jobListener.called, 1);
+      }
+    });
+  }
+
+  @Test
+  public void testSetEvent() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations is correctly updated
+    Allocation testItem = new Allocation(Integer.MAX_VALUE);
+
+    testItem.setEvent(testEvent);
+    List<Allocation> allocationList = testEvent.getAllocationList();
+    assertNotNull(allocationList);
+    assertTrue(allocationList.contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener allocationListener = new TestListener();
+    testItem.addPropertyChangeListener(allocationListener);
+    final TestListener eventListener = new TestListener();
+    testEvent.addPropertyChangeListener(eventListener);
+
+    testItem.setEvent(null);
+
+    assertFalse(testEvent.getAllocationList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(allocationListener.called, 1);
+        assertEquals(eventListener.called, 1);
+      }
+    });
+  }
+
+  @Test
+  public void testSetPerson() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations is correctly updated
+    Allocation testItem = new Allocation(Integer.MAX_VALUE);
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.flush();
+
+    testItem.setPerson(testPerson);
+    List<Allocation> allocationList = testPerson.getAllocationList();
+    assertNotNull(allocationList);
+    assertTrue(allocationList.contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener allocationListener = new TestListener();
+    testItem.addPropertyChangeListener(allocationListener);
+    final TestListener personListener = new TestListener();
+    testPerson.addPropertyChangeListener(personListener);
+
+    testItem.setPerson(null);
+
+    assertFalse(testPerson.getAllocationList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(allocationListener.called, 1);
+        assertEquals(personListener.called, 1);
       }
     });
   }

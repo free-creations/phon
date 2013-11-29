@@ -63,20 +63,20 @@ public class Allocation implements Serializable, DbEntity {
   private String planner;
   @Column(name = "NOTE")
   private String note;
-//  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
-//  @ManyToOne(optional = false)
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
+  @ManyToOne(optional = false)
   private Person person;
-//  @JoinColumn(name = "JOB", referencedColumnName = "JOBID")
-//  @ManyToOne
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "JOB", referencedColumnName = "JOBID")
+  @ManyToOne
   private Job job;
-//  @JoinColumn(name = "EVENT", referencedColumnName = "EVENTID")
-//  @ManyToOne(optional = false)
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "EVENT", referencedColumnName = "EVENTID")
+  @ManyToOne(optional = false)
   private Event event;
   public static final String PROP_NOTE = "PROP_NOTE";
   public static final String PROP_PLANNER = "PROP_PLANNER";
+  public static final String PROP_JOB = "PROP_JOB";
+  public static final String PROP_EVENT = "PROP_EVENT";
+  public static final String PROP_PERSON = "PROP_PERSON";
 
   public Allocation() {
   }
@@ -125,24 +125,60 @@ public class Allocation implements Serializable, DbEntity {
     return person;
   }
 
-  public void setPerson(Person person) {
-    this.person = person;
-  }
-
   public Job getJob() {
     return job;
   }
 
-  public void setJob(Job job) {
-    this.job = job;
+  public void setJob(Job newValue) {
+    Job old = this.job;
+    this.job = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeAllocation(this);
+      }
+      if (newValue != null) {
+        newValue.addAllocation(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_JOB, oldId, newId);
+    }
+  }
+
+  public void setPerson(Person newValue) {
+    Person old = this.person;
+    this.person = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeAllocation(this);
+      }
+      if (newValue != null) {
+        newValue.addAllocation(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_PERSON, oldId, newId);
+    }
+  }
+
+  public void setEvent(Event newValue) {
+    Event old = this.event;
+    this.event = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removeAllocation(this);
+      }
+      if (newValue != null) {
+        newValue.addAllocation(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_EVENT, oldId, newId);
+    }
   }
 
   public Event getEvent() {
     return event;
-  }
-
-  public void setEvent(Event event) {
-    this.event = event;
   }
 
   @Override

@@ -53,12 +53,13 @@ public class Job implements Serializable, DbEntity {
   private String jobId;
   @Column(name = "NAME")
   private String name;
-  // @OneToMany(mappedBy = "job")
-  @Transient
+  @OneToMany(mappedBy = "job")
   private List<Allocation> allocationList;
   @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
   @ManyToOne(optional = false)
   private JobType jobType;
+  public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
+  public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
 
   public Job() {
   }
@@ -112,5 +113,63 @@ public class Job implements Serializable, DbEntity {
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(Job.class, jobId);
+  }
+
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    addPropertyChangeListener(listener, this.jobId);
+  }
+
+  public static void addPropertyChangeListener(PropertyChangeListener listener, String jobId) {
+    PropertyChangeManager.instance().addPropertyChangeListener(listener,
+            new EntityIdentity(Job.class, jobId));
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    removePropertyChangeListener(listener, this.jobId);
+  }
+
+  /**
+   * Remove a PropertyChangeListener for the entity represented by this
+   * <em>Class</em>
+   * and the given primary key.
+   *
+   * @param listener
+   * @param jobId
+   */
+  public static void removePropertyChangeListener(PropertyChangeListener listener, String jobId) {
+    PropertyChangeManager.instance().removePropertyChangeListener(listener,
+            new EntityIdentity(Job.class, jobId));
+  }
+
+  private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+    PropertyChangeManager.instance().firePropertyChange(
+            identity(),
+            propertyName, oldValue, newValue);
+  }
+
+  void removeAllocation(Allocation a) {
+    if (allocationList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!allocationList.contains(a)) {
+      return;
+    }
+    allocationList.remove(a);
+    firePropertyChange(PROP_ALLOCATIONREMOVED, a.identity(), null);
+  }
+
+  void addAllocation(Allocation a) {
+    assert (a != null);
+    if (allocationList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (allocationList.contains(a)) {
+      return;
+    }
+    if (this != a.getJob()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    allocationList.add(a);
+    firePropertyChange(PROP_ALLOCATIONADDED, null, a.identity());
   }
 }

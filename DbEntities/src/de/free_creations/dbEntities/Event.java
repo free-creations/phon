@@ -33,7 +33,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -58,8 +57,7 @@ public class Event implements Serializable, DbEntity {
   private Integer eventId;
   @Column(name = "SCHEDULED")
   private Integer scheduled;
-//  @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
   private List<Allocation> allocationList;
   @JoinColumn(name = "TIMESLOT", referencedColumnName = "TIMESLOTID")
   @ManyToOne(optional = false)
@@ -73,6 +71,8 @@ public class Event implements Serializable, DbEntity {
   public static final String PROP_SCHEDULED = "PROP_CONFIRMED";
   public static final String PROP_LOCATION = "PROP_LOCATION";
   public static final String PROP_CONTEST = "PROP_CONTEST";
+  public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
+  public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
 
   protected Event() {
   }
@@ -249,5 +249,31 @@ public class Event implements Serializable, DbEntity {
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(Event.class, eventId);
+  }
+
+  void removeAllocation(Allocation a) {
+    if (allocationList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (!allocationList.contains(a)) {
+      return;
+    }
+    allocationList.remove(a);
+    firePropertyChange(PROP_ALLOCATIONREMOVED, a.identity(), null);
+  }
+
+  void addAllocation(Allocation a) {
+    assert (a != null);
+    if (allocationList == null) {
+      throw new RuntimeException("Cannot perform this operation. Record must be persited");
+    }
+    if (allocationList.contains(a)) {
+      return;
+    }
+    if (this != a.getEvent()) {
+      throw new RuntimeException("Entity missmatch.");
+    }
+    allocationList.add(a);
+    firePropertyChange(PROP_ALLOCATIONADDED, null, a.identity());
   }
 }
