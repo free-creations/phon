@@ -36,6 +36,7 @@ public class ContestTypeCollection implements EntityCollection<ContestType, Stri
     contestTypeIds = new ArrayList<>();
     contestNames = new ArrayList<>();
     contestIconNames = new ArrayList<>();
+   
     for (ContestType jt : getAll()) {
       contestTypeIds.add(jt.getContestTypeId());
       contestNames.add(jt.getName());
@@ -69,7 +70,7 @@ public class ContestTypeCollection implements EntityCollection<ContestType, Stri
     synchronized (Manager.databaseAccessLock) {
       try {
         EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<ContestType> query = entityManager.createNamedQuery("Job.findAll", ContestType.class);
+        TypedQuery<ContestType> query = entityManager.createNamedQuery("ContestType.findAll", ContestType.class);
         List<ContestType> ff = query.getResultList();
         return ff;
       } catch (DataBaseNotReadyException ignored) {

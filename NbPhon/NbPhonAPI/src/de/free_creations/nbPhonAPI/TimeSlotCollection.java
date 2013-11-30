@@ -102,15 +102,15 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
    */
   public TimeSlot findEntity(int day, int timeOfDay) throws DataBaseNotReadyException {
     final String qlString =
-            "SELECT z FROM TimeSlot z "
-            + "WHERE z.tag = :tag "
-            + "AND z.tageszeit = :tageszeit";
-
+            "SELECT t FROM TimeSlot t "
+            + "WHERE t.dayIdx = :dayIdx "
+            + "AND t.timeOfDayIdx = :timeOfDayIdx";  
+    
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
       TypedQuery<TimeSlot> query = entityManager.createQuery(qlString, TimeSlot.class);
-      query.setParameter("tag", day + 1);
-      query.setParameter("tageszeit", timeOfDay + 1);
+      query.setParameter("dayIdx", day + 1);
+      query.setParameter("timeOfDayIdx", timeOfDay + 1);
       try {
         return query.getSingleResult();
       } catch (Throwable th) {
