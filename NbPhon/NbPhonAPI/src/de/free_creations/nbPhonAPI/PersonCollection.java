@@ -107,11 +107,11 @@ public class PersonCollection implements MutableEntityCollection<Person, Integer
       List<TimeSlot> allTimeslots = allTimesQuery.getResultList();
 
       for (TimeSlot t : allTimeslots) {
-        Availability v = new Availability();
-        v.setVerfuegbar(false);
-        entityManager.persist(v);
-        v.setZeitid(t);
-        v.setPersonid(newPerson);
+        Availability a = new Availability();
+        a.setAvailable(false);
+        entityManager.persist(a);
+        a.setTimeSlot(t);
+        a.setPerson(newPerson);
         entityManager.flush();
       }
     }
@@ -132,7 +132,7 @@ public class PersonCollection implements MutableEntityCollection<Person, Integer
   }
 
   /**
-   * Remove PropertyChangeListener.
+   * Remoae PropertyChangeListener.
    *
    * @param listener
    */
@@ -146,8 +146,8 @@ public class PersonCollection implements MutableEntityCollection<Person, Integer
   }
 
   /**
-   * Reports a bound property update to listeners that have been registered to
-   * track updates of all properties or a property with the specified name.
+   * Reports a bound property update to listeners that haae been registered to
+ track updates of all properties or a property with the specified name.
    *
    * Note: the callback is guaranteed to execute in the AWT thread.
    *

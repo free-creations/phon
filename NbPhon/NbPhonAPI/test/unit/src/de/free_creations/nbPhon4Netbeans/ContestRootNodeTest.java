@@ -41,8 +41,8 @@ public class ContestRootNodeTest {
       ArrayList<Contest> result = new ArrayList<>();
       j1 = new Contest(1);
       j2 = new Contest(2);
-      j1.setWertung("j1 jury");
-      j2.setWertung("j2 jury");
+      j1.setName("j1 jury");
+      j2.setName("j2 jury");
 
       result.add(j1);
       result.add(j2);
@@ -116,9 +116,9 @@ public class ContestRootNodeTest {
   public void testGetNodeAt() {
     ContestRootNode testRoot = new ContestRootNode(juryCollectionMock);
     ContestNode node1 = testRoot.getNodeAt(0);
-    assertEquals((int)juryCollectionMock.j1.getJuryid(), (int)node1.getJuryId());
+    assertEquals((int)juryCollectionMock.j1.getContestId(), (int)node1.getJuryId());
     ContestNode node2 = testRoot.getNodeAt(1);
-    assertEquals((int)juryCollectionMock.j2.getJuryid(), (int)node2.getJuryId());
+    assertEquals((int)juryCollectionMock.j2.getContestId(), (int)node2.getJuryId());
 
 
     ContestNode nullJury = testRoot.getNodeAt(4711);

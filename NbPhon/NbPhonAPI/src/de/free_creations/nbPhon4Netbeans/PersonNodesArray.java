@@ -90,7 +90,7 @@ public class PersonNodesArray extends Children.SortedArray {
     }
     for (Person p : pp) {
       assert (p != null);
-      Integer personid = p.getPersonid();
+      Integer personid = p.getPersonId();
       assert (personid != null);
       result.add(new PersonNode(personid, personCollection));
     }

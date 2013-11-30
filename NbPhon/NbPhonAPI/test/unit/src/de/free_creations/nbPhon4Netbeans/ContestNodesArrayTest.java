@@ -41,8 +41,8 @@ public class ContestNodesArrayTest {
       ArrayList<Contest> result = new ArrayList<>();
       j1 = new Contest(1);
       j2 = new Contest(2);
-      j1.setWertung("j1 jury");
-      j2.setWertung("j2 jury");
+      j1.setName("j1 jury");
+      j2.setName("j2 jury");
 
       result.add(j1);
       result.add(j2);

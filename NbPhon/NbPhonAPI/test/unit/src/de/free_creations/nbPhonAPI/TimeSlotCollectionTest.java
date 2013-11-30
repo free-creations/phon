@@ -93,8 +93,8 @@ public class TimeSlotCollectionTest {
     for (int day = 0; day < dayCount; day++) {
       for (int timeOfDay = 0; timeOfDay < timeOfDayCount; timeOfDay++) {
         TimeSlot t = timeSlotCollection.findEntity(day, timeOfDay);
-        assertEquals(day+1, (int) t.getTag());
-        assertEquals(timeOfDay+1, (int) t.getTageszeit());
+        assertEquals(day+1, (int) t.getDayIdx());
+        assertEquals(timeOfDay+1, (int) t.getTimeOfDayIdx());
       }
     }
     

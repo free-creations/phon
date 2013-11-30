@@ -48,7 +48,7 @@ public class ContestCollectionTest {
   @Test
   public void testContestTypes() {
     System.out.println("testGetJuryTypes");
-    Set<String> juryTypes = contestCollection.contestTypes();
+    List<String> juryTypes = contestCollection.contestTypes();
     assertNotNull(juryTypes);
     assertFalse(juryTypes.isEmpty());
     for (String jt : juryTypes) {
@@ -74,7 +74,7 @@ public class ContestCollectionTest {
 
     Contest entity = contestCollection.findEntity(1);
     assertNotNull(entity);
-    assertEquals(1, entity.getJuryid());
+    assertEquals(1, (int)entity.getContestId());
   }
 
   /**
@@ -85,7 +85,7 @@ public class ContestCollectionTest {
     System.out.println("testNewEntity");
     Contest entity = contestCollection.newEntity();
     assertNotNull(entity);
-    System.out.println("..."+entity.getJuryid());
+    System.out.println("..."+entity.getContestId());
   }
 
   /**

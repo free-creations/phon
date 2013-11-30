@@ -40,12 +40,10 @@ public class PersonNodesArrayTest {
     @Override
     public List<Person> getAll() {
       ArrayList<Person> result = new ArrayList<>();
-      p1 = new Person();
-      p2 = new Person();
-      p1.setPersonid(1);
-      p1.setFamilienname("A");
-      p2.setPersonid(2);
-      p2.setFamilienname("B");
+      p1 = new Person(1);
+      p2 = new Person(2);
+      p1.setSurname("A");
+      p2.setSurname("B");
       result.add(p1);
       result.add(p2);
       return result;

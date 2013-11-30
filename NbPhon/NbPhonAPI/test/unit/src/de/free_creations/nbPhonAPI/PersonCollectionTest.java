@@ -61,14 +61,14 @@ public class PersonCollectionTest {
     List<Person> allPersons = cc.getAll();
 
     Person testPerson = allPersons.get(0);
-    int key = testPerson.getPersonid();
+    int key = testPerson.getPersonId();
 
     Person fromFind = cc.findEntity(key);
     assertTrue(testPerson == fromFind);
 
-    testPerson.setFamilienname("Test");
+    testPerson.setSurname("Test");
     Person fromFind2 = cc.findEntity(key);
-    assertEquals("Test", fromFind2.getFamilienname());
+    assertEquals("Test", fromFind2.getSurname());
     ///
     /// BUT NOTE
     ///
@@ -89,7 +89,7 @@ public class PersonCollectionTest {
     List<Person> allPersons_1 = testItem.getAll();
     List<Person> allPersons_2 = testItem.getAll();
     // check that the first entry refernces the same record
-    assertEquals(allPersons_1.get(0).getPersonid(), allPersons_2.get(0).getPersonid());
+    assertEquals(allPersons_1.get(0).getPersonId(), allPersons_2.get(0).getPersonId());
     // check pointer identity
     assertTrue(allPersons_1.get(0) == allPersons_2.get(0));
   }
@@ -105,7 +105,7 @@ public class PersonCollectionTest {
     List<Person> allPersons = testItem.getAll();
     Person personFromList = allPersons.get(0);
 
-    Integer key = personFromList.getPersonid();
+    Integer key = personFromList.getPersonId();
     Person personFromContext = Manager.getEntityManager().find(Person.class, key);
 
     assertTrue(personFromContext == personFromList);
@@ -138,8 +138,8 @@ public class PersonCollectionTest {
     PersonCollection testItem = Manager.getPersonCollection();
 
     Person newPerson = testItem.newEntity();
-    newPerson.setFamilienname("UNIT TEST: newPerson_mustHaveValidKey");
-    int personid = newPerson.getPersonid();
+    newPerson.setSurname("UNIT TEST: newPerson_mustHaveValidKey");
+    int personid = newPerson.getPersonId();
 
     System.out.println("...newPersonId=" + personid);
 
@@ -148,7 +148,7 @@ public class PersonCollectionTest {
 
   /**
    * When applying the method newPerson() the returned "Person"- entity must
-   * have all disponibility (Availability) records attached.
+   * have all Availability records attached.
    */
   @Test
   public void newPerson_mustHaveTimeSlots() throws DataBaseNotReadyException {
@@ -156,7 +156,7 @@ public class PersonCollectionTest {
     PersonCollection testItem = Manager.getPersonCollection();
 
     Person newPerson = testItem.newEntity();
-    List<Availability> verfuegbarkeitList = newPerson.getVerfuegbarkeitList();
+    List<Availability> verfuegbarkeitList = newPerson.getAvailabilityList();
 
     // verify that the verfuegbarkeitList exists and is not empty
     assertNotNull(verfuegbarkeitList);
@@ -164,9 +164,9 @@ public class PersonCollectionTest {
 
     // verify that all the dependencies are correctly linked
     for (Availability v : verfuegbarkeitList) {
-      assertEquals(v.getPersonid(), newPerson);
-      TimeSlot z = v.getZeitid();
-      assertTrue(z.getVerfuegbarkeitList().contains(v));
+      assertEquals(v.getPerson(), newPerson);
+      TimeSlot z = v.getTimeSlot();
+      assertTrue(z.getAvailabilityList().contains(v));
     }
   }
 

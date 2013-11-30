@@ -65,7 +65,8 @@ public class Manager {
    * Show an error dialog if the database cannot be accessed, this dialog is
    * only shown the first time that this procedure is called, thus avoiding to
    * nag the user with several times the same error report at startup.
-   * @return 
+   *
+   * @return
    */
   public static boolean assertOpen() {
     boolean open = isOpen();
@@ -179,9 +180,9 @@ public class Manager {
   }
 
   /**
-   * Returns the collection of all JURY records.
+   * Returns the collection of all CONTEST records.
    *
-   * @return the collection of all JURY records.
+   * @return the collection of all CONTEST records.
    */
   public static ContestCollection getContestCollection() {
     synchronized (contestLock) {
@@ -189,6 +190,30 @@ public class Manager {
         contestCollection = new ContestCollection();
       }
       return contestCollection;
+    }
+  }
+
+  private static final Object contestTypeLock = new Object();
+  private static ContestTypeCollection contestTypeCollection = null;
+
+  public static ContestTypeCollection getContestTypeCollection() {
+    synchronized (contestTypeLock) {
+      if (contestTypeCollection == null) {
+        contestTypeCollection = new ContestTypeCollection();
+      }
+      return contestTypeCollection;
+    }
+  }
+
+  private static final Object jobTypeLock = new Object();
+  private static JobTypeCollection jobTypeCollection = null;
+
+  public static JobTypeCollection getJobTypeCollection() {
+    synchronized (jobTypeLock) {
+      if (jobTypeCollection == null) {
+        jobTypeCollection = new JobTypeCollection();
+      }
+      return jobTypeCollection;
     }
   }
 }

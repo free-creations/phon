@@ -67,7 +67,6 @@
             <public-packages>
                 <package>de.free_creations.actions</package>
                 <package>de.free_creations.actions.person</package>
-                <package>de.free_creations.dbEntities</package>
                 <package>de.free_creations.nbPhon4Netbeans</package>
                 <package>de.free_creations.nbPhonAPI</package>
             </public-packages>

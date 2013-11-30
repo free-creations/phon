@@ -39,12 +39,10 @@ public class PersonsRootNodeTest {
     @Override
     public List<Person> getAll() {
       ArrayList<Person> result = new ArrayList<>();
-      p1 = new Person();
-      p2 = new Person();
-      p1.setPersonid(1);
-      p1.setFamilienname("A");
-      p2.setPersonid(2);
-      p2.setFamilienname("B");
+      p1 = new Person(1);
+      p2 = new Person(2);
+      p1.setSurname("A");
+      p2.setSurname("B");
       result.add(p1);
       result.add(p2);
       return result;
@@ -116,9 +114,9 @@ public class PersonsRootNodeTest {
   public void testGetNodeAt() {
     PersonsRootNode testRoot = new PersonsRootNode(personCollectionMock);
     PersonNode node1 = testRoot.getNodeAt(0);
-    assertEquals((int) personCollectionMock.p1.getPersonid(), node1.getKey());
+    assertEquals((int) personCollectionMock.p1.getPersonId(), node1.getKey());
     PersonNode node2 = testRoot.getNodeAt(1);
-    assertEquals((int) personCollectionMock.p2.getPersonid(), node2.getKey());
+    assertEquals((int) personCollectionMock.p2.getPersonId(), node2.getKey());
 
     PersonNode nullPerson = testRoot.getNodeAt(4711);
     assertNull(nullPerson);

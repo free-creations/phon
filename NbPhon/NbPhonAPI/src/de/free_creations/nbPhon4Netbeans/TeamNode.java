@@ -89,13 +89,13 @@ public class TeamNode extends AbstractNode {
 
     private Collection<Node> regularTeam() {
       try {
-        Team c = teamManager.findEntity(teamId);
-        if (c == null) {
+        Team t = teamManager.findEntity(teamId);
+        if (t == null) {
           return empty;
         }
         ArrayList<Node> result = new ArrayList<>();
-        for (Person p : c.getPersonList()) {
-          PersonNode pn = new PersonNode(p.getPersonid(), personManager);
+        for (Person p : t.getPersonList()) {
+          PersonNode pn = new PersonNode(p.getPersonId(), personManager);
           result.add(pn);
         }
         return result;
@@ -109,7 +109,7 @@ public class TeamNode extends AbstractNode {
       ArrayList<Node> result = new ArrayList<>();
       for (Person p : pp) {
         if (p.getTeam() == null) {
-          PersonNode pn = new PersonNode(p.getPersonid(), personManager);
+          PersonNode pn = new PersonNode(p.getPersonId(), personManager);
           result.add(pn);
         }
       }

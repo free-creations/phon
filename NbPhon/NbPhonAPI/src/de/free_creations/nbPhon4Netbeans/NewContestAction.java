@@ -62,7 +62,7 @@ public final class NewContestAction extends AbstractAction {
               Lookup.getDefault().lookup(
               ContestEditorProvider.class);
       if (provider != null) {
-        provider.getEditor(true, newJury.getJuryid() );
+        provider.getEditor(true, newJury.getContestId());
       } else {
         throw new RuntimeException("No Editor provider found.");
       }

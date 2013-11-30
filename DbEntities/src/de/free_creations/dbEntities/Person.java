@@ -131,6 +131,10 @@ public class Person implements Serializable, DbEntity {
   public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
   public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
   public static final String PROP_TEAM = "PROP_TEAM";
+  public static final String PROP_GIVENNAME = "PROP_GIVENNAME";
+  public static final String PROP_JOBTYPE = "PROP_JOBTYPE";
+  public static final String PROP_CONTESTTYPE = "PROP_CONTESTTYPE";
+  public static final String PROP_AVAILABILITY = "PROP_AVAILABILITY";
 
   public Person() {
   }
@@ -164,7 +168,7 @@ public class Person implements Serializable, DbEntity {
     String old = this.givenname;
     this.givenname = value;
     if (!Objects.equals(old, value)) {
-      firePropertyChange(PROP_SURNAME, old, value);
+      firePropertyChange(PROP_GIVENNAME, old, value);
     }
   }
 
@@ -352,14 +356,14 @@ public class Person implements Serializable, DbEntity {
       }
       EntityIdentity newId = (newValue == null) ? null : newValue.identity();
       EntityIdentity oldId = (old == null) ? null : old.identity();
-      firePropertyChange(PROP_TEAM, oldId, newId);
+      firePropertyChange(PROP_JOBTYPE, oldId, newId);
     }
   }
 
   public ContestType getContestType() {
     return contestType;
   }
-  
+
   public void setContestType(ContestType newValue) {
     ContestType old = this.contestType;
     this.contestType = newValue;
@@ -372,10 +376,10 @@ public class Person implements Serializable, DbEntity {
       }
       EntityIdentity newId = (newValue == null) ? null : newValue.identity();
       EntityIdentity oldId = (old == null) ? null : old.identity();
-      firePropertyChange(PROP_TEAM, oldId, newId);
+      firePropertyChange(PROP_CONTESTTYPE, oldId, newId);
     }
   }
-  
+
   @Override
   public int hashCode() {
     int hash = 0;
@@ -498,6 +502,18 @@ public class Person implements Serializable, DbEntity {
     }
     availabilityList.add(a);
     firePropertyChange(PROP_AVAILABILITYADDED, null, a.identity());
+  }
+
+  public boolean isAvailable() {
+    if (availabilityList == null) {
+      return false;
+    }
+    for (Availability a : availabilityList) {
+      if (a.isAvailable()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   void removeAllocation(Allocation a) {

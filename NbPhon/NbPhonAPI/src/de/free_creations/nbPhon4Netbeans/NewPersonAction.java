@@ -62,7 +62,7 @@ public final class NewPersonAction extends AbstractAction {
               Lookup.getDefault().lookup(
               PersonEditorProvider.class);
       if (provider != null) {
-        provider.getEditor(true, newPerson.getPersonid());
+        provider.getEditor(true, newPerson.getPersonId());
       } else {
         throw new RuntimeException("No Editor provider found.");
       }

@@ -52,11 +52,11 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
 
     List<TimeSlot> tt = getAll();
     for (TimeSlot t : tt) {
-      if (t.getTageszeit() != null) {
-        _timeOfDayNames.put(t.getTageszeit() - 1, t.getTageszeitprint());
+      if (t.getTimeOfDayIdx()!= null) {
+        _timeOfDayNames.put(t.getTimeOfDayIdx() - 1, t.getTimeOfDayPrint());
       }
-      if (t.getTag() != null) {
-        _dayNames.put(t.getTag() - 1, t.getWochentag());
+      if (t.getDayIdx()!= null) {
+        _dayNames.put(t.getDayIdx()- 1, t.getDayOfWeek());
       }
     }
     timeOfDayNames = _timeOfDayNames.toArray();
@@ -129,35 +129,5 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
     }
   }
 
-  /**
-   * This method is used in module "Editors" in "TimeTableVisualTest"
-   * to see how the display performs when there are gaps in the time-slot succession.
-   * It adds a supplementary time-slot item. It is assumed that the time-slot table
-   * is pre-populated using the provided "populateCoreTables.sql" and has exactly 
-   * 15 entries.
-   * @deprecated only for test
-   */
-  @Deprecated
-  public static void addTestItem() throws DataBaseNotReadyException {
-    synchronized (Manager.databaseAccessLock) {
-      if (Manager.hasTimeSlotCollection()) {
-        throw new RuntimeException("Time-slot-collection has already been initialized.");
-      }
-      EntityManager entityManager = Manager.getEntityManager();
-      TimeSlot zeit = new TimeSlot(
-              16,//zeitId
-              6, // tag, 
-              3, // tageszeit, 
-              "TEST", // wochentag, 
-              "test_ab",// label, 
-              "Abend"// tageszeitprint
-              );
-      entityManager.persist(zeit);
-      try {
-        entityManager.flush();
-      } catch (Throwable ex) {
-        throw new DataBaseNotReadyException(ex);
-      }
-    }
-  }
+
 }

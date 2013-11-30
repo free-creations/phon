@@ -37,15 +37,13 @@ public class ContestCollection implements MutableEntityCollection<Contest, Integ
   protected ContestCollection() {
   }
 
-  public Set<String> contestTypes() {
-    List<Contest> jj = getAll();
-    TreeSet<String> result = new TreeSet<>();
-    for (Contest j : jj) {
-      if (j.getWertungstyp() != null) {
-        result.add(j.getWertungstyp());
-      }
-    }
-    return result;
+  /**
+   * @deprecated  use ContestTypeCollection().contestTypeIds()
+   * @return 
+   */
+  public List<String> contestTypes() {
+    return Manager.getContestTypeCollection().contestTypeIds();
+
   }
 
   @Override
@@ -54,8 +52,8 @@ public class ContestCollection implements MutableEntityCollection<Contest, Integ
       try {
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<Contest> query = entityManager.createNamedQuery("Contest.findAll", Contest.class);
-        List<Contest> jj = query.getResultList();
-        return jj;
+        List<Contest> cc = query.getResultList();
+        return cc;
       } catch (DataBaseNotReadyException ignored) {
         return Collections.emptyList();
       }

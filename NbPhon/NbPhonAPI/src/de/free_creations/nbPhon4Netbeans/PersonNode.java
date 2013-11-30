@@ -15,7 +15,9 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
+import de.free_creations.dbEntities.ContestType;
 import de.free_creations.dbEntities.Job;
+import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
@@ -87,20 +89,20 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       notifyPendingChanges();
-      if (Person.PROP_HERRFRAU.equals(evt.getPropertyName())) {
+      if (Person.PROP_GENDER.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
       }
-      if (Person.PROP_FAMILIENNAME.equals(evt.getPropertyName())) {
+      if (Person.PROP_SURNAME.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
       }
-      if (Person.PROP_VORNAME.equals(evt.getPropertyName())) {
+      if (Person.PROP_GIVENNAME.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
       }
-      if (Person.PROP_VERFUEGBARKEIT.equals(evt.getPropertyName())) {
+      if (Person.PROP_AVAILABILITY.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
         fireIconChange();
       }
-      if (Person.PROP_GEWUENSCHTEWERTUNG.equals(evt.getPropertyName())) {
+      if (Person.PROP_CONTESTTYPE.equals(evt.getPropertyName())) {
         fireIconChange();
       }
 
@@ -253,7 +255,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     try {
       Person p = personsManager.findEntity(key);
       if (p != null) {
-        return String.format("%s, %s", p.getFamilienname(), p.getVorname());
+        return String.format("%s, %s", p.getSurname(), p.getGivenname());
       } else {
         return getName();
       }
@@ -321,8 +323,11 @@ public class PersonNode extends AbstractNode implements CommittableNode {
       Person p = personsManager.findEntity(key);
       if (p != null) {
         BufferedImage personsIcon = getPersonsIcon(p);
-        String gewuenschtewertung = p.getGewuenschtewertung();
-        return iconManager().getInstrumentedImage(personsIcon, gewuenschtewertung);
+        ContestType contestType = p.getContestType();
+        if(contestType != null)
+        return iconManager().getInstrumentedImage(personsIcon, contestType.getIcon());
+        else
+          return personsIcon;
       }
     } catch (DataBaseNotReadyException ex) {
       Exceptions.printStackTrace(ex);
@@ -332,17 +337,15 @@ public class PersonNode extends AbstractNode implements CommittableNode {
 
   private BufferedImage getPersonsIcon(Person p) {
     assert (p != null);
-    if (isGroupleader(p)) {
-      return iconManager().iconGroupleader;
-    }
-    Job function = p.getGewuenschtefunktion();
-    if (function != null) {
-      if ("LEHRER".equalsIgnoreCase(function.getFunktionid())) {
+
+    JobType jobType = p.getJobType();
+    if (jobType != null) {
+      if ("LEHRER".equalsIgnoreCase(jobType.getJobTypeId())) {
         return iconManager().iconTeacher;
       }
     }
-    boolean isfemale = "Fr.".equals(p.getHerrfrau());
-    if ("KIND".equals(p.getAltersgruppe())) {
+    boolean isfemale = "Fr.".equals(p.getGender());
+    if ("KIND".equals(p.getAgegroup())) {
       if (isfemale) {
         return iconManager().iconChildFemale;
       } else {
@@ -357,19 +360,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     }
   }
 
-  private boolean isGroupleader(Person p) {
-    if (p == null) {
-      return false;
-    }
-    List<Person> groupList = p.getGroupList();
-    if (groupList == null) {
-      return false;
-    }
-    if (groupList.isEmpty()) {
-      return false;
-    }
-    return true;
-  }
+  
 
   /**
    * This function is called by the Committer class every time this Record is

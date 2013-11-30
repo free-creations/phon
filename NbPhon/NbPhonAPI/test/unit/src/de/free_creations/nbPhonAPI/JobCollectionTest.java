@@ -83,6 +83,5 @@ public class JobCollectionTest {
     Job f1 = functionsCollection.findEntity(1);
     assertNotNull(f1);
 
-    assertTrue(f1.getSortvalue() >= f0.getSortvalue());
   }
 }

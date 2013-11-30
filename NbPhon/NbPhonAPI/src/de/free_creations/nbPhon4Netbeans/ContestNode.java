@@ -16,6 +16,7 @@
 package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.Contest;
+import de.free_creations.dbEntities.ContestType;
 
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
@@ -45,7 +46,7 @@ import org.openide.nodes.Node;
 /**
  *
  * @see http://netbeans.dzone.com/nb-how-to-drag-drop-with-nodes-apifor a DnD
- example.
+ * example.
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class ContestNode extends AbstractNode implements CommittableNode {
@@ -127,7 +128,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   public Integer getJuryId() {
     return key;
   }
-  private final MutableEntityCollection<Contest, Integer> juryManager;
+  private final MutableEntityCollection<Contest, Integer> contestManager;
   private final EditCookie editCookie = new EditCookie() {
     @Override
     public void edit() {
@@ -138,9 +139,9 @@ public class ContestNode extends AbstractNode implements CommittableNode {
     @Override
     public void actionPerformed(ActionEvent e) {
       try {
-        ContestEditorProvider provider =
-                Lookup.getDefault().lookup(
-                ContestEditorProvider.class);
+        ContestEditorProvider provider
+                = Lookup.getDefault().lookup(
+                        ContestEditorProvider.class);
         if (provider != null) {
           provider.getEditor(false, key);
         } else {
@@ -155,9 +156,9 @@ public class ContestNode extends AbstractNode implements CommittableNode {
     @Override
     public void actionPerformed(ActionEvent e) {
       try {
-        ContestEditorProvider provider =
-                Lookup.getDefault().lookup(
-                ContestEditorProvider.class);
+        ContestEditorProvider provider
+                = Lookup.getDefault().lookup(
+                        ContestEditorProvider.class);
         if (provider != null) {
           provider.getEditor(true, key);
         } else {
@@ -170,12 +171,12 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   };
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
 
-  public ContestNode(Integer juryId, MutableEntityCollection<Contest, Integer> juryManager) {
+  public ContestNode(Integer juryId, MutableEntityCollection<Contest, Integer> contestManager) {
     super(makeChildren());
 
     this.key = juryId;
 
-    this.juryManager = juryManager;
+    this.contestManager = contestManager;
     if (key != null) {
       Contest.addPropertyChangeListener(listener, juryId);
       getCookieSet().add(editCookie);
@@ -258,9 +259,9 @@ public class ContestNode extends AbstractNode implements CommittableNode {
       return "";
     }
     try {
-      Contest j = juryManager.findEntity(key);
+      Contest j = contestManager.findEntity(key);
       if (j != null) {
-        String wertung = j.getWertung();
+        String wertung = j.getName();
         if (wertung != null) {
           return String.format("%s", wertung);
         } else {
@@ -280,10 +281,12 @@ public class ContestNode extends AbstractNode implements CommittableNode {
     BufferedImage result = iconManager().iconJury;
     if (key != null) {
       try {
-        Contest j = juryManager.findEntity(key);
+        Contest j = contestManager.findEntity(key);
         if (j != null) {
-          String wertungstyp = j.getWertungstyp();
-          result = iconManager().getInstrumentedImage(result, wertungstyp);
+          ContestType contestType = j.getContestType();
+          if (contestType != null) {
+            result = iconManager().getInstrumentedImage(result, contestType.getIcon());
+          }
         }
       } catch (DataBaseNotReadyException ex) {
       }
@@ -306,7 +309,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
 
   /**
    * The transferable in a Drag and Drop is the default Netbeans node
- transferable plus the specific ContestNodeTransferable.
+   * transferable plus the specific ContestNodeTransferable.
    *
    * @return the interface for classes that can be used to provide data for a
    * transfer operation.

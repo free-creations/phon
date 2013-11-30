@@ -27,45 +27,35 @@ import javax.persistence.TypedQuery;
 
 /**
  *
- * @author Harald Postner <Harald at free-creations.de>
+ * @author Harald Postner <Harald at jree-creations.de>
  */
 public class JobCollection implements EntityCollection<Job, String> {
 
   private final String[] jobNames;
   private final String[] jobKeys;
-  private final Comparator<Job> compareOnSortOrder = new Comparator<Job>() {
-    @Override
-    public int compare(Job f1, Job f2) {
-      int c = typeCheckCompare(f1, f2, Job.class);
-      if (c != bothValid) {
-        return c;
-      }
-      return integerCompareNull(f1.getSortvalue(), f2.getSortvalue());
-    }
-  };
 
   protected JobCollection() {
-    List<Job> ff = getAll();
-    jobNames = new String[ff.size()];
-    jobKeys = new String[ff.size()];
+    List<Job> jj = getAll();
+    jobNames = new String[jj.size()];
+    jobKeys = new String[jj.size()];
     for (int i = 0; i < jobNames.length; i++) {
-      Job f = ff.get(i);
-      jobNames[i] = f.getFunktionname();
-      jobKeys[i] = f.getFunktionid();
+      Job j = jj.get(i);
+      jobNames[i] = j.getName();
+      jobKeys[i] = j.getJobId();
     }
   }
 
   /**
-   * The names of all functions in table FUNKTIONEN.
+   * The names of all junctions in table FUNKTIONEN.
    *
-   * @return an array of function-names sorted on {@link Job#sortvalue}.
+   * @return an array of junction-names sorted on {@link Job#sortvalue}.
    */
   public String[] jobNames() {
     return this.jobNames;
   }
 
   /**
-   * The primary keys of all functions in table FUNKTIONEN.
+   * The primary keys of all junctions in table FUNKTIONEN.
    *
    * @return an array of key-values sorted on {@link Job#sortvalue}.
    */
@@ -88,7 +78,7 @@ public class JobCollection implements EntityCollection<Job, String> {
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<Job> query = entityManager.createNamedQuery("Job.findAll", Job.class);
         List<Job> ff = query.getResultList();
-        Collections.sort(ff, compareOnSortOrder);
+
         return ff;
       } catch (DataBaseNotReadyException ignored) {
         return Collections.emptyList();
@@ -102,6 +92,7 @@ public class JobCollection implements EntityCollection<Job, String> {
    * @param key the primary key.
    * @return the returned entity is guaranteed to belong to the current
    * persistency context.
+   * @throws de.free_creations.nbPhonAPI.DataBaseNotReadyException
    */
   @Override
   public Job findEntity(String key) throws DataBaseNotReadyException {
@@ -115,9 +106,10 @@ public class JobCollection implements EntityCollection<Job, String> {
 
   /**
    * Returns an entity from the current persistency context.
+   *
    * @param index the index as in {@link #jobKeys} and {@link #jobNames}
    * @return
-   * @throws DataBaseNotReadyException 
+   * @throws DataBaseNotReadyException
    */
   public Job findEntity(int index) throws DataBaseNotReadyException {
     return findEntity(jobKeys[index]);

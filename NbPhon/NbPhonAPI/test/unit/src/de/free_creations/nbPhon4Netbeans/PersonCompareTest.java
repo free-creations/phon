@@ -99,7 +99,7 @@ public class PersonCompareTest {
     // one family name not null
     Person p1 = new Person();
     personCollectionMock.p1 = p1;
-    p1.setFamilienname("A");
+    p1.setSurname("A");
     result = testComparator.compare(np1, np2);
     assertTrue(result > 0);
 
@@ -109,12 +109,12 @@ public class PersonCompareTest {
     // both family names not null
     Person p2 = new Person();
     personCollectionMock.p2 = p2;
-    p2.setFamilienname("A");
+    p2.setSurname("A");
     result = testComparator.compare(np1, np2);
     assertEquals(0, result);
 
     // one first name not null
-    p1.setVorname("A");
+    p1.setGivenname("A");
     result = testComparator.compare(np1, np2);
     assertTrue(result > 0);
 
@@ -122,17 +122,17 @@ public class PersonCompareTest {
     assertTrue(result < 0);
 
     // both first names not null
-    p2.setVorname("A");
+    p2.setGivenname("A");
     result = testComparator.compare(np1, np2);
     assertEquals(0, result);
 
-    p1.setVorname("B");
+    p1.setGivenname("B");
     result = testComparator.compare(np1, np2);
     assertTrue(result > 0);
     result = testComparator.compare(np2, np1);
     assertTrue(result < 0);
 
-    p2.setFamilienname("B");
+    p2.setSurname("B");
     result = testComparator.compare(np1, np2);
     assertTrue(result < 0);
 

@@ -32,7 +32,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -95,6 +94,7 @@ public class Availability implements Serializable, DbEntity {
       boolean old = isAvailable();
       this.available = value ? 1 : 0;
       firePropertyChange(PROP_AVAILABLE, old, value);
+      firePropertyChangeOnPerson(Person.PROP_AVAILABILITY, old, value);
     }
   }
 
@@ -110,7 +110,7 @@ public class Availability implements Serializable, DbEntity {
     return timeSlot;
   }
 
- public final void setTimeSlot(TimeSlot newValue) {
+  public final void setTimeSlot(TimeSlot newValue) {
     TimeSlot old = this.timeSlot;
     this.timeSlot = newValue;
     if (!Objects.equals(old, newValue)) {
@@ -201,6 +201,14 @@ public class Availability implements Serializable, DbEntity {
     PropertyChangeManager.instance().firePropertyChange(
             identity(),
             propertyName, oldValue, newValue);
+  }
+
+  private void firePropertyChangeOnPerson(String propertyName, Object oldValue, Object newValue) {
+    if (person != null) {
+      PropertyChangeManager.instance().firePropertyChange(
+              person.identity(),
+              propertyName, oldValue, newValue);
+    }
   }
 
   @Override

@@ -39,7 +39,7 @@ public class ContestNodesArray extends Children.SortedArray {
     @Override
     public int compare(Node n1, Node n2) {
 
-      // make sure both nodes are JuryNodes
+      // make sure both nodes are ContestNodes
       int typeCheck = Utils.typeCheckCompare(n1, n2, ContestNode.class);
       if (typeCheck != Utils.bothValid) {
         // OOps, one or both nodes were not of the expected type..
@@ -58,8 +58,8 @@ public class ContestNodesArray extends Children.SortedArray {
           return notNullCheck;
         }
 
-        String w1 = j1.getWertung();
-        String w2 = j1.getWertung();
+        String w1 = j1.getName();
+        String w2 = j1.getName();
         int result = Utils.stringCompareNull(w1, w2);
         if (result == 0) {
           // OOps, they have both the same long description (probably both null)
@@ -86,8 +86,8 @@ public class ContestNodesArray extends Children.SortedArray {
         // this jury must now be added to the internal "nodes" list.
         Object o = evt.getNewValue();
         if (o instanceof EntityIdentity) {
-          EntityIdentity newJury = (EntityIdentity) o;
-          Integer juryId = (Integer) newJury.primaryKey;
+          EntityIdentity newContest = (EntityIdentity) o;
+          Integer juryId = (Integer) newContest.primaryKey;
           //create a node for this new Contest
           ContestNode newNode = new ContestNode(juryId, juryCollection);
           newNode.notifyPendingChanges();
@@ -132,7 +132,7 @@ public class ContestNodesArray extends Children.SortedArray {
 
     for (Contest j : jj) {
       assert (j != null);
-      Integer juryid = j.getJuryid();
+      Integer juryid = j.getContestId();
       assert (juryid != null);
       result.add(new ContestNode(juryid, juryCollection));
     }
@@ -144,13 +144,13 @@ public class ContestNodesArray extends Children.SortedArray {
     return result;
   }
 
-//  public void setComparator(JuryCompare.JuryComparator c) {
+//  public void setComparator(ContestCompare.ContestComparator c) {
 //    super.setComparator(c);
 //  }
   /**
    * Find the current position of a given node.
    *
-   * @param key the JuryId that is searched for.
+   * @param key the ContestId that is searched for.
    * @return returns the index of the current position. Returns -1 if no
  ContestNode with the searched key could be found.
    */

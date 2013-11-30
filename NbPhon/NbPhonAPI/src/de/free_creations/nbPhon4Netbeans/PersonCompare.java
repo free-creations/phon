@@ -74,8 +74,8 @@ public class PersonCompare {
           /**
            * @Todo this is just a test, implement real priority comparison
            */
-          int prio1 = nonNull(p1.getPersonid());
-          int prio2 = nonNull(p2.getPersonid());
+          int prio1 = nonNull(p1.getPersonId());
+          int prio2 = nonNull(p2.getPersonId());
 
           return Integer.compare(prio1, prio2);
 
@@ -113,11 +113,11 @@ public class PersonCompare {
             return checkNull2;
           }
 
-          String f1 = nonNull(p1.getFamilienname());
-          String f2 = nonNull(p2.getFamilienname());
+          String f1 = nonNull(p1.getSurname());
+          String f2 = nonNull(p2.getSurname());
           if (f1.equals(f2)) {
-            String v1 = nonNull(p1.getVorname());
-            String v2 = nonNull(p2.getVorname());
+            String v1 = nonNull(p1.getGivenname());
+            String v2 = nonNull(p2.getGivenname());
             return v1.compareToIgnoreCase(v2);
           } else {
             return f1.compareToIgnoreCase(f2);
