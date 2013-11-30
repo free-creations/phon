@@ -29,7 +29,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -54,8 +53,7 @@ public class Team implements Serializable, DbEntity {
   private Integer teamId;
   @Column(name = "NAME")
   private String name;
-  //@OneToMany(mappedBy = "team")
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @OneToMany(mappedBy = "team")
   private List<Person> personList;
   public static final String PROP_ADD_PERSON = "addPerson";
   public static final String PROP_REMOVE_PERSON = "removePerson";
@@ -111,7 +109,7 @@ public class Team implements Serializable, DbEntity {
       return;
     }
     if (p.getTeam() != this) {
-      throw new RuntimeException("Cannot add Person whishing an other Team.");
+      throw new RuntimeException("Entity missmatch.");
     }
     personList.add(p);
     firePropertyChange(PROP_ADD_PERSON, null, p.identity());
@@ -119,7 +117,7 @@ public class Team implements Serializable, DbEntity {
 
   /**
    * Removes a person from the list of persons who want to be assigned to this
-   * function.
+   * team.
    *
    * @param p
    */

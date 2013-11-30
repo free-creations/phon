@@ -15,6 +15,7 @@
  */
 package de.free_creations.dbEntities;
 
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -56,9 +57,10 @@ public class ContestType implements Serializable, DbEntity {
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "contestType")
   private List<Contest> contestList;
-  //@OneToMany(mappedBy = "contestType")
-  @Transient
+  @OneToMany(mappedBy = "contestType")
   private List<Person> personList;
+  public static final String PROP_ADD_PERSON = "addPerson";
+  public static final String PROP_REMOVE_PERSON = "removePerson";
 
   public ContestType() {
   }
@@ -144,8 +146,68 @@ public class ContestType implements Serializable, DbEntity {
     return "testDb.ContestType[ contestTypeId=" + contestTypeId + " ]";
   }
 
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    addPropertyChangeListener(listener, this.contestTypeId);
+  }
+
+  public static void addPropertyChangeListener(PropertyChangeListener listener, String contestTypeId) {
+    PropertyChangeManager.instance().addPropertyChangeListener(listener,
+            new EntityIdentity(ContestType.class, contestTypeId));
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    removePropertyChangeListener(listener, this.contestTypeId);
+  }
+
+  /**
+   * Remove a PropertyChangeListener for the entity represented by this
+   * <em>Class</em>
+   * and the given primary key.
+   *
+   * @param listener
+   * @param contestTypeid
+   */
+  public static void removePropertyChangeListener(PropertyChangeListener listener, String contestTypeid) {
+    PropertyChangeManager.instance().removePropertyChangeListener(listener,
+            new EntityIdentity(ContestType.class, contestTypeid));
+  }
+
+  private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+    PropertyChangeManager.instance().firePropertyChange(
+            identity(),
+            propertyName, oldValue, newValue);
+  }
+
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(this.getClass(), contestTypeId);
+  }
+
+  void removePerson(Person p) {
+    if (personList == null) {
+      throw new RuntimeException("Cannot remove Person from Function. Record must be persited");
+    }
+    if (!personList.contains(p)) {
+      return;
+    }
+    personList.remove(p);
+    assert (p != null);
+    firePropertyChange(PROP_REMOVE_PERSON, p.identity(), null);
+  }
+
+
+  void addPerson(Person p) {
+    assert (p != null);
+    if (personList == null) {
+      throw new RuntimeException("Cannot add a Person to this Team. Record must be persited");
+    }
+    if (personList.contains(p)) {
+      return;
+    }
+    if (p.getContestType() != this) {
+       throw new RuntimeException("Entity missmatch.");
+    }
+    personList.add(p);
+    firePropertyChange(PROP_ADD_PERSON, null, p.identity());
   }
 }

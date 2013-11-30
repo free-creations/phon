@@ -96,7 +96,7 @@ public class PersonNGTest {
   }
 
   @Test
-  public void testPropertyChangeCallback() throws Throwable  {
+  public void testPropertyChangeCallback() throws Throwable {
 
     Person testItem = new Person(Integer.MAX_VALUE);
     final TestListener testListener = new TestListener();
@@ -114,15 +114,14 @@ public class PersonNGTest {
     testItem.setSurname("Santa");// 10 
     testItem.setTelephone("000 0000 001");// 11
     testItem.setZipcode("H0H 0H0 ");// 12
-   
-    
+
     final int expectedCallbackCount = 12;
 
     try {
       EventQueue.invokeAndWait(new Runnable() {
         @Override
         public void run() {
-          assertEquals(testListener.called, expectedCallbackCount );
+          assertEquals(testListener.called, expectedCallbackCount);
         }
       });
     } catch (InvocationTargetException ex) {
@@ -131,4 +130,93 @@ public class PersonNGTest {
 
   }
 
+  @Test
+  public void testSetTeam() throws InterruptedException, InvocationTargetException {
+    Team testTeam = new Team();
+    Person testItem = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testTeam);
+    entityManager.persist(testItem);
+    entityManager.flush();
+    // verify that the one to many relation is correctly updated
+
+    testItem.setTeam(testTeam);
+    assertTrue(testTeam.getPersonList().contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener personListener = new TestListener();
+    testItem.addPropertyChangeListener(personListener);
+    final TestListener teamListener = new TestListener();
+    testTeam.addPropertyChangeListener(teamListener);
+
+    testItem.setTeam(null);
+
+    assertFalse(testTeam.getPersonList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(personListener.called, 1);
+        assertEquals(teamListener.called, 1);
+      }
+    });
+  }
+
+  @Test
+  public void testSetJobType() throws InterruptedException, InvocationTargetException {
+    JobType testJobType = new JobType("Marshal");
+    Person testItem = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testJobType);
+    entityManager.persist(testItem);
+    entityManager.flush();
+    // verify that the one to many relation is correctly updated
+
+    testItem.setJobType(testJobType);
+    assertTrue(testJobType.getPersonList().contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener personListener = new TestListener();
+    testItem.addPropertyChangeListener(personListener);
+    final TestListener jobTypeListener = new TestListener();
+    testJobType.addPropertyChangeListener(jobTypeListener);
+
+    testItem.setJobType(null);
+
+    assertFalse(testJobType.getPersonList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(personListener.called, 1);
+        assertEquals(jobTypeListener.called, 1);
+      }
+    });
+  }
+
+  @Test
+  public void testSetContestType() throws InterruptedException, InvocationTargetException {
+    ContestType testContestType = new ContestType("Driving");
+    Person testItem = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testContestType);
+    entityManager.persist(testItem);
+    entityManager.flush();
+    // verify that the one to many relation is correctly updated
+
+    testItem.setContestType(testContestType);
+    assertTrue(testContestType.getPersonList().contains(testItem));
+
+    //verify that callbacks are executed
+    final TestListener personListener = new TestListener();
+    testItem.addPropertyChangeListener(personListener);
+    final TestListener contestTypeListener = new TestListener();
+    testContestType.addPropertyChangeListener(contestTypeListener);
+
+    testItem.setContestType(null);
+
+    assertFalse(testContestType.getPersonList().contains(testItem));
+    EventQueue.invokeAndWait(new Runnable() {
+      @Override
+      public void run() {
+        assertEquals(personListener.called, 1);
+        assertEquals(contestTypeListener.called, 1);
+      }
+    });
+  }
 }

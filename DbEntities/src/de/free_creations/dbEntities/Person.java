@@ -30,6 +30,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -103,17 +105,14 @@ public class Person implements Serializable, DbEntity {
   private List<Contest> contestList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
   private List<Allocation> allocationList;
-//  @JoinColumn(name = "TEAM", referencedColumnName = "TEAMID")
-//  @ManyToOne
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "TEAM", referencedColumnName = "TEAMID")
+  @ManyToOne
   private Team team;
-//  @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
-//  @ManyToOne
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
+  @ManyToOne
   private JobType jobType;
-//  @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
-//  @ManyToOne
-  @Transient //<<<<<<<<<<<<<<<<<<<<<<<remove
+  @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
+  @ManyToOne
   private ContestType contestType;
   public static final String PROP_SURNAME = "PROP_SURNAME";
   public static final String PROP_GENDER = "PROP_GENDER";
@@ -131,6 +130,7 @@ public class Person implements Serializable, DbEntity {
   public static final String PROP_AVAILABILITYADDED = "PROP_AVAILABILITYADDED";
   public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
   public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
+  public static final String PROP_TEAM = "PROP_TEAM";
 
   public Person() {
   }
@@ -320,22 +320,62 @@ public class Person implements Serializable, DbEntity {
     return team;
   }
 
-//  public void setTeam(Team value) {
-//    this.team = value;
-//  }
-  public JobType getJobtype() {
+  public void setTeam(Team newValue) {
+    Team old = this.team;
+    this.team = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removePerson(this);
+      }
+      if (newValue != null) {
+        newValue.addPerson(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_TEAM, oldId, newId);
+    }
+  }
+
+  public JobType getJobType() {
     return jobType;
   }
 
-//  public void setJobtype(JobType value) {
-//    this.jobType = value;
-//  }
-//  public ContestType getContestType() {
-//    return contestType;
-//  }
-//  public void setContestType(ContestType value) {
-//    this.contestType = value;
-//  }
+  public void setJobType(JobType newValue) {
+    JobType old = this.jobType;
+    this.jobType = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removePerson(this);
+      }
+      if (newValue != null) {
+        newValue.addPerson(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_TEAM, oldId, newId);
+    }
+  }
+
+  public ContestType getContestType() {
+    return contestType;
+  }
+  
+  public void setContestType(ContestType newValue) {
+    ContestType old = this.contestType;
+    this.contestType = newValue;
+    if (!Objects.equals(old, newValue)) {
+      if (old != null) {
+        old.removePerson(this);
+      }
+      if (newValue != null) {
+        newValue.addPerson(this);
+      }
+      EntityIdentity newId = (newValue == null) ? null : newValue.identity();
+      EntityIdentity oldId = (old == null) ? null : old.identity();
+      firePropertyChange(PROP_TEAM, oldId, newId);
+    }
+  }
+  
   @Override
   public int hashCode() {
     int hash = 0;

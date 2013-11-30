@@ -15,6 +15,7 @@
  */
 package de.free_creations.dbEntities;
 
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -54,11 +55,12 @@ public class JobType implements Serializable, DbEntity {
   private String name;
   @Column(name = "ICON")
   private String icon;
-  //@OneToMany(mappedBy = "jobType")
-  @Transient
+  @OneToMany(mappedBy = "jobType")
   private List<Person> personList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "jobType")
   private List<Job> jobList;
+  public static final String PROP_REMOVE_PERSON = "removePerson";
+  public static final String PROP_ADD_PERSON = "addPerson";
 
   public JobType() {
   }
@@ -89,6 +91,7 @@ public class JobType implements Serializable, DbEntity {
   public List<Person> getPersonList() {
     return personList;
   }
+
   /**
    * The list of all concrete jobs that are of this type.
    *
@@ -124,8 +127,67 @@ public class JobType implements Serializable, DbEntity {
     return "testDb.JobType[ jobTypeId=" + jobTypeId + " ]";
   }
 
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    addPropertyChangeListener(listener, this.jobTypeId);
+  }
+
+  public static void addPropertyChangeListener(PropertyChangeListener listener, String jobTypeId) {
+    PropertyChangeManager.instance().addPropertyChangeListener(listener,
+            new EntityIdentity(JobType.class, jobTypeId));
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    removePropertyChangeListener(listener, this.jobTypeId);
+  }
+
+  /**
+   * Remove a PropertyChangeListener for the entity represented by this
+   * <em>Class</em>
+   * and the given primary key.
+   *
+   * @param listener
+   * @param jobTypeId
+   */
+  public static void removePropertyChangeListener(PropertyChangeListener listener, String jobTypeId) {
+    PropertyChangeManager.instance().removePropertyChangeListener(listener,
+            new EntityIdentity(JobType.class, jobTypeId));
+  }
+
+  private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+    PropertyChangeManager.instance().firePropertyChange(
+            identity(),
+            propertyName, oldValue, newValue);
+  }
+
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(this.getClass(), jobTypeId);
+  }
+
+  protected void removePerson(Person p) {
+    if (personList == null) {
+      throw new RuntimeException("Cannot remove Person from Function. Record must be persited");
+    }
+    if (!personList.contains(p)) {
+      return;
+    }
+    personList.remove(p);
+    assert (p != null);
+    firePropertyChange(PROP_REMOVE_PERSON, p.identity(), null);
+  }
+
+  protected void addPerson(Person p) {
+    assert (p != null);
+    if (personList == null) {
+      throw new RuntimeException("Cannot add a Person to this Team. Record must be persited");
+    }
+    if (personList.contains(p)) {
+      return;
+    }
+    if (p.getJobType() != this) {
+      throw new RuntimeException("Cannot add Person whishing an other Team.");
+    }
+    personList.add(p);
+    firePropertyChange(PROP_ADD_PERSON, null, p.identity());
   }
 }
