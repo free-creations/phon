@@ -55,7 +55,7 @@ public class GeneratePersonTable {
     if (!outputDir.isDirectory()) {
       throw new RuntimeException("is not a directory. >" + outputDir.getAbsolutePath() + "<");
     }
-    File outFile = new File(outputDir, "populateExamplePersons.sql");
+    File outFile = new File(outputDir, "_3_populateExamplePersons.sql");
     PrintWriter output;
     output = new PrintWriter(outFile);
     makePrologue(output);
