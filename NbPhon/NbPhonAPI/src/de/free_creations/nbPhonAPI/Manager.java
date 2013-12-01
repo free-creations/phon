@@ -216,4 +216,16 @@ public class Manager {
       return jobTypeCollection;
     }
   }
+
+  private static final Object locationLock = new Object();
+  private static LocationCollection locationCollection = null;
+
+  public static LocationCollection getLocationCollection() {
+    synchronized (locationLock) {
+      if (locationCollection == null) {
+        locationCollection = new LocationCollection();
+      }
+      return locationCollection;
+    }
+  }
 }

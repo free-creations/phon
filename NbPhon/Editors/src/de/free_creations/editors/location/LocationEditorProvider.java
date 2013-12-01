@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.editors.contest;
+package de.free_creations.editors.location;
 
 import org.openide.windows.CloneableTopComponent;
 import org.openide.windows.TopComponent;
@@ -24,26 +24,26 @@ import org.openide.windows.WindowManager;
  * @author Harald Postner <Harald at free-creations.de>
  */
 @org.openide.util.lookup.ServiceProvider(
-        service=de.free_creations.nbPhon4Netbeans.ContestEditorProvider.class,
+        service=de.free_creations.nbPhon4Netbeans.LocationEditorProvider.class,
         position=100)
-public class ContestEditorProvider implements de.free_creations.nbPhon4Netbeans.ContestEditorProvider {
+public class LocationEditorProvider implements de.free_creations.nbPhon4Netbeans.LocationEditorProvider {
 
 
 
   @Override
   public CloneableTopComponent getEditor(boolean newWindow, Integer key) {
     WindowManager windowManager = WindowManager.getDefault();
-    ContestTopComponent editor = null;
+    LocationTopComponent editor = null;
     if(!newWindow){
-      TopComponent foundTC = windowManager.findTopComponent("JuryEditorTopComponent");
-      if(foundTC instanceof ContestTopComponent){
-        editor = (ContestTopComponent)foundTC;
+      TopComponent foundTC = windowManager.findTopComponent("LocationTopComponent");
+      if(foundTC instanceof LocationTopComponent){
+        editor = (LocationTopComponent)foundTC;
       }
     }
     if(editor == null){
-     editor = new ContestTopComponent(key);
+     editor = new LocationTopComponent(key);
     }
-    editor.viewContestRecord(key);
+    editor.viewLocationRecord(key);
     editor.open();
     editor.requestActive();
     return editor;  }

@@ -15,7 +15,9 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
+import de.free_creations.dbEntities.Location;
 import static de.free_creations.nbPhon4Netbeans.IconManager.iconManager;
+import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import org.openide.nodes.AbstractNode;
@@ -27,9 +29,9 @@ import org.openide.nodes.Children;
  */
 public class LocationNode extends AbstractNode {
 
-  private final String locationId;
+  private final Integer locationId;
 
-  public LocationNode(String locationId) {
+  public LocationNode(Integer locationId, MutableEntityCollection<Location, Integer> locationManager) {
     super(Children.LEAF);
     this.locationId = locationId;
   }

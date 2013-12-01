@@ -124,26 +124,7 @@ public final class LocationListTopComponent extends TopComponent
     associateLookup(ExplorerUtils.createLookup(explorerManager, getActionMap()));
 
     //---
-    nodes = new Node[]{
-      new LocationNode("Mensa"),
-      new LocationNode("Musikschule Saal 1.11"),
-      new LocationNode("Schloss Keramikmuseum"),
-      new LocationNode("Schloss Festinbau"),
-      new LocationNode("Schiller-Gymn. Musiksaal"),
-      new LocationNode("Kulturzentrum kl. Saal"),
-      new LocationNode("Kulturzentrum 303"),
-      new LocationNode("Forum Schubartsaal"),
-      new LocationNode("Forum Silchersaal"),
-      new LocationNode("Staatsarchiv - Vortragsaal"),
-      new LocationNode("Schiller-Gymn. Aula"),
-      new LocationNode("Musikschule Saal 0.11"),
-      new LocationNode("Goethe-Gymn. Aula"),
-      new LocationNode("Musikschule Kl. Bühne"),
-      new LocationNode("Palais Grävenitz Saal"),
-      new LocationNode("Theater-Akademie  Zuschauersaal"),
-      new LocationNode("Landratsamt Sitzungssaal"),
-      new LocationNode("Pestalozzischule, Aula"),
-      new LocationNode("Rathaus, Justinus-Kerner-Saal"),};
+    nodes = new Node[]{};
 
     ArrayList<Node> aNodes = new ArrayList<>();
     aNodes.addAll(Arrays.asList(nodes));

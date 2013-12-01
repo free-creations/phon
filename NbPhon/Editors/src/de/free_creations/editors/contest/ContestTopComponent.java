@@ -50,16 +50,16 @@ import org.openide.windows.CloneableTopComponent;
 @Messages({
   "CTL_ContestAction=Contest",
   "CTL_ContestTopComponent=Contest",
-  "HINT_ContestTopComponent=Show the details of a Contest"
+  "HINT_ContestTopComponent=Shows the details of a Contest"
 })
 public final class ContestTopComponent extends CloneableTopComponent {
 
   private Integer currentKey = null;
-  private final ContestCollection juryCollection = Manager.getContestCollection();
+  private final ContestCollection contestCollection = Manager.getContestCollection();
   private final PropertyChangeListener listener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      Contest j = thisJury();
+      Contest j = thisContest();
       if (j != null) {
         refreshView(j);
       }
@@ -76,7 +76,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
 
   ContestTopComponent(Integer key) {
     this();
-    viewJuryRecord(key);
+    viewContestRecord(key);
 
   }
 
@@ -88,39 +88,28 @@ public final class ContestTopComponent extends CloneableTopComponent {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    lblJuryId = new javax.swing.JLabel();
-    edWertung = new javax.swing.JTextField();
+    edContestId = new javax.swing.JLabel();
+    edName = new javax.swing.JTextField();
     jLabel2 = new javax.swing.JLabel();
-    edCategory = new javax.swing.JTextField();
-    jLabel3 = new javax.swing.JLabel();
-    edRaum = new javax.swing.JTextField();
+    edContestType = new javax.swing.JTextField();
     jLabel4 = new javax.swing.JLabel();
     jScrollPane1 = new javax.swing.JScrollPane();
     allocationTable = new de.free_creations.editors.contest.AllocationTable();
     jScrollPane2 = new javax.swing.JScrollPane();
     timeTable1 = new de.free_creations.editors.contest.TimeTable();
 
-    org.openide.awt.Mnemonics.setLocalizedText(lblJuryId, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.lblJuryId.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(edContestId, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edContestId.text")); // NOI18N
 
-    edWertung.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edWertung.text")); // NOI18N
-    edWertung.addFocusListener(new java.awt.event.FocusAdapter() {
+    edName.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edName.text")); // NOI18N
+    edName.addFocusListener(new java.awt.event.FocusAdapter() {
       public void focusLost(java.awt.event.FocusEvent evt) {
-        edWertungFocusLost(evt);
+        edNameFocusLost(evt);
       }
     });
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel2.text")); // NOI18N
 
-    edCategory.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edCategory.text")); // NOI18N
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel3.text")); // NOI18N
-
-    edRaum.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edRaum.text")); // NOI18N
-    edRaum.addFocusListener(new java.awt.event.FocusAdapter() {
-      public void focusLost(java.awt.event.FocusEvent evt) {
-        edRaumFocusLost(evt);
-      }
-    });
+    edContestType.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edContestType.text")); // NOI18N
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel4.text")); // NOI18N
 
@@ -136,22 +125,20 @@ public final class ContestTopComponent extends CloneableTopComponent {
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
-            .addComponent(lblJuryId, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(edContestId, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
           .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(jLabel2)
-                  .addComponent(jLabel3)
                   .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addComponent(edWertung)
+                  .addComponent(edName)
                   .addGroup(layout.createSequentialGroup()
-                    .addComponent(edCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE))
-                  .addComponent(edRaum)))
+                    .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE))))
               .addComponent(jScrollPane2)
               .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
             .addContainerGap())))
@@ -160,39 +147,24 @@ public final class ContestTopComponent extends CloneableTopComponent {
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(lblJuryId)
+        .addComponent(edContestId)
         .addGap(15, 15, 15)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jLabel2)
-          .addComponent(edCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addGap(18, 18, 18)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(edWertung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(edName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel4))
-        .addGap(18, 18, 18)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel3)
-          .addComponent(edRaum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGap(39, 39, 39)
         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(70, Short.MAX_VALUE))
+        .addContainerGap(74, Short.MAX_VALUE))
     );
   }// </editor-fold>//GEN-END:initComponents
 
-  private void edRaumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edRaumFocusLost
-//    Contest j = thisJury();
-//    if (j != null) {
-//      String oldS = noNull(j.getWertungsraum());
-//      String newS = edRaum.getText();
-//      if (!oldS.equals(newS)) {
-//        j.setWertungsraum(newS);
-//      }
-//    }
-  }//GEN-LAST:event_edRaumFocusLost
-
-  private void edWertungFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edWertungFocusLost
+  private void edNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edNameFocusLost
 //    Contest j = thisJury();
 //    if (j != null) {
 //      String oldS = noNull(j.getWertung());
@@ -201,18 +173,16 @@ public final class ContestTopComponent extends CloneableTopComponent {
 //        j.setWertung(newS);
 //      }
 //    }
-  }//GEN-LAST:event_edWertungFocusLost
+  }//GEN-LAST:event_edNameFocusLost
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private de.free_creations.editors.contest.AllocationTable allocationTable;
-  private javax.swing.JTextField edCategory;
-  private javax.swing.JTextField edRaum;
-  private javax.swing.JTextField edWertung;
+  private javax.swing.JLabel edContestId;
+  private javax.swing.JTextField edContestType;
+  private javax.swing.JTextField edName;
   private javax.swing.JLabel jLabel2;
-  private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
-  private javax.swing.JLabel lblJuryId;
   private de.free_creations.editors.contest.TimeTable timeTable1;
   // End of variables declaration//GEN-END:variables
 
@@ -238,44 +208,42 @@ public final class ContestTopComponent extends CloneableTopComponent {
     // TODO read your settings according to their version
   }
 
-  void viewJuryRecord(Integer newKey) {
+  void viewContestRecord(Integer newKey) {
     if (!Objects.equals(currentKey, newKey)) {
       Contest.removePropertyChangeListener(listener, currentKey);
       currentKey = newKey;
 
-      Contest newJury = thisJury();
-      if (newJury != null) {
+      Contest newContest = thisContest();
+      if (newContest != null) {
         Contest.addPropertyChangeListener(listener, newKey);
-        refreshView(newJury);
+        refreshView(newContest);
       }
-      lblJuryId.setText(String.format("%s",newKey));
+      edContestId.setText(String.format("%s",newKey));
       allocationTable.setJuryId(newKey);
     }
   }
 
-  private Contest thisJury() {
+  private Contest thisContest() {
     Contest j = null;
     try {
-      j = juryCollection.findEntity(currentKey);
+      j = contestCollection.findEntity(currentKey);
     } catch (DataBaseNotReadyException ex) {
       Exceptions.printStackTrace(ex);
     }
     return j;
   }
 
-  private void refreshView(Contest jury) {
-    assert (jury != null);
-    String wertung = noNull(jury.getName()).trim();
+  private void refreshView(Contest contest) {
+    assert (contest != null);
+    String wertung = noNull(contest.getName()).trim();
     if (wertung.length() > 0) {
       setDisplayName(wertung);
     } else {
       setDisplayName(String.format("Contest[%s]", currentKey));
     }
 
-    lblJuryId.setText(String.format("%s", currentKey));
-//    edWertung.setText(noNull(jury.getWertung()));
-//    edRaum.setText(noNull(jury.getWertungsraum()));
-//    edCategory.setText(noNull(jury.getWertungstyp()));
+    edContestId.setText(String.format("%s", currentKey));
+
   }
 
   private String noNull(String s) {
