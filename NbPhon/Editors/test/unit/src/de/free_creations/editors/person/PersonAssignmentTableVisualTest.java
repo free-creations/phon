@@ -37,13 +37,13 @@ public class PersonAssignmentTableVisualTest extends javax.swing.JFrame {
   protected void initialize() {
     boolean open = Manager.assertOpen();
     if(open){
-      try {
-        Manager.commit();
-        TimeSlotCollection.addTestItem();
-      } catch (DataBaseNotReadyException ex) {
-        Exceptions.printStackTrace(ex);
-      }
-      
+//      try {
+//        Manager.commit();
+//       // TimeSlotCollection.addTestItem();
+//      } catch (DataBaseNotReadyException ex) {
+//        Exceptions.printStackTrace(ex);
+//      }
+//      
     }
     initComponents();
   }

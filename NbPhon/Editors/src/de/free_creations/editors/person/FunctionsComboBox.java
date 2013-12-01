@@ -68,7 +68,7 @@ public class FunctionsComboBox extends JComboBox<Job> {
     if (anItem instanceof Job) {
       Job mayBeZomby = (Job) anItem;
       try {
-        return Manager.getJobCollection().findEntity(mayBeZomby.getFunktionid());
+        return Manager.getJobCollection().findEntity(mayBeZomby.getJobId());
       } catch (DataBaseNotReadyException ex) {
         return null;
       }
@@ -81,7 +81,7 @@ public class FunctionsComboBox extends JComboBox<Job> {
     public FunctionsComboBoxModel() {
       super();
       if (java.beans.Beans.isDesignTime()) {
-        Job f0 = new Job("LEHRER", "LehrkraftXX", 1);
+        Job f0 = new Job("LEHRER");
         addElement(f0);
         FunctionsComboBoxModel.this.setSelectedItem(f0);
 

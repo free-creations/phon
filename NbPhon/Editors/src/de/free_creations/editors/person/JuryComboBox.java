@@ -17,6 +17,7 @@ package de.free_creations.editors.person;
 
 
 import de.free_creations.nbPhonAPI.Manager;
+import java.util.List;
 import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -44,7 +45,7 @@ public class JuryComboBox extends JComboBox<String> {
         JuryComboBoxModel.this.setSelectedItem("KLAVIER-STREICH");
 
       } else {
-        Set<String> juryTypes = Manager.getContestCollection().contestTypes();
+        List<String> juryTypes = Manager.getContestCollection().contestTypes();
         for (String jt : juryTypes) {
           addElement(jt);
         }

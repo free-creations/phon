@@ -385,10 +385,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edNachnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edNachnameFocusLost
     Person p = thisPerson();
     if (p != null) {
-      String oldS = noNull(p.getFamilienname());
+      String oldS = noNull(p.getSurname());
       String newS = edNachname.getText();
       if (!oldS.equals(newS)) {
-        p.setFamilienname(newS);
+        p.setSurname(newS);
       }
     }
   }//GEN-LAST:event_edNachnameFocusLost
@@ -396,10 +396,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edVornameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edVornameFocusLost
     Person p = thisPerson();
     if (p != null) {
-      String oldS = noNull(p.getVorname());
+      String oldS = noNull(p.getGivenname());
       String newS = edVorname.getText();
       if (!oldS.equals(newS)) {
-        p.setVorname(newS);
+        p.setGivenname(newS);
       }
     }
   }//GEN-LAST:event_edVornameFocusLost
@@ -407,10 +407,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edPlzFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edPlzFocusLost
     Person p = thisPerson();
     if (p != null) {
-      String oldS = noNull(p.getPlz());
+      String oldS = noNull(p.getZipcode());
       String newS = edPlz.getText();
       if (!oldS.equals(newS)) {
-        p.setPlz(newS);
+        p.setZipcode(newS);
       }
     }
   }//GEN-LAST:event_edPlzFocusLost
@@ -418,10 +418,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edWohnortFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edWohnortFocusLost
     Person p = thisPerson();
     if (p != null) {
-      String oldS = noNull(p.getOrt());
+      String oldS = noNull(p.getCity());
       String newS = edWohnort.getText();
       if (!oldS.equals(newS)) {
-        p.setOrt(newS);
+        p.setCity(newS);
       }
     }
   }//GEN-LAST:event_edWohnortFocusLost
@@ -429,10 +429,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edStrasseFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edStrasseFocusLost
     Person p = thisPerson();
     if (p != null) {
-      String oldS = noNull(p.getStrasse());
+      String oldS = noNull(p.getStreet());
       String newS = edStrasse.getText();
       if (!oldS.equals(newS)) {
-        p.setStrasse(newS);
+        p.setStreet(newS);
       }
     }
   }//GEN-LAST:event_edStrasseFocusLost
@@ -440,10 +440,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edFestnetzFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edFestnetzFocusLost
     Person p = thisPerson();
     if (p != null) {
-      String oldS = noNull(p.getTelnr());
+      String oldS = noNull(p.getTelephone());
       String newS = edFestnetz.getText();
       if (!oldS.equals(newS)) {
-        p.setTelnr(newS);
+        p.setTelephone(newS);
       }
     }
   }//GEN-LAST:event_edFestnetzFocusLost
@@ -451,10 +451,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edHandyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edHandyFocusLost
     Person p = thisPerson();
     if (p != null) {
-      String oldS = noNull(p.getHandy());
+      String oldS = noNull(p.getMobile());
       String newS = edHandy.getText();
       if (!oldS.equals(newS)) {
-        p.setHandy(newS);
+        p.setMobile(newS);
       }
     }
   }//GEN-LAST:event_edHandyFocusLost
@@ -471,26 +471,26 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }//GEN-LAST:event_edEMailFocusLost
 
   private void edFunctionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edFunctionActionPerformed
-    Person p = thisPerson();
-    if (p != null) {
-      Job oldF = p.getGewuenschtefunktion();
-      Job newF = edFunction.getSelectedItemFromPersistency();
-      if (!Objects.equals(oldF, newF)) {
-        p.setGewuenschtefunktion(newF);
-      }
-    }
+//    Person p = thisPerson();
+//    if (p != null) {
+//      Job oldF = p.get();
+//      Job newF = edFunction.getSelectedItemFromPersistency();
+//      if (!Objects.equals(oldF, newF)) {
+//        p.setGewuenschtefunktion(newF);
+//      }
+//    }
 
   }//GEN-LAST:event_edFunctionActionPerformed
 
   private void edWertungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edWertungActionPerformed
-    Person p = thisPerson();
-    if (p != null) {
-      String oldW = p.getGewuenschtewertung();
-      String newW = toString(edWertung.getSelectedItem());
-      if (!Objects.equals(oldW, newW)) {
-        p.setGewuenschtewertung(newW);
-      }
-    }
+//    Person p = thisPerson();
+//    if (p != null) {
+//      String oldW = p.getGewuenschtewertung();
+//      String newW = toString(edWertung.getSelectedItem());
+//      if (!Objects.equals(oldW, newW)) {
+//        p.setGewuenschtewertung(newW);
+//      }
+//    }
   }//GEN-LAST:event_edWertungActionPerformed
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField PersonId;
@@ -578,33 +578,34 @@ public final class PersonTopComponent extends CloneableTopComponent {
   }
 
   private void refreshView(Person person) {
-    setDisplayName(String.format("%s, %s", person.getFamilienname(), person.getVorname()));
-    PersonId.setText(noNull(person.getPersonid()));
-    edAlter.setSelectedItem(noNull(person.getAltersgruppe()));
+    setDisplayName(String.format("%s, %s", person.getSurname(), person.getGivenname()));
+    PersonId.setText(noNull(person.getPersonId()));
+    edAlter.setSelectedItem(noNull(person.getAgegroup()));
     edEMail.setText(noNull(person.getEmail()));
-    edFestnetz.setText(noNull(person.getTelnr()));
-    edFunction.setSelectedItem(person.getGewuenschtefunktion());
-    edHandy.setText(noNull(person.getHandy()));
-    edHerrFrau.setSelectedItem(noNull(person.getHerrfrau()));
-    edNachname.setText(noNull(person.getFamilienname()));
-    edNotiz.setText(noNull(person.getNotiz()));
-    edPlz.setText(noNull(person.getPlz()));
-    edStrasse.setText(noNull(person.getStrasse()));
-    edVorname.setText(noNull(person.getVorname()));
-    edWertung.setSelectedItem(person.getGewuenschtewertung());
-    edWohnort.setText(noNull(person.getOrt()));
-    teamPanel.setPersonId(person.getPersonid());
+    edFestnetz.setText(noNull(person.getTelephone()));
+  //  edFunction.setSelectedItem(person.getGewuenschtefunktion());
+    edHandy.setText(noNull(person.getMobile()));
+    edHerrFrau.setSelectedItem(noNull(person.getGender()));
+    edNachname.setText(noNull(person.getSurname()));
+    edNotiz.setText(noNull(person.getNotice()));
+    edPlz.setText(noNull(person.getZipcode()));
+    edStrasse.setText(noNull(person.getStreet()));
+    edVorname.setText(noNull(person.getGivenname()));
+   // edWertung.setSelectedItem(person.getGewuen());
+    edWohnort.setText(noNull(person.getCity()));
+ //   teamPanel.setPersonId(person.getPersonid());
   }
 
   private Integer findTeamleaderId(Person person) {
-    if (person == null) {
-      return null;
-    }
-    Person p = person.getGewuenschterkollege();
-    if (p == null) {
-      return null;
-    }
-    return p.getPersonid();
+//    if (person == null) {
+//      return null;
+//    }
+//    Person p = person.getGewuenschterkollege();
+//    if (p == null) {
+//      return null;
+//    }
+//    return p.getPersonid();
+    return null;
 
   }
 

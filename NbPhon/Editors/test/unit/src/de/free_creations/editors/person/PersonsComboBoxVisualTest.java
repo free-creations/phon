@@ -128,7 +128,7 @@ public class PersonsComboBoxVisualTest extends javax.swing.JFrame {
     if(selectedKey != null){
       try {
         Person p = Manager.getPersonCollection().findEntity(selectedKey);
-        System.out.println("  person: "+p.getFamilienname()+","+p.getVorname());
+        System.out.println("  person: "+p.getSurname()+","+p.getGivenname());
       } catch (DataBaseNotReadyException ex) {
         System.out.println("  Ooops database not ready.");
       }

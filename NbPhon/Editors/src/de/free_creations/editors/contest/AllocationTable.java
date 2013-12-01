@@ -67,7 +67,7 @@ public class AllocationTable extends JTable {
         AllocationPersonsComboBox cb = (AllocationPersonsComboBox) editor;
         if (value instanceof Allocation) {
           Allocation t = (Allocation) value;
-          cb.setSelectedPerson(t.getPersonid());
+          cb.setSelectedPerson(t.getPerson());
         } else {
           cb.setSelectedPerson(null);
         }
@@ -156,7 +156,7 @@ public class AllocationTable extends JTable {
           PersonNode node =
                   (alloc == null)
                   ? null
-                  : model.getNodeFor(alloc.getPersonid().getPersonid());
+                  : model.getNodeFor(alloc.getPerson().getPersonId());
           if (node != null) {
             preparedRenderer.setText(node.getDisplayName());
             Image image = node.getIcon(BeanInfo.ICON_COLOR_16x16);
@@ -311,26 +311,26 @@ public class AllocationTable extends JTable {
       if (juryId == null) {
         return null;
       }
-      Contest j;
-      Job f;
-      TimeSlot t;
-      try {
-        j = Manager.getContestCollection().findEntity(juryId);
-        f = Manager.getJobCollection().findEntity(functionIndex(rowIndex));
-        t = Manager.getTimeSlotCollection().findEntity(
-                dayIndex(columnIndex), timeOfDayIndex(rowIndex));
-      } catch (DataBaseNotReadyException ignored) {
-        return null;
-      }
-      List<Allocation> aa = j.getTeameinteilungList();//the allocations for this jury
-
-      for (Allocation a : aa) {
-        if (Objects.equals(a.getZeit(), t)) {
-          if (Objects.equals(a.getFunktionen(), f)) {
-            return a;
-          }
-        }
-      }
+//      Contest j;
+//      Job f;
+//      TimeSlot t;
+//      try {
+//        j = Manager.getContestCollection().findEntity(juryId);
+//        f = Manager.getJobCollection().findEntity(functionIndex(rowIndex));
+//        t = Manager.getTimeSlotCollection().findEntity(
+//                dayIndex(columnIndex), timeOfDayIndex(rowIndex));
+//      } catch (DataBaseNotReadyException ignored) {
+//        return null;
+//      }
+//      List<Allocation> aa = j.getTeameinteilungList();//the allocations for this jury
+//
+//      for (Allocation a : aa) {
+//        if (Objects.equals(a.getZeit(), t)) {
+//          if (Objects.equals(a.getFunktionen(), f)) {
+//            return a;
+//          }
+//        }
+//      }
       return null;
     }
 

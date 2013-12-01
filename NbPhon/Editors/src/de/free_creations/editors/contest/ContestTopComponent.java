@@ -182,25 +182,25 @@ public final class ContestTopComponent extends CloneableTopComponent {
   }// </editor-fold>//GEN-END:initComponents
 
   private void edRaumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edRaumFocusLost
-    Contest j = thisJury();
-    if (j != null) {
-      String oldS = noNull(j.getWertungsraum());
-      String newS = edRaum.getText();
-      if (!oldS.equals(newS)) {
-        j.setWertungsraum(newS);
-      }
-    }
+//    Contest j = thisJury();
+//    if (j != null) {
+//      String oldS = noNull(j.getWertungsraum());
+//      String newS = edRaum.getText();
+//      if (!oldS.equals(newS)) {
+//        j.setWertungsraum(newS);
+//      }
+//    }
   }//GEN-LAST:event_edRaumFocusLost
 
   private void edWertungFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edWertungFocusLost
-    Contest j = thisJury();
-    if (j != null) {
-      String oldS = noNull(j.getWertung());
-      String newS = edWertung.getText();
-      if (!oldS.equals(newS)) {
-        j.setWertung(newS);
-      }
-    }
+//    Contest j = thisJury();
+//    if (j != null) {
+//      String oldS = noNull(j.getWertung());
+//      String newS = edWertung.getText();
+//      if (!oldS.equals(newS)) {
+//        j.setWertung(newS);
+//      }
+//    }
   }//GEN-LAST:event_edWertungFocusLost
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private de.free_creations.editors.contest.AllocationTable allocationTable;
@@ -265,7 +265,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
 
   private void refreshView(Contest jury) {
     assert (jury != null);
-    String wertung = noNull(jury.getWertung()).trim();
+    String wertung = noNull(jury.getName()).trim();
     if (wertung.length() > 0) {
       setDisplayName(wertung);
     } else {
@@ -273,9 +273,9 @@ public final class ContestTopComponent extends CloneableTopComponent {
     }
 
     lblJuryId.setText(String.format("%s", currentKey));
-    edWertung.setText(noNull(jury.getWertung()));
-    edRaum.setText(noNull(jury.getWertungsraum()));
-    edCategory.setText(noNull(jury.getWertungstyp()));
+//    edWertung.setText(noNull(jury.getWertung()));
+//    edRaum.setText(noNull(jury.getWertungsraum()));
+//    edCategory.setText(noNull(jury.getWertungstyp()));
   }
 
   private String noNull(String s) {

@@ -130,7 +130,7 @@ public class PersonsComboBox extends ChoiceView {
     if (p == null) {
       setSelectedPersonId(null);
     } else {
-      setSelectedPersonId(p.getPersonid());
+      setSelectedPersonId(p.getPersonId());
     }
   }
 }

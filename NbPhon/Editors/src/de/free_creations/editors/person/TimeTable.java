@@ -259,10 +259,10 @@ public class TimeTable extends JTable {
       try {
         Person p = Manager.getPersonCollection().findEntity(personId);
         List<Availability> emptyVv = Collections.emptyList();
-        List<Availability> vv = (p == null) ? emptyVv : p.getVerfuegbarkeitList();
+        List<Availability> vv = (p == null) ? emptyVv : p.getAvailabilityList();
         TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
         for (Availability v : vv) {
-          if (Objects.equals(t, v.getZeitid())) {
+          if (Objects.equals(t, v.getTimeSlot())) {
             return v;
           }
         }
@@ -283,7 +283,7 @@ public class TimeTable extends JTable {
       assert (columnIndex > 0);
       Availability v = getVerfuegEntity(rowIndex, columnIndex);
       if (v != null) {
-        return v.isVerfuegbar();
+        return v.isAvailable();
       } else {
         return false;
       }
@@ -317,7 +317,7 @@ public class TimeTable extends JTable {
         Availability v = getVerfuegEntity(rowIndex, columnIndex);
         if (v != null) {
           if (aValue instanceof Boolean) {
-            v.setVerfuegbar((Boolean) aValue);
+            v.setAvailable((Boolean) aValue);
           }
         }
       }
@@ -371,7 +371,7 @@ public class TimeTable extends JTable {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      if (Person.PROP_VERFUEGBARKEIT.equals(evt.getPropertyName())) {
+      if (Person.PROP_AVAILABILITY.equals(evt.getPropertyName())) {
         fireTableDataChanged();
       }
     }

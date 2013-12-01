@@ -18,6 +18,7 @@ package de.free_creations.editors.person;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Availability;
+import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
@@ -154,8 +155,8 @@ public class PersonAssignmentTable extends JTable {
       if (column != 0) {
         if (!isPersonAvailable(row, column)) {
           preparedRenderer.setBackground(disabledColor);
-        }else{
-          
+        } else {
+
         }
       }
       return preparedRenderer;
@@ -232,10 +233,10 @@ public class PersonAssignmentTable extends JTable {
         Integer personId = ((AssignemtTableModel) dataModel).getPersonId();
         Person p = Manager.getPersonCollection().findEntity(personId);
         List<Availability> emptyVv = Collections.emptyList();
-        List<Availability> vv = (p == null) ? emptyVv : p.getVerfuegbarkeitList();
+        List<Availability> vv = (p == null) ? emptyVv : p.getAvailabilityList();
         TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
         for (Availability v : vv) {
-          if (Objects.equals(t, v.getZeitid())) {
+          if (Objects.equals(t, v.getTimeSlot())) {
             return v;
           }
         }
@@ -256,7 +257,7 @@ public class PersonAssignmentTable extends JTable {
     assert (columnIndex > 0);
     Availability v = getVerfuegEntity(rowIndex, columnIndex);
     if (v != null) {
-      return v.isVerfuegbar();
+      return v.isAvailable();
     } else {
       return false;
     }
@@ -270,17 +271,17 @@ public class PersonAssignmentTable extends JTable {
   private TableModel makeDesignTimeModel() {
     return (new javax.swing.table.DefaultTableModel(
             new Object[][]{
-      {"Vormittag", "<html>BLOCKFLOETE-1<br>Lehrkraft</html>", "<html>KLAVIER-DUO-1<br>Lehrkraft</html>", "", "", "", "", "<html>Klavier-1<br>Saaldienst</html>"},
-      {"Nachmittag", "<html>Gitarre<br>Lehrkraft</html>", "<html>Klavier-1<br>Lehrkraft</html>", "<html>KLAVIER-STREICH<br>Saaldienst</html>", "", "", "", "<html>Klavier-1<br>Saaldienst</html>"},
-      {"Abend", "<html>Klavier-1<br>Lehrkraft</html>", "<html>Klavier-1<br>Lehrkraft</html>", "", "", "<html>KLAVIER-STREICH<br>Saaldienst</html>", "<html>KLAVIER-STREICH<br>Saaldienst</html>", "<html>KLAVIER-STREICH<br>Saaldienst</html>"}},
+              {"Vormittag", "<html>BLOCKFLOETE-1<br>Lehrkraft</html>", "<html>KLAVIER-DUO-1<br>Lehrkraft</html>", "", "", "", "", "<html>Klavier-1<br>Saaldienst</html>"},
+              {"Nachmittag", "<html>Gitarre<br>Lehrkraft</html>", "<html>Klavier-1<br>Lehrkraft</html>", "<html>KLAVIER-STREICH<br>Saaldienst</html>", "", "", "", "<html>Klavier-1<br>Saaldienst</html>"},
+              {"Abend", "<html>Klavier-1<br>Lehrkraft</html>", "<html>Klavier-1<br>Lehrkraft</html>", "", "", "<html>KLAVIER-STREICH<br>Saaldienst</html>", "<html>KLAVIER-STREICH<br>Saaldienst</html>", "<html>KLAVIER-STREICH<br>Saaldienst</html>"}},
             new String[]{
-      "Design", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
-    }) {
-      @Override
-      public Class<?> getColumnClass(int columnIndex) {
-        return String.class;
-      }
-    });
+              "Design", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+            }) {
+              @Override
+              public Class<?> getColumnClass(int columnIndex) {
+                return String.class;
+              }
+            });
   }
 
   /**
@@ -326,12 +327,17 @@ public class PersonAssignmentTable extends JTable {
       try {
         Person p = Manager.getPersonCollection().findEntity(personId);
         List<Allocation> emptyAa = Collections.emptyList();
-        List<Allocation> aa = (p == null) ? emptyAa : p.getTeameinteilungList();
+        List<Allocation> aa = (p == null) ? emptyAa : p.getAllocationList();
         TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
+        if (t == null) {
+          return null;
+        }
         for (Allocation a : aa) {
-
-          if (Objects.equals(t, a.getZeit())) {
-            return a;
+          Event event = a.getEvent();
+          if (event != null) {
+            if (Objects.equals(t, event.getTimeSlot())) {
+              return a;
+            }
           }
         }
       } catch (DataBaseNotReadyException ignored) {
@@ -352,9 +358,8 @@ public class PersonAssignmentTable extends JTable {
       Allocation a = getAssignmentEntity(rowIndex, columnIndex);
       String result = "";
       if (a != null) {
-        result = String.format("<html>%s<br>%s</html>",
-                a.getJury().getWertung(),
-                a.getFunktionen().getFunktionname());
+        result = String.format("%s",
+                a.getEvent());
       }
       return result;
 
@@ -443,7 +448,7 @@ public class PersonAssignmentTable extends JTable {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      if (Person.PROP_VERFUEGBARKEIT.equals(evt.getPropertyName())) {
+      if (Person.PROP_AVAILABILITY.equals(evt.getPropertyName())) {
         fireTableDataChanged();
       }
     }

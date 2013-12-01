@@ -127,7 +127,7 @@ public class FunktionenComboBoxVisualTest extends javax.swing.JFrame {
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     // TODO add your handling code here:
     
-    Job f = new Job("LEHRER", null, 0);
+    Job f = new Job("LEHRER");
     functionsComboBox1.setSelectedItem(f);
   }//GEN-LAST:event_jButton2ActionPerformed
 

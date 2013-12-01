@@ -114,7 +114,7 @@ public class PersonTeamPanelVisualTest extends javax.swing.JFrame {
       Team team1 = teamCollection.findEntity(1);
       List<Person> personList = team1.getPersonList();
       if(!personList.isEmpty()){
-      personTeamPanel2.setPersonId(personList.get(0).getPersonid());
+      personTeamPanel2.setPersonId(personList.get(0).getPersonId());
       }
     } catch (DataBaseNotReadyException ex) {
       Exceptions.printStackTrace(ex);

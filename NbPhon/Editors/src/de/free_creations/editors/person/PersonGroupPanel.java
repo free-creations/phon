@@ -19,7 +19,7 @@ import de.free_creations.actions.CheckedAction;
 import static de.free_creations.actions.CheckedAction.Severity.irrecoverable;
 import static de.free_creations.actions.CheckedAction.Severity.ok;
 import static de.free_creations.actions.CheckedAction.Severity.recoverable;
-import de.free_creations.actions.person.SetGroupleaderRule;
+
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhon4Netbeans.PersonsRootNode;
@@ -65,46 +65,46 @@ public class PersonGroupPanel extends javax.swing.JPanel
 
     @Override
     public Transferable paste() throws IOException {
-      try {
-        CheckedAction setGroupleaderRule = SetGroupleaderRule.setGroupleader(newMemberId, groupLeaderId);
-        switch (setGroupleaderRule.level()) {
-          case ok: {
-            setGroupleaderRule.apply();
-            return ExTransferable.EMPTY;
-          }
-          case recoverable: {
-            NotifyDescriptor.Confirmation message = new NotifyDescriptor.Confirmation(
-                    setGroupleaderRule.problemDescription() + "!\n\n"
-                    + setGroupleaderRule.proposedSolution() + "?",
-                    NotifyDescriptor.OK_CANCEL_OPTION,
-                    NotifyDescriptor.WARNING_MESSAGE);
-            Object reply = DialogDisplayer.getDefault().notify(message);
-            if (NotifyDescriptor.OK_OPTION.equals(reply)) {
-              setGroupleaderRule.apply();
-            }
-
-            return ExTransferable.EMPTY;
-          }
-          case irrecoverable: {
-            NotifyDescriptor.Confirmation message = new NotifyDescriptor.Confirmation(
-                    setGroupleaderRule.problemDescription() + "!\n\n"
-                    + setGroupleaderRule.proposedSolution() + "?",
-                    NotifyDescriptor.OK_CANCEL_OPTION,
-                    NotifyDescriptor.ERROR_MESSAGE);
-            Object reply = DialogDisplayer.getDefault().notify(message);
-            if (NotifyDescriptor.OK_OPTION.equals(reply)) {
-              setGroupleaderRule.apply();
-            }
-
-            return ExTransferable.EMPTY;
-
-
-          }
-        }
-
-      } catch (DataBaseNotReadyException ex) {
-        return ExTransferable.EMPTY;
-      }
+//      try {
+//        CheckedAction setGroupleaderRule = SetGroupleaderRule.setGroupleader(newMemberId, groupLeaderId);
+//        switch (setGroupleaderRule.level()) {
+//          case ok: {
+//            setGroupleaderRule.apply();
+//            return ExTransferable.EMPTY;
+//          }
+//          case recoverable: {
+//            NotifyDescriptor.Confirmation message = new NotifyDescriptor.Confirmation(
+//                    setGroupleaderRule.problemDescription() + "!\n\n"
+//                    + setGroupleaderRule.proposedSolution() + "?",
+//                    NotifyDescriptor.OK_CANCEL_OPTION,
+//                    NotifyDescriptor.WARNING_MESSAGE);
+//            Object reply = DialogDisplayer.getDefault().notify(message);
+//            if (NotifyDescriptor.OK_OPTION.equals(reply)) {
+//              setGroupleaderRule.apply();
+//            }
+//
+//            return ExTransferable.EMPTY;
+//          }
+//          case irrecoverable: {
+//            NotifyDescriptor.Confirmation message = new NotifyDescriptor.Confirmation(
+//                    setGroupleaderRule.problemDescription() + "!\n\n"
+//                    + setGroupleaderRule.proposedSolution() + "?",
+//                    NotifyDescriptor.OK_CANCEL_OPTION,
+//                    NotifyDescriptor.ERROR_MESSAGE);
+//            Object reply = DialogDisplayer.getDefault().notify(message);
+//            if (NotifyDescriptor.OK_OPTION.equals(reply)) {
+//              setGroupleaderRule.apply();
+//            }
+//
+//            return ExTransferable.EMPTY;
+//
+//
+//          }
+//        }
+//
+//      } catch (DataBaseNotReadyException ex) {
+//        return ExTransferable.EMPTY;
+//      }
       return ExTransferable.EMPTY;
     }
   };
@@ -241,20 +241,21 @@ public class PersonGroupPanel extends javax.swing.JPanel
     @Override
     public List<Person> getAll() {
       final List<Person> emptyResult = Collections.emptyList();
-      Person p;
-      try {
-        p = Manager.getPersonCollection().findEntity(leaderId);
-      } catch (DataBaseNotReadyException ex) {
-        p = null;
-      }
-      if (p != null) {
-        List<Person> groupList = p.getGroupList();
-        // if the team leader appears in the groupList, remove him to avoid recursion.
-        groupList.remove(p);
-        return groupList;
-      } else {
-        return emptyResult;
-      }
+      return emptyResult;
+//      Person p;
+//      try {
+//        p = Manager.getPersonCollection().findEntity(leaderId);
+//      } catch (DataBaseNotReadyException ex) {
+//        p = null;
+//      }
+//      if (p != null) {
+//        List<Person> groupList = p.getGroupList();
+//        // if the team leader appears in the groupList, remove him to avoid recursion.
+//        groupList.remove(p);
+//        return groupList;
+//      } else {
+//        return emptyResult;
+//      }
     }
 
     @Override
@@ -264,12 +265,12 @@ public class PersonGroupPanel extends javax.swing.JPanel
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      if (Person.PROP_REMOVE_GROUPMEMBER.equals(evt.getPropertyName())
-              || Person.PROP_ADD_GROUPMEMBER.equals(evt.getPropertyName())) {
-        // this will inform the root-node which will in turn inform the ExplorerManager
-        // which will in turn update the display
-        propertyChangeSupport.firePropertyChange(PROP_ITEM_LIST_CHANGED, null, null);
-      }
+//      if (Person.PROP_REMOVE_GROUPMEMBER.equals(evt.getPropertyName())
+//              || Person.PROP_ADD_GROUPMEMBER.equals(evt.getPropertyName())) {
+//        // this will inform the root-node which will in turn inform the ExplorerManager
+//        // which will in turn update the display
+//        propertyChangeSupport.firePropertyChange(PROP_ITEM_LIST_CHANGED, null, null);
+//      }
     }
   }
 
