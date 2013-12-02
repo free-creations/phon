@@ -40,7 +40,7 @@ import org.openide.windows.CloneableTopComponent;
 @TopComponent.Description(
         preferredID = "LocationTopComponent",
         iconBase = "de/free_creations/editors/location/house.png",
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS
+        persistenceType = TopComponent.PERSISTENCE_NEVER
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "de.free_creations.editors.location.LocationTopComponent")
@@ -103,6 +103,8 @@ public final class LocationTopComponent extends CloneableTopComponent {
     edTown = new javax.swing.JTextField();
     lblGridnumber = new javax.swing.JLabel();
     edGridnumber = new javax.swing.JTextField();
+    jScrollPane2 = new javax.swing.JScrollPane();
+    timeTable1 = new de.free_creations.editors.location.TimeTable();
 
     org.openide.awt.Mnemonics.setLocalizedText(edLocationId, org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.edLocationId.text")); // NOI18N
 
@@ -160,32 +162,39 @@ public final class LocationTopComponent extends CloneableTopComponent {
       }
     });
 
+    jScrollPane2.setViewportView(timeTable1);
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(lblBuilding)
-          .addComponent(lblName)
-          .addComponent(lblRoom)
-          .addComponent(lblTown)
-          .addComponent(lblGridnumber)
-          .addComponent(lblStreet))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(edName)
-          .addComponent(edRoom)
-          .addComponent(edBuilding)
-          .addComponent(edStreet)
-          .addComponent(edTown)
-          .addComponent(edGridnumber))
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+          .addGroup(jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE))
+          .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(lblBuilding)
+              .addComponent(lblName)
+              .addComponent(lblRoom)
+              .addComponent(lblTown)
+              .addComponent(lblGridnumber)
+              .addComponent(lblStreet))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(edName)
+              .addComponent(edRoom)
+              .addComponent(edBuilding)
+              .addComponent(edStreet)
+              .addComponent(edTown)
+              .addComponent(edGridnumber)))
+          .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+            .addGap(12, 12, 12)
+            .addComponent(edLocationId, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 0, Short.MAX_VALUE)))
         .addContainerGap())
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addGap(12, 12, 12)
-        .addComponent(edLocationId, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(423, Short.MAX_VALUE))
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +225,9 @@ public final class LocationTopComponent extends CloneableTopComponent {
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(lblGridnumber)
           .addComponent(edGridnumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap(303, Short.MAX_VALUE))
+        .addGap(18, 18, 18)
+        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
     jScrollPane1.setViewportView(jPanel1);
@@ -229,7 +240,7 @@ public final class LocationTopComponent extends CloneableTopComponent {
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -309,12 +320,14 @@ public final class LocationTopComponent extends CloneableTopComponent {
   private javax.swing.JTextField edTown;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JScrollPane jScrollPane1;
+  private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JLabel lblBuilding;
   private javax.swing.JLabel lblGridnumber;
   private javax.swing.JLabel lblName;
   private javax.swing.JLabel lblRoom;
   private javax.swing.JLabel lblStreet;
   private javax.swing.JLabel lblTown;
+  private de.free_creations.editors.location.TimeTable timeTable1;
   // End of variables declaration//GEN-END:variables
   @Override
   public void componentOpened() {

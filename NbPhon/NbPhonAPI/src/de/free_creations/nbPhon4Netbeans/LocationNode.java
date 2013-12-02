@@ -142,15 +142,17 @@ public class LocationNode extends AbstractNode implements CommittableNode {
   @Override
   public String getDisplayName() {
     if (locationId == null) {
-      return "";
+      return "null";
     }
     try {
       Location l = locationManager.findEntity(locationId);
       if (l != null) {
-        return l.getName();
-      } else {
-        return getName();
-      }
+        String name = l.getName();
+        if (name != null) {
+          return l.getName();
+        }
+      } 
+      return getName();
     } catch (DataBaseNotReadyException ex) {
       Exceptions.printStackTrace(ex);
       return getName();

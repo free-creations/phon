@@ -15,10 +15,10 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.Contest;
+import de.free_creations.dbEntities.Location;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
-import de.free_creations.nbPhonAPI.ContestCollection;
 import de.free_creations.nbPhonAPI.Manager;
+import de.free_creations.nbPhonAPI.LocationCollection;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,35 +34,35 @@ import org.openide.util.NbBundle.Messages;
 
 @ActionID(
         category = "Edit",
-        id = "de.free_creations.jmNetbeans.NewJuryAction")
+        id = "de.free_creations.jmNetbeans.NewLocationAction")
 @ActionRegistration(
-        iconBase = "de/free_creations/nbPhon4Netbeans/resources/newJury.png",
-        displayName = "#CTL_newJury")
+        iconBase = "de/free_creations/nbPhon4Netbeans/resources/newLocation.png",
+        displayName = "#CTL_newLocation")
 @ActionReferences({
   @ActionReference(path = "Menu/Edit", position = 0),
-  @ActionReference(path = "Toolbars/File", position = 350),
-  //@ActionReference(path = "Shortcuts", name = "D-ENTER")
+  @ActionReference(path = "Toolbars/File", position = 400)
+
 })
-@Messages("CTL_newJury=new Contest")
-public final class NewContestAction extends AbstractAction {
+@Messages("CTL_newLocation=new Location")
+public final class NewLocationAction extends AbstractAction {
 
-  private static final Logger logger = Logger.getLogger(NewContestAction.class.getName());
+  private static final Logger logger = Logger.getLogger(NewLocationAction.class.getName());
 
-  public NewContestAction() {
-    super("new Contest");
+  public NewLocationAction() {
+    super("new Location");
   }
 
   @Override
   @SuppressWarnings("UseSpecificCatch")
   public void actionPerformed(ActionEvent e) {
     try {
-      ContestCollection personCollection = Manager.getContestCollection();
-      Contest newJury = personCollection.newEntity();
-      ContestEditorProvider provider =
+      LocationCollection locationCollection = Manager.getLocationCollection();
+      Location newLocation = locationCollection.newEntity();
+      LocationEditorProvider provider =
               Lookup.getDefault().lookup(
-              ContestEditorProvider.class);
+              LocationEditorProvider.class);
       if (provider != null) {
-        provider.getEditor(true, newJury.getContestId());
+        provider.getEditor(true, newLocation.getLocationId());
       } else {
         throw new RuntimeException("No Editor provider found.");
       }
@@ -71,9 +71,9 @@ public final class NewContestAction extends AbstractAction {
               "Cannot access the database.\n Try to re-start the server.",
               NotifyDescriptor.ERROR_MESSAGE);
       DialogDisplayer.getDefault().notify(message);
-      logger.log(Level.INFO, "Could not create new person record.", ex);
+      logger.log(Level.INFO, "Could not create new location record.", ex);
     } catch (Throwable ex) {
-      logger.log(Level.SEVERE, "Could not create new person record.", ex);
+      logger.log(Level.SEVERE, "Could not create new location record.", ex);
     }
   }
 }

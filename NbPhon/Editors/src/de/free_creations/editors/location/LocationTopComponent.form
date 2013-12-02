@@ -21,7 +21,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane1" alignment="0" pref="495" max="32767" attributes="0"/>
+          <Component id="jScrollPane1" alignment="0" pref="532" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -35,31 +35,39 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblBuilding" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblName" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblRoom" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblTown" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblGridnumber" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblStreet" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jScrollPane2" pref="567" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lblBuilding" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblName" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblRoom" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblTown" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblGridnumber" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblStreet" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="edName" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="edRoom" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="edBuilding" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="edStreet" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="edTown" max="32767" attributes="0"/>
+                                  <Component id="edGridnumber" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+                              <Component id="edLocationId" min="-2" pref="110" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="edName" alignment="0" max="32767" attributes="0"/>
-                          <Component id="edRoom" alignment="0" max="32767" attributes="0"/>
-                          <Component id="edBuilding" alignment="0" max="32767" attributes="0"/>
-                          <Component id="edStreet" alignment="0" max="32767" attributes="0"/>
-                          <Component id="edTown" max="32767" attributes="0"/>
-                          <Component id="edGridnumber" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-                      <Component id="edLocationId" min="-2" pref="110" max="-2" attributes="0"/>
-                      <EmptySpace pref="423" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -98,7 +106,9 @@
                           <Component id="lblGridnumber" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="edGridnumber" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="303" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" min="-2" pref="142" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -213,6 +223,17 @@
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edGridnumberFocusLost"/>
               </Events>
             </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="de.free_creations.editors.location.TimeTable" name="timeTable1">
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
       </SubComponents>
