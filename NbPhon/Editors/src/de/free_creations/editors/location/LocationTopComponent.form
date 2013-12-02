@@ -124,6 +124,9 @@
                   <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="LocationTopComponent.edName.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edNameFocusLost"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblRoom">
               <Properties>
@@ -138,6 +141,9 @@
                   <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="LocationTopComponent.edRoom.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edRoomFocusLost"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblBuilding">
               <Properties>
@@ -152,6 +158,9 @@
                   <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="LocationTopComponent.edBuilding.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edBuildingFocusLost"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblStreet">
               <Properties>
@@ -166,6 +175,9 @@
                   <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="LocationTopComponent.edStreet.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edStreetFocusLost"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblTown">
               <Properties>
@@ -180,6 +192,9 @@
                   <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="LocationTopComponent.edTown.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edTownFocusLost"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblGridnumber">
               <Properties>
@@ -194,6 +209,9 @@
                   <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="LocationTopComponent.edGridnumber.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="edGridnumberFocusLost"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

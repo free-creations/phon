@@ -26,6 +26,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import org.openide.cookies.EditCookie;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.Exceptions;
@@ -86,11 +87,21 @@ public class LocationNode extends AbstractNode implements CommittableNode {
   };
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
   private final MutableEntityCollection<Location, Integer> locationManager;
+  private final EditCookie editCookie = new EditCookie() {
+    @Override
+    public void edit() {
+      editAction.actionPerformed(null);
+    }
+  };
 
   public LocationNode(Integer locationId, MutableEntityCollection<Location, Integer> locationManager) {
     super(Children.LEAF);
     this.locationId = locationId;
     this.locationManager = locationManager;
+    if (locationId != null) {
+      Location.addPropertyChangeListener(listener, locationId);
+      getCookieSet().add(editCookie);
+    }
   }
 
   /**

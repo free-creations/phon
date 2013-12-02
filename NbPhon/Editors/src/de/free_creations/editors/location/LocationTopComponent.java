@@ -78,7 +78,7 @@ public final class LocationTopComponent extends CloneableTopComponent {
   LocationTopComponent(Integer key) {
     this();
     viewLocationRecord(key);
-   }
+  }
 
   /**
    * This method is called from within the constructor to initialize the form.
@@ -109,26 +109,56 @@ public final class LocationTopComponent extends CloneableTopComponent {
     org.openide.awt.Mnemonics.setLocalizedText(lblName, org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.lblName.text")); // NOI18N
 
     edName.setText(org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.edName.text")); // NOI18N
+    edName.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edNameFocusLost(evt);
+      }
+    });
 
     org.openide.awt.Mnemonics.setLocalizedText(lblRoom, org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.lblRoom.text")); // NOI18N
 
     edRoom.setText(org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.edRoom.text")); // NOI18N
+    edRoom.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edRoomFocusLost(evt);
+      }
+    });
 
     org.openide.awt.Mnemonics.setLocalizedText(lblBuilding, org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.lblBuilding.text")); // NOI18N
 
     edBuilding.setText(org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.edBuilding.text")); // NOI18N
+    edBuilding.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edBuildingFocusLost(evt);
+      }
+    });
 
     org.openide.awt.Mnemonics.setLocalizedText(lblStreet, org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.lblStreet.text")); // NOI18N
 
     edStreet.setText(org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.edStreet.text")); // NOI18N
+    edStreet.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edStreetFocusLost(evt);
+      }
+    });
 
     org.openide.awt.Mnemonics.setLocalizedText(lblTown, org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.lblTown.text")); // NOI18N
 
     edTown.setText(org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.edTown.text")); // NOI18N
+    edTown.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edTownFocusLost(evt);
+      }
+    });
 
     org.openide.awt.Mnemonics.setLocalizedText(lblGridnumber, org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.lblGridnumber.text")); // NOI18N
 
     edGridnumber.setText(org.openide.util.NbBundle.getMessage(LocationTopComponent.class, "LocationTopComponent.edGridnumber.text")); // NOI18N
+    edGridnumber.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edGridnumberFocusLost(evt);
+      }
+    });
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
@@ -203,6 +233,72 @@ public final class LocationTopComponent extends CloneableTopComponent {
     );
   }// </editor-fold>//GEN-END:initComponents
 
+  private void edNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edNameFocusLost
+    Location l = thisLocation();
+    if (l != null) {
+      String oldS = noNull(l.getName());
+      String newS = edName.getText();
+      if (!oldS.equals(newS)) {
+        l.setName(newS);
+      }
+    }
+  }//GEN-LAST:event_edNameFocusLost
+
+  private void edRoomFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edRoomFocusLost
+    Location l = thisLocation();
+    if (l != null) {
+      String oldS = noNull(l.getRoom());
+      String newS = edRoom.getText();
+      if (!oldS.equals(newS)) {
+        l.setRoom(newS);
+      }
+    }
+  }//GEN-LAST:event_edRoomFocusLost
+
+  private void edBuildingFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edBuildingFocusLost
+    Location l = thisLocation();
+    if (l != null) {
+      String oldS = noNull(l.getBuilding());
+      String newS = edBuilding.getText();
+      if (!oldS.equals(newS)) {
+        l.setBuilding(newS);
+      }
+    }
+  }//GEN-LAST:event_edBuildingFocusLost
+
+  private void edStreetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edStreetFocusLost
+    Location l = thisLocation();
+    if (l != null) {
+      String oldS = noNull(l.getStreet());
+      String newS = edStreet.getText();
+      if (!oldS.equals(newS)) {
+        l.setStreet(newS);
+      }
+    }
+  }//GEN-LAST:event_edStreetFocusLost
+
+  private void edTownFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edTownFocusLost
+    Location l = thisLocation();
+    if (l != null) {
+      String oldS = noNull(l.getTown());
+      String newS = edTown.getText();
+      if (!oldS.equals(newS)) {
+        l.setTown(newS);
+      }
+    }
+  }//GEN-LAST:event_edTownFocusLost
+
+  private void edGridnumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edGridnumberFocusLost
+    Location l = thisLocation();
+    if (l != null) {
+      String oldS = noNull(l.getGridnumber());
+      String newS = edGridnumber.getText();
+      if (!oldS.equals(newS)) {
+        l.setGridnumber(newS);
+      }
+    }
+  }//GEN-LAST:event_edGridnumberFocusLost
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField edBuilding;
   private javax.swing.JTextField edGridnumber;
@@ -251,7 +347,8 @@ public final class LocationTopComponent extends CloneableTopComponent {
     }
     return l;
   }
-   public void viewLocationRecord(Integer newKey) {
+
+  public void viewLocationRecord(Integer newKey) {
     if (!Objects.equals(currentKey, newKey)) {
       Location.removePropertyChangeListener(listener, currentKey);
       currentKey = newKey;

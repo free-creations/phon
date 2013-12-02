@@ -26,3 +26,6 @@
 /phonDb/CreateDb/build/
 /phonDb/CreateDb/sql/populateExamplePersons.sql
 /phonDb/CreateDb/dist/
+/phonDb/CreateDb/sql/populateExampleContests.sql
+/phonDb/CreateDb/sql/_3_populateExamplePersons.sql
+/phonDb/CreateDb/sql/_4_populateExampleContests.sql
