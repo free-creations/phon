@@ -291,15 +291,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
   }
 
 
-  /**
-   * Creates a grayed version of the given image and caches it for further use.
-   *
-   * @param enabledImage
-   * @return
-   */
-  private static Image getDisabledImage(Image enabledImage) {
-    return enabledImage;
-  }
+
 
   /**
    * @return true if the person is available for at least one time slot;

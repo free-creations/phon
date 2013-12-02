@@ -17,10 +17,18 @@ package de.free_creations.explorers;
 
 
 import de.free_creations.nbPhon4Netbeans.LocationNode;
+import de.free_creations.nbPhon4Netbeans.LocationRootNode;
+import de.free_creations.nbPhonAPI.LocationCollection;
+import de.free_creations.nbPhonAPI.Manager;
+import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingWorker;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -57,60 +65,46 @@ import org.openide.util.NbBundle.Messages;
 public final class LocationListTopComponent extends TopComponent
         implements ExplorerManager.Provider {
 
-  private final Node[] nodes;
+
   private static final Logger logger = Logger.getLogger(LocationListTopComponent.class.getName());
-  private static ExplorerManager explorerManager = new ExplorerManager();
-  //private DatabaseActivationTask databaseActivationTask = null;
-//
-//  private class DatabaseActivationTask extends SwingWorker<Void, Void> {
-//
-//    private final ProgressHandle progressHandle;
-//    LocationRootNode locationRootNode = null;
-//
-//    public DatabaseActivationTask() {
-//      super();
-//      progressHandle = ProgressHandleFactory.createHandle("Connecting to Database.");
-//    }
-//
-//    @Override
-//    protected Void doInBackground() throws Exception {
-//      try {
-//        progressHandle.start();
-//        LocationCollection jj = Manager.getLocationCollection();
-//        locationRootNode = new LocationRootNode(jj);
-//      } catch (Throwable ex) {
-//        logger.log(Level.SEVERE, "Could not access the database.", ex);
-//      }
-//      return null;
-//    }
-//
-//    @Override
-//    protected void done() {
-//      Manager.assertOpen();
-//      if (locationRootNode != null) {
-//        explorerManager.setRootContext(locationRootNode);
-//      }
-//      scrollPane.setCursor(null);
-//      progressHandle.finish();
-//    }
-//  }
-//
+  private static final ExplorerManager explorerManager = new ExplorerManager();
+  private DatabaseActivationTask databaseActivationTask = null;
 
-  private class LChildren extends Children.Array {
+  private class DatabaseActivationTask extends SwingWorker<Void, Void> {
 
-    private final Collection<Node> ch;
+    private final ProgressHandle progressHandle;
+    LocationRootNode locationRootNode = null;
 
-    public LChildren(Collection<Node> ch) {
+    public DatabaseActivationTask() {
       super();
-      assert(ch != null);
-      this.ch = ch;
+      progressHandle = ProgressHandleFactory.createHandle("Connecting to Database.");
     }
 
     @Override
-    protected Collection<Node> initCollection() {
-      return ch;
+    protected Void doInBackground() throws Exception {
+      try {
+        progressHandle.start();
+        LocationCollection ll = Manager.getLocationCollection();
+        locationRootNode = new LocationRootNode(ll);
+      } catch (Throwable ex) {
+        logger.log(Level.SEVERE, "Could not access the database.", ex);
+      }
+      return null;
     }
-  };
+
+    @Override
+    protected void done() {
+      Manager.assertOpen();
+      if (locationRootNode != null) {
+        explorerManager.setRootContext(locationRootNode);
+      }
+      scrollPane.setCursor(null);
+      progressHandle.finish();
+    }
+  }
+
+
+
 
   public LocationListTopComponent() {
     initComponents();
@@ -122,23 +116,6 @@ public final class LocationListTopComponent extends TopComponent
     BeanTreeView beanTreeView = (BeanTreeView) scrollPane;
     beanTreeView.setRootVisible(false);
     associateLookup(ExplorerUtils.createLookup(explorerManager, getActionMap()));
-
-    //---
-    nodes = new Node[]{};
-
-    ArrayList<Node> aNodes = new ArrayList<>();
-    aNodes.addAll(Arrays.asList(nodes));
-    
-    
-    LChildren children = new LChildren(aNodes);
-
-
-    Node rootNode = new AbstractNode(children);
-    explorerManager.setRootContext(rootNode);
-
-
-
-
   }
 
   /**
@@ -170,13 +147,13 @@ public final class LocationListTopComponent extends TopComponent
   @Override
   public void componentOpened() {
     super.componentOpened();
-//    synchronized (databaseActivationTaskLock) {
-//      if (databaseActivationTask == null) {
-//        scrollPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-//        databaseActivationTask = new DatabaseActivationTask();
-//        databaseActivationTask.execute();
-//      }
-//    }
+    synchronized (databaseActivationTaskLock) {
+      if (databaseActivationTask == null) {
+        scrollPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        databaseActivationTask = new DatabaseActivationTask();
+        databaseActivationTask.execute();
+      }
+    }
   }
 
   @Override
