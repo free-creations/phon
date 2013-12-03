@@ -94,8 +94,8 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
 
   /**
    *
-   * @param day the day index = t.getTag()-1
-   * @param timeOfDay the timeOfDay index = t.getTageszeit()-1
+   * @param day the zero-based day-index
+   * @param timeOfDay the zero-based timeOfDay-index 
    * @return the time-slot where day = t.getTag()-1 and timeOfDay =
    * t.getTageszeit()-1 if no such entry can be found the function returns null.
    * @throws DataBaseNotReadyException

@@ -61,16 +61,34 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
 
     jScrollPane1 = new javax.swing.JScrollPane();
     timeTable1 = new de.free_creations.editors.location.TimeTable();
-    jButton1 = new javax.swing.JButton();
-    jButton2 = new javax.swing.JButton();
+    btnSetLocationId_3 = new javax.swing.JButton();
+    btnSetLocationId_null = new javax.swing.JButton();
+    btnSetLocationId_4 = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
     jScrollPane1.setViewportView(timeTable1);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.jButton1.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetLocationId_3, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnSetLocationId_3.text")); // NOI18N
+    btnSetLocationId_3.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnSetLocationId_3ActionPerformed(evt);
+      }
+    });
 
-    org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.jButton2.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetLocationId_null, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnSetLocationId_null.text")); // NOI18N
+    btnSetLocationId_null.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnSetLocationId_nullActionPerformed(evt);
+      }
+    });
+
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetLocationId_4, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnSetLocationId_4.text")); // NOI18N
+    btnSetLocationId_4.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnSetLocationId_4ActionPerformed(evt);
+      }
+    });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -79,24 +97,43 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
       .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
       .addGroup(layout.createSequentialGroup()
         .addGap(45, 45, 45)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-          .addComponent(jButton2)
-          .addComponent(jButton1))
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addComponent(btnSetLocationId_null, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(btnSetLocationId_3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(btnSetLocationId_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGap(140, 140, 140))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jButton1)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(btnSetLocationId_3)
+          .addComponent(btnSetLocationId_4))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jButton2)
+        .addComponent(btnSetLocationId_null)
         .addGap(38, 38, 38))
     );
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
+
+  private void btnSetLocationId_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetLocationId_3ActionPerformed
+    // TODO add your handling code here:
+    timeTable1.setLocationId(3);
+  }//GEN-LAST:event_btnSetLocationId_3ActionPerformed
+
+  private void btnSetLocationId_nullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetLocationId_nullActionPerformed
+    // TODO add your handling code here:
+        timeTable1.setLocationId(null);
+  }//GEN-LAST:event_btnSetLocationId_nullActionPerformed
+
+  private void btnSetLocationId_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetLocationId_4ActionPerformed
+    // TODO add your handling code here:
+    timeTable1.setLocationId(4);
+  }//GEN-LAST:event_btnSetLocationId_4ActionPerformed
 
   /**
    * @param args the command line arguments
@@ -141,8 +178,9 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
     System.out.println("Use \"Run File\" to see this test.");
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton jButton1;
-  private javax.swing.JButton jButton2;
+  private javax.swing.JButton btnSetLocationId_3;
+  private javax.swing.JButton btnSetLocationId_4;
+  private javax.swing.JButton btnSetLocationId_null;
   private javax.swing.JScrollPane jScrollPane1;
   private de.free_creations.editors.location.TimeTable timeTable1;
   // End of variables declaration//GEN-END:variables

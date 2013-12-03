@@ -15,7 +15,9 @@
  */
 package de.free_creations.editors.location;
 
-
+import de.free_creations.dbEntities.Contest;
+import de.free_creations.dbEntities.Event;
+import de.free_creations.dbEntities.Location;
 import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
@@ -27,6 +29,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
+import java.util.Objects;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -79,6 +83,21 @@ public class TimeTable extends JTable {
     showVerticalLines = true;
   }
 
+  public void setLocationId(Integer locationId) {
+    TableModel oldModel = getModel();
+    if (oldModel instanceof TimeTableModel) {
+      TimeTableModel oldTimeModel = (TimeTableModel) oldModel;
+      if (Objects.equals(locationId, oldTimeModel.getLocationId())) {
+        return;
+      }
+      oldTimeModel.stopListening();
+    }
+
+    TimeTableModel timeTableModel = new TimeTableModel(locationId);
+    setModel(timeTableModel);
+    timeTableModel.startListening();
+  }
+
   /**
    * Avoid selection on the left-most column (the row-header column).
    *
@@ -107,7 +126,20 @@ public class TimeTable extends JTable {
     }
     if (isCellVisible(row, column)) {
       if (column > 0) {
-        return new TimeTableCellPanel();
+        //<<<<<<<<<<<<< rework >>>>>>>>>>>>>>>>>>>>>>>>>
+        TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel();
+        if (dataModel instanceof TimeTableModel) {
+          TimeTableModel timeTableModel = (TimeTableModel) dataModel;
+          Object valueAt = timeTableModel.getValueAt(row, column);     
+          if(valueAt instanceof Integer){
+            timeTableCellPanel.setContestId((Integer) valueAt);
+          }else{
+            timeTableCellPanel.setContestId(null);
+          }
+        }else{
+          timeTableCellPanel.setContestId(null);
+        }
+        return timeTableCellPanel;
       }
       return super.prepareRenderer(renderer, row, column);
     } else {
@@ -165,26 +197,26 @@ public class TimeTable extends JTable {
   /**
    * Returns the data model which shall be displayed at design time.
    *
-   * @return a data model shows data similar to the runtime version.
+   * @return a data model that shows data similar to the runtime version.
    */
   private TableModel makeDesignTimeModel() {
     return (new javax.swing.table.DefaultTableModel(
             new Object[][]{
-      {"Vormittag", true, null, null, null, true, null, null},
-      {"Nachmittag", null, true, null, true, null, null, null},
-      {"Abend", null, null, true, false, null, null, null}},
+              {"Vormittag", true, null, null, null, true, null, null},
+              {"Nachmittag", null, true, null, true, null, null, null},
+              {"Abend", null, null, true, false, null, null, null}},
             new String[]{
-      ".Design.", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
-    }) {
-      @Override
-      public Class<?> getColumnClass(int columnIndex) {
-        if (columnIndex > 0) {
-          return Boolean.class;
-        } else {
-          return String.class;
-        }
-      }
-    });
+              ".Design.", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+            }) {
+              @Override
+              public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex > 0) {
+                  return Boolean.class;
+                } else {
+                  return String.class;
+                }
+              }
+            });
   }
 
   /**
@@ -192,12 +224,14 @@ public class TimeTable extends JTable {
    */
   public class TimeTableModel extends AbstractTableModel implements PropertyChangeListener {
 
+    private final Integer locationId;
     private final String[] timeOfDayNames;
     private final String[] dayNames;
     private final int columnCount; // the number of data columns (first column not included)
     private final int rowCount; // the number of data rows (header row not included)
 
-    public TimeTableModel(Integer juryId) {
+    public TimeTableModel(Integer locationId) {
+      this.locationId = locationId;
 
       TimeSlotCollection tt = Manager.getTimeSlotCollection();
 
@@ -206,6 +240,10 @@ public class TimeTable extends JTable {
 
       timeOfDayNames = tt.timeOfDayNames();
       rowCount = timeOfDayNames.length;
+    }
+
+    public Integer getLocationId() {
+      return locationId;
     }
 
     @Override
@@ -231,6 +269,44 @@ public class TimeTable extends JTable {
       if (columnIndex == 0) {
         return timeOfDayNames[rowIndex];
       } else {
+        return getContestIdFor(rowIndex, columnIndex);
+      }
+    }
+
+    private Integer getContestIdFor(int rowIndex, int columnIndex) {
+      if (locationId == null) {
+        return null;
+      }
+      TimeSlot t = getTimeSlotFor(rowIndex, columnIndex);
+      if (t == null) {
+        return null;
+      }
+      //--- retrieve the events which happen at the given time-slot.
+      List<Event> eventList = t.getEventList();
+      //--- within those events, search for the (first) event that happens 
+      //    in the given location (note: here we could check that never two or
+      //    more events happen in the same location at the same time(slot).
+      for (Event e : eventList) {
+        Location location = e.getLocation();
+        if (location != null) {
+          if (Objects.equals(locationId, location.getLocationId())) {
+            return e.getContest().getContestId();
+          }
+        }
+      }
+      return null;
+    }
+
+    private TimeSlot getTimeSlotFor(int rowIndex, int columnIndex) {
+      if (columnIndex < 1) {
+        return null;
+      }
+      int day = columnIndex - 1;
+      int timeOfDay = rowIndex;
+      try {
+        return Manager.getTimeSlotCollection().findEntity(day, timeOfDay);
+
+      } catch (DataBaseNotReadyException ex) {
         return null;
       }
     }

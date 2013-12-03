@@ -89,7 +89,7 @@ public class ContestNodesArray extends Children.SortedArray {
           EntityIdentity newContest = (EntityIdentity) o;
           Integer juryId = (Integer) newContest.primaryKey;
           //create a node for this new Contest
-          ContestNode newNode = new ContestNode(juryId, juryCollection);
+          ContestNode newNode = new ContestNode(juryId, juryCollection, true);
           newNode.notifyPendingChanges();
           if (nodes instanceof ArrayList) {
             // if the nodes- list is an ArrayList (as created in initCollection)
@@ -134,7 +134,7 @@ public class ContestNodesArray extends Children.SortedArray {
       assert (j != null);
       Integer juryid = j.getContestId();
       assert (juryid != null);
-      result.add(new ContestNode(juryid, juryCollection));
+      result.add(new ContestNode(juryid, juryCollection, true));
     }
 
     Comparator<? super Node> comparator = getComparator();

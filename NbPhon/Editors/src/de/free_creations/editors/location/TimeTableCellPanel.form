@@ -21,17 +21,17 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="lblLocation" alignment="0" pref="192" max="32767" attributes="0"/>
+          <Component id="lblContest" alignment="0" pref="192" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="lblLocation" max="32767" attributes="0"/>
+          <Component id="lblContest" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="lblLocation">
+    <Component class="javax.swing.JLabel" name="lblContest">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="12" style="0"/>
@@ -40,7 +40,7 @@
           <Image iconType="3" name="/de/free_creations/editors/resources/chairs.png"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="TimeTableCellPanel.lblLocation.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="TimeTableCellPanel.lblContest.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>

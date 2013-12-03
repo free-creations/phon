@@ -16,6 +16,7 @@
 package de.free_creations.nbPhon4Netbeans;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
@@ -40,8 +41,9 @@ public class IconManager {
   public final BufferedImage iconTeamOpened;
   //---- Location Node
   public final BufferedImage iconLocation;
-  //---- JuryNode
-  public final BufferedImage iconJury;
+  //---- ContestNode
+  public final BufferedImage iconContest;
+  public final BufferedImage iconNullContest;
   //---- PersonNode
   public final BufferedImage iconEmpty24x16;
   public final BufferedImage iconEmpty32x16;
@@ -77,7 +79,8 @@ public class IconManager {
     //---- Location Node
     iconLocation = ImageIO.read(IconManager.class.getResource("resources/house.png"));
     //---- JuryNode
-    iconJury = ImageIO.read(IconManager.class.getResource("resources/chairs16x16.png"));
+    iconContest = ImageIO.read(IconManager.class.getResource("resources/chairs16x16.png"));
+    iconNullContest = ImageIO.read(IconManager.class.getResource("resources/noChairs16x16.png"));
     //---- PersonNode
     iconEmpty24x16 = ImageIO.read(IconManager.class.getResource("resources/empty24x16.png"));
     iconEmpty32x16 = ImageIO.read(IconManager.class.getResource("resources/empty32x16.png"));

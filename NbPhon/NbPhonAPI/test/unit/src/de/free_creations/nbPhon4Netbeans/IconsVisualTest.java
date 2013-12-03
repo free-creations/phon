@@ -36,7 +36,7 @@ public class IconsVisualTest extends javax.swing.JFrame {
     initComponents();
     ImageIcon[] items = {
       iconManager().image2icon(iconManager().iconLocation),
-      iconManager().image2icon(iconManager().iconJury),
+      iconManager().image2icon(iconManager().iconContest),
       iconManager().image2icon(iconManager().iconChildFemale),
       iconManager().image2icon(iconManager().iconChildMale),
       iconManager().image2icon(iconManager().iconTeacher),

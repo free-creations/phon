@@ -171,19 +171,32 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   };
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
 
-  public ContestNode(Integer juryId, MutableEntityCollection<Contest, Integer> contestManager) {
-    super(makeChildren());
+  public ContestNode(Integer contestId, MutableEntityCollection<Contest, Integer> contestManager, boolean showJobTypes) {
+    super(makeChildren(showJobTypes));
 
-    this.key = juryId;
+    this.key = contestId;
 
     this.contestManager = contestManager;
     if (key != null) {
-      Contest.addPropertyChangeListener(listener, juryId);
+      Contest.addPropertyChangeListener(listener, contestId);
       getCookieSet().add(editCookie);
     }
   }
 
-  private static Children makeChildren() {
+  public ContestNode(Integer contestId, MutableEntityCollection<Contest, Integer> contestManager) {
+    this(contestId, contestManager, false);
+  }
+
+  @Override
+  public void destroy() throws IOException {
+    Contest.removePropertyChangeListener(listener, key);
+    super.destroy();
+  }
+
+  private static Children makeChildren(boolean showJobTypes) {
+    if (!showJobTypes) {
+      return Children.LEAF;
+    }
     Node[] nodes = new Node[]{
       new AbstractNode(Children.LEAF) {
         @Override
@@ -278,7 +291,10 @@ public class ContestNode extends AbstractNode implements CommittableNode {
 
   @Override
   public Image getIcon(int type) {
-    BufferedImage result = iconManager().iconJury;
+    if (key == null) {
+      return iconManager().iconNullContest;
+    }
+    BufferedImage result = iconManager().iconContest;
     if (key != null) {
       try {
         Contest j = contestManager.findEntity(key);
