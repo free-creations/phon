@@ -62,8 +62,8 @@ DROP TABLE "APP"."EVENT";
 -- -----------------------------------------------------------------------------
 CREATE TABLE "APP"."TIMESLOT" (
   "TIMESLOTID" INTEGER NOT NULL, 
-  "DAYIDX" INTEGER, -- index for the day e.g. (1= first day of the events, 2= second day etc.)
-  "TIMEOFDAYIDX" INTEGER, -- index for the time of the day e.g. (1= morning, 2=noon, 3=evening)
+  "DAYIDX" INTEGER, -- index for the day (starting by 1) e.g. (1= first day of the events, 2= second day etc.)
+  "TIMEOFDAYIDX" INTEGER, -- index for the time of the day (starting by 1) e.g. (1= morning, 2=noon, 3=evening)
   "DATUM" DATE, -- the date of this timeslot e.g. 2014-04-02
   "STARTTIME" TIME, -- start of this time-slot 09:30
   "ENDTIME" TIME, -- end of this time-slot 12:00
