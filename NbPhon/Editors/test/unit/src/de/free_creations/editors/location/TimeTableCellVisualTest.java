@@ -58,6 +58,7 @@ public class TimeTableCellVisualTest extends javax.swing.JFrame {
     setContestIdNull = new javax.swing.JButton();
     lblWarning = new javax.swing.JLabel();
     timeTableCellPanel1 = new de.free_creations.editors.location.TimeTableCellPanel();
+    btnSelected = new javax.swing.JToggleButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +79,13 @@ public class TimeTableCellVisualTest extends javax.swing.JFrame {
     lblWarning.setForeground(new java.awt.Color(255, 0, 0));
     org.openide.awt.Mnemonics.setLocalizedText(lblWarning, org.openide.util.NbBundle.getMessage(TimeTableCellVisualTest.class, "TimeTableCellVisualTest.lblWarning.text")); // NOI18N
 
+    org.openide.awt.Mnemonics.setLocalizedText(btnSelected, org.openide.util.NbBundle.getMessage(TimeTableCellVisualTest.class, "TimeTableCellVisualTest.btnSelected.text")); // NOI18N
+    btnSelected.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnSelectedActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -85,26 +93,25 @@ public class TimeTableCellVisualTest extends javax.swing.JFrame {
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(timeTableCellPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-              .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-              .addComponent(setContestId10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addContainerGap())
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(setContestIdNull, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addContainerGap())))
+          .addComponent(timeTableCellPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+          .addComponent(lblWarning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(setContestId10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(setContestIdNull, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(btnSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(timeTableCellPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(timeTableCellPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(setContestId10)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(setContestIdNull)
-        .addGap(11, 11, 11)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(btnSelected)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(lblWarning)
         .addContainerGap())
     );
@@ -121,6 +128,11 @@ public class TimeTableCellVisualTest extends javax.swing.JFrame {
     // 
         timeTableCellPanel1.setContestId(null);
   }//GEN-LAST:event_setContestIdNullActionPerformed
+
+  private void btnSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectedActionPerformed
+    // TODO add your handling code here:
+     timeTableCellPanel1.setSelected(btnSelected.isSelected());
+  }//GEN-LAST:event_btnSelectedActionPerformed
 
   /**
    * @param args the command line arguments
@@ -165,6 +177,7 @@ public class TimeTableCellVisualTest extends javax.swing.JFrame {
     System.out.println("Use \"Run File\" to see this test.");
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JToggleButton btnSelected;
   private javax.swing.JLabel lblWarning;
   private javax.swing.JButton setContestId10;
   private javax.swing.JButton setContestIdNull;

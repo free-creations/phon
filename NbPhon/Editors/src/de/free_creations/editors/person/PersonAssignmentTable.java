@@ -133,10 +133,10 @@ public class PersonAssignmentTable extends JTable {
    * @param column
    * @return true for all cells except those in column 0.
    */
-  @Override
-  public boolean isCellSelected(int row, int column) {
-    return (column > 0) ? super.isCellSelected(row, column) : false;
-  }
+//  @Override
+//  public boolean isCellSelected(int row, int column) {
+//    return (column > 0) ? super.isCellSelected(row, column) : false;
+//  }
 
   /**
    * Cells that correspond to a time-slot that cannot be found in the "ZEIT"

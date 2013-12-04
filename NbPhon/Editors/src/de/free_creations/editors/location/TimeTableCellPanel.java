@@ -17,6 +17,7 @@ package de.free_creations.editors.location;
 
 import de.free_creations.nbPhon4Netbeans.ContestNode;
 import de.free_creations.nbPhonAPI.Manager;
+import java.awt.Color;
 import java.awt.Image;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
@@ -34,6 +35,13 @@ import org.openide.util.Exceptions;
  */
 public class TimeTableCellPanel extends javax.swing.JPanel {
 
+  /**
+   * @Todo move color management to a central place
+   */
+  private static final Color disabledColor = new Color(170, 170, 170);
+  private static final Color selectedBackgroundColor = new Color(57, 105, 138);
+  private static final Color selectedForegroundColor = Color.WHITE;
+
   private ContestNode node = null;
   private final PropertyChangeListener nodeListener = new PropertyChangeListener() {
 
@@ -43,9 +51,6 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     }
   };
 
-  /**
-   * Creates new form TimeTableCellPanel
-   */
   public TimeTableCellPanel() {
     initComponents();
     if (!java.beans.Beans.isDesignTime()) {
@@ -135,9 +140,30 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     }
     Image image = node.getIcon(BeanInfo.ICON_COLOR_16x16);
     Icon icon = null;
-    if(image != null){
+    if (image != null) {
       icon = new ImageIcon(image);
     }
     lblContest.setIcon(icon);
   }
+
+  void setValue(Object value) {
+    if (value instanceof Integer) {
+      setContestId((Integer) value);
+    } else {
+      setContestId(null);
+    }
+  }
+
+  void setSelected(boolean selected) {
+    if (selected) {
+      setBackground(selectedBackgroundColor);
+      lblContest.setForeground(selectedForegroundColor);
+    } else {
+      setBackground(Color.WHITE);
+      lblContest.setForeground(Color.BLACK);
+    }
+  }
+
+
+
 }

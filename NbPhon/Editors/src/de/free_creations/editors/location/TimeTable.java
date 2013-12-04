@@ -28,8 +28,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -63,6 +65,71 @@ public class TimeTable extends JTable {
     }
   };
 
+  private final TableCellRenderer tableCellRenderer = new TableCellRenderer() {
+
+    private final JLabel emptyLabel = new JLabel();
+
+    @Override
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row, int column) {
+      JComponent c = getBaseComponent(value, isSelected, row, column);
+      if (hasFocus) {
+        c.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+      } else {
+        c.setBorder(null);
+      }
+      return c;
+    }
+
+    private JComponent getBaseComponent(
+            Object value,
+            boolean isSelected,
+            int row, int column) {
+      if (!isCellVisible(row, column)) {
+        // there is no time-slot for this cell
+        return emptyLabel;
+      }
+      if (column == 0) {
+        return getRowHeaderComponent(value);
+      } else {
+        TimeTableCellPanel panel = getTimeTableCellPanel(row, column);
+        panel.setValue(value);
+        panel.setSelected(isSelected);
+        return panel;
+      }
+    }
+
+    private final HashMap<String, JLabel> colHeaderCache = new HashMap<>();
+
+    private JComponent getRowHeaderComponent(Object value) {
+      if (value instanceof String) {
+        String text = (String) value;
+        if (!colHeaderCache.containsKey(text)) {
+          JLabel newLabel = new JLabel(text);
+          colHeaderCache.put(text, newLabel);
+        }
+        return colHeaderCache.get(text);
+      } else {
+        return emptyLabel;
+      }
+    }
+
+    private final HashMap<Integer, TimeTableCellPanel> cellCache = new HashMap<>();
+    private static final int maxRows = 10007;
+
+    private TimeTableCellPanel getTimeTableCellPanel(int row, int column) {
+      int hash = column * maxRows + row;
+      if (!cellCache.containsKey(hash)) {
+        cellCache.put(hash, new TimeTableCellPanel());
+      }
+      return cellCache.get(hash);
+    }
+  };
+
   public TimeTable() {
     super();
     if (java.beans.Beans.isDesignTime()) {
@@ -74,6 +141,7 @@ public class TimeTable extends JTable {
 
       TimeTableModel timeTableModel = new TimeTableModel(null);
       setModel(timeTableModel);
+      setDefaultRenderer(Object.class, tableCellRenderer);
 
     }
     rowHeight = 35 + 2;
@@ -104,11 +172,10 @@ public class TimeTable extends JTable {
    * @param column
    * @return true for all cells except those in column 0.
    */
-  @Override
-  public boolean isCellSelected(int row, int column) {
-    return (column > 0) ? super.isCellSelected(row, column) : false;
-  }
-
+//  @Override
+//  public boolean isCellSelected(int row, int column) {
+//    return (column > 0) ? super.isCellSelected(row, column) : false;
+//  }
   /**
    * Cells that correspond to a time-slot that cannot be found in the "TIMESLOT"
    * table are overlaid with a blank label.
@@ -118,34 +185,33 @@ public class TimeTable extends JTable {
    * @param column
    * @return
    */
-  @Override
-  public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-    if (java.beans.Beans.isDesignTime()) {
-      return super.prepareRenderer(renderer, row, column);
-    }
-    if (isCellVisible(row, column)) {
-      if (column > 0) {
-        //<<<<<<<<<<<<< rework >>>>>>>>>>>>>>>>>>>>>>>>>
-        TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel();
-        if (dataModel instanceof TimeTableModel) {
-          TimeTableModel timeTableModel = (TimeTableModel) dataModel;
-          Object valueAt = timeTableModel.getValueAt(row, column);     
-          if(valueAt instanceof Integer){
-            timeTableCellPanel.setContestId((Integer) valueAt);
-          }else{
-            timeTableCellPanel.setContestId(null);
-          }
-        }else{
-          timeTableCellPanel.setContestId(null);
-        }
-        return timeTableCellPanel;
-      }
-      return super.prepareRenderer(renderer, row, column);
-    } else {
-      return new JLabel();
-    }
-  }
-
+//  @Override
+//  public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+//    if (java.beans.Beans.isDesignTime()) {
+//      return super.prepareRenderer(renderer, row, column);
+//    }
+//    if (isCellVisible(row, column)) {
+//      if (column > 0) {
+//        //<<<<<<<<<<<<< rework >>>>>>>>>>>>>>>>>>>>>>>>>
+//        TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel(row, column);
+//        if (dataModel instanceof TimeTableModel) {
+//          TimeTableModel timeTableModel = (TimeTableModel) dataModel;
+//          Object valueAt = timeTableModel.getValueAt(row, column);
+//          if (valueAt instanceof Integer) {
+//            timeTableCellPanel.setContestId((Integer) valueAt);
+//          } else {
+//            timeTableCellPanel.setContestId(null);
+//          }
+//        } else {
+//          timeTableCellPanel.setContestId(null);
+//        }
+//        return timeTableCellPanel;
+//      }
+//      return super.prepareRenderer(renderer, row, column);
+//    } else {
+//      return new JLabel();
+//    }
+//  }
   /**
    * Cells that correspond to a time-slot that cannot be found in the "TIMESLOT"
    * table are overlaid with a blank label.
@@ -183,11 +249,8 @@ public class TimeTable extends JTable {
     }
     try {
       TimeSlot t = Manager.getTimeSlotCollection().findEntity(column - 1, row);
-      if (t == null) {
-        return false;
-      } else {
-        return true;
-      }
+      return (t != null);
+
     } catch (DataBaseNotReadyException ex) {
       return false;
     }
@@ -209,7 +272,7 @@ public class TimeTable extends JTable {
             }) {
               @Override
               public Class<?> getColumnClass(int columnIndex) {
-                  return String.class;               
+                return String.class;
               }
             });
   }
@@ -318,14 +381,14 @@ public class TimeTable extends JTable {
     /**
      *
      * @param columnIndex
-     * @return String for column 0, Boolean for all other.
+     * @return String for column 0, Integer (the Location id) for all other.
      */
     @Override
     public Class<?> getColumnClass(int columnIndex) {
       if (columnIndex > 0) {
         return String.class;
       } else {
-        return String.class;
+        return Integer.class;
       }
     }
 

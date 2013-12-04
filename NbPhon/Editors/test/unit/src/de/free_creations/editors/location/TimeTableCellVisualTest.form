@@ -26,19 +26,13 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="timeTableCellPanel1" alignment="0" max="32767" attributes="0"/>
-                          <Component id="lblWarning" alignment="0" max="32767" attributes="0"/>
-                          <Component id="setContestId10" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="setContestIdNull" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="timeTableCellPanel1" alignment="0" pref="257" max="32767" attributes="0"/>
+                  <Component id="lblWarning" alignment="0" max="32767" attributes="0"/>
+                  <Component id="setContestId10" alignment="0" max="32767" attributes="0"/>
+                  <Component id="setContestIdNull" max="32767" attributes="0"/>
+                  <Component id="btnSelected" alignment="0" max="32767" attributes="0"/>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -46,12 +40,14 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="timeTableCellPanel1" max="32767" attributes="0"/>
+              <Component id="timeTableCellPanel1" pref="53" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Component id="setContestId10" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="setContestIdNull" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btnSelected" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="lblWarning" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -90,6 +86,16 @@
       </Properties>
     </Component>
     <Component class="de.free_creations.editors.location.TimeTableCellPanel" name="timeTableCellPanel1">
+    </Component>
+    <Component class="javax.swing.JToggleButton" name="btnSelected">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="TimeTableCellVisualTest.btnSelected.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectedActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
