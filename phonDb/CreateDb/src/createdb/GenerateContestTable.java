@@ -92,6 +92,7 @@ public class GenerateContestTable {
             + contestId + ","
             + "'" + csv.item(0) + "',"// CONTESTTYPE
             + "'" + csv.item(1) + "'," // NAME
+            + "'" + csv.item(2) + "'," // DESCRIPTION
             + randomPerson()
             + ");";
 

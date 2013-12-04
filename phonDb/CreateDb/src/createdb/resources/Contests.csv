@@ -1,18 +1,18 @@
-1 ContestType, 2 Name
-KLAVIER,Klavier AG II
-KLAVIER,Klavier AG III
-KLAVIER,Klavier AG IV
-KLAVIER,Klavier AG V
-KLAVIER,Klavier AG VI
-GESANG,Gesang AG III
-GESANG,Gesang AG IV
-GESANG,Gesang AG V
-GESANG,Gesang AG VI
-HARFE,Harfe AG II- VI
-ENSEMBLE,Holzbläser AG II – VI
-ENSEMBLE,Blechbläser AG II – VI
-ENSEMBLE,Streichinstrumente AG II – VI
-ENSEMBLE,Akkordeon AG II - VI
-POP,Pop-Gitarre AG II – VI
-POP,Drum-Set AG II - VI
-NEUEMUSIK,Neue Musik
+1 ContestType, 2 Name, 3 Description
+KLAVIER,2 Klavier,Klavier AG II
+KLAVIER,3 Klavier,Klavier AG III
+KLAVIER,4 Klavier,Klavier AG IV
+KLAVIER,5 Klavier,Klavier AG V
+KLAVIER,6 Klavier,Klavier AG VI
+GESANG,3 Gesang,Gesang AG III
+GESANG,4 Gesang,Gesang AG IV
+GESANG,5 Gesang,Gesang AG V
+GESANG,6 Gesang,Gesang AG VI
+HARFE,2-4 Harfe,Harfe AG II- VI
+ENSEMBLE,2-4 Holzbläser,Holzbläser AG II – VI
+ENSEMBLE,2-4 Blechbläser,Blechbläser AG II – VI
+ENSEMBLE,2-4 Streichinstrumente, Streichinstrumente AG II – VI
+ENSEMBLE,2-4 Akkordeon,Akkordeon AG II - VI
+POP,2-4 Gitarre,Pop-Gitarre AG II – VI
+POP,2-4 Drum-Set,Drum-Set AG II - VI
+NEUEMUSIK,Neue Musik,Neue Musik
