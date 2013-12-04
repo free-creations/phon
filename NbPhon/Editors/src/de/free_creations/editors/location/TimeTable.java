@@ -15,7 +15,6 @@
  */
 package de.free_creations.editors.location;
 
-import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Location;
 import de.free_creations.dbEntities.TimeSlot;
@@ -202,19 +201,15 @@ public class TimeTable extends JTable {
   private TableModel makeDesignTimeModel() {
     return (new javax.swing.table.DefaultTableModel(
             new Object[][]{
-              {"Vormittag", true, null, null, null, true, null, null},
-              {"Nachmittag", null, true, null, true, null, null, null},
-              {"Abend", null, null, true, false, null, null, null}},
+              {"Vormittag", "Akkordeonensemble", "Akkordeonensemble", "Akkordeonensemble", "Akkordeonensemble", "Klavier", "Akkordeonensemble", "Akkordeonensemble"},
+              {"Nachmittag", "Akkordeonensemble", "Klavier", "Akkordeonensemble", "Klavier", "Akkordeonensemble", "Akkordeonensemble", "Akkordeonensemble"},
+              {"Abend", "Akkordeonensemble", "Akkordeonensemble", "Klavier", "Streicherensemble", "Akkordeonensemble", "Akkordeonensemble", "Akkordeonensemble"}},
             new String[]{
               ".Design.", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
             }) {
               @Override
               public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex > 0) {
-                  return Boolean.class;
-                } else {
-                  return String.class;
-                }
+                  return String.class;               
               }
             });
   }

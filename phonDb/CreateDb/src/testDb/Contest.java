@@ -46,6 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Contest.findByContestId", query = "SELECT c FROM Contest c WHERE c.contestId = :contestId"),
   @NamedQuery(name = "Contest.findByName", query = "SELECT c FROM Contest c WHERE c.name = :name")})
 public class Contest implements Serializable {
+  @Column(name = "DESCRIPTION")
+  private String description;
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -134,6 +136,14 @@ public class Contest implements Serializable {
   @Override
   public String toString() {
     return "testDb.Contest[ contestId=" + contestId + " ]";
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
   
 }

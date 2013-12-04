@@ -32,7 +32,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -57,6 +56,8 @@ public class Contest implements Serializable, DbEntity {
   private Integer contestId;
   @Column(name = "NAME")
   private String name;
+  @Column(name = "DESCRIPTION")
+  private String description;
   @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
   @ManyToOne
   private Person person;
@@ -71,6 +72,7 @@ public class Contest implements Serializable, DbEntity {
   public static final String PROP_PERSON = "PROP_PERSON";
   public static final String PROP_EVENTREMOVED = "PROP_EVENTREMOVED";
   public static final String PROP_EVENTADDED = "PROP_EVENTADDED";
+  public static final String PROP_DESCRIPTION = "PROP_DESCRIPTION";
 
   public Contest() {
   }
@@ -92,6 +94,18 @@ public class Contest implements Serializable, DbEntity {
     this.name = name;
     if (!Objects.equals(old, name)) {
       firePropertyChange(PROP_NAME, old, name);
+    }
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    String old = this.description;
+    this.description = description;
+    if (!Objects.equals(old, description)) {
+      firePropertyChange(PROP_DESCRIPTION, old, description);
     }
   }
 
@@ -217,7 +231,7 @@ public class Contest implements Serializable, DbEntity {
     firePropertyChange(PROP_EVENTREMOVED, e.identity(), null);
   }
 
- protected void addEvent(Event e) {
+  protected void addEvent(Event e) {
     assert (e != null);
     if (eventList == null) {
       throw new RuntimeException("Cannot perform this operation. Record must be persited");
