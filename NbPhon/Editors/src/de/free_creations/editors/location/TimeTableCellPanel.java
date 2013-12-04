@@ -19,13 +19,18 @@ import de.free_creations.nbPhon4Netbeans.ContestNode;
 import de.free_creations.nbPhonAPI.Manager;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Objects;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 
@@ -48,6 +53,15 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       showNode(node);
+    }
+  };
+
+  private final Action deleteAction = new AbstractAction("delete") {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      System.out.println("Bla");
+
     }
   };
 
@@ -127,11 +141,14 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
   // End of variables declaration//GEN-END:variables
 
   private void showNode(Node node) {
+
     if (node == null) {
       lblContest.setText("null");
       lblContest.setIcon(null);
+      lblContest.setComponentPopupMenu(null);
       return;
     }
+
     String htmlDisplayName = node.getHtmlDisplayName();
     if (htmlDisplayName != null) {
       lblContest.setText(htmlDisplayName);
@@ -143,7 +160,15 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     if (image != null) {
       icon = new ImageIcon(image);
     }
+    
     lblContest.setIcon(icon);
+    JPopupMenu popupMenu = null;
+    if (contestId != null) {
+      popupMenu = node.getContextMenu();
+      popupMenu.addSeparator();
+      popupMenu.add(deleteAction);
+    }
+    lblContest.setComponentPopupMenu(popupMenu);
   }
 
   void setValue(Object value) {
@@ -163,7 +188,5 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
       lblContest.setForeground(Color.BLACK);
     }
   }
-
-
 
 }
