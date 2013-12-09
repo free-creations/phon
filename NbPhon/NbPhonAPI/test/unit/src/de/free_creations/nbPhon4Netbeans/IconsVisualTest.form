@@ -26,14 +26,25 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="cbInstrument" alignment="0" pref="206" max="32767" attributes="0"/>
-                      <Component id="cbIcons" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="cbInstrument" alignment="0" pref="206" max="32767" attributes="0"/>
+                              <Component id="cbIcons" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="lblEnabled" alignment="0" min="-2" pref="169" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblDisabled" pref="193" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="lblEnabled" alignment="0" min="-2" pref="169" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="lblDisabled" pref="193" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -46,9 +57,13 @@
                   <Component id="lblEnabled" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                   <Component id="lblDisabled" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="cbIcons" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="cbInstrument" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="128" max="32767" attributes="0"/>
           </Group>
@@ -66,25 +81,14 @@
     <Component class="javax.swing.JComboBox" name="cbInstrument">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="18">
-            <StringItem index="0" value="BLOCKFLOETE"/>
-            <StringItem index="1" value="GITARRE"/>
-            <StringItem index="2" value="HORN"/>
-            <StringItem index="3" value="KLARINETTE"/>
-            <StringItem index="4" value="KLAVIER-DUO"/>
-            <StringItem index="5" value="KLAVIER-STREICH"/>
-            <StringItem index="6" value="KUNSTLIED"/>
-            <StringItem index="7" value="MUSICAL"/>
-            <StringItem index="8" value="OBOE"/>
-            <StringItem index="9" value="ORGEL"/>
-            <StringItem index="10" value="POP"/>
-            <StringItem index="11" value="POSAUNE"/>
-            <StringItem index="12" value="QUERFLOETE"/>
-            <StringItem index="13" value="SAX"/>
-            <StringItem index="14" value="SEL-BESETZ"/>
-            <StringItem index="15" value="TROMPETE"/>
-            <StringItem index="16" value="TUBA"/>
-            <StringItem index="17" value=" "/>
+          <StringArray count="7">
+            <StringItem index="0" value="KLAVIER"/>
+            <StringItem index="1" value="GESANG"/>
+            <StringItem index="2" value="HARFE"/>
+            <StringItem index="3" value="ENSEMBLE"/>
+            <StringItem index="4" value="POP"/>
+            <StringItem index="5" value="NEUEMUSIK"/>
+            <StringItem index="6" value=" "/>
           </StringArray>
         </Property>
       </Properties>
@@ -111,6 +115,20 @@
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="de/free_creations/nbPhon4Netbeans/Bundle.properties" key="IconsVisualTest.lblDisabled.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="de/free_creations/nbPhon4Netbeans/Bundle.properties" key="IconsVisualTest.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="de/free_creations/nbPhon4Netbeans/Bundle.properties" key="IconsVisualTest.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>

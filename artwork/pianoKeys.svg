@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16px"
+   height="16px"
+   id="svg3760"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="pianoKeys.svg"
+   inkscape:export-filename="/home/harald/NetBeansProjects/phon/artwork/pianoKeys.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs3762" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="41.018746"
+     inkscape:cx="8.0389726"
+     inkscape:cy="7.478338"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:snap-grids="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="977"
+     inkscape:window-x="0"
+     inkscape:window-y="281"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3768"
+       empspacing="4"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3765">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer"
+     style="display:none">
+    <rect
+       style="fill:#1cacff;fill-opacity:1;stroke:none"
+       id="rect3855"
+       width="233.48018"
+       height="236.56387"
+       x="-171.36565"
+       y="-116.15859" />
+  </g>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <rect
+       style="fill:#f3f0e5;fill-opacity:1;stroke:#5a5a5a;stroke-width:0.72110456;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3802"
+       width="3.235527"
+       height="9.3073225"
+       x="11.891218"
+       y="6.0581913" />
+    <rect
+       y="6.0581913"
+       x="8.6069317"
+       height="9.3073225"
+       width="3.235527"
+       id="rect3806"
+       style="fill:#f3f0e5;fill-opacity:1;stroke:#5a5a5a;stroke-width:0.72110456;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <rect
+       style="fill:#f3f0e5;fill-opacity:1;stroke:#5a5a5a;stroke-width:0.72110456;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3808"
+       width="3.235527"
+       height="9.3073225"
+       x="5.3426714"
+       y="6.0581913" />
+    <rect
+       y="6.0581913"
+       x="2.0583847"
+       height="9.3073225"
+       width="3.235527"
+       id="rect3810"
+       style="fill:#f3f0e5;fill-opacity:1;stroke:#5a5a5a;stroke-width:0.72110456;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <rect
+       style="fill:#64592e;fill-opacity:1;stroke:#5a5a5a;stroke-width:0.58776307;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3812"
+       width="1.5523537"
+       height="5.839715"
+       x="4.5821686"
+       y="6.5739679" />
+    <rect
+       y="6.5658197"
+       x="7.8506317"
+       height="5.8316317"
+       width="1.4237896"
+       id="rect3814"
+       style="fill:#64592e;fill-opacity:1;stroke:#5a5a5a;stroke-width:0.5625084;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    <rect
+       y="6.5036249"
+       x="11.13393"
+       height="5.8809934"
+       width="1.4057378"
+       id="rect3816"
+       style="fill:#64592e;fill-opacity:1;stroke:#5a5a5a;stroke-width:0.56129175;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  </g>
+</svg>

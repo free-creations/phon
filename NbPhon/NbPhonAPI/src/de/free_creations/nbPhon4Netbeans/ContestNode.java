@@ -301,7 +301,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
         if (j != null) {
           ContestType contestType = j.getContestType();
           if (contestType != null) {
-            result = iconManager().getInstrumentedImage(result, contestType.getIcon());
+            result = iconManager().underLayContestTypeImage(result, contestType.getIcon());
           }
         }
       } catch (DataBaseNotReadyException ex) {

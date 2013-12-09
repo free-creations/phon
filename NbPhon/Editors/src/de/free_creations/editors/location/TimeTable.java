@@ -40,7 +40,11 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 /**
+ * The time table in the Locations Edit Window (LocationsTopComponent)
  *
+ * @see
+ * http://docs.oracle.com/javase/tutorial/uiswing/components/table.html#renderer
+ * http://stackoverflow.com/questions/16743427/newbie-jtable-right-click-popup-menu
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class TimeTable extends JTable {
@@ -163,6 +167,15 @@ public class TimeTable extends JTable {
     TimeTableModel timeTableModel = new TimeTableModel(locationId);
     setModel(timeTableModel);
     timeTableModel.startListening();
+  }
+
+  @Override
+  public TableCellRenderer getCellRenderer(int row, int column) {
+    if (column > 0) {
+      return tableCellRenderer;
+    }
+    // else...
+    return super.getCellRenderer(row, column);
   }
 
   /**

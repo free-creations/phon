@@ -16,7 +16,6 @@
 package de.free_creations.nbPhon4Netbeans;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
@@ -44,6 +43,13 @@ public class IconManager {
   //---- ContestNode
   public final BufferedImage iconContest;
   public final BufferedImage iconNullContest;
+  //---- ContestTypes
+  public final BufferedImage iconContestPiano;
+  public final BufferedImage iconContestSinging;
+  public final BufferedImage iconContestHarp;
+  public final BufferedImage iconContestEnsemble;
+  public final BufferedImage iconContestPop;
+  public final BufferedImage iconNewMusic;
   //---- PersonNode
   public final BufferedImage iconEmpty24x16;
   public final BufferedImage iconEmpty32x16;
@@ -78,9 +84,17 @@ public class IconManager {
     iconTeamOpened = ImageIO.read(IconManager.class.getResource("resources/groupOpened.png"));
     //---- Location Node
     iconLocation = ImageIO.read(IconManager.class.getResource("resources/house.png"));
-    //---- JuryNode
+    //---- ContestNode
     iconContest = ImageIO.read(IconManager.class.getResource("resources/chairs16x16.png"));
     iconNullContest = ImageIO.read(IconManager.class.getResource("resources/noChairs16x16.png"));
+    //---- ContestTypes
+    iconContestPiano = ImageIO.read(IconManager.class.getResource("resources/pianoKeys.png"));
+    iconContestSinging = ImageIO.read(IconManager.class.getResource("resources/twoSingers.png"));
+    iconContestHarp = ImageIO.read(IconManager.class.getResource("resources/harp.png"));
+    iconContestEnsemble = ImageIO.read(IconManager.class.getResource("resources/pianoViolin.png"));
+    iconContestPop = ImageIO.read(IconManager.class.getResource("resources/sax.png"));
+    iconNewMusic = ImageIO.read(IconManager.class.getResource("resources/newMusic.png"));
+
     //---- PersonNode
     iconEmpty24x16 = ImageIO.read(IconManager.class.getResource("resources/empty24x16.png"));
     iconEmpty32x16 = ImageIO.read(IconManager.class.getResource("resources/empty32x16.png"));
@@ -131,49 +145,44 @@ public class IconManager {
    * KUNSTLIED MUSICAL OBOE x ORGEL POP POSAUNE trombone x QUERFLOETE SAX x
    * SEL-BESETZ TROMPETE x TUBA x
    *
-   * @param instrCategory
+   * @param contestType can be an icon from the resources or the ContestType Id string
    * @return
    */
-  public BufferedImage getInstrumentImage(String instrCategory) {
-    if (instrCategory == null) {
+  public BufferedImage getContestTypeImage(String contestType) {
+    if (contestType == null) {
       return null;
     }
-    switch (instrCategory) {
-      case "BLOCKFLOETE":
-        return iconRecorder;
-      case "GITARRE":
-        return iconGuitar;
-      case "HORN":
-        return iconHorn;
-      case "KLARINETTE":
-        return iconClarinet;
-      case "KLAVIER-DUO":
-        return iconTwoPianos;
-      case "KLAVIER-STREICH":
-        return iconPianoViolin;
-      case "KUNSTLIED":
-        return iconSinger;
-      case "MUSICAL":
-        return iconTwoSingers;
-      case "OBOE":
-        return iconOboe;
-      case "ORGEL":
-        return iconNote;
-      case "POP":
-        return iconTwoSingers;
-      case "POSAUNE":
-        return iconTrombone;
-      case "QUERFLOETE":
-        return iconRecorder;
-      case "SAX":
-        return iconSax;
-      case "SEL-BESETZ":
-        return iconNote;
-      case "TROMPETE":
-        return iconTrumpet;
-      case "TUBA":
-        return iconTuba;
+    contestType = contestType.toLowerCase();
+    if (!contestType.endsWith(".png") )  {
+      contestType = contestType + ".png";
+    }
 
+    switch (contestType) {
+      case "klavier.png":
+        return iconContestPiano;
+      case "piano.png":
+        return iconContestPiano;
+        
+      case "gesang.png":
+        return iconContestSinging;
+      case "sing.png":
+        return iconContestSinging;
+
+      case "harfe.png":
+        return iconContestHarp;
+      case "harp.png":
+        return iconContestHarp;
+
+      case "ensemble.png":
+        return iconContestEnsemble;
+
+      case "pop.png":
+        return iconContestPop;
+        
+      case "neuemusik.png":
+        return iconNewMusic;
+      case "newmusic.png":
+        return iconNewMusic;
     }
     return null;
   }
@@ -239,41 +248,41 @@ public class IconManager {
    * Overlays a star onto the given image and caches it for further use.
    *
    * @param baseImage
-   * @param instrumentCategory
+   * @param contestType
    * @return
    */
-  public BufferedImage getInstrumentedImage(BufferedImage baseImage, String instrumentCategory) {
-    synchronized (instrumentedImageCacheLock) {
+  public BufferedImage underLayContestTypeImage(BufferedImage baseImage, String contestType) {
+    synchronized (contestTypeImageCacheLock) {
       if (baseImage == null) {
-        return getInstrumentImage(instrumentCategory);
+        return getContestTypeImage(contestType);
       }
-      BufferedImage instrumentImage = getInstrumentImage(instrumentCategory);
-      if (instrumentImage == null) {
+      BufferedImage contestTypeImage = getContestTypeImage(contestType);
+      if (contestTypeImage == null) {
         return baseImage;
       }
-      ImageKey imageKey = new ImageKey(baseImage, instrumentCategory);
-      if (!instrumentedImageCache.containsKey(imageKey)) {
-        BufferedImage instrumentedImage = mergeImages(instrumentImage, baseImage, 8, 0);
-        instrumentedImageCache.put(imageKey, instrumentedImage);
+      ImageKey imageKey = new ImageKey(baseImage, contestType);
+      if (!contestTypeImageCache.containsKey(imageKey)) {
+        BufferedImage instrumentedImage = mergeImages(contestTypeImage, baseImage, 8, 0);
+        contestTypeImageCache.put(imageKey, instrumentedImage);
       }
-      return instrumentedImageCache.get(imageKey);
+      return contestTypeImageCache.get(imageKey);
     }
   }
-  private final HashMap<ImageKey, BufferedImage> instrumentedImageCache = new HashMap<>();
-  private final Object instrumentedImageCacheLock = new Object();
+  private final HashMap<ImageKey, BufferedImage> contestTypeImageCache = new HashMap<>();
+  private final Object contestTypeImageCacheLock = new Object();
 
   private class ImageKey {
 
     private final BufferedImage baseImage;
-    private final String instrumentCategory;
+    private final String contestType;
     private final int hash;
 
-    public ImageKey(BufferedImage baseImage, String instrumentCategory) {
+    public ImageKey(BufferedImage baseImage, String contestType) {
       this.baseImage = baseImage;
-      this.instrumentCategory = instrumentCategory;
+      this.contestType = contestType;
       int h = 7;
       h = 53 * h + Objects.hashCode(this.baseImage);
-      h = 53 * h + Objects.hashCode(this.instrumentCategory);
+      h = 53 * h + Objects.hashCode(this.contestType);
       hash = h;
     }
 
@@ -294,7 +303,7 @@ public class IconManager {
       if (!Objects.equals(this.baseImage, other.baseImage)) {
         return false;
       }
-      return Objects.equals(this.instrumentCategory, other.instrumentCategory);
+      return Objects.equals(this.contestType, other.contestType);
     }
   }
 

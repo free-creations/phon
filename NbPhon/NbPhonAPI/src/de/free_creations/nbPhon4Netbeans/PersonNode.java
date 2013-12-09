@@ -16,7 +16,6 @@
 package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.ContestType;
-import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
@@ -28,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.openide.cookies.EditCookie;
@@ -317,7 +315,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
         BufferedImage personsIcon = getPersonsIcon(p);
         ContestType contestType = p.getContestType();
         if(contestType != null)
-        return iconManager().getInstrumentedImage(personsIcon, contestType.getIcon());
+        return iconManager().underLayContestTypeImage(personsIcon, contestType.getIcon());
         else
           return personsIcon;
       }
