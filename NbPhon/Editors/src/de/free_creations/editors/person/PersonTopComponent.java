@@ -16,7 +16,6 @@
 package de.free_creations.editors.person;
 
 import de.free_creations.dbEntities.ContestType;
-import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
@@ -89,7 +88,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void initComponents() {
 
     PersonId = new javax.swing.JTextField();
-    edAlter = new javax.swing.JComboBox();
+    edPersontype = new javax.swing.JComboBox();
     edHerrFrau = new javax.swing.JComboBox();
     edNachname = new javax.swing.JTextField();
     edVorname = new javax.swing.JTextField();
@@ -107,12 +106,10 @@ public final class PersonTopComponent extends CloneableTopComponent {
     jLabel8 = new javax.swing.JLabel();
     jLabel1 = new javax.swing.JLabel();
     jPanel1 = new javax.swing.JPanel();
-    jLabel10 = new javax.swing.JLabel();
     jLabel3 = new javax.swing.JLabel();
     jLabel9 = new javax.swing.JLabel();
     jScrollPane3 = new javax.swing.JScrollPane();
     timeTable = new de.free_creations.editors.person.TimeTable();
-    edFunction = new de.free_creations.editors.person.FunctionsComboBox();
     jLabel11 = new javax.swing.JLabel();
     teamPanel = new de.free_creations.editors.person.PersonTeamPanel();
     edContestType = new de.free_creations.editors.person.ContestTypeComboBox();
@@ -126,8 +123,13 @@ public final class PersonTopComponent extends CloneableTopComponent {
     PersonId.setEditable(false);
     PersonId.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.PersonId.text")); // NOI18N
 
-    edAlter.setEditable(true);
-    edAlter.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "KIND", "JUGENDLICH", "ERWACHSEN" }));
+    edPersontype.setEditable(true);
+    edPersontype.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Kind", "Jugendlich", "Erwachsen", "Lehrer" }));
+    edPersontype.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        edPersontypeActionPerformed(evt);
+      }
+    });
 
     edHerrFrau.setEditable(true);
     edHerrFrau.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hr.", "Fr." }));
@@ -204,9 +206,6 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
     jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jPanel1.border.title"))); // NOI18N
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel10.text")); // NOI18N
-    jLabel10.setPreferredSize(new java.awt.Dimension(70, 15));
-
     org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel3.text")); // NOI18N
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel9.text")); // NOI18N
@@ -214,13 +213,6 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
     jScrollPane3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jScrollPane3.setViewportView(timeTable);
-
-    edFunction.setMinimumSize(new java.awt.Dimension(112, 26));
-    edFunction.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        edFunctionActionPerformed(evt);
-      }
-    });
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel11.text")); // NOI18N
 
@@ -234,48 +226,38 @@ public final class PersonTopComponent extends CloneableTopComponent {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane3)
+      .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
       .addGroup(jPanel1Layout.createSequentialGroup()
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jLabel3)
           .addGroup(jPanel1Layout.createSequentialGroup()
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel11)
-                .addGap(119, 119, 119))
-              .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-              .addComponent(edFunction, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addComponent(jLabel11)
+            .addGap(119, 119, 119))
+          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(jPanel1Layout.createSequentialGroup()
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-            .addContainerGap())
-          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(31, 31, 31))))
+            .addGap(0, 0, Short.MAX_VALUE))
+          .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
+        .addContainerGap())
+      .addGroup(jPanel1Layout.createSequentialGroup()
+        .addComponent(jLabel3)
+        .addGap(0, 0, Short.MAX_VALUE))
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel1Layout.createSequentialGroup()
-        .addContainerGap()
         .addComponent(jLabel3)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel11))
         .addGap(0, 0, 0)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-            .addComponent(edFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
@@ -300,7 +282,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
           .addGroup(layout.createSequentialGroup()
             .addComponent(PersonId, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(121, 121, 121)
-            .addComponent(edAlter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(edPersontype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
           .addComponent(jLabel12)
           .addComponent(jScrollPane1)
           .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -345,7 +327,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(PersonId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(edAlter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(edPersontype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jLabel2)
@@ -475,18 +457,6 @@ public final class PersonTopComponent extends CloneableTopComponent {
     }
   }//GEN-LAST:event_edEMailFocusLost
 
-  private void edFunctionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edFunctionActionPerformed
-//    Person p = thisPerson();
-//    if (p != null) {
-//      Job oldF = p.get();
-//      Job newF = edFunction.getSelectedItemFromPersistency();
-//      if (!Objects.equals(oldF, newF)) {
-//        p.setGewuenschtefunktion(newF);
-//      }
-//    }
-
-  }//GEN-LAST:event_edFunctionActionPerformed
-
   private void edContestTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edContestTypeActionPerformed
     Person p = thisPerson();
     if (p != null) {
@@ -498,24 +468,26 @@ public final class PersonTopComponent extends CloneableTopComponent {
     }
   }//GEN-LAST:event_edContestTypeActionPerformed
 
+  private void edPersontypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edPersontypeActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_edPersontypeActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField PersonId;
   private de.free_creations.editors.person.PersonAssignmentTable assignmentTable;
-  private javax.swing.JComboBox edAlter;
   private de.free_creations.editors.person.ContestTypeComboBox edContestType;
   private javax.swing.JTextField edEMail;
   private javax.swing.JTextField edFestnetz;
-  private de.free_creations.editors.person.FunctionsComboBox edFunction;
   private javax.swing.JTextField edHandy;
   private javax.swing.JComboBox edHerrFrau;
   private javax.swing.JTextField edNachname;
   private javax.swing.JTextArea edNotiz;
+  private javax.swing.JComboBox edPersontype;
   private javax.swing.JTextField edPlz;
   private javax.swing.JTextField edStrasse;
   private javax.swing.JTextField edVorname;
   private javax.swing.JTextField edWohnort;
   private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel10;
   private javax.swing.JLabel jLabel11;
   private javax.swing.JLabel jLabel12;
   private javax.swing.JLabel jLabel13;
@@ -586,7 +558,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void refreshView(Person person) {
     setDisplayName(String.format("%s, %s", person.getSurname(), person.getGivenname()));
     PersonId.setText(noNull(person.getPersonId()));
-    edAlter.setSelectedItem(noNull(person.getAgegroup()));
+    edPersontype.setSelectedItem(noNull(person.getAgegroup()));
     edEMail.setText(noNull(person.getEmail()));
     edFestnetz.setText(noNull(person.getTelephone()));
     //  edFunction.setSelectedItem(person.getGewuenschtefunktion());
@@ -599,7 +571,21 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edVorname.setText(noNull(person.getGivenname()));
     edContestType.setSelectedContestType(person.getContestType());
     edWohnort.setText(noNull(person.getCity()));
+    edPersontype.setSelectedItem(personType(person));
     //   teamPanel.setPersonId(person.getPersonid());
+  }
+  
+  private String personType(Person person){
+    if("LEHRER".equals(person.getJobType().getJobTypeId())){
+      return "Lehrer";
+    }
+    String agegroup = person.getAgegroup();
+    switch(agegroup){
+      case "ERWACHSEN": return "Erwachsen";
+      case "JUGENDLICH": return "Jugendlich";
+      case "KIND": return "Kind";
+      default : return "Erwachsen";
+    }
   }
   
   private Integer findTeamleaderId(Person person) {

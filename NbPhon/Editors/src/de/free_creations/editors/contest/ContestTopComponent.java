@@ -16,6 +16,7 @@
 package de.free_creations.editors.contest;
 
 import de.free_creations.dbEntities.Contest;
+import de.free_creations.dbEntities.ContestType;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.ContestCollection;
 import de.free_creations.nbPhonAPI.Manager;
@@ -31,7 +32,7 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.CloneableTopComponent;
 
 /**
- * Top component which displays something.
+ * Toc comconent which disclays something.
  */
 @ConvertAsProperties(
         dtd = "-//de.free_creations.editors.contest//Contest//EN",
@@ -90,7 +91,6 @@ public final class ContestTopComponent extends CloneableTopComponent {
     edContestId = new javax.swing.JLabel();
     edDescription = new javax.swing.JTextField();
     jLabel2 = new javax.swing.JLabel();
-    edContestType = new javax.swing.JTextField();
     jLabel4 = new javax.swing.JLabel();
     jScrollPane1 = new javax.swing.JScrollPane();
     allocationTable = new de.free_creations.editors.contest.AllocationTable();
@@ -98,6 +98,8 @@ public final class ContestTopComponent extends CloneableTopComponent {
     timeTable1 = new de.free_creations.editors.contest.TimeTable();
     jLabel1 = new javax.swing.JLabel();
     edName = new javax.swing.JTextField();
+    contestTypeComboBox1 = new de.free_creations.editors.contest.ContestTypeComboBox();
+    edContestType = new de.free_creations.editors.contest.ContestTypeComboBox();
 
     org.openide.awt.Mnemonics.setLocalizedText(edContestId, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edContestId.text")); // NOI18N
 
@@ -109,8 +111,6 @@ public final class ContestTopComponent extends CloneableTopComponent {
     });
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel2.text")); // NOI18N
-
-    edContestType.setText(org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edContestType.text")); // NOI18N
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel4.text")); // NOI18N
 
@@ -124,6 +124,12 @@ public final class ContestTopComponent extends CloneableTopComponent {
     edName.addFocusListener(new java.awt.event.FocusAdapter() {
       public void focusLost(java.awt.event.FocusEvent evt) {
         edNameFocusLost(evt);
+      }
+    });
+
+    edContestType.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        edContestTypeActionPerformed(evt);
       }
     });
 
@@ -149,9 +155,16 @@ public final class ContestTopComponent extends CloneableTopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(edDescription)
-                  .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                  .addComponent(edName))))
+                  .addComponent(edName)
+                  .addGroup(layout.createSequentialGroup()
+                    .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))))
             .addContainerGap())))
+      .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+          .addGap(0, 0, Short.MAX_VALUE)
+          .addComponent(contestTypeComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addGap(0, 0, Short.MAX_VALUE)))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,9 +185,14 @@ public final class ContestTopComponent extends CloneableTopComponent {
           .addComponent(jLabel4))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(79, Short.MAX_VALUE))
+        .addContainerGap(68, Short.MAX_VALUE))
+      .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+          .addGap(0, 0, Short.MAX_VALUE)
+          .addComponent(contestTypeComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addGap(0, 0, Short.MAX_VALUE)))
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -200,10 +218,22 @@ public final class ContestTopComponent extends CloneableTopComponent {
     }
   }//GEN-LAST:event_edNameFocusLost
 
+  private void edContestTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edContestTypeActionPerformed
+    Contest c = thisContest();
+    if (c != null) {
+      ContestType oldCt = c.getContestType();
+      ContestType newCt = edContestType.getSelectedContestType();
+      if (!Objects.equals(oldCt, newCt)) {
+        c.setContestType(newCt);
+      }
+    }
+  }//GEN-LAST:event_edContestTypeActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private de.free_creations.editors.contest.AllocationTable allocationTable;
+  private de.free_creations.editors.contest.ContestTypeComboBox contestTypeComboBox1;
   private javax.swing.JLabel edContestId;
-  private javax.swing.JTextField edContestType;
+  private de.free_creations.editors.contest.ContestTypeComboBox edContestType;
   private javax.swing.JTextField edDescription;
   private javax.swing.JTextField edName;
   private javax.swing.JLabel jLabel1;
@@ -270,6 +300,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
       setDisplayName(String.format("Contest[%s]", currentKey));
     }
 
+    edContestType.setSelectedContestType(contest.getContestType());
     edContestId.setText(String.format("%s", currentKey));
     edName.setText(name);
     edDescription.setText(noNull(contest.getDescription()));
