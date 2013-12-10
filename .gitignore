@@ -29,3 +29,6 @@
 /phonDb/CreateDb/sql/populateExampleContests.sql
 /phonDb/CreateDb/sql/_3_populateExamplePersons.sql
 /phonDb/CreateDb/sql/_4_populateExampleContests.sql
+/phonDb/bin/
+/NbPhon/dist/
+/InstallNSIS/dist/install-Phon.exe
