@@ -27,7 +27,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- *
+ * With this class we try to find out how to unit-test call-backs that happen
+ * in the AWT thread.
  * @author Harald Postner<harald at free-creations.de>
  */
 public class AsyncronousExperimentNGTest {
@@ -60,23 +61,28 @@ public class AsyncronousExperimentNGTest {
     TestListner listener = new TestListner();
     AsyncronousExperiment instance = new AsyncronousExperiment();
     instance.callLater(listener);
-    checkLater(listener);
+    checkLater(listener, "This test should not fail");
   }
 
+  /**
+   * Here we demonstrate how a test failure manifests itself in the test runner.
+   * @throws InterruptedException
+   * @throws InvocationTargetException 
+   */
   @Test
   public void testBadCallLater() throws InterruptedException, InvocationTargetException {
     System.out.println("callLater");
     TestListner listener = new TestListner();
     AsyncronousExperiment instance = new AsyncronousExperiment();
-    //instance.callLater(listener);
-    checkLater(listener);
+    //no call to : instance.callLater(listener); <== this is the error we want to demonstrate
+    checkLater(listener, "This test fails on purpose!");
   }
 
-  private void checkLater(final TestListner listener) throws InterruptedException, InvocationTargetException {
+  private void checkLater(final TestListner listener, final String comment) throws InterruptedException, InvocationTargetException {
     EventQueue.invokeAndWait(new Runnable() {
       @Override
       public void run() {
-        assertTrue(listener.wasCalled);
+        assertTrue(listener.wasCalled, comment);
       }
     });
   }
