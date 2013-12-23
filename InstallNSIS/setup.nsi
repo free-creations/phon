@@ -1,4 +1,3 @@
-# see also http://www.klopfenstein.net/lorenz.aspx/simple-nsis-installer-with-user-execution-level
 
 # Included files
 !include Sections.nsh
@@ -18,9 +17,6 @@ Name "Phon"
 
 RequestExecutionLevel user
 
-
-
-
 # Reserved Files
 ReserveFile "${NSISDIR}\Plugins\x86-unicode\StartMenu.dll"
 
@@ -30,18 +26,12 @@ Var StartMenuGroup
 # Installer pages
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
-
-
 
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
-
-#Page license
-#Page directory
-#Page custom StartMenuGroupSelect "" ": $(StartMenuPageTitle)"
-#Page instfiles
 
 # Installer languages
 !insertmacro MUI_LANGUAGE "English"
@@ -73,7 +63,10 @@ InstallDirRegKey HKCU "${REGKEY}" Path
 UninstallIcon "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall-nsis.ico"
 ShowUninstDetails show
 
+# ------------------------------------------------------------------------
 # Installer sections
+# ------------------------------------------------------------------------
+
 Section -Main SEC0000
     SetShellVarContext current
     
@@ -97,6 +90,46 @@ Section -Main SEC0000
       
 SectionEnd
 
+# ------------------------------------------------------------------------
+# The Database Server section installs the Derby Database libraries
+# and the binary database files.
+Section /o "Database Server" SEC_Server
+
+    # The Derby libraries 
+    SetOverwrite on
+    SetOutPath $INSTDIR\derby
+    File /r "C:\Program Files (x86)\Java\jdk1.7.0_45\db"
+
+    # The Database Data-files
+    SetOverwrite on
+    SetOutPath $INSTDIR\phonDb
+    File /r "..\phonDb\data"
+
+    # configure the bat file that starts the database
+    SetOutPath $INSTDIR\phonDb\bin
+    FileOpen $0 "startServer.bat" w
+    ;-----------------------------------------------------------
+    fileWrite $0 'echo off $\r$\n'
+    fileWrite $0 'prompt $$G $\r$\n'
+    fileWrite $0 'set DATA_LOC="$INSTDIR\phonDb\data\" $\r$\n'
+    fileWrite $0 'set _JAVACMD="$INSTDIR\jre7\bin\java.exe" $\r$\n'
+    fileWrite $0 'set _JAR="$INSTDIR\derby\db\lib\derbyrun.jar" $\r$\n'
+    fileWrite $0 'cd %DATA_LOC% $\r$\n'
+    fileWrite $0 'echo *************************************************$\r$\n'
+    fileWrite $0 'echo **** Schliessen dieses Fensters beendet alle ****$\r$\n'
+    fileWrite $0 'echo **** Datenbankverbindungen                   ****$\r$\n'
+    fileWrite $0 'echo *************************************************$\r$\n'
+    fileWrite $0 '%_JAVACMD% -jar %_JAR% server start$\r$\n'
+    ;-----------------------------------------------------------
+    # close the file
+    fileClose $0
+
+    CreateShortcut "$SMPROGRAMS\Phon\PhonServer.lnk" $INSTDIR\phonDb\bin\startServer.bat
+    CreateShortcut "$DESKTOP\PhonServer.lnk"  $INSTDIR\phonDb\bin\startServer.bat
+
+
+SectionEnd
+
 Section -post SEC0001
     SetShellVarContext current
     WriteRegStr HKCU "${REGKEY}" Path $INSTDIR
@@ -106,7 +139,6 @@ Section -post SEC0001
     SetOutPath $SMPROGRAMS\$StartMenuGroup
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Phon.lnk" $INSTDIR\bin\nbphon.exe
     CreateShortcut "$DESKTOP\Phon.lnk" $INSTDIR\bin\nbphon.exe
-    ##CreateShortcut "$SMPROGRAMS\$StartMenuGroup\$(^UninstallLink).lnk" $INSTDIR\uninstall.exe
     
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayVersion "${VERSION}"
@@ -132,10 +164,18 @@ done${UNSECTION_ID}:
 !macroend
 
 # Uninstaller sections
-Section /o -un.Main UNSEC0000
+Section  -un.Main UNSEC0000
     Delete /REBOOTOK $INSTDIR\bin\nbphon.exe
     RmDir /r /REBOOTOK $INSTDIR
     DeleteRegValue HKCU "${REGKEY}\Components" Main
+SectionEnd
+
+Section /o "-un.Database Server" UNSEC_Server
+    RmDir /r /REBOOTOK $INSTDIR/phonDb
+    RmDir /r /REBOOTOK $INSTDIR
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\PhonServer.lnk" 
+    Delete /REBOOTOK "$DESKTOP\PhonServer.lnk"  
+
 SectionEnd
 
 Section -un.post UNSEC0001
@@ -152,7 +192,10 @@ Section -un.post UNSEC0001
     RmDir /REBOOTOK $INSTDIR
 SectionEnd
 
+# ------------------------------------------------------------------------
 # Installer functions
+# ------------------------------------------------------------------------
+
 Function StartMenuGroupSelect
     Push $R1
     StartMenu::Select /autoadd /text "$(StartMenuPageText)" /lastused $StartMenuGroup Phon
@@ -178,11 +221,6 @@ Function .onInit
     StrCmp $R0 "" done
     
     #.. ask user if OK to uninstall
-   # MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-   #           "$(^Name) is already installed. $\n$\nClick `OK` to remove the \
-   #            previous version or `Cancel` to cancel this upgrade." \
-   #            IDOK uninst
-   #            Abort
    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
               $(allreadyInstalled) \
                IDOK uninst
@@ -204,14 +242,16 @@ done:
 
 FunctionEnd
 
-#--- Uninstaller functions
+
+# Uninstaller functions
 Function un.onInit
     ReadRegStr $INSTDIR HKCU "${REGKEY}" Path
     ReadRegStr $StartMenuGroup HKCU "${REGKEY}" StartMenuGroup
     !insertmacro SELECT_UNSECTION Main ${UNSEC0000}
 FunctionEnd
-
+# ------------------------------------------------------------------------
 # Installer Language Strings
+# ------------------------------------------------------------------------
 # TODO Update the Language Strings with the appropriate translations.
 
 LangString allreadyInstalled ${LANG_ENGLISH} "$(^Name) is already installed. $\n$\nClick `OK` to remove the \
@@ -220,6 +260,17 @@ LangString allreadyInstalled ${LANG_GERMAN} "$(^Name) ist schon installiert. $\n
                                               die alte Version und installert die neue Version; `Abbrechen` stoppt die Installation." 
 LangString allreadyInstalled ${LANG_FRENCH} "$(^Name) est deja installé. $\n$\n `OK` désinstal \
                                               l'ancien version; `Cancel` arrete l'installation." 
+
+LangString DESC_SectionServer ${LANG_ENGLISH} "The database server shall be installed only on one Compuer in the local network."
+LangString DESC_SectionServer ${LANG_GERMAN} "Der Datenbank Server sollte nur auf einem Rechner im Netz installiert werden.."
+LangString DESC_SectionServer ${LANG_FRENCH} "Le serveur de donnees doit etre installe sur un seul ordinateur dans le reseau."
+
+
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_Server} $(DESC_SectionServer)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
 
 LangString StartMenuPageTitle ${LANG_ENGLISH} "Start Menu Folder"
 LangString StartMenuPageTitle ${LANG_GERMAN} "Start Menu Folder"
