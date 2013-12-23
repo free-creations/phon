@@ -4,11 +4,14 @@
  */
 package de.free_creations.nbPhonAPI;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -80,6 +83,34 @@ public class Manager {
       }
     }
     return open;
+  }
+
+  /**
+   * A rapid check, to verify whether the database is still alive.
+   *
+   * This check is recommended before doing complex queries (like "getAll"), because the
+   * execution of such queries on a dead database might take several minutes
+   * before ending on a time out.
+   *
+   * @throws ConnectionLostException
+   */
+  @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch"})
+  public static void ping() throws ConnectionLostException {
+    if (!assertOpen()) {
+      return; // too early to report any problem
+    }
+    synchronized (databaseAccessLock) {
+      try {
+        Query q = getEntityManager().createNamedQuery("ping");
+        List resultList = q.getResultList();
+        if (resultList != null) {
+          return; // normal exit
+        }
+      } catch (Throwable ex) {
+        // ignore all exceptions. ConnectionLostException wilkl be thrown anyway.
+      }
+      throw new ConnectionLostException();
+    }
   }
 
   /**

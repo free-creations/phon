@@ -55,11 +55,12 @@ public class TeamCollection implements MutableEntityCollection<Team, Integer> {
   public final List<Team> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
+        Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<Team> query = entityManager.createNamedQuery("Team.findAll", Team.class);
         List<Team> cc = query.getResultList();
         return cc;
-      } catch (DataBaseNotReadyException ignored) {
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
     }

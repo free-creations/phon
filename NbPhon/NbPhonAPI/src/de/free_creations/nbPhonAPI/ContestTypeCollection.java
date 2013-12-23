@@ -69,11 +69,12 @@ public class ContestTypeCollection implements EntityCollection<ContestType, Stri
   public final List<ContestType> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
+        Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<ContestType> query = entityManager.createNamedQuery("ContestType.findAll", ContestType.class);
         List<ContestType> ff = query.getResultList();
         return ff;
-      } catch (DataBaseNotReadyException ignored) {
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
     }

@@ -52,11 +52,11 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
 
     List<TimeSlot> tt = getAll();
     for (TimeSlot t : tt) {
-      if (t.getTimeOfDayIdx()!= null) {
+      if (t.getTimeOfDayIdx() != null) {
         _timeOfDayNames.put(t.getTimeOfDayIdx() - 1, t.getTimeOfDayPrint());
       }
-      if (t.getDayIdx()!= null) {
-        _dayNames.put(t.getDayIdx()- 1, t.getDayOfWeek());
+      if (t.getDayIdx() != null) {
+        _dayNames.put(t.getDayIdx() - 1, t.getDayOfWeek());
       }
     }
     timeOfDayNames = _timeOfDayNames.toArray();
@@ -75,10 +75,11 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
   public final List<TimeSlot> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
+        Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<TimeSlot> query = entityManager.createNamedQuery("TimeSlot.findAll", TimeSlot.class);
         return query.getResultList();
-      } catch (DataBaseNotReadyException ignored) {
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
     }
@@ -95,17 +96,17 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
   /**
    *
    * @param day the zero-based day-index
-   * @param timeOfDay the zero-based timeOfDay-index 
+   * @param timeOfDay the zero-based timeOfDay-index
    * @return the time-slot where day = t.getTag()-1 and timeOfDay =
    * t.getTageszeit()-1 if no such entry can be found the function returns null.
    * @throws DataBaseNotReadyException
    */
   public TimeSlot findEntity(int day, int timeOfDay) throws DataBaseNotReadyException {
-    final String qlString =
-            "SELECT t FROM TimeSlot t "
+    final String qlString
+            = "SELECT t FROM TimeSlot t "
             + "WHERE t.dayIdx = :dayIdx "
-            + "AND t.timeOfDayIdx = :timeOfDayIdx";  
-    
+            + "AND t.timeOfDayIdx = :timeOfDayIdx";
+
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
       TypedQuery<TimeSlot> query = entityManager.createQuery(qlString, TimeSlot.class);
@@ -128,6 +129,5 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
       return Manager.getEntityManager().find(TimeSlot.class, key);
     }
   }
-
 
 }

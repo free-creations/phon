@@ -37,7 +37,7 @@ public class PersonCollection implements MutableEntityCollection<Person, Integer
   /**
    * Indicates that a new item has been added.
    */
-  
+
   /**
    * Indicates that a new item has been added.
    */
@@ -64,10 +64,11 @@ public class PersonCollection implements MutableEntityCollection<Person, Integer
   public List<Person> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
+        Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<Person> query = entityManager.createNamedQuery("Person.findAll", Person.class);
         return query.getResultList();
-      } catch (DataBaseNotReadyException ignored) {
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
     }
@@ -120,7 +121,6 @@ public class PersonCollection implements MutableEntityCollection<Person, Integer
     return newPerson;
   }
 
-
   /**
    * Add PropertyChangeListener.
    *
@@ -147,7 +147,7 @@ public class PersonCollection implements MutableEntityCollection<Person, Integer
 
   /**
    * Reports a bound property update to listeners that haae been registered to
- track updates of all properties or a property with the specified name.
+   * track updates of all properties or a property with the specified name.
    *
    * Note: the callback is guaranteed to execute in the AWT thread.
    *

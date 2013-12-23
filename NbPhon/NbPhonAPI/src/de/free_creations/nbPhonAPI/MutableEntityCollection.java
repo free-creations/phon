@@ -67,6 +67,7 @@ public interface MutableEntityCollection<EntiyClass, KeyClass>
    * @return an entity representing a new record in the table . Note, the
    * returned entity is attached to the current persistence context and a
    * corresponding record is flushed (but not committed).
+   * @throws de.free_creations.nbPhonAPI.DataBaseNotReadyException
    */
   public EntiyClass newEntity() throws DataBaseNotReadyException;
 

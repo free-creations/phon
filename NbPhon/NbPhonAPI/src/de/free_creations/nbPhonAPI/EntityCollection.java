@@ -19,8 +19,10 @@ import java.util.List;
 
 /**
  * Manages the access to a table of the database.
- * 
+ *
  * @author Harald Postner <Harald at free-creations.de>
+ * @param <EntiyClass>
+ * @param <KeyClass>
  */
 public interface EntityCollection<EntiyClass, KeyClass> {
 
@@ -30,7 +32,7 @@ public interface EntityCollection<EntiyClass, KeyClass> {
    * If the connection to the database cannot be established, an empty list will
    * be returned.
    *
-   * @return the list of all entries in the table 
+   * @return the list of all entries in the table
    */
   public List<EntiyClass> getAll();
 
@@ -40,6 +42,7 @@ public interface EntityCollection<EntiyClass, KeyClass> {
    * @param key the primary key.
    * @return the returned entity is guaranteed to belong to the current
    * persistency context.
+   * @throws de.free_creations.nbPhonAPI.DataBaseNotReadyException
    */
   public EntiyClass findEntity(KeyClass key) throws DataBaseNotReadyException;
 }

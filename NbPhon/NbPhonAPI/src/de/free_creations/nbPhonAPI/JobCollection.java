@@ -16,11 +16,7 @@
 package de.free_creations.nbPhonAPI;
 
 import de.free_creations.dbEntities.Job;
-import static de.free_creations.nbPhonAPI.util.CompareUtils.bothValid;
-import static de.free_creations.nbPhonAPI.util.CompareUtils.typeCheckCompare;
-import static de.free_creations.nbPhonAPI.util.CompareUtils.integerCompareNull;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -75,12 +71,13 @@ public class JobCollection implements EntityCollection<Job, String> {
   public final List<Job> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
+        Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<Job> query = entityManager.createNamedQuery("Job.findAll", Job.class);
         List<Job> ff = query.getResultList();
 
         return ff;
-      } catch (DataBaseNotReadyException ignored) {
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
     }

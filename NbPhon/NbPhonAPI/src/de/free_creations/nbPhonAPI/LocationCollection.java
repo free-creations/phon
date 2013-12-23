@@ -35,16 +35,16 @@ public class LocationCollection implements MutableEntityCollection<Location, Int
   protected LocationCollection() {
   }
 
-
   @Override
   public List<Location> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
+        Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<Location> query = entityManager.createNamedQuery("Location.findAll", Location.class);
         List<Location> ll = query.getResultList();
         return ll;
-      } catch (DataBaseNotReadyException ignored) {
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
     }
@@ -73,12 +73,10 @@ public class LocationCollection implements MutableEntityCollection<Location, Int
       } catch (Throwable ex) {
         throw new DataBaseNotReadyException(ex);
       }
-      
+
       return newLocation;
     }
   }
-
-
 
   @Override
   public void removeEntity(Integer key) throws DataBaseNotReadyException {
@@ -94,8 +92,8 @@ public class LocationCollection implements MutableEntityCollection<Location, Int
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(listener);
   }
-  
-    private void firePropertyChange(final String propertyName,
+
+  private void firePropertyChange(final String propertyName,
           final Object oldValue,
           final Object newValue) {
     if (EventQueue.isDispatchThread()) {

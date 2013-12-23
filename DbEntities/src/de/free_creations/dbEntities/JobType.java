@@ -23,6 +23,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -37,6 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "JOBTYPE")
 @XmlRootElement
+// we use this table (because it is the smallest) to ping the database from time to time.
+@NamedNativeQuery(name = "ping", query = "select * from APP.JOBTYPE")
 @NamedQueries({
   @NamedQuery(name = "JobType.findAll", query = "SELECT j FROM JobType j"),
   @NamedQuery(name = "JobType.findByJobTypeId", query = "SELECT j FROM JobType j WHERE j.jobTypeId = :jobTypeId"),

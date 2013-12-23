@@ -21,10 +21,9 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Collections;
-import java.util.Set;
-import java.util.TreeSet;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -50,11 +49,12 @@ public class ContestCollection implements MutableEntityCollection<Contest, Integ
   public List<Contest> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
+        Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<Contest> query = entityManager.createNamedQuery("Contest.findAll", Contest.class);
         List<Contest> cc = query.getResultList();
         return cc;
-      } catch (DataBaseNotReadyException ignored) {
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
     }

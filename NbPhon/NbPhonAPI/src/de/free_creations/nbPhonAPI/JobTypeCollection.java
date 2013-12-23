@@ -68,11 +68,12 @@ public class JobTypeCollection implements EntityCollection<JobType, String> {
   public final List<JobType> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
+        Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
         TypedQuery<JobType> query = entityManager.createNamedQuery("Job.findAll", JobType.class);
         List<JobType> ff = query.getResultList();
         return ff;
-      } catch (DataBaseNotReadyException ignored) {
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
     }
