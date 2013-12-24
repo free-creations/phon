@@ -32,7 +32,7 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.CloneableTopComponent;
 
 /**
- * Toc comconent which disclays something.
+ * Top component which displays something.
  */
 @ConvertAsProperties(
         dtd = "-//de.free_creations.editors.contest//Contest//EN",
@@ -42,11 +42,11 @@ import org.openide.windows.CloneableTopComponent;
         iconBase = "de/free_creations/editors/contest/chairs.png",
         persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
-@ActionID(category = "Window", id = "de.free_creations.editors.contest.JuryTopComponent")
+@ActionID(category = "Window", id = "de.free_creations.editors.contest.ContestTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_ContestAction",
-        preferredID = "JuryEditorTopComponent")
+        preferredID = "ContestTopComponent")
 @Messages({
   "CTL_ContestAction=Contest",
   "CTL_ContestTopComponent=Contest",

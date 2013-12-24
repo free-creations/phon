@@ -35,7 +35,7 @@ public class ContestEditorProvider implements de.free_creations.nbPhon4Netbeans.
     WindowManager windowManager = WindowManager.getDefault();
     ContestTopComponent editor = null;
     if(!newWindow){
-      TopComponent foundTC = windowManager.findTopComponent("JuryEditorTopComponent");
+      TopComponent foundTC = windowManager.findTopComponent("ContestTopComponent");
       if(foundTC instanceof ContestTopComponent){
         editor = (ContestTopComponent)foundTC;
       }

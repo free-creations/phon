@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
@@ -42,9 +44,6 @@ import javax.swing.table.TableModel;
 /**
  * The time table in the Locations Edit Window (LocationsTopComponent)
  *
- * @see
- * http://docs.oracle.com/javase/tutorial/uiswing/components/table.html#renderer
- * http://stackoverflow.com/questions/16743427/newbie-jtable-right-click-popup-menu
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class TimeTable extends JTable {
@@ -80,7 +79,11 @@ public class TimeTable extends JTable {
             boolean isSelected,
             boolean hasFocus,
             int row, int column) {
-      JComponent c = getBaseComponent(value, isSelected, row, column);
+      if (java.beans.Beans.isDesignTime()) {
+        return new JLabel("designTime");
+      }
+
+      JComponent c = getBaseComponent(table, value, isSelected, row, column);
       if (hasFocus) {
         c.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
       } else {
@@ -90,6 +93,7 @@ public class TimeTable extends JTable {
     }
 
     private JComponent getBaseComponent(
+            JTable table,
             Object value,
             boolean isSelected,
             int row, int column) {
@@ -100,7 +104,7 @@ public class TimeTable extends JTable {
       if (column == 0) {
         return getRowHeaderComponent(value);
       } else {
-        TimeTableCellPanel panel = getTimeTableCellPanel(row, column);
+        TimeTableCellPanel panel = getTimeTableCellPanel(table, row, column);
         panel.setValue(value);
         panel.setSelected(isSelected);
         return panel;
@@ -120,17 +124,6 @@ public class TimeTable extends JTable {
       } else {
         return emptyLabel;
       }
-    }
-
-    private final HashMap<Integer, TimeTableCellPanel> cellCache = new HashMap<>();
-    private static final int maxRows = 10007;
-
-    private TimeTableCellPanel getTimeTableCellPanel(int row, int column) {
-      int hash = column * maxRows + row;
-      if (!cellCache.containsKey(hash)) {
-        cellCache.put(hash, new TimeTableCellPanel());
-      }
-      return cellCache.get(hash);
     }
   };
 
@@ -152,6 +145,38 @@ public class TimeTable extends JTable {
     gridColor = Color.lightGray;
     showHorizontalLines = true;
     showVerticalLines = true;
+
+  }
+
+  private TimeTableCellPanel getTimeTableCellPanel(JTable table, int row, int column) {
+    int hash = column * maxRows + row;
+    if (!cellCache.containsKey(hash)) {
+      cellCache.put(hash,
+              new TimeTableCellPanel(
+                      new Color(170, 170, 170),
+                      table.getSelectionBackground(),
+                      table.getSelectionForeground()));
+    }
+    return cellCache.get(hash);
+  }
+  private final HashMap<Integer, TimeTableCellPanel> cellCache = new HashMap<>();
+  private static final int maxRows = 10007;
+
+  @Override
+  public JPopupMenu getComponentPopupMenu() {
+    int col = columnAtPoint(getMousePosition());
+    int row = rowAtPoint(getMousePosition());
+    if (col > 0) {
+      TimeTableCellPanel timeTableCellPanel = getTimeTableCellPanel(this, row, col);
+      return timeTableCellPanel.getComponentPopupMenu();
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public boolean getInheritsPopupMenu() {
+    return false;
   }
 
   public void setLocationId(Integer locationId) {

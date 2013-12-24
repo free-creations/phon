@@ -29,6 +29,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
@@ -42,9 +43,9 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
   /**
    * @Todo move color management to a central place
    */
-  private static final Color disabledColor = new Color(170, 170, 170);
-  private static final Color selectedBackgroundColor = new Color(57, 105, 138);
-  private static final Color selectedForegroundColor = Color.WHITE;
+  private Color disabledColor;
+  private Color selectedBackgroundColor;
+  private Color selectedForegroundColor;
 
   private ContestNode node = null;
   private final PropertyChangeListener nodeListener = new PropertyChangeListener() {
@@ -60,11 +61,17 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     @Override
     public void actionPerformed(ActionEvent e) {
       System.out.println("Bla");
-
     }
   };
 
   public TimeTableCellPanel() {
+    this(new Color(170, 170, 170), new Color(57, 105, 138), Color.WHITE);
+  }
+
+  public TimeTableCellPanel(Color disabledColor, Color selectedBackgroundColor, Color selectedForegroundColor) {
+    this.disabledColor = disabledColor;
+    this.selectedBackgroundColor = selectedBackgroundColor;
+    this.selectedForegroundColor = selectedForegroundColor;
     initComponents();
     if (!java.beans.Beans.isDesignTime()) {
       setContestId(null);
@@ -159,7 +166,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     if (image != null) {
       icon = new ImageIcon(image);
     }
-    
+
     lblContest.setIcon(icon);
     JPopupMenu popupMenu = null;
     if (contestId != null) {
@@ -167,7 +174,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
       popupMenu.addSeparator();
       popupMenu.add(deleteAction);
     }
-    lblContest.setComponentPopupMenu(popupMenu);
+    this.setComponentPopupMenu(popupMenu);
   }
 
   void setValue(Object value) {
@@ -187,5 +194,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
       lblContest.setForeground(Color.BLACK);
     }
   }
+
+
 
 }
