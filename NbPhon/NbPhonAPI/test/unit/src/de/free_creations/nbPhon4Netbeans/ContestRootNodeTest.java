@@ -116,9 +116,9 @@ public class ContestRootNodeTest {
   public void testGetNodeAt() {
     ContestRootNode testRoot = new ContestRootNode(juryCollectionMock);
     ContestNode node1 = testRoot.getNodeAt(0);
-    assertEquals((int)juryCollectionMock.j1.getContestId(), (int)node1.getJuryId());
+    assertEquals((int)juryCollectionMock.j1.getContestId(), (int)node1.getContestId());
     ContestNode node2 = testRoot.getNodeAt(1);
-    assertEquals((int)juryCollectionMock.j2.getContestId(), (int)node2.getJuryId());
+    assertEquals((int)juryCollectionMock.j2.getContestId(), (int)node2.getContestId());
 
 
     ContestNode nullJury = testRoot.getNodeAt(4711);

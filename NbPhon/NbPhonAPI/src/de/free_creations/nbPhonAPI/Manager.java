@@ -94,7 +94,7 @@ public class Manager {
    *
    * @throws ConnectionLostException
    */
-  @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch"})
+  @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch","unchecked","rawtypes"})
   public static void ping() throws ConnectionLostException {
     if (!assertOpen()) {
       return; // too early to report any problem

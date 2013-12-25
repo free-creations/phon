@@ -87,7 +87,7 @@ public class ContestNodesArrayTest {
    */
   @Test
   public void testInitCollection() {
-    ContestNodesArray testItem = new ContestNodesArray(juryCollectionMock);
+    ContestNodesArray testItem = new ContestNodesArray(juryCollectionMock,false, true);
     ArrayList<Node> result = testItem.initCollection();
     assertNotNull(result);
     assertEquals(2, result.size());
@@ -98,7 +98,7 @@ public class ContestNodesArrayTest {
    */
   @Test
   public void testfindIndexForNode() {
-    ContestNodesArray testItem = new ContestNodesArray(juryCollectionMock);
+    ContestNodesArray testItem = new ContestNodesArray(juryCollectionMock,false, true);
 
     int indexFirstNode = testItem.findIndexForNode(1);
     assertEquals(0, indexFirstNode);

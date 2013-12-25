@@ -28,29 +28,42 @@ import org.openide.nodes.Node;
 public class ContestRootNode extends AbstractNode {
 
   private final ContestNodesArray children;
-  private final MutableEntityCollection<Contest, Integer> juryCollection;
- 
+  private final MutableEntityCollection<Contest, Integer> contestCollection;
 
   private final Action newItemAction = new NewContestAction();
   private final Action[] allActions = new Action[]{newItemAction};
 
-  private ContestRootNode(ContestNodesArray children, MutableEntityCollection<Contest, Integer> jj) {
+  private ContestRootNode(ContestNodesArray children, MutableEntityCollection<Contest, Integer> cc) {
     super(children);
     this.children = children;
-    this.juryCollection = jj;
+    this.contestCollection = cc;
 
   }
 
-  public ContestRootNode(MutableEntityCollection<Contest, Integer> pp) {
-    this(new ContestNodesArray(pp), pp);
+  /**
+   * Create a root node containing contest- nodes for all contest-keys found in
+   * the given contestCollection.
+   *
+   * @param cc for every item found in this collection a node object will be
+   * created.
+   * @param withNullItem add an extra item with null key (used to show in drop
+   * down boxes)
+   * @param attachJobtypes attach job-type-nodes to each contest-node.
+   */
+  public ContestRootNode(MutableEntityCollection<Contest, Integer> cc,
+          boolean withNullItem, 
+          boolean attachJobtypes) {
+    this(new ContestNodesArray(cc, withNullItem, attachJobtypes), cc);
+  }
+
+  public ContestRootNode(MutableEntityCollection<Contest, Integer> cc) {
+    this(cc, false, true);
   }
 
   @Override
   public Action[] getActions(boolean context) {
     return allActions;
   }
-
-
 
   /**
    * Getter for a child at a given position.
@@ -62,7 +75,7 @@ public class ContestRootNode extends AbstractNode {
    *
    * @param index
    * @return the ContestNode that is currently at the position given by index or
- null if the index is invalid.
+   * null if the index is invalid.
    */
   public ContestNode getNodeAt(int index) {
     if (index < 0) {
@@ -85,17 +98,17 @@ public class ContestRootNode extends AbstractNode {
    * Note: the position of a child node depends on the currently chosen sort
    * order.
    *
-   * If a child with such index does not exists it returns null. 
+   * If a child with such index does not exists it returns null.
    *
    *
    * @param index
    * @return the ContestNode that is currently at the position given by index.
- Returns null if the index is invalid.
+   * Returns null if the index is invalid.
    */
   public Integer getNodeKeyAt(int index) {
     ContestNode node = getNodeAt(index);
     if (node != null) {
-      return node.getJuryId();
+      return node.getContestId();
     } else {
       return null;
     }
@@ -106,9 +119,9 @@ public class ContestRootNode extends AbstractNode {
    *
    * @param key
    * @return return the current position. If there is no ContestNode with the
- given key the function will return -1.
+   * given key the function will return -1.
    */
-  public int findIndexForNode(int key) {
+  public int findIndexForNode(Integer key) {
     return children.findIndexForNode(key);
   }
 }

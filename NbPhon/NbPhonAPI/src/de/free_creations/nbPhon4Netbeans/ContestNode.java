@@ -70,9 +70,9 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   /**
    * The data flavor for a Drag and Drop action.
    */
-  public static class JuryNodeFlavor extends DataFlavor {
+  public static class ContestNodeFlavor extends DataFlavor {
 
-    public JuryNodeFlavor() {
+    public ContestNodeFlavor() {
       super(ContestNode.class, "Contest");
     }
   }
@@ -80,17 +80,17 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   /**
    * The transferable that is transfered in a Drag and Drop action.
    */
-  public class JuryNodeTransferable extends ExTransferable.Single {
+  public class ContestNodeTransferable extends ExTransferable.Single {
 
     private final Integer contestId;
 
-    public JuryNodeTransferable(Integer contestId) {
-      super(JURY_NODE_FLAVOR);
+    public ContestNodeTransferable(Integer contestId) {
+      super(CONTEST_NODE_FLAVOR);
       this.contestId = contestId;
     }
 
     /**
-     * The jury node transfers the primary key of the record it represents.
+     * The contest node transfers the primary key of the record it represents.
      *
      * @return
      */
@@ -99,7 +99,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
       return contestId;
     }
   }
-  public static final DataFlavor JURY_NODE_FLAVOR = new JuryNodeFlavor();
+  public static final DataFlavor CONTEST_NODE_FLAVOR = new ContestNodeFlavor();
   private boolean pendingChanges = false;
   private final Integer key;
   private final PropertyChangeListener listener = new PropertyChangeListener() {
@@ -121,11 +121,11 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   }
 
   /**
-   * Returns the juryId.
+   * Returns the contestId.
    *
-   * @return returns the juryId.
+   * @return returns the contestId.
    */
-  public Integer getJuryId() {
+  public Integer getContestId() {
     return key;
   }
   private final MutableEntityCollection<Contest, Integer> contestManager;
@@ -335,7 +335,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   public Transferable clipboardCopy() throws IOException {
     Transferable nbDefault = super.clipboardCopy();
     ExTransferable added = ExTransferable.create(nbDefault);
-    added.put(new JuryNodeTransferable(getJuryId()));
+    added.put(new ContestNodeTransferable(getContestId()));
     return added;
   }
 }

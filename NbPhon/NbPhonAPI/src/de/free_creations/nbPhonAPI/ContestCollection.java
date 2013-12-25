@@ -40,6 +40,7 @@ public class ContestCollection implements MutableEntityCollection<Contest, Integ
    * @deprecated  use ContestTypeCollection().contestTypeIds()
    * @return 
    */
+  @Deprecated
   public List<String> contestTypes() {
     return Manager.getContestTypeCollection().contestTypeIds();
 

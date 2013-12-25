@@ -35,7 +35,10 @@ import org.openide.nodes.Node;
  */
 public class ContestNodesArray extends Children.SortedArray {
 
-  private final Comparator<Node> juryComparator = new Comparator<Node>() {
+  private final boolean withNullItem;  
+  private final boolean attachJobtypes;
+
+  private final Comparator<Node> contestComparator = new Comparator<Node>() {
     @Override
     public int compare(Node n1, Node n2) {
 
@@ -50,8 +53,8 @@ public class ContestNodesArray extends Children.SortedArray {
 
       // try to get the corresponding entities
       try {
-        Contest j1 = juryCollection.findEntity(jn1.getJuryId());
-        Contest j2 = juryCollection.findEntity(jn2.getJuryId());
+        Contest j1 = contestCollection.findEntity(jn1.getContestId());
+        Contest j2 = contestCollection.findEntity(jn2.getContestId());
         int notNullCheck = Utils.typeCheckCompare(j1, j2, Contest.class);
         if (notNullCheck != Utils.bothValid) {
           // OOps, one or both entities could not be foud in the database...
@@ -64,7 +67,7 @@ public class ContestNodesArray extends Children.SortedArray {
         if (result == 0) {
           // OOps, they have both the same long description (probably both null)
           // So we'll discriminate through the primary key.
-          return Utils.integerCompareNull(jn1.getJuryId(), jn2.getJuryId());
+          return Utils.integerCompareNull(jn1.getContestId(), jn2.getContestId());
         }
 
         // OK, this is the result we wanted.
@@ -73,23 +76,23 @@ public class ContestNodesArray extends Children.SortedArray {
       } catch (DataBaseNotReadyException ex) {
         // OOps, database not ready.
         // So we'll discriminate through the primary key.
-        return Utils.integerCompareNull(jn1.getJuryId(), jn2.getJuryId());
+        return Utils.integerCompareNull(jn1.getContestId(), jn2.getContestId());
       }
     }
   };
-  private final MutableEntityCollection<Contest, Integer> juryCollection;
-  private final PropertyChangeListener personCollectionListener = new PropertyChangeListener() {
+  private final MutableEntityCollection<Contest, Integer> contestCollection;
+  private final PropertyChangeListener contestCollectionListener = new PropertyChangeListener() {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       if (MutableEntityCollection.PROP_ITEM_ADDED.equals(evt.getPropertyName())) {
-        // a new Contest has been added to the to the  juryCollection,
-        // this jury must now be added to the internal "nodes" list.
+        // a new Contest has been added to the to the  contestCollection,
+        // this contest must now be added to the internal "nodes" list.
         Object o = evt.getNewValue();
         if (o instanceof EntityIdentity) {
           EntityIdentity newContest = (EntityIdentity) o;
-          Integer juryId = (Integer) newContest.primaryKey;
+          Integer contestId = (Integer) newContest.primaryKey;
           //create a node for this new Contest
-          ContestNode newNode = new ContestNode(juryId, juryCollection, true);
+          ContestNode newNode = new ContestNode(contestId, contestCollection, true);
           newNode.notifyPendingChanges();
           if (nodes instanceof ArrayList) {
             // if the nodes- list is an ArrayList (as created in initCollection)
@@ -103,14 +106,14 @@ public class ContestNodesArray extends Children.SortedArray {
         }
       }
       if (MutableEntityCollection.PROP_ITEM_REMOVED.equals(evt.getPropertyName())) {
-        // a  Contest has been removed from the  juryCollection,
+        // a  Contest has been removed from the  contestCollection,
         // we re-initialize the list from scratch. (Removing the item from
         // the existing list might be a little more efficient but not worth the hassle.)
         nodes = initCollection();
         refresh();
       }
       if (MutableEntityCollection.PROP_ITEM_LIST_CHANGED.equals(evt.getPropertyName())) {
-        // The juryCollection has entirly changed,
+        // The contestCollection has entirly changed,
         // we re-initialize the list from scratch. 
         nodes = initCollection();
         refresh();
@@ -118,23 +121,46 @@ public class ContestNodesArray extends Children.SortedArray {
     }
   };
 
-  public ContestNodesArray(MutableEntityCollection<Contest, Integer> juryCollection) {
+  /**
+   * Create nodes for all contest keys found in the given contestCollection.
+   *
+   * @param contestCollection for every item found in this collection a node 
+   * object will be created. 
+   */
+//  public ContestNodesArray(MutableEntityCollection<Contest, Integer> contestCollection) {
+//    this(contestCollection, false, true);
+//  }
+
+  /**
+   * Create nodes for all contest keys found in the given contestCollection.
+   *
+   * @param contestCollection for every item found in this collection a node 
+   * object will be created. 
+   * @param withNullItem add an extra item with null key (used to show in drop down boxes)
+   * @param attachJobtypes attach job type nodes to each contest node.
+   */
+  public ContestNodesArray(MutableEntityCollection<Contest, Integer> contestCollection, boolean withNullItem, boolean attachJobtypes) {
     super();
-    super.setComparator(juryComparator);
-    this.juryCollection = juryCollection;
-    this.juryCollection.addPropertyChangeListener(personCollectionListener);
+    this.withNullItem = withNullItem;
+    this.attachJobtypes = attachJobtypes;
+    super.setComparator(contestComparator);
+    this.contestCollection = contestCollection;
+    this.contestCollection.addPropertyChangeListener(contestCollectionListener);
   }
 
   @Override
   protected ArrayList<Node> initCollection() {
-    List<Contest> jj = juryCollection.getAll();
+    List<Contest> jj = contestCollection.getAll();
     ArrayList<Node> result = new ArrayList<>(jj.size());
 
     for (Contest j : jj) {
       assert (j != null);
-      Integer juryid = j.getContestId();
-      assert (juryid != null);
-      result.add(new ContestNode(juryid, juryCollection, true));
+      Integer contestId = j.getContestId();
+      assert (contestId != null);
+      result.add(new ContestNode(contestId, contestCollection, attachJobtypes));
+    }
+    if (withNullItem) {
+      result.add(new ContestNode(null, null, false));
     }
 
     Comparator<? super Node> comparator = getComparator();
@@ -152,7 +178,7 @@ public class ContestNodesArray extends Children.SortedArray {
    *
    * @param key the ContestId that is searched for.
    * @return returns the index of the current position. Returns -1 if no
- ContestNode with the searched key could be found.
+   * ContestNode with the searched key could be found.
    */
   int findIndexForNode(Integer key) {
     int nodesCount = getNodesCount();
@@ -160,7 +186,7 @@ public class ContestNodesArray extends Children.SortedArray {
       Node n = getNodeAt(i);
       if (n instanceof ContestNode) {
         ContestNode pn = (ContestNode) n;
-        if (Objects.equals(pn.getJuryId(), key)) {
+        if (Objects.equals(pn.getContestId(), key)) {
           return i;
         }
       }

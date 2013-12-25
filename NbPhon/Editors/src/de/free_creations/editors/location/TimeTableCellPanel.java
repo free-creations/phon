@@ -151,7 +151,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     if (node == null) {
       lblContest.setText("null");
       lblContest.setIcon(null);
-      lblContest.setComponentPopupMenu(null);
+      this.setComponentPopupMenu(null);
       return;
     }
 
@@ -172,7 +172,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     if (contestId != null) {
       popupMenu = node.getContextMenu();
       popupMenu.addSeparator();
-      popupMenu.add(deleteAction);
+     // popupMenu.add(deleteAction);
     }
     this.setComponentPopupMenu(popupMenu);
   }
