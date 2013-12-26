@@ -15,10 +15,10 @@
  */
 package de.free_creations.editors.person;
 
-import de.free_creations.actions.CheckedAction;
-import static de.free_creations.actions.CheckedAction.Severity.irrecoverable;
-import static de.free_creations.actions.CheckedAction.Severity.ok;
-import static de.free_creations.actions.CheckedAction.Severity.recoverable;
+import de.free_creations.actions.CheckedActionOld;
+import static de.free_creations.actions.CheckedActionOld.Severity.irrecoverable;
+import static de.free_creations.actions.CheckedActionOld.Severity.ok;
+import static de.free_creations.actions.CheckedActionOld.Severity.recoverable;
 
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
@@ -66,7 +66,7 @@ public class PersonGroupPanel extends javax.swing.JPanel
     @Override
     public Transferable paste() throws IOException {
 //      try {
-//        CheckedAction setGroupleaderRule = SetGroupleaderRule.setGroupleader(newMemberId, groupLeaderId);
+//        CheckedActionOld setGroupleaderRule = SetGroupleaderRule.setGroupleader(newMemberId, groupLeaderId);
 //        switch (setGroupleaderRule.level()) {
 //          case ok: {
 //            setGroupleaderRule.apply();

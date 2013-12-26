@@ -17,12 +17,8 @@ package de.free_creations.editors.location;
 
 
 
-import de.free_creations.editors.contest.*;
-import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
-import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import org.junit.Test;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -38,15 +34,8 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
 
   protected void initialize() {
     boolean open = Manager.assertOpen();
-//    if(open){
-//      try {
-//        Manager.commit();
-//        TimeSlotCollection.addTestItem();
-//      } catch (DataBaseNotReadyException ex) {
-//        Exceptions.printStackTrace(ex);
-//      }
-//      
-//    }
+      
+    
     initComponents();
   }
 

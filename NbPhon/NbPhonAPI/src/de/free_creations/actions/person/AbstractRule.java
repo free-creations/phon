@@ -20,8 +20,8 @@ import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.EntityCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.PersonCollection;
-import de.free_creations.actions.CheckedAction;
-import static de.free_creations.actions.CheckedAction.Severity.*;
+import de.free_creations.actions.CheckedActionOld;
+import static de.free_creations.actions.CheckedActionOld.Severity.*;
 import java.util.logging.Logger;
 
 /**
@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class AbstractRule implements CheckedAction {
+public class AbstractRule implements CheckedActionOld {
 
   private static final Logger logger = Logger.getLogger(AbstractRule.class.getName());
   private final Person selfP;

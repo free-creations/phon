@@ -15,6 +15,7 @@
  */
 package de.free_creations.editors.location;
 
+import de.free_creations.actions.location.AllocateContestAtTimeslot;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Location;
 import de.free_creations.dbEntities.TimeSlot;
@@ -31,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
@@ -39,6 +41,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+import org.openide.util.Exceptions;
 
 /**
  * The time table in the Locations Edit Window (LocationsTopComponent)
@@ -126,8 +129,53 @@ public class TimeTable extends JTable {
     }
   };
 
+  private class TimeTableCellEditor extends DefaultCellEditor {
+
+    private final TimeTableContestComboBox timeTableContestComboBox;
+
+    /**
+     * As side effect stores a pointer to the given TimeTableContestComboBox.
+     *
+     * @param ttccb
+     */
+    private TimeTableCellEditor(TimeTableContestComboBox ttccb) {
+      super(ttccb);
+      timeTableContestComboBox = ttccb;
+    }
+
+    /**
+     * creates a TableCellEditor based on a TimeTableContestComboBox.
+     */
+    public TimeTableCellEditor() {
+      this(new TimeTableContestComboBox());
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table,
+            Object value,
+            boolean isSelected,
+            int row,
+            int column) {
+      if (value instanceof Integer) {
+        timeTableContestComboBox.setSelectedContestId((Integer) value);
+      } else {
+        timeTableContestComboBox.setSelectedContestId(null);
+      }
+      return super.getTableCellEditorComponent(table, value, isSelected, row, column);
+    }
+
+    @Override
+    public Integer getCellEditorValue() {
+      return timeTableContestComboBox.getSelectedContestId();
+    }
+
+  };
+
+  private final TimeTableCellEditor tableCellEditor;
+
   public TimeTable() {
     super();
+    TimeTableCellEditor _tableCellEditor = null;
     if (java.beans.Beans.isDesignTime()) {
       setModel(makeDesignTimeModel());
     } else {
@@ -138,8 +186,10 @@ public class TimeTable extends JTable {
       TimeTableModel timeTableModel = new TimeTableModel(null);
       setModel(timeTableModel);
       setDefaultRenderer(Object.class, tableCellRenderer);
+      _tableCellEditor = new TimeTableCellEditor();
 
     }
+    tableCellEditor = _tableCellEditor;
     rowHeight = 35 + 2;
     gridColor = Color.lightGray;
     showHorizontalLines = true;
@@ -202,53 +252,17 @@ public class TimeTable extends JTable {
     return super.getCellRenderer(row, column);
   }
 
-  /**
-   * Avoid selection on the left-most column (the row-header column).
-   *
-   * @param row
-   * @param column
-   * @return true for all cells except those in column 0.
-   */
-//  @Override
-//  public boolean isCellSelected(int row, int column) {
-//    return (column > 0) ? super.isCellSelected(row, column) : false;
-//  }
-  /**
-   * Cells that correspond to a time-slot that cannot be found in the "TIMESLOT"
-   * table are overlaid with a blank label.
-   *
-   * @param renderer
-   * @param row
-   * @param column
-   * @return
-   */
-//  @Override
-//  public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-//    if (java.beans.Beans.isDesignTime()) {
-//      return super.prepareRenderer(renderer, row, column);
-//    }
-//    if (isCellVisible(row, column)) {
-//      if (column > 0) {
-//        //<<<<<<<<<<<<< rework >>>>>>>>>>>>>>>>>>>>>>>>>
-//        TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel(row, column);
-//        if (dataModel instanceof TimeTableModel) {
-//          TimeTableModel timeTableModel = (TimeTableModel) dataModel;
-//          Object valueAt = timeTableModel.getValueAt(row, column);
-//          if (valueAt instanceof Integer) {
-//            timeTableCellPanel.setContestId((Integer) valueAt);
-//          } else {
-//            timeTableCellPanel.setContestId(null);
-//          }
-//        } else {
-//          timeTableCellPanel.setContestId(null);
-//        }
-//        return timeTableCellPanel;
-//      }
-//      return super.prepareRenderer(renderer, row, column);
-//    } else {
-//      return new JLabel();
-//    }
-//  }
+  @Override
+  public TableCellEditor getCellEditor(int row, int column) {
+    if (column > 0) {
+      if (tableCellEditor != null) {
+        return tableCellEditor;
+      }
+    }
+    return super.getCellEditor(row, column);
+
+  }
+
   /**
    * Cells that correspond to a time-slot that cannot be found in the "TIMESLOT"
    * table are overlaid with a blank label.
@@ -431,7 +445,7 @@ public class TimeTable extends JTable {
 
     @Override
     public boolean isCellEditable(int row, int column) {
-      return false;
+      return ((column > 0) && (locationId != null));
     }
 
     /**
@@ -448,6 +462,32 @@ public class TimeTable extends JTable {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+    }
+
+    @Override
+    public void setValueAt(Object aValue,
+            int rowIndex,
+            int columnIndex) {
+      Integer newContestId = null;
+      if (aValue != null) {
+        if (aValue instanceof Integer) {
+          newContestId = (Integer) aValue;
+        } else {
+          return;
+        }
+      }
+      TimeSlot timeSlot = getTimeSlotFor(rowIndex, columnIndex);
+      if (timeSlot == null) {
+        return;
+      }
+
+      AllocateContestAtTimeslot action
+              = new AllocateContestAtTimeslot(locationId, newContestId, timeSlot.getTimeSlotId());
+      try {
+        action.apply(0);
+      } catch (DataBaseNotReadyException ex) {
+        Exceptions.printStackTrace(ex);
+      }
     }
   }
 }

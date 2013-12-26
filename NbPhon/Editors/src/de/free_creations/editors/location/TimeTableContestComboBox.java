@@ -76,7 +76,7 @@ public class TimeTableContestComboBox extends ChoiceView {
     }
   };
 
-  @SuppressWarnings("unchecked")
+
   public TimeTableContestComboBox() {
     super();
 

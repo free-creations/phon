@@ -16,17 +16,17 @@
 package de.free_creations.actions;
 
 /**
- * A checked-action is an action than performs some verifications before
- * performing the change.
- *
+ * A checked-action is an action than performs some verifications before performing
+ * the change.
+ * 
  * A checked-action that might not be possible can propose some alternative
  * action.
- *
+ * 
  * Interface implemented by all rules.
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public interface CheckedAction {
+public interface CheckedActionOld {
 
   public enum Severity {
 
@@ -40,21 +40,19 @@ public interface CheckedAction {
      */
     ok,
     /**
-     * Recoverable means: the change cannot be applied exactly as the user
-     * wants, but there is a similar solution.
+     * Recoverable means: the change cannot be applied exactly as the user wants,
+     * but there is a similar solution.
      *
      * The functions problemDescription() will describe why the change cannot be
      * applied.
      *
-     * The function proposedSolution() will describe workarounds which might be
-     * applied instead.
+     * The functions proposedSolution() will describe what can be done instead.
      *
      * The function apply() will apply the the proposed solution.
      */
     recoverable,
-    /**
-     * Irrecoverable means: the change cannot be applied and there is no
-     * workaround.
+        /**
+     * Irrecoverable means: the change cannot be applied and there is no workaround.
      *
      * The functions problemDescription() will describe why the change cannot be
      * applied.
@@ -65,34 +63,27 @@ public interface CheckedAction {
   }
 
   /**
-   *
+   * 
    * @return the level of the problem if any.
    */
   public Severity level();
 
   /**
-   *
+   * 
    * @return a description why the requested change cannot be performed.
    */
   public String problemDescription();
 
   /**
-   *
-   * @return a description of what could be done instead of the requested
-   * change.
+   * 
+   * @return a description of what could be done instead of the requested change.
    */
-  public String[] proposedSolution();
-
-  public int workaroundCount();
+  public String proposedSolution();
 
   /**
-   * Applies the requested change or a workaround.
-   *
+   * Applies the requested change if it is OK or applies the proposed solution.
+   * 
    * If the requested change is impossible to fulfill the function does nothing.
-   *
-   * @param workaroundIdx the index of the workaround. If the requested change
-   * was OK the index is ignored.
-   * @throws java.lang.Exception
    */
-  public void apply(int workaroundIdx) throws Exception;
+  public void apply();
 }
