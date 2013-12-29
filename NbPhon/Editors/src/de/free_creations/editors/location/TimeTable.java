@@ -19,16 +19,19 @@ import de.free_creations.actions.location.AllocateContestAtTimeslot;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Location;
 import de.free_creations.dbEntities.TimeSlot;
+import de.free_creations.nbPhon4Netbeans.ContestNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -37,6 +40,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.TransferHandler;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -66,6 +70,33 @@ public class TimeTable extends JTable {
       if (evt.getClickCount() == 2) {
         int col = columnAtPoint(evt.getPoint());
 
+      }
+    }
+  };
+
+  private final TransferHandler transferHandler = new TransferHandler() {
+    @Override
+    public boolean canImport(TransferHandler.TransferSupport support) {
+      if (support.isDataFlavorSupported(ContestNode.CONTEST_NODE_FLAVOR)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    @Override
+    public boolean importData(TransferHandler.TransferSupport support) {
+      try {
+        Integer key = (Integer) support.getTransferable().getTransferData(ContestNode.CONTEST_NODE_FLAVOR);
+        int col = getSelectedColumn();
+        int row = getSelectedRow();
+        if(col>0){
+          setValueAt(key, row, col);
+        }
+        //setSelectedPersonId(key);
+        return true;
+      } catch (ClassCastException | UnsupportedFlavorException | IOException ex) {
+        return false;
       }
     }
   };
@@ -187,6 +218,7 @@ public class TimeTable extends JTable {
       setModel(timeTableModel);
       setDefaultRenderer(Object.class, tableCellRenderer);
       _tableCellEditor = new TimeTableCellEditor();
+      setTransferHandler(transferHandler);
 
     }
     tableCellEditor = _tableCellEditor;
@@ -197,14 +229,37 @@ public class TimeTable extends JTable {
 
   }
 
+  private class CellAdaptor implements PropertyChangeListener {
+
+    private final int row;
+    private final int col;
+    private final TimeTableModel model;
+
+    public CellAdaptor(int row, int col, TimeTableModel model) {
+      this.row = row;
+      this.col = col;
+      this.model = model;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      if (TimeTableCellPanel.PROP_VALUE_CHANGED.equals(evt.getPropertyName())) {
+        model.fireTableCellUpdated(row, col);
+      }
+    }
+
+  }
+
   private TimeTableCellPanel getTimeTableCellPanel(JTable table, int row, int column) {
     int hash = column * maxRows + row;
     if (!cellCache.containsKey(hash)) {
-      cellCache.put(hash,
-              new TimeTableCellPanel(
-                      new Color(170, 170, 170),
-                      table.getSelectionBackground(),
-                      table.getSelectionForeground()));
+      TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel(
+              new Color(170, 170, 170),
+              table.getSelectionBackground(),
+              table.getSelectionForeground());
+      CellAdaptor cellAdaptor = new CellAdaptor(row, column, (TimeTableModel) table.getModel());
+      timeTableCellPanel.addPropertyChangeListener(cellAdaptor);
+      cellCache.put(hash, timeTableCellPanel);
     }
     return cellCache.get(hash);
   }
@@ -452,16 +507,29 @@ public class TimeTable extends JTable {
      * un-subscribe to listen on changes on the location.
      */
     private void stopListening() {
+      if (locationId != null) {
+        Location.removePropertyChangeListener(this, locationId);
+      }
     }
 
     /**
      * Subscribe to listen on changes on the location.
      */
     public void startListening() {
+      if (locationId != null) {
+        Location.addPropertyChangeListener(this, locationId);
+      }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+      String propertyName = evt.getPropertyName();
+      switch (propertyName) {
+        case (Location.PROP_EVENTADDED):
+        case (Location.PROP_EVENTREMOVED):
+          fireTableDataChanged();
+          break;
+      }
     }
 
     @Override

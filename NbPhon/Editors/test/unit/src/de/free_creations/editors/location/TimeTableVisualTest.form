@@ -31,7 +31,10 @@
                   <Component id="btnSetLocationId_3" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnSetLocationId_4" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btnSetLocationId_4" max="32767" attributes="0"/>
+                  <Component id="btnChangeName" max="32767" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -46,7 +49,10 @@
                   <Component id="btnSetLocationId_4" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="btnSetLocationId_null" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnSetLocationId_null" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnChangeName" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -92,6 +98,16 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSetLocationId_4ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnChangeName">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="de/free_creations/editors/location/Bundle.properties" key="TimeTableVisualTest.btnChangeName.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnChangeNameActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

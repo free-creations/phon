@@ -17,8 +17,12 @@ package de.free_creations.editors.location;
 
 
 
+import de.free_creations.dbEntities.Contest;
+import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
+import javax.swing.table.AbstractTableModel;
 import org.junit.Test;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -53,6 +57,7 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
     btnSetLocationId_3 = new javax.swing.JButton();
     btnSetLocationId_null = new javax.swing.JButton();
     btnSetLocationId_4 = new javax.swing.JButton();
+    btnChangeName = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,6 +84,13 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
       }
     });
 
+    org.openide.awt.Mnemonics.setLocalizedText(btnChangeName, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnChangeName.text")); // NOI18N
+    btnChangeName.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnChangeNameActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -90,7 +102,9 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
           .addComponent(btnSetLocationId_null, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(btnSetLocationId_3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(btnSetLocationId_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(btnSetLocationId_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(btnChangeName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addGap(140, 140, 140))
     );
     layout.setVerticalGroup(
@@ -102,7 +116,9 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
           .addComponent(btnSetLocationId_3)
           .addComponent(btnSetLocationId_4))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(btnSetLocationId_null)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(btnSetLocationId_null)
+          .addComponent(btnChangeName))
         .addGap(38, 38, 38))
     );
 
@@ -121,8 +137,26 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
 
   private void btnSetLocationId_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetLocationId_4ActionPerformed
     // TODO add your handling code here:
-    timeTable1.setLocationId(4);
+    timeTable1.setLocationId(19);
   }//GEN-LAST:event_btnSetLocationId_4ActionPerformed
+
+  private void btnChangeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeNameActionPerformed
+    // TODO add your handling code here:
+    Object v = timeTable1.getValueAt(1, 1);
+    if(v != null){
+      try {
+        Contest c = Manager.getContestCollection().findEntity((Integer)v);
+        String old = c.getName();
+        c.setName("Test");
+        c.setDescription("Test");
+        System.out.println("changed from \""+old+"\" to \"Test\"");
+      } catch (DataBaseNotReadyException ex) {
+        Exceptions.printStackTrace(ex);
+      }
+      ((AbstractTableModel)timeTable1.getModel()).fireTableDataChanged();
+      
+    }
+  }//GEN-LAST:event_btnChangeNameActionPerformed
 
   /**
    * @param args the command line arguments
@@ -168,6 +202,7 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
     System.out.println("Use \"Run File\" to see this test.");
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton btnChangeName;
   private javax.swing.JButton btnSetLocationId_3;
   private javax.swing.JButton btnSetLocationId_4;
   private javax.swing.JButton btnSetLocationId_null;

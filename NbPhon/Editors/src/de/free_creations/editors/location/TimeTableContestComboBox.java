@@ -31,29 +31,28 @@ import org.openide.explorer.view.ChoiceView;
 import org.openide.explorer.view.NodeListModel;
 
 /**
- * This combo box appears when the user edits a cell in the 
- * {@link TimeTable}.
- * 
+ * This combo box appears when the user edits a cell in the {@link TimeTable}.
+ *
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class TimeTableContestComboBox extends ChoiceView {
 
   private final ContestRootNode contestRootNode;
-  private final KeyListener keyListener =
-          new KeyAdapter() {
-    private final static char deleteChar = '\u007F';
-    private final static char backspaceChar = '\u0008';
+  private final KeyListener keyListener
+          = new KeyAdapter() {
+            private final static char deleteChar = '\u007F';
+            private final static char backspaceChar = '\u0008';
 
-    @Override
-    public void keyTyped(KeyEvent evt) {
-      char c = evt.getKeyChar();
-      switch (c) {
-        case backspaceChar:
-        case deleteChar:
-          setSelectedContestId(null);
-      }
-    }
-  };
+            @Override
+            public void keyTyped(KeyEvent evt) {
+              char c = evt.getKeyChar();
+              switch (c) {
+                case backspaceChar:
+                case deleteChar:
+                  setSelectedContestId(null);
+              }
+            }
+          };
   private final TransferHandler transferHandler = new TransferHandler() {
     @Override
     public boolean canImport(TransferHandler.TransferSupport support) {
@@ -76,7 +75,6 @@ public class TimeTableContestComboBox extends ChoiceView {
     }
   };
 
-
   public TimeTableContestComboBox() {
     super();
 
@@ -89,6 +87,7 @@ public class TimeTableContestComboBox extends ChoiceView {
       contestRootNode = new ContestRootNode(pp, true, false);
       NodeListModel nodeListModel = new NodeListModel(contestRootNode);
       setModel(nodeListModel);
+      setSelectedContestId(null);
     } else {
       contestRootNode = null;
     }
@@ -117,13 +116,17 @@ public class TimeTableContestComboBox extends ChoiceView {
 
   }
 
-  public void setSelectedContestId(Integer contestId) {
+  public final void setSelectedContestId(Integer contestId) {
     if (contestRootNode == null) {
       return;
     }
 //    int key = ContestNode.contestIdToKey(contestId);
     int selectedIndex = contestRootNode.findIndexForNode(contestId);
-    setSelectedIndex(selectedIndex);
+    if (selectedIndex == -1) {
+      setSelectedIndex(contestRootNode.findIndexForNode(null));
+    } else {
+      setSelectedIndex(selectedIndex);
+    }
   }
 
   public void setSelectedContest(Contest p) {

@@ -42,8 +42,8 @@ INSERT INTO "APP"."LOCATION" VALUES(10,'E.-H.-Knapp Real.Musiksaal','Elly-Heuss-
 INSERT INTO "APP"."LOCATION" VALUES(11,'E.-H.-Knapp Real.Aufenthaltsraum','Elly-Heuss-Knapp Realschule','Aufenthaltsraum','Karlstr. 33','71638 Ludwigsburg',NULL);
 
 INSERT INTO "APP"."LOCATION" VALUES(12,'Kulturzentrum Kl. Saal','Kulturzentrum','Kleiner Saal','Wilhelmstraße 9/1','71638 Ludwigsburg',NULL);
-INSERT INTO "APP"."LOCATION" VALUES(13,'Kulturzentrum Kl. Saal','Kulturzentrum','Raum 303','Wilhelmstraße 9/1','71638 Ludwigsburg',NULL);
-INSERT INTO "APP"."LOCATION" VALUES(14,'Kulturzentrum Kl. Saal','Kulturzentrum','Großer Saal','Wilhelmstraße 9/1','71638 Ludwigsburg',NULL);
+INSERT INTO "APP"."LOCATION" VALUES(13,'Kulturzentrum R 303','Kulturzentrum','Raum 303','Wilhelmstraße 9/1','71638 Ludwigsburg',NULL);
+INSERT INTO "APP"."LOCATION" VALUES(14,'Kulturzentrum Gr. Saal','Kulturzentrum','Großer Saal','Wilhelmstraße 9/1','71638 Ludwigsburg',NULL);
 
 INSERT INTO "APP"."LOCATION" VALUES(15,'Landratsamt','Landratsamt','Großer Sitzungssaal','Hindenburgstr. 40','71638 Ludwigsburg',NULL);
 

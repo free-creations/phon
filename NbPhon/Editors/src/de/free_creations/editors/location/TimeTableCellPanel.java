@@ -15,21 +15,18 @@
  */
 package de.free_creations.editors.location;
 
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.nbPhon4Netbeans.ContestNode;
 import de.free_creations.nbPhonAPI.Manager;
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Objects;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
@@ -40,6 +37,10 @@ import org.openide.util.Exceptions;
  */
 public class TimeTableCellPanel extends javax.swing.JPanel {
 
+  /**
+   * Indicates that the value of displayed by this panel has changed.
+   */
+  public static final String PROP_VALUE_CHANGED = "PROP_VALUE_CHANGED";
   /**
    * @Todo move color management to a central place
    */
@@ -52,15 +53,8 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+      fireValueChanged();
       showNode(node);
-    }
-  };
-
-  private final Action deleteAction = new AbstractAction("delete") {
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      System.out.println("Bla");
     }
   };
 
@@ -99,7 +93,8 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     this.contestId = contestId;
     if (!Objects.equals(old, contestId)) {
       if (node != null) {
-        node.removePropertyChangeListener(nodeListener);
+        // node.removePropertyChangeListener(nodeListener);
+        Contest.removePropertyChangeListener(nodeListener, contestId);
         try {
           node.destroy();
         } catch (IOException ex) {
@@ -107,8 +102,10 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
         }
       }
       node = new ContestNode(contestId, Manager.getContestCollection());
-      node.addPropertyChangeListener(nodeListener);
+      //node.addPropertyChangeListener(nodeListener);
+      Contest.addPropertyChangeListener(nodeListener, contestId);
       showNode(node);
+      fireValueChanged();
     }
 
   }
@@ -172,7 +169,6 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     if (contestId != null) {
       popupMenu = node.getContextMenu();
       popupMenu.addSeparator();
-     // popupMenu.add(deleteAction);
     }
     this.setComponentPopupMenu(popupMenu);
   }
@@ -195,6 +191,8 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     }
   }
 
-
+  private void fireValueChanged() {
+    firePropertyChange(PROP_VALUE_CHANGED, null, null);
+  }
 
 }

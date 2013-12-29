@@ -17,7 +17,6 @@ package de.free_creations.editors.contest;
 
 
 
-import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import org.junit.Test;
@@ -37,15 +36,7 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
 
   protected void initialize() {
     boolean open = Manager.assertOpen();
-//    if(open){
-//      try {
-//        Manager.commit();
-//        TimeSlotCollection.addTestItem();
-//      } catch (DataBaseNotReadyException ex) {
-//        Exceptions.printStackTrace(ex);
-//      }
-//      
-//    }
+
     initComponents();
   }
 
@@ -60,24 +51,42 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
 
     jScrollPane1 = new javax.swing.JScrollPane();
     timeTable1 = new de.free_creations.editors.contest.TimeTable();
+    btnContestNull = new javax.swing.JButton();
+    btnContest_4 = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
     jScrollPane1.setViewportView(timeTable1);
+
+    org.openide.awt.Mnemonics.setLocalizedText(btnContestNull, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnContestNull.text")); // NOI18N
+
+    org.openide.awt.Mnemonics.setLocalizedText(btnContest_4, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnContest_4.text")); // NOI18N
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+        .addContainerGap()
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(btnContestNull, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, 18)
+            .addComponent(btnContest_4, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 0, Short.MAX_VALUE))
+          .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE))
         .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addGap(0, 23, Short.MAX_VALUE))
+        .addContainerGap()
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(btnContestNull)
+          .addComponent(btnContest_4))
+        .addGap(71, 71, 71))
     );
 
     pack();
@@ -126,6 +135,8 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
     System.out.println("Use \"Run File\" to see this test.");
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton btnContestNull;
+  private javax.swing.JButton btnContest_4;
   private javax.swing.JScrollPane jScrollPane1;
   private de.free_creations.editors.contest.TimeTable timeTable1;
   // End of variables declaration//GEN-END:variables

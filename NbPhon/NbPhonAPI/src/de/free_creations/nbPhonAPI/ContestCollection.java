@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Collections;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import org.openide.util.Exceptions;
 
 /**
  *
