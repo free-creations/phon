@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.openide.cookies.EditCookie;
@@ -105,6 +106,19 @@ public class LocationNode extends AbstractNode implements CommittableNode {
   }
 
   /**
+   *
+   */
+  @Override
+  public void destroy() {
+    Location.removePropertyChangeListener(listener, locationId);
+    try {
+      super.destroy();
+    } catch (IOException ex) {
+      Exceptions.printStackTrace(ex);
+    }
+  }
+
+  /**
    * @return a name without accessing the DAO.
    */
   @Override
@@ -114,6 +128,9 @@ public class LocationNode extends AbstractNode implements CommittableNode {
 
   @Override
   public Image getIcon(int type) {
+    if (locationId == null) {
+      return iconManager().iconNullLocation;
+    }
     BufferedImage result = iconManager().iconLocation;
     if (pendingChanges) {
       result = iconManager().getStaredImage(result);
@@ -142,7 +159,7 @@ public class LocationNode extends AbstractNode implements CommittableNode {
   @Override
   public String getDisplayName() {
     if (locationId == null) {
-      return "null";
+      return "";
     }
     try {
       Location l = locationManager.findEntity(locationId);
@@ -151,7 +168,7 @@ public class LocationNode extends AbstractNode implements CommittableNode {
         if (name != null) {
           return l.getName();
         }
-      } 
+      }
       return getName();
     } catch (DataBaseNotReadyException ex) {
       Exceptions.printStackTrace(ex);

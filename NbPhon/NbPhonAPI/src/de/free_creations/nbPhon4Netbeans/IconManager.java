@@ -40,6 +40,7 @@ public class IconManager {
   public final BufferedImage iconTeamOpened;
   //---- Location Node
   public final BufferedImage iconLocation;
+  public final BufferedImage iconNullLocation;
   //---- ContestNode
   public final BufferedImage iconContest;
   public final BufferedImage iconNullContest;
@@ -84,6 +85,7 @@ public class IconManager {
     iconTeamOpened = ImageIO.read(IconManager.class.getResource("resources/groupOpened.png"));
     //---- Location Node
     iconLocation = ImageIO.read(IconManager.class.getResource("resources/house.png"));
+    iconNullLocation = ImageIO.read(IconManager.class.getResource("resources/noHouse16x16.png"));
     //---- ContestNode
     iconContest = ImageIO.read(IconManager.class.getResource("resources/chairs16x16.png"));
     iconNullContest = ImageIO.read(IconManager.class.getResource("resources/noChairs16x16.png"));

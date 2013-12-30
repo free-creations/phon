@@ -11,7 +11,6 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -88,13 +87,13 @@ public class Manager {
   /**
    * A rapid check, to verify whether the database is still alive.
    *
-   * This check is recommended before doing complex queries (like "getAll"), because the
-   * execution of such queries on a dead database might take several minutes
-   * before ending on a time out.
+   * This check is recommended before doing complex queries (like "getAll"),
+   * because the execution of such queries on a dead database might take several
+   * minutes before ending on a time out.
    *
    * @throws ConnectionLostException
    */
-  @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch","unchecked","rawtypes"})
+  @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch", "unchecked", "rawtypes"})
   public static void ping() throws ConnectionLostException {
     if (!assertOpen()) {
       return; // too early to report any problem
@@ -135,6 +134,8 @@ public class Manager {
 
   /**
    * Closes the connection to the database.
+   *
+   * @param commit
    */
   public synchronized static void close(boolean commit) {
     synchronized (databaseAccessLock) {
@@ -257,6 +258,18 @@ public class Manager {
         locationCollection = new LocationCollection();
       }
       return locationCollection;
+    }
+  }
+
+  private static final Object eventLock = new Object();
+  private static EventCollection eventCollection = null;
+
+  public static EventCollection getEventCollection() {
+    synchronized (eventLock) {
+      if (eventCollection == null) {
+        eventCollection = new EventCollection();
+      }
+      return eventCollection;
     }
   }
 }

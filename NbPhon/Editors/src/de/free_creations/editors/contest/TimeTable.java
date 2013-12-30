@@ -26,6 +26,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -58,6 +60,67 @@ public class TimeTable extends JTable {
       }
     }
   };
+  
+  private final TableCellRenderer tableCellRenderer = new TableCellRenderer() {
+
+    private final JLabel emptyLabel = new JLabel();
+
+    @Override
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row, int column) {
+      if (java.beans.Beans.isDesignTime()) {
+        return new JLabel("designTime");
+      }
+
+      JComponent c = getBaseComponent(table, value, isSelected, row, column);
+      if (hasFocus) {
+        c.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+      } else {
+        c.setBorder(null);
+      }
+      return c;
+    }
+
+    private JComponent getBaseComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            int row, int column) {
+      if (!isCellVisible(row, column)) {
+        // there is no time-slot for this cell
+        return emptyLabel;
+      }
+      if (column == 0) {
+        return getRowHeaderComponent(value);
+      } else {
+        throw new RuntimeException("not implemented");
+//        TimeTableCellPanel panel = getTimeTableCellPanel(table, row, column);
+//        panel.setValue(value);
+//        panel.setSelected(isSelected);             
+//        return panel;
+      }
+    }
+
+    private final HashMap<String, JLabel> colHeaderCache = new HashMap<>();
+
+    private JComponent getRowHeaderComponent(Object value) {
+      if (value instanceof String) {
+        String text = (String) value;
+        if (!colHeaderCache.containsKey(text)) {
+          JLabel newLabel = new JLabel(text);
+          colHeaderCache.put(text, newLabel);
+        }
+        return colHeaderCache.get(text);
+      } else {
+        return emptyLabel;
+      }
+    }
+  };
+
 
   public TimeTable() {
     super();
@@ -113,6 +176,23 @@ public class TimeTable extends JTable {
       return new JLabel();
     }
   }
+  
+    private TimeTableCellPanel getTimeTableCellPanel(JTable table, int row, int column) {
+      throw new RuntimeException("not implemented");
+//    int hash = column * maxRows + row;
+//    if (!cellCache.containsKey(hash)) {
+//      TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel(
+//              new Color(170, 170, 170),
+//              table.getSelectionBackground(),
+//              table.getSelectionForeground());
+//      CellAdaptor cellAdaptor = new CellAdaptor(row, column, (TimeTableModel) table.getModel());
+//      timeTableCellPanel.addPropertyChangeListener(cellAdaptor);
+//      cellCache.put(hash, timeTableCellPanel);
+//    }
+//    return cellCache.get(hash);
+  }
+  private final HashMap<Integer, TimeTableCellPanel> cellCache = new HashMap<>();
+  private static final int maxRows = 10007;
 
   /**
    * Cells that correspond to a time-slot that cannot be found in the "ZEIT"
@@ -169,21 +249,21 @@ public class TimeTable extends JTable {
   private TableModel makeDesignTimeModel() {
     return (new javax.swing.table.DefaultTableModel(
             new Object[][]{
-      {"Vormittag", true, null, null, null, true, null, null},
-      {"Nachmittag", null, true, null, true, null, null, null},
-      {"Abend", null, null, true, false, null, null, null}},
+              {"Vormittag", true, null, null, null, true, null, null},
+              {"Nachmittag", null, true, null, true, null, null, null},
+              {"Abend", null, null, true, false, null, null, null}},
             new String[]{
-      ".Design.", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
-    }) {
-      @Override
-      public Class<?> getColumnClass(int columnIndex) {
-        if (columnIndex > 0) {
-          return Boolean.class;
-        } else {
-          return String.class;
-        }
-      }
-    });
+              ".Design.", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+            }) {
+              @Override
+              public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex > 0) {
+                  return Boolean.class;
+                } else {
+                  return String.class;
+                }
+              }
+            });
   }
 
   /**
@@ -191,12 +271,14 @@ public class TimeTable extends JTable {
    */
   public class TimeTableModel extends AbstractTableModel implements PropertyChangeListener {
 
+    private final Integer contestId;
     private final String[] timeOfDayNames;
     private final String[] dayNames;
     private final int columnCount; // the number of data columns (first column not included)
     private final int rowCount; // the number of data rows (header row not included)
 
-    public TimeTableModel(Integer juryId) {
+    public TimeTableModel(Integer contestId) {
+      this.contestId = contestId;
 
       TimeSlotCollection tt = Manager.getTimeSlotCollection();
 
@@ -259,17 +341,17 @@ public class TimeTable extends JTable {
 
     @Override
     public boolean isCellEditable(int row, int column) {
-      return false;
+      return ((column > 0) && (contestId != null));
     }
 
     /**
-     * un-subscribe to listen on changes on the person.
+     * un-subscribe to listen on changes on the contest.
      */
     private void stopListening() {
     }
 
     /**
-     * Subscribe to listen on changes on the person.
+     * Subscribe to listen on changes on the contest.
      */
     public void startListening() {
     }

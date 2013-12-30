@@ -15,17 +15,80 @@
  */
 package de.free_creations.editors.contest;
 
+import de.free_creations.dbEntities.Event;
+import de.free_creations.dbEntities.Location;
+import de.free_creations.dbEntities.TimeSlot;
+import de.free_creations.nbPhon4Netbeans.LocationNode;
+import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
+import de.free_creations.nbPhonAPI.Manager;
+import java.awt.Color;
+import java.awt.Image;
+import java.beans.BeanInfo;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Objects;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
+
 /**
+ * Displays one single cell of the "time table" shown in the contest edit
+ * window.
+ *
+ * Each cell shows information for one single event entity and the attached
+ * Location Entity.
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class TimeTableCellPanel extends javax.swing.JPanel {
 
   /**
-   * Creates new form TimeTableCellPanel
+   * Indicates that the value of displayed by this panel has changed.
+   */
+  public static final String PROP_VALUE_CHANGED = "PROP_VALUE_CHANGED";
+  /**
+   * @Todo move color management to a central place
+   */
+  private Color disabledColor;
+  private Color selectedBackgroundColor;
+  private Color selectedForegroundColor;
+
+  /**
+   * The identity of the event that is currently displayed.
+   */
+  private Integer eventId = Integer.MIN_VALUE;
+  /**
+   * The identity of the location that is currently displayed.
+   */
+  private Integer locationId = Integer.MIN_VALUE;
+  private final PropertyChangeListener nodeListener = new PropertyChangeListener() {
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      showEntity();
+      fireValueChanged();
+    }
+  };
+
+  /**
+   * Creates a TimeTableCellPanel with default colors (only for test)
    */
   public TimeTableCellPanel() {
+    this(new Color(170, 170, 170), new Color(57, 105, 138), Color.WHITE);
+  }
+
+  /**
+   * Creates a TimeTableCellPanel and permits to define the colors for the
+   * "selected" state (selected within the table).
+   */
+  public TimeTableCellPanel(Color disabledColor, Color selectedBackgroundColor, Color selectedForegroundColor) {
+    this.disabledColor = disabledColor;
+    this.selectedBackgroundColor = selectedBackgroundColor;
+    this.selectedForegroundColor = selectedForegroundColor;
     initComponents();
+    if (!java.beans.Beans.isDesignTime()) {
+      setEventId(null);
+    }
   }
 
   /**
@@ -64,7 +127,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+      .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
       .addGroup(layout.createSequentialGroup()
         .addComponent(btnCheck)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -73,8 +136,8 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addComponent(lblLocation)
-        .addGap(0, 0, 0)
+        .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGap(0, 0, Short.MAX_VALUE)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
           .addComponent(lblTime)
           .addComponent(btnCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
@@ -82,7 +145,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void btnCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckActionPerformed
-    // TODO add your handling code here:
+
     if (btnCheck.isSelected()) {
       lblLocation.setEnabled(true);
       lblTime.setEnabled(true);
@@ -96,4 +159,128 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
   private javax.swing.JLabel lblLocation;
   private javax.swing.JTextField lblTime;
   // End of variables declaration//GEN-END:variables
+
+  private void setEventId(Integer newEventId) {
+    Integer old = this.eventId;
+    this.eventId = newEventId;
+    if (!Objects.equals(old, newEventId)) {
+      if (old != null) {
+        Event.removePropertyChangeListener(nodeListener, newEventId);
+      }
+      if (newEventId != null) {
+        Event.addPropertyChangeListener(nodeListener, newEventId);
+      }
+      Event event = null;
+      try {
+        event = Manager.getEventCollection().findEntity(newEventId);
+      } catch (DataBaseNotReadyException ignored) {
+      }
+
+      Integer oldLocationId = this.locationId;
+      locationId = null; // provisional default
+      if (event != null) {
+        Location location = event.getLocation();
+        if (location != null) {
+          locationId = location.getLocationId();
+        }
+      }
+      if (oldLocationId != null) {
+        Location.removePropertyChangeListener(nodeListener, oldLocationId);
+      }
+      if (locationId != null) {
+        Location.addPropertyChangeListener(nodeListener, locationId);
+      }
+
+      showEntity();
+      fireValueChanged();
+    }
+  }
+
+  /**
+   * same as "setEventId()", but the value can be anything.
+   *
+   * @param value if not an Integer enventId will be set to null.
+   */
+  public void setValue(Object value) {
+    if (value instanceof Integer) {
+      setEventId((Integer) value);
+    } else {
+      setEventId(null);
+    }
+  }
+
+  /**
+   * show the current locationId and eventId
+   */
+  private void showEntity() {
+    LocationNode tempNode = new LocationNode(locationId, Manager.getLocationCollection());
+    String htmlDisplayName = tempNode.getHtmlDisplayName();
+    if (htmlDisplayName != null) {
+      lblLocation.setText(htmlDisplayName);
+    } else {
+      lblLocation.setText(tempNode.getDisplayName());
+    }
+    Image image = tempNode.getIcon(BeanInfo.ICON_COLOR_16x16);
+    Icon icon = null;
+    if (image != null) {
+      icon = new ImageIcon(image);
+    }
+    lblLocation.setIcon(icon);
+
+    JPopupMenu popupMenu = null;
+    if (locationId != null) {
+      popupMenu = tempNode.getContextMenu();
+    }
+    this.setComponentPopupMenu(popupMenu);
+    tempNode.destroy();
+
+    String fromTo = "";
+    boolean scheduled = false;
+    Event event = null;
+    try {
+      event = Manager.getEventCollection().findEntity(eventId);
+    } catch (DataBaseNotReadyException ignored) {
+    }
+    if (event != null) {
+      scheduled = event.isScheduled();
+      TimeSlot ts = event.getTimeSlot();
+      if (ts != null) {
+        fromTo = String.format("%1$tH:%1$tM - %2$tH:%2$tM", ts.getStartTime(), ts.getEndTime());
+      }
+    }
+    lblTime.setText(fromTo);
+    btnCheck.setSelected(scheduled);
+    btnCheckActionPerformed(null);
+  }
+
+  void setSelected(boolean selected) {
+    if (selected) {
+      setBackground(selectedBackgroundColor);
+      lblLocation.setBackground(selectedBackgroundColor);
+      setForeground(selectedForegroundColor);
+      lblLocation.setForeground(selectedForegroundColor);
+    } else {
+      setBackground(Color.WHITE);
+      lblLocation.setBackground(Color.WHITE);
+      setForeground(Color.BLACK);
+      lblLocation.setForeground(Color.BLACK);
+    }
+  }
+
+  /**
+   * inform the surrounding table that something has changed and the panel needs
+   * to be repainted.
+   */
+  private void fireValueChanged() {
+    firePropertyChange(PROP_VALUE_CHANGED, null, null);
+  }
+
+  public Integer getLocationId() {
+    return locationId;
+  }
+
+  public Integer getEventId() {
+    return eventId;
+  }
+
 }
