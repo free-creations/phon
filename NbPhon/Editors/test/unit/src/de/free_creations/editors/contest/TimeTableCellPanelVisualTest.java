@@ -54,6 +54,7 @@ public class TimeTableCellPanelVisualTest extends javax.swing.JFrame {
     btnSetEventMinusOne = new javax.swing.JButton();
     btnChangeLocation = new javax.swing.JButton();
     btnChangeEvent = new javax.swing.JButton();
+    btnEventLocation = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,7 +65,7 @@ public class TimeTableCellPanelVisualTest extends javax.swing.JFrame {
     borderPanelLayout.setHorizontalGroup(
       borderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, borderPanelLayout.createSequentialGroup()
-        .addComponent(timeTableCellPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+        .addComponent(timeTableCellPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         .addGap(0, 0, 0))
     );
     borderPanelLayout.setVerticalGroup(
@@ -123,6 +124,13 @@ public class TimeTableCellPanelVisualTest extends javax.swing.JFrame {
       }
     });
 
+    org.openide.awt.Mnemonics.setLocalizedText(btnEventLocation, org.openide.util.NbBundle.getMessage(TimeTableCellPanelVisualTest.class, "TimeTableCellPanelVisualTest.btnEventLocation.text")); // NOI18N
+    btnEventLocation.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnEventLocationActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -137,7 +145,8 @@ public class TimeTableCellPanelVisualTest extends javax.swing.JFrame {
           .addComponent(btnSetEvent45, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(btnSetEventMinusOne, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(btnChangeLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(btnChangeEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(btnChangeEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(btnEventLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -159,7 +168,9 @@ public class TimeTableCellPanelVisualTest extends javax.swing.JFrame {
         .addComponent(btnChangeEvent)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(btnChangeLocation)
-        .addContainerGap())
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(btnEventLocation)
+        .addGap(35, 35, 35))
     );
 
     pack();
@@ -218,6 +229,21 @@ public class TimeTableCellPanelVisualTest extends javax.swing.JFrame {
     }
   }//GEN-LAST:event_btnChangeLocationActionPerformed
 
+  private void btnEventLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEventLocationActionPerformed
+    // TODO add your handling code here:
+    Integer eventId = timeTableCellPanel1.getEventId();
+    if (eventId != null) {
+      try {
+        Event e = Manager.getEventCollection().findEntity(eventId);
+        if (e != null) {
+          e.setLocation(null);
+        }
+      } catch (DataBaseNotReadyException ex) {
+        Exceptions.printStackTrace(ex);
+      }
+    }
+  }//GEN-LAST:event_btnEventLocationActionPerformed
+
   /**
    * @param args the command line arguments
    */
@@ -262,6 +288,7 @@ public class TimeTableCellPanelVisualTest extends javax.swing.JFrame {
   private javax.swing.JPanel borderPanel;
   private javax.swing.JButton btnChangeEvent;
   private javax.swing.JButton btnChangeLocation;
+  private javax.swing.JButton btnEventLocation;
   private javax.swing.JToggleButton btnSelected;
   private javax.swing.JButton btnSetEvent45;
   private javax.swing.JButton btnSetEventMinusOne;

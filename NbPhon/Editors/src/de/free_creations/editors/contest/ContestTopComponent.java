@@ -95,7 +95,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
     jScrollPane1 = new javax.swing.JScrollPane();
     allocationTable = new de.free_creations.editors.contest.AllocationTable();
     jScrollPane2 = new javax.swing.JScrollPane();
-    timeTable1 = new de.free_creations.editors.contest.TimeTable();
+    timeTable = new de.free_creations.editors.contest.TimeTable();
     jLabel1 = new javax.swing.JLabel();
     edName = new javax.swing.JTextField();
     contestTypeComboBox1 = new de.free_creations.editors.contest.ContestTypeComboBox();
@@ -116,7 +116,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
 
     jScrollPane1.setViewportView(allocationTable);
 
-    jScrollPane2.setViewportView(timeTable1);
+    jScrollPane2.setViewportView(timeTable);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel1.text")); // NOI18N
 
@@ -241,7 +241,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
   private javax.swing.JLabel jLabel4;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
-  private de.free_creations.editors.contest.TimeTable timeTable1;
+  private de.free_creations.editors.contest.TimeTable timeTable;
   // End of variables declaration//GEN-END:variables
 
   @Override
@@ -304,6 +304,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
     edContestId.setText(String.format("%s", currentKey));
     edName.setText(name);
     edDescription.setText(noNull(contest.getDescription()));
+    timeTable.setContestId(currentKey);
 
   }
 

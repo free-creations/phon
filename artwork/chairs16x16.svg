@@ -15,11 +15,36 @@
    version="1.1"
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="chairs16x16.svg"
-   inkscape:export-filename="/home/harald/NetBeansProjects/JMAdmin/artwork/chairs16x16.png"
+   inkscape:export-filename="/home/harald/NetBeansProjects/phon/artwork/chairs16x16.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
-     id="defs2987" />
+     id="defs2987">
+    <filter
+       inkscape:collect="always"
+       id="filter3755"
+       x="-0.11709183"
+       width="1.2341837"
+       y="-0.081964289"
+       height="1.1639286">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.34151789"
+         id="feGaussianBlur3757" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3787"
+       x="-0.14285714"
+       width="1.2857143"
+       y="-0.085714286"
+       height="1.1714286">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.35714286"
+         id="feGaussianBlur3789" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -28,7 +53,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="33.317575"
-     inkscape:cx="9.629353"
+     inkscape:cx="13.289471"
      inkscape:cy="7.2083631"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -71,7 +96,9 @@
   <g
      id="layer1"
      inkscape:label="Layer 1"
-     inkscape:groupmode="layer">
+     inkscape:groupmode="layer"
+     style="display:inline"
+     sodipodi:insensitive="true">
     <path
        style="fill:#00314e;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 1.0502128,3.4 0,10 1,0 0,-4 3,0 0,4 1,0 0,-4 1,0 0,-1 -5,0 0,-5 -1,0 z"

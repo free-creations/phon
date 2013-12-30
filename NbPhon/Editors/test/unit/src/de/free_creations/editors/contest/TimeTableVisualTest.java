@@ -17,13 +17,18 @@ package de.free_creations.editors.contest;
 
 
 
+import de.free_creations.dbEntities.Event;
+import de.free_creations.dbEntities.Location;
+import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
-import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import org.junit.Test;
 import org.openide.util.Exceptions;
 
 /**
- *
+ * The time table in the Contest Edit Window (ContestTopComponent).
+ * 
+ * It shows where the Contests take place.
+ * 
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class TimeTableVisualTest extends javax.swing.JFrame {
@@ -53,14 +58,32 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
     timeTable1 = new de.free_creations.editors.contest.TimeTable();
     btnContestNull = new javax.swing.JButton();
     btnContest_4 = new javax.swing.JButton();
+    btnChangeEvent = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
     jScrollPane1.setViewportView(timeTable1);
 
     org.openide.awt.Mnemonics.setLocalizedText(btnContestNull, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnContestNull.text")); // NOI18N
+    btnContestNull.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnContestNullActionPerformed(evt);
+      }
+    });
 
     org.openide.awt.Mnemonics.setLocalizedText(btnContest_4, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnContest_4.text")); // NOI18N
+    btnContest_4.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnContest_4ActionPerformed(evt);
+      }
+    });
+
+    org.openide.awt.Mnemonics.setLocalizedText(btnChangeEvent, org.openide.util.NbBundle.getMessage(TimeTableVisualTest.class, "TimeTableVisualTest.btnChangeEvent.text")); // NOI18N
+    btnChangeEvent.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnChangeEventActionPerformed(evt);
+      }
+    });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -69,12 +92,14 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
           .addGroup(layout.createSequentialGroup()
-            .addComponent(btnContestNull, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+              .addComponent(btnChangeEvent, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+              .addComponent(btnContestNull, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
             .addGap(18, 18, 18)
             .addComponent(btnContest_4, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(0, 0, Short.MAX_VALUE))
-          .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE))
+            .addGap(0, 0, Short.MAX_VALUE)))
         .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -86,11 +111,42 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(btnContestNull)
           .addComponent(btnContest_4))
-        .addGap(71, 71, 71))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(btnChangeEvent)
+        .addGap(34, 34, 34))
     );
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
+
+  private void btnContest_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContest_4ActionPerformed
+    // TODO add your handling code here:
+    timeTable1.setContestId(4);
+  }//GEN-LAST:event_btnContest_4ActionPerformed
+
+  private void btnContestNullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContestNullActionPerformed
+    // TODO add your handling code here:
+        timeTable1.setContestId(null);
+  }//GEN-LAST:event_btnContestNullActionPerformed
+
+  private void btnChangeEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeEventActionPerformed
+    // TODO add your handling code here:
+    Object valueAt = timeTable1.getValueAt(1,1);
+    if(valueAt instanceof Integer){
+      try {
+        Event e = Manager.getEventCollection().findEntity((Integer)valueAt);
+        if(e != null){
+          Location old = e.getLocation();
+          if(old != null){
+            e.setLocation(null);
+            System.out.println("### changed "+old.getName()+" to null.");
+          }
+        }
+      } catch (DataBaseNotReadyException ex) {
+        Exceptions.printStackTrace(ex);
+      }
+    }
+  }//GEN-LAST:event_btnChangeEventActionPerformed
 
   /**
    * @param args the command line arguments
@@ -135,6 +191,7 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
     System.out.println("Use \"Run File\" to see this test.");
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton btnChangeEvent;
   private javax.swing.JButton btnContestNull;
   private javax.swing.JButton btnContest_4;
   private javax.swing.JScrollPane jScrollPane1;

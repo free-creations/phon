@@ -15,6 +15,8 @@
  */
 package de.free_creations.editors.contest;
 
+import de.free_creations.dbEntities.Contest;
+import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
@@ -27,6 +29,8 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -40,6 +44,26 @@ import javax.swing.table.TableModel;
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class TimeTable extends JTable {
+
+  private class CellAdaptor implements PropertyChangeListener {
+
+    private final int row;
+    private final int col;
+
+    public CellAdaptor(int row, int col) {
+      this.row = row;
+      this.col = col;
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      if (TimeTableCellPanel.PROP_VALUE_CHANGED.equals(evt.getPropertyName())) {
+        ((AbstractTableModel) getModel()).fireTableCellUpdated(row, col);
+      }
+    }
+
+  }
 
   private final MouseListener timeTableMouseListener = new MouseAdapter() {
     @Override
@@ -60,7 +84,7 @@ public class TimeTable extends JTable {
       }
     }
   };
-  
+
   private final TableCellRenderer tableCellRenderer = new TableCellRenderer() {
 
     private final JLabel emptyLabel = new JLabel();
@@ -97,11 +121,10 @@ public class TimeTable extends JTable {
       if (column == 0) {
         return getRowHeaderComponent(value);
       } else {
-        throw new RuntimeException("not implemented");
-//        TimeTableCellPanel panel = getTimeTableCellPanel(table, row, column);
-//        panel.setValue(value);
-//        panel.setSelected(isSelected);             
-//        return panel;
+        TimeTableCellPanel panel = getTimeTableCellPanel(table, row, column);
+        panel.setValue(value);
+        panel.setSelected(isSelected);
+        return panel;
       }
     }
 
@@ -121,7 +144,6 @@ public class TimeTable extends JTable {
     }
   };
 
-
   public TimeTable() {
     super();
     if (java.beans.Beans.isDesignTime()) {
@@ -139,6 +161,21 @@ public class TimeTable extends JTable {
     gridColor = Color.lightGray;
     showHorizontalLines = true;
     showVerticalLines = true;
+  }
+
+  public void setContestId(Integer contestId) {
+    TableModel oldModel = getModel();
+    if (oldModel instanceof TimeTableModel) {
+      TimeTableModel oldTimeModel = (TimeTableModel) oldModel;
+      if (Objects.equals(contestId, oldTimeModel.getContestId())) {
+        return;
+      }
+      oldTimeModel.stopListening();
+    }
+
+    TimeTableModel timeTableModel = new TimeTableModel(contestId);
+    setModel(timeTableModel);
+    timeTableModel.startListening();
   }
 
   /**
@@ -162,34 +199,42 @@ public class TimeTable extends JTable {
    * @param column
    * @return
    */
-  @Override
-  public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-    if (java.beans.Beans.isDesignTime()) {
-      return super.prepareRenderer(renderer, row, column);
-    }
-    if (isCellVisible(row, column)) {
-      if (column > 0) {
-        return new TimeTableCellPanel();
-      }
-      return super.prepareRenderer(renderer, row, column);
-    } else {
-      return new JLabel();
-    }
-  }
-  
-    private TimeTableCellPanel getTimeTableCellPanel(JTable table, int row, int column) {
-      throw new RuntimeException("not implemented");
-//    int hash = column * maxRows + row;
-//    if (!cellCache.containsKey(hash)) {
-//      TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel(
-//              new Color(170, 170, 170),
-//              table.getSelectionBackground(),
-//              table.getSelectionForeground());
-//      CellAdaptor cellAdaptor = new CellAdaptor(row, column, (TimeTableModel) table.getModel());
-//      timeTableCellPanel.addPropertyChangeListener(cellAdaptor);
-//      cellCache.put(hash, timeTableCellPanel);
+//  @Override
+//  public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+//    if (java.beans.Beans.isDesignTime()) {
+//      return super.prepareRenderer(renderer, row, column);
 //    }
-//    return cellCache.get(hash);
+//    if (isCellVisible(row, column)) {
+//      if (column > 0) {
+//        return new TimeTableCellPanel();
+//      }
+//      return super.prepareRenderer(renderer, row, column);
+//    } else {
+//      return new JLabel();
+//    }
+//  }
+  @Override
+  public TableCellRenderer getCellRenderer(int row, int column) {
+    if (column > 0) {
+      return tableCellRenderer;
+    }
+    // else...
+    return super.getCellRenderer(row, column);
+  }
+
+  private TimeTableCellPanel getTimeTableCellPanel(JTable table, int row, int column) {
+
+    int hash = column * maxRows + row;
+    if (!cellCache.containsKey(hash)) {
+      TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel(
+              new Color(170, 170, 170),
+              table.getSelectionBackground(),
+              table.getSelectionForeground());
+      CellAdaptor cellAdaptor = new CellAdaptor(row, column);
+      timeTableCellPanel.addPropertyChangeListener(cellAdaptor);
+      cellCache.put(hash, timeTableCellPanel);
+    }
+    return cellCache.get(hash);
   }
   private final HashMap<Integer, TimeTableCellPanel> cellCache = new HashMap<>();
   private static final int maxRows = 10007;
@@ -312,8 +357,32 @@ public class TimeTable extends JTable {
       if (columnIndex == 0) {
         return timeOfDayNames[rowIndex];
       } else {
+        return getEventIdFor(rowIndex, columnIndex);
+      }
+    }
+
+    private Integer getEventIdFor(int rowIndex, int columnIndex) {
+      if (contestId == null) {
         return null;
       }
+      TimeSlot t = getTimeSlotFor(rowIndex, columnIndex);
+      if (t == null) {
+        return null;
+      }
+      //--- retrieve the events which happen at the given time-slot.
+      List<Event> eventList = t.getEventList();
+      //--- within those events, search for the (first) event that happens 
+      //    for the given contest (note: here we could check that never two or
+      //    more events happen for the same contest at the same time(slot).
+      for (Event e : eventList) {
+        Contest contest = e.getContest();
+        if (contest != null) {
+          if (Objects.equals(contest.getContestId(), contestId)) {
+            return e.getEventId();
+          }
+        }
+      }
+      return null;
     }
 
     @Override
@@ -328,14 +397,14 @@ public class TimeTable extends JTable {
     /**
      *
      * @param columnIndex
-     * @return String for column 0, Boolean for all other.
+     * @return String for column 0, Integer for all other.
      */
     @Override
     public Class<?> getColumnClass(int columnIndex) {
       if (columnIndex > 0) {
         return String.class;
       } else {
-        return String.class;
+        return Integer.class;
       }
     }
 
@@ -348,16 +417,39 @@ public class TimeTable extends JTable {
      * un-subscribe to listen on changes on the contest.
      */
     private void stopListening() {
+      if (contestId != null) {
+        Contest.removePropertyChangeListener(this, contestId);
+      }
     }
 
     /**
      * Subscribe to listen on changes on the contest.
      */
     public void startListening() {
+      if (contestId != null) {
+        Contest.addPropertyChangeListener(this, contestId);
+      }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+    }
+
+    private Integer getContestId() {
+      return contestId;
+    }
+
+    private TimeSlot getTimeSlotFor(int rowIndex, int columnIndex) {
+      if (columnIndex < 1) {
+        return null;
+      }
+      int day = columnIndex - 1;
+      int timeOfDay = rowIndex;
+      try {
+        return Manager.getTimeSlotCollection().findEntity(day, timeOfDay);
+      } catch (DataBaseNotReadyException ex) {
+        return null;
+      }
     }
   }
 }

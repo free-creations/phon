@@ -48,7 +48,9 @@ import javax.swing.table.TableModel;
 import org.openide.util.Exceptions;
 
 /**
- * The time table in the Locations Edit Window (LocationsTopComponent)
+ * The time table in the Locations Edit Window (LocationsTopComponent).
+ * 
+ * It shows the usage of a location over time.
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
@@ -233,18 +235,18 @@ public class TimeTable extends JTable {
 
     private final int row;
     private final int col;
-    private final TimeTableModel model;
 
-    public CellAdaptor(int row, int col, TimeTableModel model) {
+
+    public CellAdaptor(int row, int col) {
       this.row = row;
       this.col = col;
-      this.model = model;
+
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       if (TimeTableCellPanel.PROP_VALUE_CHANGED.equals(evt.getPropertyName())) {
-        model.fireTableCellUpdated(row, col);
+       ((AbstractTableModel)getModel()).fireTableCellUpdated(row, col);
       }
     }
 
@@ -257,7 +259,7 @@ public class TimeTable extends JTable {
               new Color(170, 170, 170),
               table.getSelectionBackground(),
               table.getSelectionForeground());
-      CellAdaptor cellAdaptor = new CellAdaptor(row, column, (TimeTableModel) table.getModel());
+      CellAdaptor cellAdaptor = new CellAdaptor(row, column);
       timeTableCellPanel.addPropertyChangeListener(cellAdaptor);
       cellCache.put(hash, timeTableCellPanel);
     }

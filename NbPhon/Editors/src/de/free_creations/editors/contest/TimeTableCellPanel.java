@@ -65,7 +65,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      showEntity();
+      showEvent();
       fireValueChanged();
     }
   };
@@ -170,29 +170,9 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
       if (newEventId != null) {
         Event.addPropertyChangeListener(nodeListener, newEventId);
       }
-      Event event = null;
-      try {
-        event = Manager.getEventCollection().findEntity(newEventId);
-      } catch (DataBaseNotReadyException ignored) {
-      }
 
-      Integer oldLocationId = this.locationId;
-      locationId = null; // provisional default
-      if (event != null) {
-        Location location = event.getLocation();
-        if (location != null) {
-          locationId = location.getLocationId();
-        }
-      }
-      if (oldLocationId != null) {
-        Location.removePropertyChangeListener(nodeListener, oldLocationId);
-      }
-      if (locationId != null) {
-        Location.addPropertyChangeListener(nodeListener, locationId);
-      }
+      showEvent();
 
-      showEntity();
-      fireValueChanged();
     }
   }
 
@@ -212,7 +192,27 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
   /**
    * show the current locationId and eventId
    */
-  private void showEntity() {
+  private void showEvent() {
+    Event event = null;
+    try {
+      event = Manager.getEventCollection().findEntity(eventId);
+    } catch (DataBaseNotReadyException ignored) {
+    }
+
+    Integer oldLocationId = this.locationId;
+    locationId = null; // provisional default
+    if (event != null) {
+      Location location = event.getLocation();
+      if (location != null) {
+        locationId = location.getLocationId();
+      }
+    }
+    if (oldLocationId != null) {
+      Location.removePropertyChangeListener(nodeListener, oldLocationId);
+    }
+    if (locationId != null) {
+      Location.addPropertyChangeListener(nodeListener, locationId);
+    }
     LocationNode tempNode = new LocationNode(locationId, Manager.getLocationCollection());
     String htmlDisplayName = tempNode.getHtmlDisplayName();
     if (htmlDisplayName != null) {
@@ -236,11 +236,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
 
     String fromTo = "";
     boolean scheduled = false;
-    Event event = null;
-    try {
-      event = Manager.getEventCollection().findEntity(eventId);
-    } catch (DataBaseNotReadyException ignored) {
-    }
+
     if (event != null) {
       scheduled = event.isScheduled();
       TimeSlot ts = event.getTimeSlot();

@@ -143,7 +143,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="de.free_creations.editors.contest.TimeTable" name="timeTable1">
+        <Component class="de.free_creations.editors.contest.TimeTable" name="timeTable">
         </Component>
       </SubComponents>
     </Container>
