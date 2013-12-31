@@ -20,6 +20,7 @@ import static de.free_creations.nbPhon4Netbeans.IconManager.iconManager;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.awt.Image;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
@@ -32,6 +33,7 @@ import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
+import org.openide.util.datatransfer.ExTransferable;
 
 /**
  *
@@ -39,6 +41,39 @@ import org.openide.util.Lookup;
  */
 public class LocationNode extends AbstractNode implements CommittableNode {
 
+  /**
+   * The data flavor for a Drag and Drop action.
+   */
+  public static class LocationNodeFlavor extends DataFlavor {
+
+    public LocationNodeFlavor() {
+      super(LocationNode.class, "Location");
+    }
+  }
+
+  /**
+   * The transferable that is transfered in a Drag and Drop action.
+   */
+  public class LocationNodeTransferable extends ExTransferable.Single {
+
+    private final Integer locationId;
+
+    public LocationNodeTransferable(Integer locationId) {
+      super(LOCATION_NODE_FLAVOR);
+      this.locationId = locationId;
+    }
+
+    /**
+     * The location node transfers the primary key of the record it represents.
+     *
+     * @return
+     */
+    @Override
+    protected Integer getData() {
+      return locationId;
+    }
+  }
+  public static final DataFlavor LOCATION_NODE_FLAVOR = new LocationNodeFlavor();
   private final Integer locationId;
   private boolean pendingChanges = false;
 
@@ -191,4 +226,9 @@ public class LocationNode extends AbstractNode implements CommittableNode {
     pendingChanges = false;
     fireIconChange();
   }
+
+  public Integer getLocationId() {
+    return locationId;
+  }
+  
 }

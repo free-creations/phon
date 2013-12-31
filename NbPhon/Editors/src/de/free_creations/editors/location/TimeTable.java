@@ -49,7 +49,7 @@ import org.openide.util.Exceptions;
 
 /**
  * The time table in the Locations Edit Window (LocationsTopComponent).
- * 
+ *
  * It shows the usage of a location over time.
  *
  * @author Harald Postner <Harald at free-creations.de>
@@ -92,7 +92,7 @@ public class TimeTable extends JTable {
         Integer key = (Integer) support.getTransferable().getTransferData(ContestNode.CONTEST_NODE_FLAVOR);
         int col = getSelectedColumn();
         int row = getSelectedRow();
-        if(col>0){
+        if (col > 0) {
           setValueAt(key, row, col);
         }
         //setSelectedPersonId(key);
@@ -231,11 +231,14 @@ public class TimeTable extends JTable {
 
   }
 
+  /**
+   * The CellAdaptor forwards "PROP_VALUE_CHANGED" messages from an individual
+   * cell to the table model.
+   */
   private class CellAdaptor implements PropertyChangeListener {
 
     private final int row;
     private final int col;
-
 
     public CellAdaptor(int row, int col) {
       this.row = row;
@@ -246,12 +249,21 @@ public class TimeTable extends JTable {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       if (TimeTableCellPanel.PROP_VALUE_CHANGED.equals(evt.getPropertyName())) {
-       ((AbstractTableModel)getModel()).fireTableCellUpdated(row, col);
+        ((AbstractTableModel) getModel()).fireTableCellUpdated(row, col);
       }
     }
 
   }
 
+  /**
+   * Provides the panels to be displayed in a cell (in browse mode).
+   * 
+   * Each panel for a given row-col is cached.
+   * @param table
+   * @param row
+   * @param column
+   * @return the cached panel (or construct a new new one if none can be found in cache)
+   */
   private TimeTableCellPanel getTimeTableCellPanel(JTable table, int row, int column) {
     int hash = column * maxRows + row;
     if (!cellCache.containsKey(hash)) {

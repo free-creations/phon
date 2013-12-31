@@ -51,11 +51,11 @@ import org.openide.nodes.Node;
  */
 public class ContestNode extends AbstractNode implements CommittableNode {
 
-  private static class LChildren extends Children.Array {
+  private static class JobTypeChildren extends Children.Array {
 
     private final Collection<Node> ch;
 
-    public LChildren(Collection<Node> ch) {
+    public JobTypeChildren(Collection<Node> ch) {
       super();
       assert (ch != null);
       this.ch = ch;
@@ -224,7 +224,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
       },};
     ArrayList<Node> aNodes = new ArrayList<>();
     aNodes.addAll(Arrays.asList(nodes));
-    LChildren children = new LChildren(aNodes);
+    JobTypeChildren children = new JobTypeChildren(aNodes);
     return children;
   }
 

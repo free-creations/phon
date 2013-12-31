@@ -31,6 +31,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -40,11 +41,16 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 /**
+ * The time table in the Contest Edit Window (ContestTopComponent).
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class TimeTable extends JTable {
 
+  /**
+   * The CellAdaptor forwards "PROP_VALUE_CHANGED" messages from an individual
+   * cell to the table model.
+   */
   private class CellAdaptor implements PropertyChangeListener {
 
     private final int row;
@@ -144,8 +150,33 @@ public class TimeTable extends JTable {
     }
   };
 
+  private class TimeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+
+    @Override
+    public Object getCellEditorValue() {
+      return null;
+      // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table,
+            Object value,
+            boolean isSelected,
+            int row,
+            int column) {
+      TimeTableCellEditorPanel panel = new TimeTableCellEditorPanel();
+
+      panel.setValue(value);
+      panel.setSelected(isSelected);
+      return panel;
+    }
+  }
+
+  private final TimeTableCellEditor tableCellEditor;
+
   public TimeTable() {
     super();
+    TimeTableCellEditor _tableCellEditor = null;
     if (java.beans.Beans.isDesignTime()) {
       setModel(makeDesignTimeModel());
     } else {
@@ -155,9 +186,12 @@ public class TimeTable extends JTable {
 
       TimeTableModel timeTableModel = new TimeTableModel(null);
       setModel(timeTableModel);
+      setDefaultRenderer(Integer.class, tableCellRenderer);
+      _tableCellEditor = new TimeTableCellEditor();
 
     }
-    rowHeight = 35 + 2;
+    tableCellEditor = _tableCellEditor;
+    rowHeight = 42 + 2;
     gridColor = Color.lightGray;
     showHorizontalLines = true;
     showVerticalLines = true;
@@ -213,6 +247,17 @@ public class TimeTable extends JTable {
 //      return new JLabel();
 //    }
 //  }
+  /**
+   * Provides the panels to be displayed in a cell (in browse mode).
+   *
+   * Each panel for a given row-col is cached.
+   *
+   * @param table
+   * @param row
+   * @param column
+   * @return the cached panel (or construct a new new one if none can be found
+   * in cache)
+   */
   @Override
   public TableCellRenderer getCellRenderer(int row, int column) {
     if (column > 0) {
@@ -238,6 +283,17 @@ public class TimeTable extends JTable {
   }
   private final HashMap<Integer, TimeTableCellPanel> cellCache = new HashMap<>();
   private static final int maxRows = 10007;
+
+  @Override
+  public TableCellEditor getCellEditor(int row, int column) {
+    if (column > 0) {
+      if (tableCellEditor != null) {
+        return tableCellEditor;
+      }
+    }
+    return super.getCellEditor(row, column);
+
+  }
 
   /**
    * Cells that correspond to a time-slot that cannot be found in the "ZEIT"
