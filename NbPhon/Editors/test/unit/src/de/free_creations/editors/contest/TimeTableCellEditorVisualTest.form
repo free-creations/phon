@@ -24,19 +24,19 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="borderPanel" max="32767" attributes="0"/>
-                  <Component id="btnSetNull" max="32767" attributes="0"/>
-                  <Component id="btnSetEvent_5" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnSelected" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnSetEvent45" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnSetEventMinusOne" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnChangeLocation" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnChangeEvent" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnEventLocation" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnEventLocation" alignment="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="btnChangeLocation" alignment="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="btnChangeEvent" alignment="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="btnSelected" alignment="0" pref="97" max="32767" attributes="0"/>
+                  <Component id="btnSetEventMinusOne" alignment="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="btnSetEvent45" alignment="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="btnSetEvent_5" alignment="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="btnSetNull" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -61,7 +61,7 @@
               <Component id="btnChangeLocation" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnEventLocation" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -79,7 +79,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="timeTableCellEditor1" max="32767" attributes="0"/>
+              <Component id="timeTableCellEditor1" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">

@@ -15,30 +15,37 @@
  */
 package de.free_creations.editors.contest;
 
+import de.free_creations.actions.contest.AllocateLocationForEvent;
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.TimeSlot;
+import de.free_creations.nbPhon4Netbeans.LocationNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.TransferHandler;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+import org.openide.util.Exceptions;
 
 /**
  * The time table in the Contest Edit Window (ContestTopComponent).
@@ -46,6 +53,36 @@ import javax.swing.table.TableModel;
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class TimeTable extends JTable {
+
+  private final TransferHandler transferHandler = new TransferHandler() {
+    @Override
+    public boolean canImport(TransferHandler.TransferSupport support) {
+
+        return (support.isDataFlavorSupported(LocationNode.LOCATION_NODE_FLAVOR));
+
+    }
+
+    @Override
+    public boolean importData(TransferHandler.TransferSupport support) {
+      try {
+        Integer key = (Integer) support.getTransferable().getTransferData(LocationNode.LOCATION_NODE_FLAVOR);
+        int col = getSelectedColumn();
+        int row = getSelectedRow();
+        if (col > 0) {
+          Integer eventId = (Integer) getValueAt(row, col);
+          if (eventId != null) {
+            AllocateLocationForEvent action = new AllocateLocationForEvent(eventId, key);
+            action.apply(0);
+            return true;
+          }
+        }
+        return false;
+
+      } catch (DataBaseNotReadyException | ClassCastException | UnsupportedFlavorException | IOException ex) {
+        return false;
+      }
+    }
+  };
 
   /**
    * The CellAdaptor forwards "PROP_VALUE_CHANGED" messages from an individual
@@ -152,10 +189,11 @@ public class TimeTable extends JTable {
 
   private class TimeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
+    private final TimeTableCellEditorPanel panel = new TimeTableCellEditorPanel();
+
     @Override
     public Object getCellEditorValue() {
-      return null;
-      // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return panel.getEventId();
     }
 
     @Override
@@ -164,8 +202,6 @@ public class TimeTable extends JTable {
             boolean isSelected,
             int row,
             int column) {
-      TimeTableCellEditorPanel panel = new TimeTableCellEditorPanel();
-
       panel.setValue(value);
       panel.setSelected(isSelected);
       return panel;
@@ -188,6 +224,7 @@ public class TimeTable extends JTable {
       setModel(timeTableModel);
       setDefaultRenderer(Integer.class, tableCellRenderer);
       _tableCellEditor = new TimeTableCellEditor();
+      setTransferHandler(transferHandler);
 
     }
     tableCellEditor = _tableCellEditor;
@@ -293,6 +330,18 @@ public class TimeTable extends JTable {
     }
     return super.getCellEditor(row, column);
 
+  }
+
+  @Override
+  public JPopupMenu getComponentPopupMenu() {
+    int col = columnAtPoint(getMousePosition());
+    int row = rowAtPoint(getMousePosition());
+    if (col > 0) {
+      TimeTableCellPanel timeTableCellPanel = getTimeTableCellPanel(this, row, col);
+      return timeTableCellPanel.getComponentPopupMenu();
+    } else {
+      return null;
+    }
   }
 
   /**

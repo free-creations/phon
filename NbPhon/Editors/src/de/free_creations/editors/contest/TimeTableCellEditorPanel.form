@@ -74,6 +74,9 @@
       </Properties>
     </Component>
     <Component class="de.free_creations.editors.contest.LocationComboBox" name="locationComboBox">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="locationComboBoxActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

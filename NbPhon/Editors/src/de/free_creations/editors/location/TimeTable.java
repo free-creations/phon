@@ -93,6 +93,7 @@ public class TimeTable extends JTable {
         int col = getSelectedColumn();
         int row = getSelectedRow();
         if (col > 0) {
+          // note: the TimeTableModel will perform AllocateContestAtTimeslot
           setValueAt(key, row, col);
         }
         //setSelectedPersonId(key);

@@ -16,6 +16,7 @@
 package de.free_creations.nbPhonAPI;
 
 import de.free_creations.dbEntities.Contest;
+import de.free_creations.dbEntities.TimeSlot;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -36,8 +37,8 @@ public class ContestCollection implements MutableEntityCollection<Contest, Integ
   }
 
   /**
-   * @deprecated  use ContestTypeCollection().contestTypeIds()
-   * @return 
+   * @deprecated use ContestTypeCollection().contestTypeIds()
+   * @return
    */
   @Deprecated
   public List<String> contestTypes() {
@@ -82,18 +83,15 @@ public class ContestCollection implements MutableEntityCollection<Contest, Integ
       } catch (Throwable ex) {
         throw new DataBaseNotReadyException(ex);
       }
-      try {
-        entityManager.flush();
-        firePropertyChange(PROP_ITEM_ADDED, null, newContest.identity());
-      } catch (Throwable ex) {
-        throw new DataBaseNotReadyException(ex);
+      // attach events for every time-slot
+      List<TimeSlot> allTimeslots = Manager.getTimeSlotCollection().getAll();
+      for (TimeSlot ts : allTimeslots) {
+        Manager.getEventCollection().newEntity(newContest, ts);
       }
-      
+      firePropertyChange(PROP_ITEM_ADDED, null, newContest.identity());
       return newContest;
     }
   }
-
-
 
   @Override
   public void removeEntity(Integer key) throws DataBaseNotReadyException {
@@ -109,8 +107,8 @@ public class ContestCollection implements MutableEntityCollection<Contest, Integ
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(listener);
   }
-  
-    private void firePropertyChange(final String propertyName,
+
+  private void firePropertyChange(final String propertyName,
           final Object oldValue,
           final Object newValue) {
     if (EventQueue.isDispatchThread()) {

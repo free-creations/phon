@@ -104,6 +104,6 @@ public class EventCollection implements MutableEntityCollection<Event, Integer> 
 
   @Override
   public Event newEntity() throws DataBaseNotReadyException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    throw new UnsupportedOperationException("Not supported. Use newEntity(Contest, TimeSlot)"); //To change body of generated methods, choose Tools | Templates.
   }
 }

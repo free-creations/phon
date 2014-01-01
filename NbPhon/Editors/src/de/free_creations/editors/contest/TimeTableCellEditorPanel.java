@@ -15,6 +15,8 @@
  */
 package de.free_creations.editors.contest;
 
+import de.free_creations.actions.contest.AllocateLocationForEvent;
+import de.free_creations.actions.contest.SetEventScheduled;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Location;
 import de.free_creations.dbEntities.TimeSlot;
@@ -24,6 +26,7 @@ import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
+import org.openide.util.Exceptions;
 
 /**
  * Editor for one single cell of the "time table" shown in the contest edit
@@ -114,6 +117,12 @@ public class TimeTableCellEditorPanel extends javax.swing.JPanel {
     lblTime.setText(org.openide.util.NbBundle.getMessage(TimeTableCellEditorPanel.class, "TimeTableCellEditorPanel.lblTime.text")); // NOI18N
     lblTime.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
+    locationComboBox.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        locationComboBoxActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
@@ -136,15 +145,39 @@ public class TimeTableCellEditorPanel extends javax.swing.JPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void btnCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckActionPerformed
-
-    if (btnCheck.isSelected()) {
-
-      lblTime.setEnabled(true);
-    } else {
-
-      lblTime.setEnabled(false);
+    updateLblTime();
+    if(eventId != null){
+      SetEventScheduled action = new SetEventScheduled(eventId, btnCheck.isSelected());
+      try {
+        action.apply(0);
+      } catch (DataBaseNotReadyException ex) {
+        Exceptions.printStackTrace(ex);
+      }
     }
   }//GEN-LAST:event_btnCheckActionPerformed
+
+  private void updateLblTime() {
+    if (btnCheck.isSelected()) {
+      lblTime.setEnabled(true);
+    } else {
+      lblTime.setEnabled(false);
+    }
+  }
+
+  private void locationComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationComboBoxActionPerformed
+    if (eventId != null) {
+      Integer selectedLocationId = locationComboBox.getSelectedLocationId();
+      if (!Objects.equals(selectedLocationId, locationId)) {
+        AllocateLocationForEvent action = new AllocateLocationForEvent(eventId, selectedLocationId);
+        try {
+          action.apply(0);
+        } catch (DataBaseNotReadyException ex) {
+          Exceptions.printStackTrace(ex);
+        }
+      }
+    }
+  }//GEN-LAST:event_locationComboBoxActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JCheckBox btnCheck;
   private javax.swing.JTextField lblTime;
@@ -190,7 +223,6 @@ public class TimeTableCellEditorPanel extends javax.swing.JPanel {
     } catch (DataBaseNotReadyException ignored) {
     }
 
-
     locationId = null; // provisional default
     if (event != null) {
       Location location = event.getLocation();
@@ -198,7 +230,7 @@ public class TimeTableCellEditorPanel extends javax.swing.JPanel {
         locationId = location.getLocationId();
       }
     }
-    
+
     locationComboBox.setSelectedLocationId(locationId);
 
     String fromTo = "";
@@ -213,7 +245,7 @@ public class TimeTableCellEditorPanel extends javax.swing.JPanel {
     }
     lblTime.setText(fromTo);
     btnCheck.setSelected(scheduled);
-    btnCheckActionPerformed(null);
+    updateLblTime();
   }
 
   void setSelected(boolean selected) {
@@ -231,7 +263,7 @@ public class TimeTableCellEditorPanel extends javax.swing.JPanel {
    * to be repainted.
    */
   private void fireValueChanged() {
-   // firePropertyChange(PROP_VALUE_CHANGED, null, null);
+    // firePropertyChange(PROP_VALUE_CHANGED, null, null);
   }
 
   public Integer getLocationId() {

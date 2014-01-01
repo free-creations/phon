@@ -21,6 +21,7 @@ import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
@@ -230,5 +231,21 @@ public class LocationNode extends AbstractNode implements CommittableNode {
   public Integer getLocationId() {
     return locationId;
   }
-  
+
+  /**
+   * The transferable in a Drag and Drop is the default Netbeans node
+   * transferable plus the specific LocationNodeTransferable.
+   *
+   * @return the interface for classes that can be used to provide data for a
+   * transfer operation.
+   * @throws IOException
+   */
+  @Override
+  public Transferable clipboardCopy() throws IOException {
+    Transferable nbDefault = super.clipboardCopy();
+    ExTransferable added = ExTransferable.create(nbDefault);
+    added.put(new LocationNodeTransferable(getLocationId()));
+    return added;
+  }
+
 }
