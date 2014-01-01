@@ -22,6 +22,7 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -77,11 +78,38 @@ public class Allocation implements Serializable, DbEntity {
   public static final String PROP_EVENT = "PROP_EVENT";
   public static final String PROP_PERSON = "PROP_PERSON";
 
-  public Allocation() {
+  protected Allocation() {
   }
 
-  public Allocation(Integer allocationId) {
+  protected Allocation(Integer allocationId) {
     this.allocationId = allocationId;
+  }
+
+  public static Allocation newAllocation(EntityManager entityManager, Person person, Event event, Job job) {
+    assert (entityManager != null);
+    assert (person != null);
+    assert (event != null);
+    assert (job != null);
+    assert (entityManager.contains(person));
+    assert (entityManager.contains(event));
+
+    Allocation newAllocation = new Allocation();
+
+    newAllocation.setPerson(person);
+    newAllocation.setEvent(event);
+    newAllocation.setJob(job);
+
+    entityManager.persist(newAllocation);
+    entityManager.flush();
+
+    return newAllocation;
+  }
+
+  public void remove(EntityManager entityManager) {
+    setPerson(null);
+    setEvent(null);
+    setJob(null);
+    entityManager.remove(this);
   }
 
   public Integer getAllocationId() {
@@ -128,7 +156,7 @@ public class Allocation implements Serializable, DbEntity {
     return job;
   }
 
-  public void setJob(Job newValue) {
+  protected void setJob(Job newValue) {
     Job old = this.job;
     this.job = newValue;
     if (!Objects.equals(old, newValue)) {
@@ -144,7 +172,7 @@ public class Allocation implements Serializable, DbEntity {
     }
   }
 
-  public void setPerson(Person newValue) {
+  protected void setPerson(Person newValue) {
     Person old = this.person;
     this.person = newValue;
     if (!Objects.equals(old, newValue)) {
@@ -160,7 +188,7 @@ public class Allocation implements Serializable, DbEntity {
     }
   }
 
-  public void setEvent(Event newValue) {
+  protected void setEvent(Event newValue) {
     Event old = this.event;
     this.event = newValue;
     if (!Objects.equals(old, newValue)) {
