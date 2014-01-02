@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -123,8 +124,6 @@ public class AllocationNGTest {
     });
   }
 
-
-
   @Test(enabled = true)
   public void testnewAllocation() throws InterruptedException, InvocationTargetException {
     // verify that the one to many relations are correctly updated
@@ -136,7 +135,7 @@ public class AllocationNGTest {
     Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, testJob);
     Integer allocationId = testItem.getAllocationId();
     assertNotNull(allocationId);
-    
+
     List<Allocation> pAllocationList = testPerson.getAllocationList();
     assertNotNull(pAllocationList);
     assertTrue(pAllocationList.contains(testItem));
@@ -159,11 +158,63 @@ public class AllocationNGTest {
 
     jAllocationList = testJob.getAllocationList();
     assertFalse(jAllocationList.contains(testItem));
-    
-    
+
     Allocation find = entityManager.find(Allocation.class, allocationId);
     assertNull(find);
 
   }
 
+  @Test
+  public void testQuery_findByPersonAndTimeslot() {
+    //prepare the database
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.flush();
+    TimeSlot testTimeSlot = testEvent.getTimeSlot();
+    Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, testJob);
+
+    TypedQuery<Allocation> query = entityManager.createNamedQuery("Allocation.findByPersonAndTimeslot", Allocation.class);
+    query.setParameter("timeSlot", testTimeSlot);
+    query.setParameter("person", testPerson);
+    List<Allocation> resultList = query.getResultList();
+
+    assertNotNull(resultList);
+    assertEquals(resultList.size(), 1);
+
+    Allocation resultItem = resultList.get(0);
+    assertTrue(Objects.equals(resultItem, testItem));
+
+  }
+
+  @Test
+  public void testQuery_findByPersonAndTimeslot_2() {
+    //what happens if one or both parameters are null?
+
+    TypedQuery<Allocation> query = entityManager.createNamedQuery("Allocation.findByPersonAndTimeslot", Allocation.class);
+    query.setParameter("timeSlot", null);
+    query.setParameter("person", null);
+    List<Allocation> resultList = query.getResultList();
+    assertNotNull(resultList);
+    assertTrue(resultList.isEmpty());
+
+  }
+
+  @Test
+  public void testQuery_findByPersonAndTimeslot_3() {
+    //what happens if the entity does not exist
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.flush();
+    TimeSlot testTimeSlot = testEvent.getTimeSlot();
+    // Allocation.newAllocation(entityManager, testPerson, testEvent, testJob) removed!;
+
+    TypedQuery<Allocation> query = entityManager.createNamedQuery("Allocation.findByPersonAndTimeslot", Allocation.class);
+    query.setParameter("timeSlot", testTimeSlot);
+    query.setParameter("person", testPerson);
+    List<Allocation> resultList = query.getResultList();
+
+    assertNotNull(resultList);
+    assertTrue(resultList.isEmpty());
+
+  }
 }

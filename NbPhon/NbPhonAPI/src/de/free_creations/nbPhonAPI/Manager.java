@@ -272,4 +272,16 @@ public class Manager {
       return eventCollection;
     }
   }
+
+  private static final Object allocationLock = new Object();
+  private static AllocationCollection allocationCollection = null;
+
+  public static AllocationCollection getAllocationCollection() {
+    synchronized (allocationLock) {
+      if (allocationCollection == null) {
+        allocationCollection = new AllocationCollection();
+      }
+      return allocationCollection;
+    }
+  }
 }

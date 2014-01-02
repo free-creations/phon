@@ -69,11 +69,10 @@ public class LocationCollection implements MutableEntityCollection<Location, Int
       entityManager.persist(newLocation);
       try {
         entityManager.flush();
-        firePropertyChange(PROP_ITEM_ADDED, null, newLocation.identity());
       } catch (Throwable ex) {
         throw new DataBaseNotReadyException(ex);
       }
-
+        firePropertyChange(PROP_ITEM_ADDED, null, newLocation.identity());
       return newLocation;
     }
   }
