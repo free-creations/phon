@@ -277,7 +277,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
         refreshView(newContest);
       }
       edContestId.setText(String.format("%s", newKey));
-      allocationTable.setJuryId(newKey);
+      allocationTable.setContestId(newKey);
     }
   }
 

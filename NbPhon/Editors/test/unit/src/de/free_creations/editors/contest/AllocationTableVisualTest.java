@@ -93,11 +93,11 @@ public class AllocationTableVisualTest extends javax.swing.JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
   private void btnBlockfloeteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBlockfloeteActionPerformed
-    allocationTable1.setJuryId(1);
+    allocationTable1.setContestId(1);
   }//GEN-LAST:event_btnBlockfloeteActionPerformed
 
   private void btnContestNullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContestNullActionPerformed
-    allocationTable1.setJuryId(null);
+    allocationTable1.setContestId(null);
   }//GEN-LAST:event_btnContestNullActionPerformed
 
   /**

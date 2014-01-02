@@ -15,20 +15,16 @@
  */
 package de.free_creations.editors.contest;
 
-import de.free_creations.dbEntities.Job;
-import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Allocation;
+import de.free_creations.dbEntities.Contest;
+import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.TimeSlot;
-import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.JobCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Image;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JLabel;
@@ -36,8 +32,6 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
-import java.beans.BeanInfo;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -49,6 +43,30 @@ public class AllocationTable extends JTable {
   private static final Color headerColorLight = new Color(226, 230, 233);
   private static final Color headerColorDark = new Color(199, 207, 214);
   //private final AllocationPersonsComboBox comboBox;
+
+  /**
+   * The cell key is used as the "value" of a cell.
+   *
+   * It is not the value displayed to the user, but rather an indication to
+   * which event this cell relates. The table renderer will use this item to
+   * determine what is be to displayed.
+   */
+  public class CellKey {
+
+    public final Integer eventId;
+    public final String jobId;
+
+    public CellKey(Integer eventId, String jobId) {
+      this.eventId = eventId;
+      this.jobId = jobId;
+    }
+
+    @Override
+    public String toString() {
+      return "{" + "eventId=" + eventId + ", jobId=" + jobId + '}';
+    }
+
+  }
 
   private class AllocationTableCellEditor extends DefaultCellEditor {
 
@@ -81,7 +99,7 @@ public class AllocationTable extends JTable {
   protected enum RowType {
 
     dayOfTimeRow,
-    functionRow
+    jobNameRow
   }
 
   public AllocationTable() {
@@ -104,11 +122,11 @@ public class AllocationTable extends JTable {
     setCellSelectionEnabled(true);
   }
 
-  void setJuryId(Integer key) {
+  void setContestId(Integer key) {
     TableModel oldModel = getModel();
     if (oldModel instanceof AllocationTableModel) {
       AllocationTableModel oldAllocModel = (AllocationTableModel) oldModel;
-      Integer oldKey = oldAllocModel.getJuryId();
+      Integer oldKey = oldAllocModel.getContestId();
       if (Objects.equals(oldKey, key)) {
         return;
       }
@@ -152,26 +170,26 @@ public class AllocationTable extends JTable {
         if (model.getRowType(row) == RowType.dayOfTimeRow) {
           preparedRenderer.setBackground(headerColorDark);
         } else {
-          Allocation alloc = model.getAllocationValue(row, column);
-          PersonNode node =
-                  (alloc == null)
-                  ? null
-                  : model.getNodeFor(alloc.getPerson().getPersonId());
-          if (node != null) {
-            preparedRenderer.setText(node.getDisplayName());
-            Image image = node.getIcon(BeanInfo.ICON_COLOR_16x16);
-            ImageIcon icon = new ImageIcon(image);
-            preparedRenderer.setIcon(icon);
-          } else {
-            preparedRenderer.setBackground(disabledColor);
-          }
-
-          if (column == getSelectedColumn()) {
-            if (row == getSelectedRow()) {
-              preparedRenderer.setBackground(getSelectionBackground());
-              preparedRenderer.setForeground(getSelectionForeground());
-            }
-          }
+//          Allocation alloc = model.getCellKey(row, column);
+//          PersonNode node =
+//                  (alloc == null)
+//                  ? null
+//                  : model.getNodeFor(alloc.getPerson().getPersonId());
+//          if (node != null) {
+//            preparedRenderer.setText(node.getDisplayName());
+//            Image image = node.getIcon(BeanInfo.ICON_COLOR_16x16);
+//            ImageIcon icon = new ImageIcon(image);
+//            preparedRenderer.setIcon(icon);
+//          } else {
+//            preparedRenderer.setBackground(disabledColor);
+//          }
+//
+//          if (column == getSelectedColumn()) {
+//            if (row == getSelectedRow()) {
+//              preparedRenderer.setBackground(getSelectionBackground());
+//              preparedRenderer.setForeground(getSelectionForeground());
+//            }
+//          }
         }
       }
       return preparedRenderer;
@@ -182,30 +200,30 @@ public class AllocationTable extends JTable {
   private void initDesignTimeDisplay() {
     setModel(new javax.swing.table.DefaultTableModel(
             new Object[][]{
-      {"Vormittag", null, null, null, null, null, null, null, null},
-      {null, "Lehrkraft", null, null, null, null, null, null, null},
-      {null, "Empfang", null, null, null, null, null, null, null},
-      {null, "Saaldienst", null, null, null, null, null, null, null},
-      {null, "Springer", null, null, null, null, null, null, null},
-      {"Nachmittag", null, null, null, null, null, null, null, null},
-      {null, "Lehrkraft", null, null, null, null, null, null, null},
-      {null, "Empfang", null, null, null, null, null, null, null},
-      {null, "Saaldienst", null, null, null, null, null, null, null},
-      {null, "Springer", null, null, null, null, null, null, null},
-      {"Abend", null, null, null, null, null, null, null, null},
-      {null, "Lehrkraft", null, null, null, null, null, null, null},
-      {null, "Empfang", null, null, null, null, null, null, null},
-      {null, "Saaldienst", null, null, null, null, null, null, null},
-      {null, "Springer", null, null, null, null, null, null, null}
-    },
+              {"Vormittag", null, null, null, null, null, null, null, null},
+              {null, "Lehrkraft", null, null, null, null, null, null, null},
+              {null, "Empfang", null, null, null, null, null, null, null},
+              {null, "Saaldienst", null, null, null, null, null, null, null},
+              {null, "Springer", null, null, null, null, null, null, null},
+              {"Nachmittag", null, null, null, null, null, null, null, null},
+              {null, "Lehrkraft", null, null, null, null, null, null, null},
+              {null, "Empfang", null, null, null, null, null, null, null},
+              {null, "Saaldienst", null, null, null, null, null, null, null},
+              {null, "Springer", null, null, null, null, null, null, null},
+              {"Abend", null, null, null, null, null, null, null, null},
+              {null, "Lehrkraft", null, null, null, null, null, null, null},
+              {null, "Empfang", null, null, null, null, null, null, null},
+              {null, "Saaldienst", null, null, null, null, null, null, null},
+              {null, "Springer", null, null, null, null, null, null, null}
+            },
             new String[]{
-      ".Design.", "Funktion", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
-    }) {
-      @Override
-      public Class<?> getColumnClass(int columnIndex) {
-        return String.class;
-      }
-    });
+              ".Design.", "Funktion", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+            }) {
+              @Override
+              public Class<?> getColumnClass(int columnIndex) {
+                return String.class;
+              }
+            });
     setColumnSelectionAllowed(true);
     getColumnModel().getColumn(0).setPreferredWidth(100);
     getColumnModel().getColumn(1).setPreferredWidth(100);
@@ -220,30 +238,32 @@ public class AllocationTable extends JTable {
     private final int timeOfDayCount;
     private final String[] dayNames;
     private final int dayCount;
-    private final Integer juryId;
-    private final String[] functionNames;
-    private final int functionCount;
+    private final Integer ContestId;
+    private final String[] jobNames;
+    private final String[] jobKeys;
+    private final int jobCount;
 
     AllocationTableModel(Integer juryId) {
-      this.juryId = juryId;
+      this.ContestId = juryId;
       TimeSlotCollection tt = Manager.getTimeSlotCollection();
       dayNames = tt.dayNames();
       dayCount = dayNames.length;
       timeOfDayNames = tt.timeOfDayNames();
       timeOfDayCount = timeOfDayNames.length;
-      JobCollection ff = Manager.getJobCollection();
-      functionNames = ff.jobNames();
-      functionCount = functionNames.length;
+      JobCollection jj = Manager.getJobCollection();
+      jobNames = jj.jobNames();
+      jobKeys = jj.jobKeys();
+      jobCount = jobNames.length;
 
     }
 
-    public Integer getJuryId() {
-      return juryId;
+    public Integer getContestId() {
+      return ContestId;
     }
 
     @Override
     public int getRowCount() {
-      return timeOfDayCount * (functionCount + 1);
+      return timeOfDayCount * (jobCount + 1);
     }
 
     @Override
@@ -261,18 +281,18 @@ public class AllocationTable extends JTable {
             return "";
           }
         case 1:
-          if (getRowType(rowIndex) == RowType.functionRow) {
-            return getFunctionHeader(rowIndex);
+          if (getRowType(rowIndex) == RowType.jobNameRow) {
+            return getJobName(rowIndex);
           } else {
             return "";
           }
         default:
-          if (getRowType(rowIndex) == RowType.functionRow) {
-            Allocation allocationValue = getAllocationValue(rowIndex, columnIndex);
-            if (allocationValue == null) {
+          if (getRowType(rowIndex) == RowType.jobNameRow) {
+            CellKey cellKey = getCellKey(rowIndex, columnIndex);
+            if (cellKey == null) {
               return "none";
             } else {
-              return allocationValue;
+              return cellKey;
             }
           } else {
             return "";
@@ -281,10 +301,10 @@ public class AllocationTable extends JTable {
     }
 
     public RowType getRowType(int rowIndex) {
-      if ((rowIndex % (functionCount + 1)) == 0) {
+      if ((rowIndex % (jobCount + 1)) == 0) {
         return RowType.dayOfTimeRow;
       } else {
-        return RowType.functionRow;
+        return RowType.jobNameRow;
       }
     }
 
@@ -293,9 +313,26 @@ public class AllocationTable extends JTable {
       return timeOfDayNames[tdi];
     }
 
-    private Object getFunctionHeader(int rowIndex) {
-      int fi = functionIndex(rowIndex);
-      return functionNames[fi];
+    /**
+     * The job name to display for a given row.
+     *
+     * @param row
+     * @return
+     */
+    private String getJobName(int row) {
+      int fi = JobIndex(row);
+      return jobNames[fi];
+    }
+
+    /**
+     * The jobId that is
+     *
+     * @param row
+     * @return
+     */
+    private String getJobKey(int row) {
+      int fi = JobIndex(row);
+      return jobKeys[fi];
     }
 
     @Override
@@ -307,44 +344,50 @@ public class AllocationTable extends JTable {
       }
     }
 
-    private Allocation getAllocationValue(int rowIndex, int columnIndex) {
-      if (juryId == null) {
+    private Event getEventFor(int row, int col) {
+      if (ContestId == null) {
         return null;
       }
-//      Contest j;
-//      Job f;
-//      TimeSlot t;
-//      try {
-//        j = Manager.getContestCollection().findEntity(juryId);
-//        f = Manager.getJobCollection().findEntity(functionIndex(rowIndex));
-//        t = Manager.getTimeSlotCollection().findEntity(
-//                dayIndex(columnIndex), timeOfDayIndex(rowIndex));
-//      } catch (DataBaseNotReadyException ignored) {
-//        return null;
-//      }
-//      List<Allocation> aa = j.getTeameinteilungList();//the allocations for this jury
-//
-//      for (Allocation a : aa) {
-//        if (Objects.equals(a.getZeit(), t)) {
-//          if (Objects.equals(a.getFunktionen(), f)) {
-//            return a;
-//          }
-//        }
-//      }
-      return null;
+      int timeOfDay = timeOfDayIndex(row);
+      int day = dayIndex(col);
+      try {
+        TimeSlot t = Manager.getTimeSlotCollection().findEntity(day, timeOfDay);
+        if (t == null) {
+          return null;
+        }
+        Contest c = Manager.getContestCollection().findEntity(ContestId);
+        if (c == null) {
+          return null;
+        }
+        Event e = Manager.getEventCollection().findEntity(c, t);
+        return e;
+      } catch (DataBaseNotReadyException ex) {
+        return null;
+      }
+    }
+
+    private CellKey getCellKey(int row, int col) {
+      Event e = getEventFor(row, col);
+      if (e == null) {
+        return null;
+      }
+      String j = getJobKey(row);
+      CellKey cellKey = new CellKey( e.getEventId(), j);
+
+      return cellKey;
     }
 
     private int timeOfDayIndex(int rowIndex) {
-      return (rowIndex / (functionCount + 1));
+      return (rowIndex / (jobCount + 1));
     }
 
-    private int functionIndex(int rowIndex) {
-      return (rowIndex % (functionCount + 1)) - 1;
+    private int JobIndex(int row) {
+      return (row % (jobCount + 1)) - 1;
     }
 
-    private int dayIndex(int columnIndex) {
-      assert (columnIndex > 1);
-      return columnIndex - 2;
+    private int dayIndex(int col) {
+      assert (col > 1);
+      return col - 2;
     }
 
     @Override
@@ -356,15 +399,6 @@ public class AllocationTable extends JTable {
         return false;
       }
       return true;
-    }
-    private final HashMap<Integer, PersonNode> personNodeCache = new HashMap<>();
-
-    private PersonNode getNodeFor(Integer personId) {
-      if (!personNodeCache.containsKey(personId)) {
-        PersonNode newNode = new PersonNode(personId, Manager.getPersonCollection());
-        personNodeCache.put(personId, newNode);
-      }
-      return personNodeCache.get(personId);
     }
 
     private void stopListening() {
