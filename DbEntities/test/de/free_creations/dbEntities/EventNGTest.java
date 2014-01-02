@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -51,7 +52,6 @@ public class EventNGTest {
   private static EntityManager entityManager = null;
 
   private Event testEvent;
-
 
   @BeforeClass
   public static void setUpClass() throws Exception {
@@ -210,4 +210,43 @@ public class EventNGTest {
     });
   }
 
+  @Test
+  public void test_Query_FindByContestAndTimeslot() {
+    Contest c = testEvent.getContest();
+    assertNotNull(c, "Bad Test Data?");
+    TimeSlot t = testEvent.getTimeSlot();
+    assertNotNull(t, "Bad Test Data?");
+
+    TypedQuery<Event> query = entityManager.createNamedQuery("Event.findByContestAndTimeslot", Event.class);
+    query.setParameter("timeSlot", t);
+    query.setParameter("contest", c);
+    
+    List<Event> resultList = query.getResultList();
+    
+    assertNotNull(resultList);
+    assertEquals(resultList.size(), 1);
+
+    Event resultItem = resultList.get(0);
+    assertTrue(Objects.equals(resultItem, testEvent));
+  }
+  
+  @Test
+  public void test_Query_findByLocationAndTimeslot() {
+    Location l = testEvent.getLocation();
+    assertNotNull(l, "Bad Test Data?");
+    TimeSlot t = testEvent.getTimeSlot();
+    assertNotNull(t, "Bad Test Data?");
+
+    TypedQuery<Event> query = entityManager.createNamedQuery("Event.findByLocationAndTimeslot", Event.class);
+    query.setParameter("timeSlot", t);
+    query.setParameter("location", l);
+    
+    List<Event> resultList = query.getResultList();
+    
+    assertNotNull(resultList);
+    assertEquals(resultList.size(), 1);
+
+    Event resultItem = resultList.get(0);
+    assertTrue(Objects.equals(resultItem, testEvent));
+  }
 }

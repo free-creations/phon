@@ -17,12 +17,15 @@ package de.free_creations.nbPhonAPI;
 
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Event;
+import de.free_creations.dbEntities.Location;
 import de.free_creations.dbEntities.TimeSlot;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -31,6 +34,8 @@ import javax.persistence.TypedQuery;
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class EventCollection implements MutableEntityCollection<Event, Integer> {
+
+  private static final Logger logger = Logger.getLogger(EventCollection.class.getName());
 
   private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -59,6 +64,42 @@ public class EventCollection implements MutableEntityCollection<Event, Integer> 
     }
     synchronized (Manager.databaseAccessLock) {
       return Manager.getEntityManager().find(Event.class, key);
+    }
+  }
+
+  public Event findEntity(Location l, TimeSlot t) throws DataBaseNotReadyException {
+    synchronized (Manager.databaseAccessLock) {
+      TypedQuery<Event> query = Manager.getEntityManager().createNamedQuery("Event.findByLocationAndTimeslot", Event.class);
+      query.setParameter("timeSlot", t);
+      query.setParameter("location", l);
+
+      List<Event> resultList = query.getResultList();
+      assert (resultList != null);
+      if (resultList.isEmpty()) {
+        return null;
+      }
+      if (resultList.size() > 1) {
+        logger.log(Level.WARNING, "More than one event in {0} for time {1}.", new Object[]{l, t});
+      }
+      return resultList.get(0);
+    }
+  }
+
+  public Event findEntity(Contest c, TimeSlot t) throws DataBaseNotReadyException {
+    synchronized (Manager.databaseAccessLock) {
+      TypedQuery<Event> query = Manager.getEntityManager().createNamedQuery("Event.findByContestAndTimeslot", Event.class);
+      query.setParameter("timeSlot", t);
+      query.setParameter("contest", c);
+
+      List<Event> resultList = query.getResultList();
+      assert (resultList != null);
+      if (resultList.isEmpty()) {
+        return null;
+      }
+      if (resultList.size() > 1) {
+        logger.log(Level.WARNING, "More than one event for {0} at time {1}.", new Object[]{c, t});
+      }
+      return resultList.get(0);
     }
   }
 

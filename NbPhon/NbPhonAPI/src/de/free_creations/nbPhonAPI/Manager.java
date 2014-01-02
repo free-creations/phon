@@ -52,6 +52,7 @@ public class Manager {
    *
    * @return true if the database can be accessed, false otherwise.
    */
+  @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch"})
   public static boolean isOpen() {
     synchronized (databaseAccessLock) {
       try {

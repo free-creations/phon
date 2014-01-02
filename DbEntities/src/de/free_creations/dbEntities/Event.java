@@ -44,6 +44,16 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "EVENT")
 @XmlRootElement
 @NamedQueries({
+  @NamedQuery(name = "Event.findByContestAndTimeslot", query
+          = "SELECT e "
+          + "FROM Event e "
+          + "WHERE e.contest = :contest "
+          + "AND e.timeSlot = :timeSlot"),
+  @NamedQuery(name = "Event.findByLocationAndTimeslot", query
+          = "SELECT e "
+          + "FROM Event e "
+          + "WHERE e.location = :location "
+          + "AND e.timeSlot = :timeSlot"),
   @NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e"),
   @NamedQuery(name = "Event.findByEventId", query = "SELECT e FROM Event e WHERE e.eventId = :eventId"),
   @NamedQuery(name = "Event.findByScheduled", query = "SELECT e FROM Event e WHERE e.scheduled = :scheduled")})
@@ -153,7 +163,7 @@ public class Event implements Serializable, DbEntity {
     }
   }
 
-  public final void setContest(Contest newValue) {
+  protected final void setContest(Contest newValue) {
     Contest old = this.contest;
     this.contest = newValue;
     if (!Objects.equals(old, newValue)) {
@@ -169,7 +179,7 @@ public class Event implements Serializable, DbEntity {
     }
   }
 
-  public final void setTimeSlot(TimeSlot newValue) {
+  protected final void setTimeSlot(TimeSlot newValue) {
     TimeSlot old = this.timeSlot;
     this.timeSlot = newValue;
     if (!Objects.equals(old, newValue)) {
