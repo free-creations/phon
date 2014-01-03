@@ -32,7 +32,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 
 /**
- * Displays one single cell of the "time table" shown in the contest edit
+ * Displays one single cell of the "time table".
+ * 
+ * The "time table" is shown in the contest edit
  * window.
  *
  * Each cell shows information for one single event entity and the attached

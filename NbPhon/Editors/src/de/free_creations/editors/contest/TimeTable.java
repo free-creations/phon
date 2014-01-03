@@ -45,7 +45,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
-import org.openide.util.Exceptions;
 
 /**
  * The time table in the Contest Edit Window (ContestTopComponent).
@@ -105,7 +104,6 @@ public class TimeTable extends JTable {
         ((AbstractTableModel) getModel()).fireTableCellUpdated(row, col);
       }
     }
-
   }
 
   private final MouseListener timeTableMouseListener = new MouseAdapter() {

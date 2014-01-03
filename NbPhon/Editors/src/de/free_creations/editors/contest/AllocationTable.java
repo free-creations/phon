@@ -25,11 +25,16 @@ import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import java.awt.Color;
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.HashMap;
 import java.util.Objects;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
@@ -51,7 +56,7 @@ public class AllocationTable extends JTable {
    * which event this cell relates. The table renderer will use this item to
    * determine what is be to displayed.
    */
-  public class CellKey {
+  public static class CellKey {
 
     public final Integer eventId;
     public final String jobId;
@@ -66,7 +71,104 @@ public class AllocationTable extends JTable {
       return "{" + "eventId=" + eventId + ", jobId=" + jobId + '}';
     }
 
+    @Override
+    public int hashCode() {
+      int hash = 5;
+      hash = 67 * hash + Objects.hashCode(this.eventId);
+      hash = 67 * hash + Objects.hashCode(this.jobId);
+      return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      final CellKey other = (CellKey) obj;
+      if (!Objects.equals(this.eventId, other.eventId)) {
+        return false;
+      }
+      if (!Objects.equals(this.jobId, other.jobId)) {
+        return false;
+      }
+      return true;
+    }
+
   }
+
+  /**
+   * The CellAdaptor forwards "PROP_VALUE_CHANGED" messages from an individual
+   * cell to the table model.
+   */
+  private class CellAdaptor implements PropertyChangeListener {
+
+    private final int row;
+    private final int col;
+
+    public CellAdaptor(int row, int col) {
+      this.row = row;
+      this.col = col;
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      if (TimeTableCellPanel.PROP_VALUE_CHANGED.equals(evt.getPropertyName())) {
+        ((AbstractTableModel) getModel()).fireTableCellUpdated(row, col);
+      }
+    }
+  }
+
+  private class AllocationTableCellRenderer extends DefaultTableCellRenderer {
+
+    private final JLabel headerRenderer = new JLabel();
+
+    @Override
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row, int column) {
+
+      JLabel result = headerRenderer;
+      headerRenderer.setOpaque(true);
+      headerRenderer.setBackground(Color.WHITE); // the default
+
+      AllocationTableModel model = (AllocationTableModel) getModel();
+      String defaultText = (value == null) ? "" : value.toString();
+      headerRenderer.setText(defaultText);
+      if (column < 2) {
+        if (model.getRowType(row) == RowType.dayOfTimeRow) {
+          headerRenderer.setBackground(headerColorDark);
+        } else {
+          headerRenderer.setBackground(headerColorLight);
+        }
+      } else {
+        if (model.getRowType(row) == RowType.dayOfTimeRow) {
+          headerRenderer.setBackground(headerColorDark);
+        } else {
+          if (value instanceof CellKey) {
+            AllocationTableCellPanel dataLabel = getAllocationTableCellPanel(table, row, column);
+            dataLabel.setKey((CellKey) value);
+            dataLabel.setSelected(isSelected);
+            result = dataLabel;
+          }
+        }
+      }
+      if (hasFocus) {
+        result.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+      } else {
+        result.setBorder(null);
+      }
+      return result;
+    }
+  };
+
+  private final AllocationTableCellRenderer renderer;
 
   private class AllocationTableCellEditor extends DefaultCellEditor {
 
@@ -80,22 +182,27 @@ public class AllocationTable extends JTable {
             boolean isSelected,
             int row,
             int column) {
-      Component editor = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-      if (editor instanceof AllocationPersonsComboBox) {
-        AllocationPersonsComboBox cb = (AllocationPersonsComboBox) editor;
-        if (value instanceof Allocation) {
-          Allocation t = (Allocation) value;
-          cb.setSelectedPerson(t.getPerson());
-        } else {
-          cb.setSelectedPerson(null);
-        }
-      }
-      return editor;
+      return null;
+//      Component editor = super.getTableCellEditorComponent(table, value, isSelected, row, column);
+//      if (editor instanceof AllocationPersonsComboBox) {
+//        AllocationPersonsComboBox cb = (AllocationPersonsComboBox) editor;
+//        if (value instanceof Allocation) {
+//          Allocation t = (Allocation) value;
+//          cb.setSelectedPerson(t.getPerson());
+//        } else {
+//          cb.setSelectedPerson(null);
+//        }
+//      }
+//      return editor;
 
     }
   };
 
   //private final AllocationTableCellEditor tableCellEditor;
+  /**
+   * The row-type indicates whether a row displays a time-of-day or a kind of
+   * job.
+   */
   protected enum RowType {
 
     dayOfTimeRow,
@@ -104,6 +211,9 @@ public class AllocationTable extends JTable {
 
   public AllocationTable() {
     super();
+    // provisorily we set the renderer to null; if not in design time it will 
+    // be set to a new AllocationTableCellRenderer.
+    AllocationTableCellRenderer _renderer = null;
     if (java.beans.Beans.isDesignTime()) {
       initDesignTimeDisplay();
     } else {
@@ -112,7 +222,9 @@ public class AllocationTable extends JTable {
       AllocationPersonsComboBox comboBox = new AllocationPersonsComboBox();
       AllocationTableCellEditor tableCellEditor = new AllocationTableCellEditor(comboBox);
       setDefaultEditor(Object.class, tableCellEditor);
+      _renderer = new AllocationTableCellRenderer();
     }
+    renderer = _renderer;
     rowHeight = 16 + 6;
     gridColor = Color.lightGray;
     showHorizontalLines = true;
@@ -121,6 +233,31 @@ public class AllocationTable extends JTable {
     getColumnModel().getColumn(1).setMaxWidth(300);
     setCellSelectionEnabled(true);
   }
+
+  @Override
+  public TableCellRenderer getCellRenderer(int row, int column) {
+    if (renderer == null) {
+      return super.getCellRenderer(row, column);
+    } else {
+      return renderer;
+    }
+  }
+
+  private AllocationTableCellPanel getAllocationTableCellPanel(JTable table, int row, int column) {
+    int hash = column * maxRows + row;
+    if (!cellCache.containsKey(hash)) {
+      AllocationTableCellPanel allocationTableCellPanel = new AllocationTableCellPanel(
+              new Color(170, 170, 170),
+              table.getSelectionBackground(),
+              table.getSelectionForeground());
+      CellAdaptor cellAdaptor = new CellAdaptor(row, column);
+      allocationTableCellPanel.addPropertyChangeListener(cellAdaptor);
+      cellCache.put(hash, allocationTableCellPanel);
+    }
+    return cellCache.get(hash);
+  }
+  private final HashMap<Integer, AllocationTableCellPanel> cellCache = new HashMap<>();
+  private static final int maxRows = 10007;
 
   void setContestId(Integer key) {
     TableModel oldModel = getModel();
@@ -145,58 +282,6 @@ public class AllocationTable extends JTable {
    * @param column
    * @return
    */
-  @Override
-  public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-
-    if (java.beans.Beans.isDesignTime()) {
-      return super.prepareRenderer(renderer, row, column);
-    } else {
-      JLabel preparedRenderer = new JLabel();
-      preparedRenderer.setOpaque(true);
-      preparedRenderer.setBackground(Color.WHITE); // the default
-
-      AllocationTableModel model = (AllocationTableModel) getModel();
-      Object valueAt = model.getValueAt(row, column);
-      String defaultText = (valueAt == null) ? "" : valueAt.toString();
-      preparedRenderer.setText(defaultText);
-      if (column < 2) {
-        if (model.getRowType(row) == RowType.dayOfTimeRow) {
-          preparedRenderer.setBackground(headerColorDark);
-        } else {
-          preparedRenderer.setBackground(headerColorLight);
-        }
-      } else {
-
-        if (model.getRowType(row) == RowType.dayOfTimeRow) {
-          preparedRenderer.setBackground(headerColorDark);
-        } else {
-//          Allocation alloc = model.getCellKey(row, column);
-//          PersonNode node =
-//                  (alloc == null)
-//                  ? null
-//                  : model.getNodeFor(alloc.getPerson().getPersonId());
-//          if (node != null) {
-//            preparedRenderer.setText(node.getDisplayName());
-//            Image image = node.getIcon(BeanInfo.ICON_COLOR_16x16);
-//            ImageIcon icon = new ImageIcon(image);
-//            preparedRenderer.setIcon(icon);
-//          } else {
-//            preparedRenderer.setBackground(disabledColor);
-//          }
-//
-//          if (column == getSelectedColumn()) {
-//            if (row == getSelectedRow()) {
-//              preparedRenderer.setBackground(getSelectionBackground());
-//              preparedRenderer.setForeground(getSelectionForeground());
-//            }
-//          }
-        }
-      }
-      return preparedRenderer;
-    }
-
-  }
-
   private void initDesignTimeDisplay() {
     setModel(new javax.swing.table.DefaultTableModel(
             new Object[][]{
@@ -372,7 +457,7 @@ public class AllocationTable extends JTable {
         return null;
       }
       String j = getJobKey(row);
-      CellKey cellKey = new CellKey( e.getEventId(), j);
+      CellKey cellKey = new CellKey(e.getEventId(), j);
 
       return cellKey;
     }
