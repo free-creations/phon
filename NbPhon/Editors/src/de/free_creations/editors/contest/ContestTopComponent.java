@@ -98,7 +98,6 @@ public final class ContestTopComponent extends CloneableTopComponent {
     timeTable = new de.free_creations.editors.contest.TimeTable();
     jLabel1 = new javax.swing.JLabel();
     edName = new javax.swing.JTextField();
-    contestTypeComboBox1 = new de.free_creations.editors.contest.ContestTypeComboBox();
     edContestType = new de.free_creations.editors.contest.ContestTypeComboBox();
 
     org.openide.awt.Mnemonics.setLocalizedText(edContestId, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edContestId.text")); // NOI18N
@@ -145,7 +144,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
           .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+              .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
               .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
               .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,11 +159,6 @@ public final class ContestTopComponent extends CloneableTopComponent {
                     .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))))
             .addContainerGap())))
-      .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-          .addGap(0, 0, Short.MAX_VALUE)
-          .addComponent(contestTypeComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addGap(0, 0, Short.MAX_VALUE)))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,13 +180,8 @@ public final class ContestTopComponent extends CloneableTopComponent {
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(68, Short.MAX_VALUE))
-      .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-          .addGap(0, 0, Short.MAX_VALUE)
-          .addComponent(contestTypeComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addGap(0, 0, Short.MAX_VALUE)))
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+        .addContainerGap())
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -231,7 +220,6 @@ public final class ContestTopComponent extends CloneableTopComponent {
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private de.free_creations.editors.contest.AllocationTable allocationTable;
-  private de.free_creations.editors.contest.ContestTypeComboBox contestTypeComboBox1;
   private javax.swing.JLabel edContestId;
   private de.free_creations.editors.contest.ContestTypeComboBox edContestType;
   private javax.swing.JTextField edDescription;

@@ -225,7 +225,7 @@ public class AllocationTable extends JTable {
       _renderer = new AllocationTableCellRenderer();
     }
     renderer = _renderer;
-    rowHeight = 16 + 6;
+    rowHeight = 24 + 6;
     gridColor = Color.lightGray;
     showHorizontalLines = true;
     showVerticalLines = true;

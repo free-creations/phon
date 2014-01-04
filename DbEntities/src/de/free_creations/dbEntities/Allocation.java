@@ -49,6 +49,11 @@ import javax.xml.bind.annotation.XmlRootElement;
           + "JOIN a.event e "
           + "WHERE e.timeSlot = :timeSlot "
           + "AND a.person = :person"),
+  @NamedQuery(name = "Allocation.findByEventAndJob", query
+          = "SELECT a "
+          + "FROM Allocation a "
+          + "WHERE a.event = :event "
+          + "AND a.job = :job"),
   @NamedQuery(name = "Allocation.findAll", query = "SELECT a FROM Allocation a"),
   @NamedQuery(name = "Allocation.findByAllocationId", query = "SELECT a FROM Allocation a WHERE a.allocationId = :allocationId"),
   @NamedQuery(name = "Allocation.findByLastchange", query = "SELECT a FROM Allocation a WHERE a.lastchange = :lastchange"),

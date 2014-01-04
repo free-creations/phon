@@ -67,21 +67,48 @@ public class EventCollection implements MutableEntityCollection<Event, Integer> 
     }
   }
 
+  /**
+   * Searches the event-record for a given location and a given time-slot. If
+   * (by error) more than one such records exists, the first one is returned and
+   * a warning is logged.
+   *
+   * @param l the location
+   * @param t the time-slot
+   * @return the searched record or null if no such record exists.
+   * @throws DataBaseNotReadyException
+   */
   public Event findEntity(Location l, TimeSlot t) throws DataBaseNotReadyException {
+    List<Event> resultList = findAll(l, t);
+    assert (resultList != null);
+    if (resultList.isEmpty()) {
+      return null;
+    }
+    if (resultList.size() > 1) {
+      logger.log(Level.WARNING, "More than one allocation for {0} at time {1}.", new Object[]{l, t});
+    }
+    return resultList.get(0);
+  }
+
+  /**
+   * Searches all event-records for a given location and a given time-slot.
+   *
+   * If fact, in a given location only one event can happen at the same time;
+   * but the database structure does not prohibit such miss-allocations,
+   * therefore the whole list is returned.
+   *
+   * @param l the location
+   * @param t the time-slot
+   * @return a list of all records fulfilling the search criteria.
+   * @throws DataBaseNotReadyException
+   */
+  public List<Event> findAll(Location l, TimeSlot t) throws DataBaseNotReadyException {
     synchronized (Manager.databaseAccessLock) {
       TypedQuery<Event> query = Manager.getEntityManager().createNamedQuery("Event.findByLocationAndTimeslot", Event.class);
       query.setParameter("timeSlot", t);
       query.setParameter("location", l);
-
       List<Event> resultList = query.getResultList();
       assert (resultList != null);
-      if (resultList.isEmpty()) {
-        return null;
-      }
-      if (resultList.size() > 1) {
-        logger.log(Level.WARNING, "More than one event in {0} for time {1}.", new Object[]{l, t});
-      }
-      return resultList.get(0);
+      return resultList;
     }
   }
 

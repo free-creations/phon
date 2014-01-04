@@ -239,4 +239,43 @@ public class AllocationCollectionTest {
     }
   }
 
+  /**
+   * Test of findAll method, of class AllocationCollection.
+   */
+  @Test
+  public void testFindAll_Person_TimeSlot() {
+    // more or less tested in testFindEntity_Person_TimeSlot()
+  }
+
+  /**
+   * Test of findEntity method, of class AllocationCollection.
+   *
+   * @throws java.lang.Exception
+   */
+  @Test
+  public void testFindEntity_Event_Job() throws Exception {
+    Person p = Manager.getPersonCollection().findEntity(1);
+    assertNotNull("Bad test data?", p);
+    List<Allocation> pa = p.getAllocationList();
+    assertFalse("Bad test data?", pa.isEmpty());
+    Allocation a = pa.get(0);
+    Event e = a.getEvent();
+    assertNotNull("Bad test data?", e);
+    Job j = a.getJob();
+    assertNotNull("Bad test data?", j);
+
+    // Here is the statement that we want to test:
+    Allocation result = Manager.getAllocationCollection().findEntity(e, j);
+    assertNotNull(result);
+    assertTrue(Objects.equals(result, a));
+  }
+
+  /**
+   * Test of findAll method, of class AllocationCollection.
+   */
+  @Test
+  public void testFindAll_Event_Job() {
+    // more or less tested in testFindEntity_Event_Job()
+  }
+
 }

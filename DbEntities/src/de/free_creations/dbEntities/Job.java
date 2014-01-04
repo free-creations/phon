@@ -19,7 +19,6 @@ import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,12 +28,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * The Job Table is pre-populated, therfore no public constructor and
+ * no public setters.
+ * 
  * @author Harald <Harald at free-creations.de>
  */
 @Entity
@@ -61,11 +61,17 @@ public class Job implements Serializable, DbEntity {
   public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
   public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
 
-  public Job() {
+  protected Job() {
   }
 
-  public Job(String jobId) {
+  /**
+   * Only for test within this package.
+   * @param jobId
+   * @param jobType 
+   */
+  protected Job(String jobId, JobType jobType) {
     this.jobId = jobId;
+    this.jobType = jobType;
   }
 
   public String getJobId() {

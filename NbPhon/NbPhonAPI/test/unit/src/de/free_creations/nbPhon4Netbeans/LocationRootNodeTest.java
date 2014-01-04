@@ -95,7 +95,7 @@ public class LocationRootNodeTest {
     Children children = testRoot.getChildren();
     assertNotNull(children);
     assertEquals(2, children.getNodesCount());
-    
+
   }
 
   /**
@@ -126,49 +126,45 @@ public class LocationRootNodeTest {
    * Test of getNodeAt method, of class LocationRootNode.
    */
   @Test
-  @Ignore("Not implemented yet")
   public void testGetNodeAt() {
-//    LocationRootNode testRoot = new LocationRootNode(locationCollectionMock);
-//    LocationNode node1 = testRoot.getNodeAt(0);
-//    assertEquals((int)locationCollectionMock.l1.getLocationId(), (int)node1.getLocationId());
-//    LocationNode node2 = testRoot.getNodeAt(1);
-//    assertEquals((int)locationCollectionMock.l2.getLocationId(), (int)node2.getLocationId());
-//
-//
-//    LocationNode nullLocation = testRoot.getNodeAt(4711);
-//    assertNull(nullLocation);
+    LocationRootNode testRoot = new LocationRootNode(locationCollectionMock);
+    LocationNode node1 = testRoot.getNodeAt(0);
+    assertEquals((int) locationCollectionMock.l1.getLocationId(), (int) node1.getLocationId());
+    LocationNode node2 = testRoot.getNodeAt(1);
+    assertEquals((int) locationCollectionMock.l2.getLocationId(), (int) node2.getLocationId());
+
+    LocationNode nullLocation = testRoot.getNodeAt(4711);
+    assertNull(nullLocation);
   }
 
   /**
    * Test of getNodeKeyAt method, of class LocationRootNode.
    */
   @Test
-  @Ignore("Not implemented yet")
   public void testGetNodeKeyAt() {
-//    LocationRootNode testRoot = new LocationRootNode(locationCollectionMock);
-//    int nodeKey1 = testRoot.getNodeKeyAt(0);
-//    assertEquals(1, nodeKey1);
-//    int nodeKey2 = testRoot.getNodeKeyAt(1);
-//    assertEquals(2, nodeKey2);
-//
-//    Integer notFoundKey = testRoot.getNodeKeyAt(4711);
-//    assertNull(notFoundKey);
+    LocationRootNode testRoot = new LocationRootNode(locationCollectionMock);
+    int nodeKey1 = testRoot.getNodeKeyAt(0);
+    assertEquals(1, nodeKey1);
+    int nodeKey2 = testRoot.getNodeKeyAt(1);
+    assertEquals(2, nodeKey2);
+
+    Integer notFoundKey = testRoot.getNodeKeyAt(4711);
+    assertNull(notFoundKey);
   }
 
   /**
    * Test of findIndexForNode method, of class LocationRootNode.
    */
   @Test
-  @Ignore("Not implemented yet")
   public void testFindIndexForNode() {
-//    LocationRootNode testRoot = new LocationRootNode(locationCollectionMock);
-//    int indexForNode1 = testRoot.findIndexForNode(1);
-//    assertEquals(0, indexForNode1);
-//    int indexForNode2 = testRoot.findIndexForNode(2);
-//    assertEquals(1, indexForNode2);
-//
-//    int notFindable = testRoot.findIndexForNode(47114711);
-//    assertEquals(-1, notFindable);
+    LocationRootNode testRoot = new LocationRootNode(locationCollectionMock);
+    int indexForNode1 = testRoot.findIndexForNode(1);
+    assertEquals(0, indexForNode1);
+    int indexForNode2 = testRoot.findIndexForNode(2);
+    assertEquals(1, indexForNode2);
+
+    int notFindable = testRoot.findIndexForNode(47114711);
+    assertEquals(-1, notFindable);
   }
 
 }

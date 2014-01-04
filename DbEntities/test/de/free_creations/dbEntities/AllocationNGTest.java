@@ -99,7 +99,7 @@ public class AllocationNGTest {
   /**
    * Test of identity method.
    */
-  @Test
+  @Test(enabled = true)
   public void testIdentity() {
     EntityIdentity expected = new EntityIdentity(testAllocation.getClass(), testAllocation.getAllocationId());
     assertEquals(expected, testAllocation.identity());
@@ -164,7 +164,7 @@ public class AllocationNGTest {
 
   }
 
-  @Test
+  @Test(enabled = true)
   public void testQuery_findByPersonAndTimeslot() {
     //prepare the database
     Person testPerson = new Person(Integer.MAX_VALUE);
@@ -186,7 +186,7 @@ public class AllocationNGTest {
 
   }
 
-  @Test
+  @Test(enabled = true)
   public void testQuery_findByPersonAndTimeslot_2() {
     //what happens if one or both parameters are null?
 
@@ -199,7 +199,7 @@ public class AllocationNGTest {
 
   }
 
-  @Test
+  @Test(enabled = true)
   public void testQuery_findByPersonAndTimeslot_3() {
     //what happens if the entity does not exist
     Person testPerson = new Person(Integer.MAX_VALUE);
@@ -215,6 +215,32 @@ public class AllocationNGTest {
 
     assertNotNull(resultList);
     assertTrue(resultList.isEmpty());
+
+  }
+
+  @Test(enabled = true)
+  public void testQuery_findByEventAndJob() {
+    //prepare the database
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.flush();
+
+    Job tempJob = new Job("TEMP", testJob.getJobType());
+    entityManager.persist(tempJob);
+    entityManager.flush();
+
+    Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob);
+
+    TypedQuery<Allocation> query = entityManager.createNamedQuery("Allocation.findByEventAndJob", Allocation.class);
+    query.setParameter("event", testEvent);
+    query.setParameter("job", tempJob);
+    List<Allocation> resultList = query.getResultList();
+
+    assertNotNull(resultList);
+    assertEquals(resultList.size(), 1);
+
+    Allocation resultItem = resultList.get(0);
+    assertTrue(Objects.equals(resultItem, testItem));
 
   }
 }

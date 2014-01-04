@@ -22,11 +22,16 @@ import de.free_creations.dbEntities.Person;
 import java.awt.Color;
 import javax.swing.JLabel;
 import de.free_creations.editors.contest.AllocationTable.CellKey;
+import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
-import de.free_creations.nbPhonAPI.EventCollection;
 import de.free_creations.nbPhonAPI.Manager;
-import java.util.List;
+import java.awt.Image;
+import java.beans.BeanInfo;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Objects;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import org.openide.util.Exceptions;
 
 /**
@@ -42,6 +47,25 @@ public class AllocationTableCellPanel extends JLabel {
    * Indicates that the value of displayed by this panel has changed.
    */
   public static final String PROP_VALUE_CHANGED = "PROP_VALUE_CHANGED";
+
+  private final PropertyChangeListener nodeListener = new PropertyChangeListener() {
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      switch (evt.getPropertyName()) {
+        case (Event.PROP_SCHEDULED):
+        case (Person.PROP_GENDER):
+        case (Person.PROP_AGEGROUP):
+        case (Person.PROP_AVAILABILITY):
+        case (Person.PROP_GIVENNAME):
+        case (Person.PROP_SURNAME):
+        case (Person.PROP_CONTESTTYPE):
+        case (Person.PROP_JOBTYPE):
+          refresh();
+          fireValueChanged();
+      }
+    }
+  };
   /**
    * @Todo move color management to a central place
    */
@@ -81,17 +105,36 @@ public class AllocationTableCellPanel extends JLabel {
       return;
     }
     this.cellKey = cellKey;
-    Person person = findPerson(cellKey);
-    if(person != null){
-      personId = person.getPersonId();
-    }else{
-      personId = null;
+    Integer oldEventId = findEventId(oldKey);
+    Integer newEventId = findEventId(cellKey);
+    if (oldEventId != null) {
+      Event.removePropertyChangeListener(nodeListener, oldEventId);
+    }
+    if (newEventId != null) {
+      Event.addPropertyChangeListener(nodeListener, newEventId);
     }
 
+    Integer oldPersonId = personId;
+    Integer newPersonId = findPersonId(cellKey);
+
+    if (oldPersonId != null) {
+      Person.removePropertyChangeListener(nodeListener, oldPersonId);
+    }
+    if (newPersonId != null) {
+      Person.addPropertyChangeListener(nodeListener, newPersonId);
+    }
+    personId = newPersonId;
     refresh();
   }
 
-  private Person findPerson(CellKey cellKey) {
+  private Integer findEventId(CellKey cellKey) {
+    if (cellKey == null) {
+      return null;
+    }
+    return cellKey.eventId;
+  }
+
+  private Integer findPersonId(CellKey cellKey) {
     if (cellKey == null) {
       return null;
     }
@@ -103,21 +146,25 @@ public class AllocationTableCellPanel extends JLabel {
     if (jobId == null) {
       return null;
     }
-    EventCollection ee = Manager.getEventCollection();
     try {
-      Event event = ee.findEntity(eventId);
-      if (event != null) {
-        List<Allocation> aa = event.getAllocationList();
-        for (Allocation a : aa) {
-          Job job = a.getJob();
-          if (job != null) {
-            if (Objects.equals(job.getJobId(), jobId)) {
-              return a.getPerson();
-
-            }
-          }
-        }
+      Event event = Manager.getEventCollection().findEntity(eventId);
+      if (event == null) {
+        return null; //oops
       }
+      Job job = Manager.getJobCollection().findEntity(jobId);
+      if (job == null) {
+        return null; //oops
+      }
+      Allocation allocation = Manager.getAllocationCollection().findEntity(event, job);
+      if (allocation == null) {
+        return null; //that's OK.
+      }
+      Person person = allocation.getPerson();
+      if (person == null) {
+        return null; //oops
+      }
+      return person.getPersonId();
+
     } catch (DataBaseNotReadyException ex) {
     }
     return null;
@@ -128,15 +175,38 @@ public class AllocationTableCellPanel extends JLabel {
   }
 
   private void refresh() {
-    Person p = null;
-    try {
-      p= Manager.getPersonCollection().findEntity(personId);
-    } catch (DataBaseNotReadyException ex) {
+    PersonNode tempNode = new PersonNode(personId, Manager.getPersonCollection());
+    String htmlDisplayName = tempNode.getHtmlDisplayName();
+    if (htmlDisplayName != null) {
+      setText(htmlDisplayName);
+    } else {
+      setText(tempNode.getDisplayName());
     }
-    if(p!=null){
-      setText(p.getSurname());
-    }else{
-      setText("none");
+    Image image = tempNode.getIcon(BeanInfo.ICON_COLOR_16x16);
+    Icon icon = null;
+    if (image != null) {
+      icon = new ImageIcon(image);
+    }
+    setBackground(backgroundColor());
+    setIcon(icon);
+  }
+
+  private Color backgroundColor() {
+    if (cellKey == null) {
+      return disabledColor;
+    }
+    try {
+      Event event = Manager.getEventCollection().findEntity(cellKey.eventId);
+      if (event == null) {
+        return disabledColor;
+      }
+      if (event.isScheduled()) {
+        return Color.WHITE;
+      } else {
+        return disabledColor;
+      }
+    } catch (DataBaseNotReadyException ex) {
+      return disabledColor;
     }
 
   }
@@ -146,8 +216,16 @@ public class AllocationTableCellPanel extends JLabel {
       setBackground(selectedBackgroundColor);
       setForeground(selectedForegroundColor);
     } else {
-      setBackground(Color.WHITE);
+      setBackground(backgroundColor());
       setForeground(Color.BLACK);
     }
+  }
+
+  /**
+   * inform the surrounding table that something has changed and the panel needs
+   * to be repainted.
+   */
+  private void fireValueChanged() {
+    firePropertyChange(PROP_VALUE_CHANGED, null, null);
   }
 }

@@ -16,6 +16,7 @@
 package de.free_creations.editors.person;
 
 import de.free_creations.dbEntities.ContestType;
+import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
@@ -54,7 +55,7 @@ import org.openide.windows.CloneableTopComponent;
 })
 @SuppressWarnings({"rawtypes", "unchecked"})
 public final class PersonTopComponent extends CloneableTopComponent {
-  
+
   private Integer currentKey = null;
   private final PersonCollection personCollection = Manager.getPersonCollection();
   private final PropertyChangeListener listener = new PropertyChangeListener() {
@@ -64,15 +65,15 @@ public final class PersonTopComponent extends CloneableTopComponent {
       if (p != null) {
         refreshView(p);
       }
-      
+
     }
   };
-  
+
   public PersonTopComponent() {
     initComponents();
     setName(Bundle.CTL_PersonTopComponent());
   }
-  
+
   PersonTopComponent(Integer key) {
     this();
     viewPersonRecord(key);
@@ -460,7 +461,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private void edContestTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edContestTypeActionPerformed
     Person p = thisPerson();
     if (p != null) {
-      ContestType oldCt = p.getContestType();      
+      ContestType oldCt = p.getContestType();
       ContestType newCt = edContestType.getSelectedContestType();
       if (!Objects.equals(oldCt, newCt)) {
         p.setContestType(newCt);
@@ -511,31 +512,31 @@ public final class PersonTopComponent extends CloneableTopComponent {
   public void componentOpened() {
     // TODO add custom code on component opening
   }
-  
+
   @Override
   public void componentClosed() {
     // TODO add custom code on component closing
   }
-  
+
   void writeProperties(java.util.Properties p) {
     // better to version settings since initial version as advocated at
     // http://wiki.apidesign.org/wiki/PropertyFiles
     p.setProperty("version", "1.0");
     // TODO store your settings
   }
-  
+
   void readProperties(java.util.Properties p) {
     String version = p.getProperty("version");
     // TODO read your settings according to their version
   }
-  
+
   public void viewPersonRecord(Integer newKey) {
     if (currentKey != newKey) {
-      
+
       Person.removePropertyChangeListener(listener, currentKey);
       currentKey = newKey;
       Person person = thisPerson();
-      
+
       if (person != null) {
         Person.addPropertyChangeListener(listener, newKey);
         refreshView(person);
@@ -544,7 +545,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       assignmentTable.setPersonId(newKey);
     }
   }
-  
+
   private Person thisPerson() {
     Person p = null;
     try {
@@ -554,8 +555,11 @@ public final class PersonTopComponent extends CloneableTopComponent {
     }
     return p;
   }
-  
+
   private void refreshView(Person person) {
+    if (person == null) {
+      return;
+    }
     setDisplayName(String.format("%s, %s", person.getSurname(), person.getGivenname()));
     PersonId.setText(noNull(person.getPersonId()));
     edPersontype.setSelectedItem(noNull(person.getAgegroup()));
@@ -574,20 +578,32 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edPersontype.setSelectedItem(personType(person));
     //   teamPanel.setPersonId(person.getPersonid());
   }
-  
-  private String personType(Person person){
-    if("LEHRER".equals(person.getJobType().getJobTypeId())){
+
+  private String personType(Person person) {
+    if (person == null) {
+      return null;
+    }
+    JobType jobType = person.getJobType();
+    String jobTypeId = (jobType == null)?null:jobType.getJobTypeId();
+    if ("LEHRER".equals(jobTypeId)) {
       return "Lehrer";
     }
     String agegroup = person.getAgegroup();
-    switch(agegroup){
-      case "ERWACHSEN": return "Erwachsen";
-      case "JUGENDLICH": return "Jugendlich";
-      case "KIND": return "Kind";
-      default : return "Erwachsen";
+    if(agegroup==null){
+      return null;
+    }
+    switch (agegroup) {
+      case "ERWACHSEN":
+        return "Erwachsen";
+      case "JUGENDLICH":
+        return "Jugendlich";
+      case "KIND":
+        return "Kind";
+      default:
+        return "Erwachsen";
     }
   }
-  
+
   private Integer findTeamleaderId(Person person) {
 //    if (person == null) {
 //      return null;
@@ -598,9 +614,9 @@ public final class PersonTopComponent extends CloneableTopComponent {
 //    }
 //    return p.getPersonid();
     return null;
-    
+
   }
-  
+
   private String noNull(Integer i) {
     if (i == null) {
       return "";
@@ -608,7 +624,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       return i.toString();
     }
   }
-  
+
   private String noNull(String s) {
     if (s == null) {
       return "";

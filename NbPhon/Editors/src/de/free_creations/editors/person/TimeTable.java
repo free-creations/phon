@@ -119,7 +119,7 @@ public class TimeTable extends JTable {
 
   /**
    * Avoid selection on the left-most column (the row-header column).
-   * 
+   *
    * THIS DEADLOCKS WHEN THE USER TABS INTO TABLE!!!!
    *
    * @param row
@@ -130,7 +130,6 @@ public class TimeTable extends JTable {
 //  public boolean isCellSelected(int row, int column) {
 //    return (column > 0) ? super.isCellSelected(row, column) : false;
 //  }
-
   /**
    * Cells that correspond to a time-slot that cannot be found in the "ZEIT"
    * table are overlaid with a blank label.
@@ -142,6 +141,9 @@ public class TimeTable extends JTable {
    */
   @Override
   public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+    if (java.beans.Beans.isDesignTime()) {
+      return super.prepareRenderer(renderer, row, column);
+    }
     if (isCellVisible(row, column)) {
       return super.prepareRenderer(renderer, row, column);
     } else {
@@ -201,21 +203,21 @@ public class TimeTable extends JTable {
   private TableModel makeDesignTimeModel() {
     return (new javax.swing.table.DefaultTableModel(
             new Object[][]{
-      {"Vormittag", true, null, null, null, true, null, null},
-      {"Nachmittag", null, true, null, true, null, null, null},
-      {"Abend", null, null, true, false, null, null, null}},
+              {"Vormittag", true, null, null, null, true, null, null},
+              {"Nachmittag", null, true, null, true, null, null, null},
+              {"Abend", null, null, true, false, null, null, null}},
             new String[]{
-      ".Design.", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
-    }) {
-      @Override
-      public Class<?> getColumnClass(int columnIndex) {
-        if (columnIndex > 0) {
-          return Boolean.class;
-        } else {
-          return String.class;
-        }
-      }
-    });
+              ".Design.", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+            }) {
+              @Override
+              public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex > 0) {
+                  return Boolean.class;
+                } else {
+                  return String.class;
+                }
+              }
+            });
   }
 
   /**
@@ -230,14 +232,23 @@ public class TimeTable extends JTable {
     private final int rowCount; // the number of data rows (header row not included)
 
     public TimeTableModel(Integer personId) {
-      this.personId = personId;
-      TimeSlotCollection tt = Manager.getTimeSlotCollection();
 
-      dayNames = tt.dayNames();
-      columnCount = dayNames.length;
+      if (java.beans.Beans.isDesignTime()) {
+        this.personId = null;
+        dayNames = new String[]{"Montag", "Dienstag"};
+        columnCount = dayNames.length;
+        timeOfDayNames = new String[]{"Vormittag", "Nachmittag"};
+        rowCount = timeOfDayNames.length;
+      } else {
+        this.personId = personId;
+        TimeSlotCollection tt = Manager.getTimeSlotCollection();
 
-      timeOfDayNames = tt.timeOfDayNames();
-      rowCount = timeOfDayNames.length;
+        dayNames = tt.dayNames();
+        columnCount = dayNames.length;
+
+        timeOfDayNames = tt.timeOfDayNames();
+        rowCount = timeOfDayNames.length;
+      }
     }
 
     @Override

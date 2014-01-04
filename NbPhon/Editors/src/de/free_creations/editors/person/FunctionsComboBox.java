@@ -81,9 +81,9 @@ public class FunctionsComboBox extends JComboBox<Job> {
     public FunctionsComboBoxModel() {
       super();
       if (java.beans.Beans.isDesignTime()) {
-        Job f0 = new Job("LEHRER");
-        addElement(f0);
-        FunctionsComboBoxModel.this.setSelectedItem(f0);
+//        Job f0 = new Job("LEHRER");
+//        addElement(f0);
+//        FunctionsComboBoxModel.this.setSelectedItem(f0);
 
       } else {
         List<Job> ff = Manager.getJobCollection().getAll();
