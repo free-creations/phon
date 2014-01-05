@@ -15,28 +15,36 @@
  */
 package de.free_creations.editors.contest;
 
-import de.free_creations.dbEntities.Allocation;
+import de.free_creations.actions.contest.AllocatePersonForEvent;
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.TimeSlot;
+import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.JobCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComponent;
+import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.TransferHandler;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -47,7 +55,32 @@ public class AllocationTable extends JTable {
   private static final Color disabledColor = new Color(170, 170, 170);
   private static final Color headerColorLight = new Color(226, 230, 233);
   private static final Color headerColorDark = new Color(199, 207, 214);
-  //private final AllocationPersonsComboBox comboBox;
+
+  private final TransferHandler transferHandler = new TransferHandler() {
+    @Override
+    public boolean canImport(TransferHandler.TransferSupport support) {
+
+      return (support.isDataFlavorSupported(PersonNode.PERSON_NODE_FLAVOR));
+
+    }
+
+    @Override
+    public boolean importData(TransferHandler.TransferSupport support) {
+      try {
+        Integer personId = (Integer) support.getTransferable().getTransferData(PersonNode.PERSON_NODE_FLAVOR);
+        int col = getSelectedColumn();
+        int row = getSelectedRow();
+        if (col > 0) {
+          TableModel model = getModel();
+          model.setValueAt(personId, row, col);
+          return true;
+        }
+        return false;
+      } catch (ClassCastException | UnsupportedFlavorException | IOException ex) {
+        return false;
+      }
+    }
+  };
 
   /**
    * The cell key is used as the "value" of a cell.
@@ -170,10 +203,14 @@ public class AllocationTable extends JTable {
 
   private final AllocationTableCellRenderer renderer;
 
-  private class AllocationTableCellEditor extends DefaultCellEditor {
+  private class AllocationTableCellEditor extends AbstractCellEditor
+          implements TableCellEditor, ActionListener {
 
-    public AllocationTableCellEditor(AllocationPersonsComboBox comboBox) {
-      super(comboBox);
+    private final AllocationPersonsComboBox comboBox;
+
+    private AllocationTableCellEditor() {
+      this.comboBox = new AllocationPersonsComboBox();
+      this.comboBox.addActionListener(this);
     }
 
     @Override
@@ -182,23 +219,28 @@ public class AllocationTable extends JTable {
             boolean isSelected,
             int row,
             int column) {
-      return null;
-//      Component editor = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-//      if (editor instanceof AllocationPersonsComboBox) {
-//        AllocationPersonsComboBox cb = (AllocationPersonsComboBox) editor;
-//        if (value instanceof Allocation) {
-//          Allocation t = (Allocation) value;
-//          cb.setSelectedPerson(t.getPerson());
-//        } else {
-//          cb.setSelectedPerson(null);
-//        }
-//      }
-//      return editor;
+      if (value instanceof CellKey) {
+        CellKey ck = (CellKey) value;
+        Integer personId = AllocationTableCellPanel.findPersonId(ck);
+        comboBox.setSelectedPersonId(personId);
+      } else {
+        comboBox.setSelectedPerson(null);
+      }
+      return comboBox;
+    }
 
+    @Override
+    public Object getCellEditorValue() {
+      return comboBox.getSelectedPersonId();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      stopCellEditing();
     }
   };
 
-  //private final AllocationTableCellEditor tableCellEditor;
+//private final AllocationTableCellEditor tableCellEditor;
   /**
    * The row-type indicates whether a row displays a time-of-day or a kind of
    * job.
@@ -219,10 +261,10 @@ public class AllocationTable extends JTable {
     } else {
       AllocationTableModel allocationTableModel = new AllocationTableModel(null);
       setModel(allocationTableModel);
-      AllocationPersonsComboBox comboBox = new AllocationPersonsComboBox();
-      AllocationTableCellEditor tableCellEditor = new AllocationTableCellEditor(comboBox);
+      AllocationTableCellEditor tableCellEditor = new AllocationTableCellEditor();
       setDefaultEditor(Object.class, tableCellEditor);
       _renderer = new AllocationTableCellRenderer();
+      setTransferHandler(transferHandler);
     }
     renderer = _renderer;
     rowHeight = 24 + 6;
@@ -258,6 +300,20 @@ public class AllocationTable extends JTable {
   }
   private final HashMap<Integer, AllocationTableCellPanel> cellCache = new HashMap<>();
   private static final int maxRows = 10007;
+
+  @Override
+  public JPopupMenu getComponentPopupMenu() {
+    int col = columnAtPoint(getMousePosition());
+    int row = rowAtPoint(getMousePosition());
+    if (col > 1) {
+      // note: this will create (invalid) panels also for dayOfTimeRow.
+      // Those panels are initialised to personId = null, therefore they do not harm.
+      AllocationTableCellPanel allocationTableCellPanel = getAllocationTableCellPanel(this, row, col);
+      return allocationTableCellPanel.getComponentPopupMenu();
+    } else {
+      return null;
+    }
+  }
 
   void setContestId(Integer key) {
     TableModel oldModel = getModel();
@@ -312,6 +368,7 @@ public class AllocationTable extends JTable {
     setColumnSelectionAllowed(true);
     getColumnModel().getColumn(0).setPreferredWidth(100);
     getColumnModel().getColumn(1).setPreferredWidth(100);
+
   }
 
   /**
@@ -323,13 +380,13 @@ public class AllocationTable extends JTable {
     private final int timeOfDayCount;
     private final String[] dayNames;
     private final int dayCount;
-    private final Integer ContestId;
+    private final Integer contestId;
     private final String[] jobNames;
     private final String[] jobKeys;
     private final int jobCount;
 
-    AllocationTableModel(Integer juryId) {
-      this.ContestId = juryId;
+    AllocationTableModel(Integer contestId) {
+      this.contestId = contestId;
       TimeSlotCollection tt = Manager.getTimeSlotCollection();
       dayNames = tt.dayNames();
       dayCount = dayNames.length;
@@ -343,7 +400,7 @@ public class AllocationTable extends JTable {
     }
 
     public Integer getContestId() {
-      return ContestId;
+      return contestId;
     }
 
     @Override
@@ -373,12 +430,7 @@ public class AllocationTable extends JTable {
           }
         default:
           if (getRowType(rowIndex) == RowType.jobNameRow) {
-            CellKey cellKey = getCellKey(rowIndex, columnIndex);
-            if (cellKey == null) {
-              return "none";
-            } else {
-              return cellKey;
-            }
+            return getCellKey(rowIndex, columnIndex);
           } else {
             return "";
           }
@@ -430,7 +482,7 @@ public class AllocationTable extends JTable {
     }
 
     private Event getEventFor(int row, int col) {
-      if (ContestId == null) {
+      if (contestId == null) {
         return null;
       }
       int timeOfDay = timeOfDayIndex(row);
@@ -440,7 +492,7 @@ public class AllocationTable extends JTable {
         if (t == null) {
           return null;
         }
-        Contest c = Manager.getContestCollection().findEntity(ContestId);
+        Contest c = Manager.getContestCollection().findEntity(contestId);
         if (c == null) {
           return null;
         }
@@ -477,13 +529,16 @@ public class AllocationTable extends JTable {
 
     @Override
     public boolean isCellEditable(int row, int column) {
+      if (contestId == null) {
+        return false;
+      }
       if (column < 2) {
         return false;
       }
       if (getRowType(row) == RowType.dayOfTimeRow) {
         return false;
       }
-      return true;
+      return (getCellKey(row, column) != null);
     }
 
     private void stopListening() {
@@ -495,11 +550,19 @@ public class AllocationTable extends JTable {
     }
 
     @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-      System.out.println(String.format("setValueAt(%s, %s, %s)",
-              aValue,
-              rowIndex,
-              columnIndex));
+    public void setValueAt(Object aValue, int row, int col) {
+      CellKey cellKey = getCellKey(row, col);
+      if (cellKey != null) {
+        Integer newPersonId = (Integer) aValue;
+        AllocatePersonForEvent action = new AllocatePersonForEvent(cellKey.eventId, newPersonId, cellKey.jobId);
+        try {
+          action.apply(0);
+          //fireTableDataChanged();
+        } catch (DataBaseNotReadyException ex) {
+          Exceptions.printStackTrace(ex);
+        }
+
+      }
     }
   }
 }

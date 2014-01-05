@@ -134,6 +134,11 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
     edHerrFrau.setEditable(true);
     edHerrFrau.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hr.", "Fr." }));
+    edHerrFrau.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        edHerrFrauActionPerformed(evt);
+      }
+    });
 
     edNachname.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.edNachname.text")); // NOI18N
     edNachname.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -253,7 +258,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel11))
         .addGap(0, 0, 0)
@@ -473,6 +478,18 @@ public final class PersonTopComponent extends CloneableTopComponent {
     // TODO add your handling code here:
   }//GEN-LAST:event_edPersontypeActionPerformed
 
+  private void edHerrFrauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edHerrFrauActionPerformed
+    Person p = thisPerson();
+    if (p != null) {
+      String oldG = p.getGender();
+      String newG = (String)edHerrFrau.getSelectedItem();
+      if (!Objects.equals(oldG, newG)) {
+        p.setGender(newG);
+      }
+    }
+    
+  }//GEN-LAST:event_edHerrFrauActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField PersonId;
   private de.free_creations.editors.person.PersonAssignmentTable assignmentTable;
@@ -603,6 +620,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
         return "Erwachsen";
     }
   }
+
 
   private Integer findTeamleaderId(Person person) {
 //    if (person == null) {

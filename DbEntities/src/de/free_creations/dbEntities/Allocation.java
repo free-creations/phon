@@ -117,10 +117,12 @@ public class Allocation implements Serializable, DbEntity {
   }
 
   public void remove(EntityManager entityManager) {
-    setPerson(null);
-    setEvent(null);
-    setJob(null);
     entityManager.remove(this);
+    entityManager.flush();
+  //  setPerson(null);
+  //  setEvent(null);
+  //  setJob(null);
+
   }
 
   public Integer getAllocationId() {

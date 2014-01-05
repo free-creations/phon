@@ -17,8 +17,6 @@ package de.free_creations.actions.contest;
 
 import de.free_creations.actions.CheckedAction;
 import static de.free_creations.actions.CheckedAction.Severity.*;
-import de.free_creations.dbEntities.Contest;
-import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Location;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;

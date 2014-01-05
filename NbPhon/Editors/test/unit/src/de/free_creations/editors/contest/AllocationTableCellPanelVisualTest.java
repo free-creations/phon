@@ -123,7 +123,7 @@ public class AllocationTableCellPanelVisualTest extends javax.swing.JFrame {
         .addComponent(btnSetCellKey_1_1)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(btnSelected)
-        .addGap(14, 14, 14))
+        .addGap(74, 74, 74))
     );
 
     pack();

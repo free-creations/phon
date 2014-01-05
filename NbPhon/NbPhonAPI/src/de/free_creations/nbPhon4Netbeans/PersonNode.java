@@ -41,7 +41,7 @@ import java.awt.image.BufferedImage;
 /**
  *
  * @see http://netbeans.dzone.com/nb-how-to-drag-drop-with-nodes-apifor a DnD
- example.
+ * example.
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class PersonNode extends AbstractNode implements CommittableNode {
@@ -117,6 +117,18 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     fireIconChange();
   }
 
+  @Override
+  public void destroy() {
+    if (key != nullKey) {
+      Person.removePropertyChangeListener(listener, keyToPersonId(key));
+    }
+    try {
+      super.destroy();
+    } catch (IOException ex) {
+      Exceptions.printStackTrace(ex);
+    }
+  }
+
   public static int personIdToKey(Integer personId) {
     if (personId == null) {
       return nullKey;
@@ -164,9 +176,9 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     @Override
     public void actionPerformed(ActionEvent e) {
       try {
-        PersonEditorProvider provider =
-                Lookup.getDefault().lookup(
-                PersonEditorProvider.class);
+        PersonEditorProvider provider
+                = Lookup.getDefault().lookup(
+                        PersonEditorProvider.class);
         if (provider != null) {
           provider.getEditor(false, key);
         } else {
@@ -181,9 +193,9 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     @Override
     public void actionPerformed(ActionEvent e) {
       try {
-        PersonEditorProvider provider =
-                Lookup.getDefault().lookup(
-                PersonEditorProvider.class);
+        PersonEditorProvider provider
+                = Lookup.getDefault().lookup(
+                        PersonEditorProvider.class);
         if (provider != null) {
           provider.getEditor(true, key);
         } else {
@@ -280,16 +292,13 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     }
     BufferedImage result = getBaseIcon();
     if (!isAvailable()) {
-     result = iconManager().getDisabledImage(result);
+      result = iconManager().getDisabledImage(result);
     }
     if (pendingChanges) {
       result = iconManager().getStaredImage(result);
     }
     return result;
   }
-
-
-
 
   /**
    * @return true if the person is available for at least one time slot;
@@ -314,10 +323,11 @@ public class PersonNode extends AbstractNode implements CommittableNode {
       if (p != null) {
         BufferedImage personsIcon = getPersonsIcon(p);
         ContestType contestType = p.getContestType();
-        if(contestType != null)
-        return iconManager().underLayContestTypeImage(personsIcon, contestType.getIcon());
-        else
+        if (contestType != null) {
+          return iconManager().underLayContestTypeImage(personsIcon, contestType.getIcon());
+        } else {
           return personsIcon;
+        }
       }
     } catch (DataBaseNotReadyException ex) {
       Exceptions.printStackTrace(ex);
@@ -349,8 +359,6 @@ public class PersonNode extends AbstractNode implements CommittableNode {
       }
     }
   }
-
-  
 
   /**
    * This function is called by the Committer class every time this Record is

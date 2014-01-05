@@ -32,7 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import org.openide.util.Exceptions;
+import javax.swing.JPopupMenu;
 
 /**
  * Displays one single cell in the Allocation table.
@@ -54,6 +54,8 @@ public class AllocationTableCellPanel extends JLabel {
     public void propertyChange(PropertyChangeEvent evt) {
       switch (evt.getPropertyName()) {
         case (Event.PROP_SCHEDULED):
+        case (Event.PROP_ALLOCATIONADDED):
+        case (Event.PROP_ALLOCATIONREMOVED):
         case (Person.PROP_GENDER):
         case (Person.PROP_AGEGROUP):
         case (Person.PROP_AVAILABILITY):
@@ -101,9 +103,7 @@ public class AllocationTableCellPanel extends JLabel {
 
   public void setKey(CellKey cellKey) {
     CellKey oldKey = this.cellKey;
-    if (Objects.equals(oldKey, cellKey)) {
-      return;
-    }
+
     this.cellKey = cellKey;
     Integer oldEventId = findEventId(oldKey);
     Integer newEventId = findEventId(cellKey);
@@ -134,7 +134,17 @@ public class AllocationTableCellPanel extends JLabel {
     return cellKey.eventId;
   }
 
-  private Integer findPersonId(CellKey cellKey) {
+  /**
+   * Determine which person is allocated to a given job for a given event. The
+   * job and the event are given by the cell key.
+   *
+   * Note this procedure is also used by the AllocationTableCellEditor (defined
+   * in AllocationTable) therfore it is public static. Sorry for the hack.
+   *
+   * @param cellKey
+   * @return
+   */
+  public static Integer findPersonId(CellKey cellKey) {
     if (cellKey == null) {
       return null;
     }
@@ -189,6 +199,13 @@ public class AllocationTableCellPanel extends JLabel {
     }
     setBackground(backgroundColor());
     setIcon(icon);
+
+    JPopupMenu popupMenu = null;
+    if (personId != null) {
+      popupMenu = tempNode.getContextMenu();
+    }
+    this.setComponentPopupMenu(popupMenu);
+    tempNode.destroy();
   }
 
   private Color backgroundColor() {

@@ -148,20 +148,19 @@ public class AllocationNGTest {
     assertNotNull(jAllocationList);
     assertTrue(jAllocationList.contains(testItem));
 
-    testItem.remove(entityManager);
-
-    pAllocationList = testPerson.getAllocationList();
-    assertFalse(pAllocationList.contains(testItem));
-
-    eAllocationList = testEvent.getAllocationList();
-    assertFalse(eAllocationList.contains(testItem));
-
-    jAllocationList = testJob.getAllocationList();
-    assertFalse(jAllocationList.contains(testItem));
-
-    Allocation find = entityManager.find(Allocation.class, allocationId);
-    assertNull(find);
-
+//    testItem.remove(entityManager);
+//
+//    pAllocationList = testPerson.getAllocationList();
+//    assertFalse(pAllocationList.contains(testItem));
+//
+//    eAllocationList = testEvent.getAllocationList();
+//    assertFalse(eAllocationList.contains(testItem));
+//
+//    jAllocationList = testJob.getAllocationList();
+//    assertFalse(jAllocationList.contains(testItem));
+//
+//    Allocation find = entityManager.find(Allocation.class, allocationId);
+//    assertNull(find);
   }
 
   @Test(enabled = true)
@@ -242,5 +241,188 @@ public class AllocationNGTest {
     Allocation resultItem = resultList.get(0);
     assertTrue(Objects.equals(resultItem, testItem));
 
+  }
+
+  /**
+   * Test of newAllocation method, of class Allocation.
+   */
+  @Test
+  public void testNewAllocation() {
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.flush();
+
+    Job tempJob = new Job("TEMP", testJob.getJobType());
+    entityManager.persist(tempJob);
+    entityManager.flush();
+
+    Allocation newItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob);
+    assertNotNull(newItem);
+    assertEquals(testPerson, newItem.getPerson());
+    assertEquals(testEvent, newItem.getEvent());
+    assertEquals(tempJob, newItem.getJob());
+
+  }
+
+  /**
+   * Test of remove method, of class Allocation.
+   */
+  @Test
+  public void testRemove() {
+    Person testPerson = testAllocation.getPerson();
+    testAllocation.remove(entityManager);
+
+
+    Allocation find = entityManager.find(Allocation.class, testAllocation.getAllocationId());
+    assertNull(find);
+
+    List<Allocation> pAllocationList = testPerson.getAllocationList();
+    assertFalse(pAllocationList.contains(testAllocation));
+
+    List<Allocation> eAllocationList = testEvent.getAllocationList();
+    assertFalse(eAllocationList.contains(testAllocation));
+
+    List<Allocation> jAllocationList = testJob.getAllocationList();
+    assertFalse(jAllocationList.contains(testAllocation));
+  }
+
+  /**
+   * Test of getAllocationId method, of class Allocation.
+   */
+  @Test
+  public void testGetAllocationId() {
+  }
+
+  /**
+   * Test of getLastchange method, of class Allocation.
+   */
+  @Test
+  public void testGetLastchange() {
+  }
+
+  /**
+   * Test of setLastchange method, of class Allocation.
+   */
+  @Test
+  public void testSetLastchange() {
+  }
+
+  /**
+   * Test of getPlanner method, of class Allocation.
+   */
+  @Test
+  public void testGetPlanner() {
+  }
+
+  /**
+   * Test of setPlanner method, of class Allocation.
+   */
+  @Test
+  public void testSetPlanner() {
+  }
+
+  /**
+   * Test of getNote method, of class Allocation.
+   */
+  @Test
+  public void testGetNote() {
+  }
+
+  /**
+   * Test of setNote method, of class Allocation.
+   */
+  @Test
+  public void testSetNote() {
+  }
+
+  /**
+   * Test of getPerson method, of class Allocation.
+   */
+  @Test
+  public void testGetPerson() {
+  }
+
+  /**
+   * Test of getJob method, of class Allocation.
+   */
+  @Test
+  public void testGetJob() {
+  }
+
+  /**
+   * Test of setJob method, of class Allocation.
+   */
+  @Test
+  public void testSetJob() {
+  }
+
+  /**
+   * Test of setPerson method, of class Allocation.
+   */
+  @Test
+  public void testSetPerson() {
+  }
+
+  /**
+   * Test of setEvent method, of class Allocation.
+   */
+  @Test
+  public void testSetEvent() {
+  }
+
+  /**
+   * Test of getEvent method, of class Allocation.
+   */
+  @Test
+  public void testGetEvent() {
+  }
+
+  /**
+   * Test of hashCode method, of class Allocation.
+   */
+  @Test
+  public void testHashCode() {
+  }
+
+  /**
+   * Test of equals method, of class Allocation.
+   */
+  @Test
+  public void testEquals() {
+  }
+
+  /**
+   * Test of toString method, of class Allocation.
+   */
+  @Test
+  public void testToString() {
+  }
+
+  /**
+   * Test of addPropertyChangeListener method, of class Allocation.
+   */
+  @Test
+  public void testAddPropertyChangeListener_PropertyChangeListener() {
+  }
+
+  /**
+   * Test of addPropertyChangeListener method, of class Allocation.
+   */
+  @Test
+  public void testAddPropertyChangeListener_PropertyChangeListener_Integer() {
+  }
+
+  /**
+   * Test of removePropertyChangeListener method, of class Allocation.
+   */
+  @Test
+  public void testRemovePropertyChangeListener_PropertyChangeListener() {
+  }
+
+  /**
+   * Test of removePropertyChangeListener method, of class Allocation.
+   */
+  @Test
+  public void testRemovePropertyChangeListener_PropertyChangeListener_Integer() {
   }
 }

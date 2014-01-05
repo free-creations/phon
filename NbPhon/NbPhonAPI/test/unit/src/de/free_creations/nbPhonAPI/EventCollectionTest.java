@@ -21,8 +21,10 @@ import de.free_creations.dbEntities.Location;
 import de.free_creations.dbEntities.TimeSlot;
 import java.util.List;
 import java.util.Objects;
+import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
@@ -31,6 +33,16 @@ import static org.junit.Assert.*;
 public class EventCollectionTest {
 
   public EventCollectionTest() {
+  }
+
+  @Before
+  public void setUp() throws Exception {
+    assertTrue("did you start the database-server?", Manager.isOpen());
+  }
+
+  @After
+  public void tearDown() {
+    Manager.close(false);
   }
 
   /**

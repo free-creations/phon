@@ -77,7 +77,7 @@ public class AllocateContestAtTimeslot implements CheckedAction {
       throw new RuntimeException(String.format("Invalid Location Id %s.", locationId));
     }
     
-    // first de-locate all events that were planed at the given time
+    // first de-locate all events that were planed at the given time in this loacation
     List<Event> eventListL = location.getEventList();
     ArrayList<Event> eventListSnapShot = new ArrayList<>(eventListL);
 
