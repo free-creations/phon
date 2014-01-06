@@ -163,6 +163,15 @@ public class TimeTable extends JTable {
     }
   };
 
+  private TimeSlot getTimeSlotFor(int row, int column) {
+    TableModel model = getModel();
+    if (model instanceof TimeTableModel) {
+      return ((TimeTableModel) model).getTimeSlotFor(row, column);
+    } else {
+      return null;
+    }
+  }
+
   private class TimeTableCellEditor extends DefaultCellEditor {
 
     private final TimeTableContestComboBox timeTableContestComboBox;
@@ -258,17 +267,22 @@ public class TimeTable extends JTable {
 
   /**
    * Provides the panels to be displayed in a cell (in browse mode).
-   * 
+   *
    * Each panel for a given row-col is cached.
+   *
    * @param table
    * @param row
    * @param column
-   * @return the cached panel (or construct a new new one if none can be found in cache)
+   * @return the cached panel (or construct a new new one if none can be found
+   * in cache)
    */
   private TimeTableCellPanel getTimeTableCellPanel(JTable table, int row, int column) {
     int hash = column * maxRows + row;
     if (!cellCache.containsKey(hash)) {
+      TimeSlot timeSlot = getTimeSlotFor(row, column);
+      Integer timeSlotId = (timeSlot == null)? null:timeSlot.getTimeSlotId();
       TimeTableCellPanel timeTableCellPanel = new TimeTableCellPanel(
+              timeSlotId,
               new Color(170, 170, 170),
               table.getSelectionBackground(),
               table.getSelectionForeground());

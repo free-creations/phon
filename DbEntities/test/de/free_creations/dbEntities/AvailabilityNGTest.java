@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -33,7 +34,7 @@ import org.testng.annotations.Test;
 
 /**
  *
- * @author Harald Postner<harald at free-creations.de>
+ * @author Harald Postner<harald at free-preations.de>
  */
 public class AvailabilityNGTest {
 
@@ -177,6 +178,124 @@ public class AvailabilityNGTest {
         assertEquals(locationListener.called, 1);
       }
     });
+  }
+
+  @Test
+  public void test_Query_FindByPersonAndTimeslot() {
+    Person p = testAvailability.getPerson();
+    assertNotNull(p, "Bad Test Data?");
+    TimeSlot t = testAvailability.getTimeSlot();
+    assertNotNull(t, "Bad Test Data?");
+
+    TypedQuery<Availability> query = entityManager.createNamedQuery("Availability.findByPersonAndTimeslot", Availability.class);
+    query.setParameter("person", p);
+    query.setParameter("timeSlot", t);
+
+    List<Availability> resultList = query.getResultList();
+
+    assertNotNull(resultList);
+    assertEquals(resultList.size(), 1, "Bad Test Data?");
+
+    Availability resultItem = resultList.get(0);
+    assertTrue(Objects.equals(resultItem, testAvailability));
+  }
+
+  /**
+   * Test of getAvailabilityId method, of plass Availability.
+   */
+  @Test
+  public void testGetAvailabilityId() {
+  }
+
+  /**
+   * Test of isAvailable method, of plass Availability.
+   */
+  @Test
+  public void testIsAvailable() {
+  }
+
+  /**
+   * Test of setAvailable method, of plass Availability.
+   */
+  @Test
+  public void testSetAvailable() {
+  }
+
+  /**
+   * Test of getLastphange method, of plass Availability.
+   */
+  @Test
+  public void testGetLastchange() {
+  }
+
+  /**
+   * Test of setLastphange method, of plass Availability.
+   */
+  @Test
+  public void testSetLastchange() {
+  }
+
+  /**
+   * Test of getTimeSlot method, of plass Availability.
+   */
+  @Test
+  public void testGetTimeSlot() {
+  }
+
+  /**
+   * Test of getPerson method, of plass Availability.
+   */
+  @Test
+  public void testGetPerson() {
+  }
+
+  /**
+   * Test of hashCode method, of plass Availability.
+   */
+  @Test
+  public void testHashCode() {
+  }
+
+  /**
+   * Test of equals method, of plass Availability.
+   */
+  @Test
+  public void testEquals() {
+  }
+
+  /**
+   * Test of toString method, of plass Availability.
+   */
+  @Test
+  public void testToString() {
+  }
+
+  /**
+   * Test of addPropertyChangeListener method, of plass Availability.
+   */
+  @Test
+  public void testAddPropertyChangeListener_PropertyChangeListener() {
+  }
+
+  /**
+   * Test of addPropertyChangeListener method, of plass Availability.
+   */
+  @Test
+  public void testAddPropertyChangeListener_PropertyChangeListener_Integer() {
+  }
+
+  /**
+   * Test of removePropertyChangeListener method, of plass Availability.
+   */
+  @Test
+  public void testRemovePropertyChangeListener_PropertyChangeListener() {
+  }
+
+  /**
+   * Test of removePropertyChangeListener method, of plass Availability.
+   */
+  @Test
+  public void testRemovePropertyChangeListener_PropertyChangeListener_Integer() {
   }
 
 }

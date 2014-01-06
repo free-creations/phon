@@ -42,6 +42,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "AVAILABILITY")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "Availability.findByPersonAndTimeslot", query
+          = "SELECT a "
+          + "FROM Availability a "
+          + "WHERE a.person = :person "
+          + "AND a.timeSlot = :timeSlot"),
   @NamedQuery(name = "Availability.findAll", query = "SELECT a FROM Availability a"),
   @NamedQuery(name = "Availability.findByAvailabilityId", query = "SELECT a FROM Availability a WHERE a.availabilityId = :availabilityId"),
   @NamedQuery(name = "Availability.findByAvailable", query = "SELECT a FROM Availability a WHERE a.available = :available"),

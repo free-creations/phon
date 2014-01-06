@@ -16,6 +16,7 @@
 package de.free_creations.editors.contest;
 
 import de.free_creations.dbEntities.Allocation;
+import de.free_creations.dbEntities.Availability;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Person;
@@ -71,11 +72,27 @@ public class AllocationTableCellPanel extends JLabel {
   /**
    * @Todo move color management to a central place
    */
-  private Color disabledColor;
+
   private Color selectedBackgroundColor;
   private Color selectedForegroundColor;
   private CellKey cellKey = null;
   private Integer personId = null;
+
+  private static class ColorPair {
+
+    public final Color foreground;
+    public final Color background;
+
+    public ColorPair(Color foreground, Color background) {
+      this.foreground = foreground;
+      this.background = background;
+    }
+  }
+
+  private final ColorPair defaultColors;
+  private final ColorPair disabledColors;
+  private final ColorPair errorColors;
+  private final ColorPair doubleErrorColors;
 
   /**
    * Creates a AllocationTableCellPanel with default colors (only for test)
@@ -89,9 +106,13 @@ public class AllocationTableCellPanel extends JLabel {
    * "selected" state (selected within the table).
    */
   public AllocationTableCellPanel(Color disabledColor, Color selectedBackgroundColor, Color selectedForegroundColor) {
-    this.disabledColor = disabledColor;
+
     this.selectedBackgroundColor = selectedBackgroundColor;
     this.selectedForegroundColor = selectedForegroundColor;
+    this.defaultColors = new ColorPair(Color.black, Color.white);
+    this.disabledColors = new ColorPair(Color.black, disabledColor);
+    this.errorColors = new ColorPair(Color.red, new Color(235, 235, 235));
+    this.doubleErrorColors = new ColorPair(Color.red, disabledColor);
     setOpaque(true);
     setSelected(false);
     refresh();
@@ -197,7 +218,9 @@ public class AllocationTableCellPanel extends JLabel {
     if (image != null) {
       icon = new ImageIcon(image);
     }
-    setBackground(backgroundColor());
+    ColorPair colors = getColors();
+    setBackground(colors.background);
+    setForeground(colors.foreground);
     setIcon(icon);
 
     JPopupMenu popupMenu = null;
@@ -208,22 +231,43 @@ public class AllocationTableCellPanel extends JLabel {
     tempNode.destroy();
   }
 
-  private Color backgroundColor() {
+  private ColorPair getColors() {
     if (cellKey == null) {
-      return disabledColor;
+      return disabledColors;
     }
     try {
       Event event = Manager.getEventCollection().findEntity(cellKey.eventId);
       if (event == null) {
-        return disabledColor;
+        return disabledColors;
       }
-      if (event.isScheduled()) {
-        return Color.WHITE;
+      Person person = Manager.getPersonCollection().findEntity(personId);
+      if (person == null) {
+        if (event.isScheduled()) {
+          return defaultColors;
+        } else {
+          return disabledColors;
+        }
+      }
+      Availability a = Manager.getAvailabilityCollection().findEntity(person, event.getTimeSlot());
+      if (a == null) {
+        return errorColors; // severe data problem detected!!!
+      }
+      if (a.isAvailable()) {
+        if (event.isScheduled()) {
+          return defaultColors;
+        } else {
+          return disabledColors;
+        }
       } else {
-        return disabledColor;
+        if (event.isScheduled()) {
+          return errorColors;
+        } else {
+          return doubleErrorColors;
+        }
       }
+
     } catch (DataBaseNotReadyException ex) {
-      return disabledColor;
+      return errorColors;
     }
 
   }
@@ -233,8 +277,9 @@ public class AllocationTableCellPanel extends JLabel {
       setBackground(selectedBackgroundColor);
       setForeground(selectedForegroundColor);
     } else {
-      setBackground(backgroundColor());
-      setForeground(Color.BLACK);
+      ColorPair colors = getColors();
+      setBackground(colors.background);
+      setForeground(colors.foreground);
     }
   }
 

@@ -15,9 +15,8 @@
  */
 package de.free_creations.nbPhonAPI;
 
-import de.free_creations.dbEntities.Contest;
-import de.free_creations.dbEntities.Event;
-import de.free_creations.dbEntities.Location;
+import de.free_creations.dbEntities.Availability;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.TimeSlot;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
@@ -31,26 +30,26 @@ import javax.persistence.TypedQuery;
 
 /**
  *
- * @author Harald Postner <Harald at free-creations.de>
+ * @author Harald Postner <Harald at fraa-creations.de>
  */
-public class EventCollection implements MutableEntityCollection<Event, Integer> {
+public class AvailabilityCollection implements MutableEntityCollection<Availability, Integer> {
 
-  private static final Logger logger = Logger.getLogger(EventCollection.class.getName());
+  private static final Logger logger = Logger.getLogger(AvailabilityCollection.class.getName());
 
   private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-  protected EventCollection() {
+  protected AvailabilityCollection() {
   }
 
   @Override
-  public List<Event> getAll() {
+  public List<Availability> getAll() {
     synchronized (Manager.databaseAccessLock) {
       try {
         Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<Event> query = entityManager.createNamedQuery("Event.findAll", Event.class);
-        List<Event> ee = query.getResultList();
-        return ee;
+        TypedQuery<Availability> query = entityManager.createNamedQuery("Availability.findAll", Availability.class);
+        List<Availability> aa = query.getResultList();
+        return aa;
       } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
         return Collections.emptyList();
       }
@@ -58,87 +57,61 @@ public class EventCollection implements MutableEntityCollection<Event, Integer> 
   }
 
   @Override
-  public Event findEntity(Integer key) throws DataBaseNotReadyException {
+  public Availability findEntity(Integer key) throws DataBaseNotReadyException {
     if (key == null) {
       return null;
     }
     synchronized (Manager.databaseAccessLock) {
-      return Manager.getEntityManager().find(Event.class, key);
+      return Manager.getEntityManager().find(Availability.class, key);
     }
   }
 
   /**
-   * Searches the event-record for a given location and a given time-slot. If
+   * Searches the availability-record for a given person and a given time-slot. If
    * (by error) more than one such records exists, the first one is returned and
    * a warning is logged.
    *
-   * @param l the location
+   * @param p the location
    * @param t the time-slot
    * @return the searched record or null if no such record exists.
    * @throws DataBaseNotReadyException
    */
-  public Event findEntity(Location l, TimeSlot t) throws DataBaseNotReadyException {
-    List<Event> resultList = findAll(l, t);
+  public Availability findEntity(Person p, TimeSlot t) throws DataBaseNotReadyException {
+    List<Availability> resultList = findAll(p, t);
     assert (resultList != null);
     if (resultList.isEmpty()) {
       return null;
     }
     if (resultList.size() > 1) {
-      logger.log(Level.WARNING, "More than one event for {0} at time {1}.", new Object[]{l, t});
+      logger.log(Level.WARNING, "More than one Availability for {0} at time {1}.", new Object[]{p, t});
     }
     return resultList.get(0);
   }
 
   /**
-   * Searches all event-records for a given location and a given time-slot.
+   * Searches all availability-records for a given person and a given time-slot.
    *
-   * If fact, in a given location only one event can happen at the same time;
+   * If fact, in a given person can only have one availability for a given time;
    * but the database structure does not prohibit such miss-allocations,
    * therefore the whole list is returned.
    *
-   * @param l the location
+   * @param p the person
    * @param t the time-slot
    * @return a list of all records fulfilling the search criteria.
    * @throws DataBaseNotReadyException
    */
-  public List<Event> findAll(Location l, TimeSlot t) throws DataBaseNotReadyException {
+  public List<Availability> findAll(Person p, TimeSlot t) throws DataBaseNotReadyException {
     synchronized (Manager.databaseAccessLock) {
-      TypedQuery<Event> query = Manager.getEntityManager().createNamedQuery("Event.findByLocationAndTimeslot", Event.class);
+      TypedQuery<Availability> query = Manager.getEntityManager().createNamedQuery("Availability.findByPersonAndTimeslot", Availability.class);
       query.setParameter("timeSlot", t);
-      query.setParameter("location", l);
-      List<Event> resultList = query.getResultList();
+      query.setParameter("person", p);
+      List<Availability> resultList = query.getResultList();
       assert (resultList != null);
       return resultList;
     }
   }
 
-  public Event findEntity(Contest c, TimeSlot t) throws DataBaseNotReadyException {
-    synchronized (Manager.databaseAccessLock) {
-      TypedQuery<Event> query = Manager.getEntityManager().createNamedQuery("Event.findByContestAndTimeslot", Event.class);
-      query.setParameter("timeSlot", t);
-      query.setParameter("contest", c);
 
-      List<Event> resultList = query.getResultList();
-      assert (resultList != null);
-      if (resultList.isEmpty()) {
-        return null;
-      }
-      if (resultList.size() > 1) {
-        logger.log(Level.WARNING, "More than one event for {0} at time {1}.", new Object[]{c, t});
-      }
-      return resultList.get(0);
-    }
-  }
-
-  public Event newEntity(Contest contest, TimeSlot timeSlot) throws DataBaseNotReadyException {
-
-    synchronized (Manager.databaseAccessLock) {
-      EntityManager entityManager = Manager.getEntityManager();
-      Event newEvent = Event.newEvent(entityManager, contest, timeSlot);
-      firePropertyChange(PROP_ITEM_ADDED, null, newEvent.identity());
-      return newEvent;
-    }
-  }
 
   @Override
   public void removeEntity(Integer key) throws DataBaseNotReadyException {
@@ -171,7 +144,8 @@ public class EventCollection implements MutableEntityCollection<Event, Integer> 
   }
 
   @Override
-  public Event newEntity() throws DataBaseNotReadyException {
-    throw new UnsupportedOperationException("Not supported. Use newEntity(Contest, TimeSlot)"); //To change body of generated methods, choose Tools | Templates.
+  public Availability newEntity() throws DataBaseNotReadyException {
+    // new availabilty records are automatically generated when a new person is created.
+    throw new UnsupportedOperationException("Not supported. Use PersonCollection.newEntity()."); //To change body of generated methods, choose Tools | Templates.
   }
 }

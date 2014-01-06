@@ -210,7 +210,6 @@ public class AllocationTable extends JTable {
 
     private AllocationTableCellEditor() {
       this.comboBox = new AllocationPersonsComboBox();
-      this.comboBox.addActionListener(this);
     }
 
     @Override
@@ -238,6 +237,13 @@ public class AllocationTable extends JTable {
     public void actionPerformed(ActionEvent e) {
       stopCellEditing();
     }
+
+    /**
+     * starts listening on event "actionPerformed" from the combo box.
+     */
+    public final void startListening() {
+      this.comboBox.addActionListener(this);
+    }
   };
 
 //private final AllocationTableCellEditor tableCellEditor;
@@ -262,6 +268,7 @@ public class AllocationTable extends JTable {
       AllocationTableModel allocationTableModel = new AllocationTableModel(null);
       setModel(allocationTableModel);
       AllocationTableCellEditor tableCellEditor = new AllocationTableCellEditor();
+      tableCellEditor.startListening();
       setDefaultEditor(Object.class, tableCellEditor);
       _renderer = new AllocationTableCellRenderer();
       setTransferHandler(transferHandler);
@@ -330,14 +337,7 @@ public class AllocationTable extends JTable {
     allocationTableModel.startListening();
   }
 
-  /**
-   * We use the prepare-renderer-method to color the cells.
-   *
-   * @param renderer
-   * @param row
-   * @param column
-   * @return
-   */
+
   private void initDesignTimeDisplay() {
     setModel(new javax.swing.table.DefaultTableModel(
             new Object[][]{

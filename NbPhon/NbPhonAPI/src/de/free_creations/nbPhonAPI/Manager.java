@@ -285,4 +285,16 @@ public class Manager {
       return allocationCollection;
     }
   }
+
+  private static final Object availabilityLock = new Object();
+  private static AvailabilityCollection availabilityCollection = null;
+
+  public static AvailabilityCollection getAvailabilityCollection() {
+    synchronized (availabilityLock) {
+      if (availabilityCollection == null) {
+        availabilityCollection = new AvailabilityCollection();
+      }
+      return availabilityCollection;
+    }
+  }
 }

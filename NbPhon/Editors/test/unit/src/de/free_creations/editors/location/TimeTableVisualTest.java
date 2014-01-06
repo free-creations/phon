@@ -137,7 +137,7 @@ public class TimeTableVisualTest extends javax.swing.JFrame {
 
   private void btnSetLocationId_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetLocationId_4ActionPerformed
     // TODO add your handling code here:
-    timeTable1.setLocationId(19);
+    timeTable1.setLocationId(4);
   }//GEN-LAST:event_btnSetLocationId_4ActionPerformed
 
   private void btnChangeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeNameActionPerformed
