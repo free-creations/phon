@@ -147,7 +147,8 @@ public class IconManager {
    * KUNSTLIED MUSICAL OBOE x ORGEL POP POSAUNE trombone x QUERFLOETE SAX x
    * SEL-BESETZ TROMPETE x TUBA x
    *
-   * @param contestType can be an icon from the resources or the ContestType Id string
+   * @param contestType can be an icon from the resources or the ContestType Id
+   * string
    * @return
    */
   public BufferedImage getContestTypeImage(String contestType) {
@@ -155,7 +156,7 @@ public class IconManager {
       return null;
     }
     contestType = contestType.toLowerCase();
-    if (!contestType.endsWith(".png") )  {
+    if (!contestType.endsWith(".png")) {
       contestType = contestType + ".png";
     }
 
@@ -164,7 +165,7 @@ public class IconManager {
         return iconContestPiano;
       case "piano.png":
         return iconContestPiano;
-        
+
       case "gesang.png":
         return iconContestSinging;
       case "sing.png":
@@ -180,13 +181,30 @@ public class IconManager {
 
       case "pop.png":
         return iconContestPop;
-        
+
       case "neuemusik.png":
         return iconNewMusic;
       case "newmusic.png":
         return iconNewMusic;
     }
     return null;
+  }
+
+  BufferedImage getJobtypeImage(String jobType) {
+    if (jobType == null) {
+      return iconMan;
+    }
+    jobType = jobType.toLowerCase();
+    if (!jobType.endsWith(".png")) {
+      jobType = jobType + ".png";
+    }
+    switch (jobType) {
+      case "teacher.png":
+        return iconTeacher;
+      case "helper.png":
+        return iconMan;
+    }
+    return iconMan;
   }
 
   public ImageIcon image2icon(BufferedImage image) {

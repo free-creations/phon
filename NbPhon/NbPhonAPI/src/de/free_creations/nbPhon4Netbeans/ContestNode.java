@@ -17,6 +17,7 @@ package de.free_creations.nbPhon4Netbeans;
 
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.ContestType;
+import de.free_creations.dbEntities.Job;
 
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
@@ -38,9 +39,10 @@ import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.datatransfer.ExTransferable;
 import static de.free_creations.nbPhon4Netbeans.IconManager.*;
+import de.free_creations.nbPhonAPI.Manager;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import org.openide.nodes.Node;
 
 /**
@@ -51,11 +53,11 @@ import org.openide.nodes.Node;
  */
 public class ContestNode extends AbstractNode implements CommittableNode {
 
-  private static class JobTypeChildren extends Children.Array {
+  private static class JobChildren extends Children.Array {
 
     private final Collection<Node> ch;
 
-    public JobTypeChildren(Collection<Node> ch) {
+    public JobChildren(Collection<Node> ch) {
       super();
       assert (ch != null);
       this.ch = ch;
@@ -137,6 +139,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   };
   private final Action editAction = new AbstractAction("Edit") {
     @Override
+    @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch"})
     public void actionPerformed(ActionEvent e) {
       try {
         ContestEditorProvider provider
@@ -154,6 +157,7 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   };
   private final Action editNewWindowAction = new AbstractAction("Edit in new Window") {
     @Override
+    @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch"})
     public void actionPerformed(ActionEvent e) {
       try {
         ContestEditorProvider provider
@@ -172,10 +176,8 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
 
   public ContestNode(Integer contestId, MutableEntityCollection<Contest, Integer> contestManager, boolean showJobTypes) {
-    super(makeChildren(showJobTypes));
-
+    super(makeChildren(contestId, showJobTypes));
     this.key = contestId;
-
     this.contestManager = contestManager;
     if (key != null) {
       Contest.addPropertyChangeListener(listener, contestId);
@@ -193,38 +195,17 @@ public class ContestNode extends AbstractNode implements CommittableNode {
     super.destroy();
   }
 
-  private static Children makeChildren(boolean showJobTypes) {
-    if (!showJobTypes) {
+  private static Children makeChildren(Integer contestId, boolean showJobs) {
+    if (!showJobs) {
       return Children.LEAF;
     }
-    Node[] nodes = new Node[]{
-      new AbstractNode(Children.LEAF) {
-        @Override
-        public String getName() {
-          return "Lehrkraft";
-        }
-      },
-      new AbstractNode(Children.LEAF) {
-        @Override
-        public String getName() {
-          return "Empfang";
-        }
-      },
-      new AbstractNode(Children.LEAF) {
-        @Override
-        public String getName() {
-          return "Saaldienst";
-        }
-      },
-      new AbstractNode(Children.LEAF) {
-        @Override
-        public String getName() {
-          return "Springer";
-        }
-      },};
-    ArrayList<Node> aNodes = new ArrayList<>();
-    aNodes.addAll(Arrays.asList(nodes));
-    JobTypeChildren children = new JobTypeChildren(aNodes);
+    ArrayList<Node> childNodes = new ArrayList<>();
+    List<Job> jj = Manager.getJobCollection().getAll();
+    for (Job j : jj) {
+      ContestJobNode newNode = new ContestJobNode(contestId, j.getJobId());
+      childNodes.add(newNode);
+    }
+    JobChildren children = new JobChildren(childNodes);
     return children;
   }
 
@@ -311,6 +292,11 @@ public class ContestNode extends AbstractNode implements CommittableNode {
       result = iconManager().getStaredImage(result);
     }
     return result;
+  }
+
+  @Override
+  public Image getOpenedIcon(int type) {
+    return getIcon(type);
   }
 
   /**

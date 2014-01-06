@@ -47,7 +47,7 @@ import javax.swing.table.TableModel;
 import org.openide.util.Exceptions;
 
 /**
- *
+ * Shows who is allocated to the events of one contest.
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class AllocationTable extends JTable {

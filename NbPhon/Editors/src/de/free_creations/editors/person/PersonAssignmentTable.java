@@ -41,7 +41,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 /**
- *
+ * Shows the allocations of one person...
+ * 
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class PersonAssignmentTable extends JTable {
@@ -227,7 +228,7 @@ public class PersonAssignmentTable extends JTable {
    * Manager.getTimeSlotCollection)
    * @return
    */
-  private Availability getVerfuegEntity(int rowIndex, int columnIndex) {
+  private Availability getAvailabilityEntity(int rowIndex, int columnIndex) {
     if (dataModel instanceof AssignemtTableModel) {
       try {
         Integer personId = ((AssignemtTableModel) dataModel).getPersonId();
@@ -255,9 +256,9 @@ public class PersonAssignmentTable extends JTable {
    */
   private boolean isPersonAvailable(int rowIndex, int columnIndex) {
     assert (columnIndex > 0);
-    Availability v = getVerfuegEntity(rowIndex, columnIndex);
-    if (v != null) {
-      return v.isAvailable();
+    Availability a = getAvailabilityEntity(rowIndex, columnIndex);
+    if (a != null) {
+      return a.isAvailable();
     } else {
       return false;
     }
@@ -353,7 +354,7 @@ public class PersonAssignmentTable extends JTable {
      * @param columnIndex the column relative to the table
      * @return
      */
-    private String getAssignmentValue(int rowIndex, int columnIndex) {
+    private String getAlloactionValue(int rowIndex, int columnIndex) {
       assert (columnIndex > 0);
       Allocation a = getAssignmentEntity(rowIndex, columnIndex);
       String result = "";
@@ -383,7 +384,7 @@ public class PersonAssignmentTable extends JTable {
       if (columnIndex == 0) {
         return timeOfDayNames[rowIndex];
       } else {
-        return getAssignmentValue(rowIndex, columnIndex);
+        return getAlloactionValue(rowIndex, columnIndex);
       }
     }
 
