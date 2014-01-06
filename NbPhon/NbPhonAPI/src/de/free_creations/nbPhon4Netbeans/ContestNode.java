@@ -190,9 +190,13 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   }
 
   @Override
-  public void destroy() throws IOException {
+  public void destroy() {
     Contest.removePropertyChangeListener(listener, key);
-    super.destroy();
+    try {
+      super.destroy();
+    } catch (IOException ex) {
+      Exceptions.printStackTrace(ex);
+    }
   }
 
   private static Children makeChildren(Integer contestId, boolean showJobs) {

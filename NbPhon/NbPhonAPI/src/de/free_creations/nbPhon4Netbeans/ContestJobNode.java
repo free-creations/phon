@@ -32,6 +32,7 @@ import org.openide.nodes.Children;
 import org.openide.util.datatransfer.ExTransferable;
 import static de.free_creations.nbPhon4Netbeans.IconManager.*;
 import de.free_creations.nbPhonAPI.Manager;
+import org.openide.util.Exceptions;
 
 /**
  * Visualizes a job within a contest.
@@ -78,7 +79,6 @@ public class ContestJobNode extends AbstractNode {
 
   private final Integer contestId;
   private final String jobId;
-
 
   public ContestJobNode(Integer contestId, String jobId) {
     super(Children.LEAF);
@@ -141,6 +141,28 @@ public class ContestJobNode extends AbstractNode {
     return result;
   }
 
+  /**
+   * Formats an html string of two lines, on the first line the contest description,
+   * on the second line the job description.
+   * @param contestId
+   * @param jobId
+   * @return 
+   */
+  public static String getLongHtmlDescription(Integer contestId, String jobId) {
+    String contestDesc = String.format("contest[%s]", contestId); // a default
+    try {
+      Contest c = Manager.getContestCollection().findEntity(contestId);
+      if(c != null){
+        String name = c.getName();
+        if(name != null){
+          contestDesc = name;
+        }
+      }
+    } catch (DataBaseNotReadyException ex) {
+    }
+    return String.format("<html>%s<br>%s</html>",contestDesc,getDisplayName(jobId));
+  }
+
   @Override
   public Image getIcon(int type) {
     return getIcon(contestId, jobId);
@@ -192,7 +214,7 @@ public class ContestJobNode extends AbstractNode {
   public Transferable clipboardCopy() throws IOException {
     Transferable nbDefault = super.clipboardCopy();
     ExTransferable added = ExTransferable.create(nbDefault);
-    added.put(new ContestJobNodeTransferable(getContestId(),getJobId()));
+    added.put(new ContestJobNodeTransferable(getContestId(), getJobId()));
     return added;
   }
 }

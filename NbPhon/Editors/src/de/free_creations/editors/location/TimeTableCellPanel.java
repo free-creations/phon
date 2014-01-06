@@ -118,11 +118,7 @@ public class TimeTableCellPanel extends javax.swing.JPanel {
     this.contestId = contestId;
     if (!Objects.equals(oldContestId, contestId)) {
       if (node != null) {
-        try {
-          node.destroy();
-        } catch (IOException ex) {
-          Exceptions.printStackTrace(ex);
-        }
+        node.destroy();
       }
       if (oldContestId != null) {
         Contest.removePropertyChangeListener(nodeListener, oldContestId);
