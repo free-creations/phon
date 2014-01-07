@@ -32,7 +32,7 @@
                           <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="btnSetPersonTo56" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnSetPersonTo_1" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="setPersonToNull" alignment="0" min="-2" pref="167" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -57,7 +57,7 @@
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="121" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="btnSetPersonTo56" min="-2" max="-2" attributes="0"/>
+              <Component id="btnSetPersonTo_1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="setPersonToNull" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
@@ -83,14 +83,14 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="btnSetPersonTo56">
+    <Component class="javax.swing.JButton" name="btnSetPersonTo_1">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/free_creations/editors/person/Bundle.properties" key="PersonAssignmentTableVisualTest.btnSetPersonTo56.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/free_creations/editors/person/Bundle.properties" key="PersonAssignmentTableVisualTest.btnSetPersonTo_1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSetPersonTo56ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSetPersonTo_1ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="setPersonToNull">

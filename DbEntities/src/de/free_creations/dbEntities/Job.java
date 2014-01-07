@@ -147,7 +147,7 @@ public class Job implements Serializable, DbEntity {
             new EntityIdentity(Job.class, jobId));
   }
 
-  private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+  protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
     PropertyChangeManager.instance().firePropertyChange(
             identity(),
             propertyName, oldValue, newValue);

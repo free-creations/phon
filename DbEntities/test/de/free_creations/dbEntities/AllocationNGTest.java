@@ -41,10 +41,12 @@ public class AllocationNGTest {
   private class TestListener implements PropertyChangeListener {
 
     public int called = 0;
+    public String lastEvt;
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       called++;
+      lastEvt = evt.getPropertyName();
     }
   }
 
@@ -264,6 +266,40 @@ public class AllocationNGTest {
 
   }
 
+  @Test
+  public void testNewAllocationPropertyChangeCallback() throws Throwable {
+
+    // preparation ---
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.flush();
+
+    Job tempJob = new Job("TEMP", testJob.getJobType());
+    entityManager.persist(tempJob);
+    entityManager.flush();
+
+    final TestListener testListener = new TestListener();
+    testPerson.addPropertyChangeListener(testListener);
+
+    // the statement we want to test:
+    Allocation newItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob);
+
+    // verification
+    final int expectedCallbackCount = 1;
+
+    try {
+      EventQueue.invokeAndWait(new Runnable() {
+        @Override
+        public void run() {
+          assertEquals(testListener.called, expectedCallbackCount);
+          assertEquals(testListener.lastEvt, Person.PROP_ALLOCATIONADDED);
+        }
+      });
+    } catch (InvocationTargetException ex) {
+      throw ex.getCause();
+    }
+  }
+
   /**
    * Test of remove method, of class Allocation.
    */
@@ -271,7 +307,6 @@ public class AllocationNGTest {
   public void testRemove() {
     Person testPerson = testAllocation.getPerson();
     testAllocation.remove(entityManager);
-
 
     Allocation find = entityManager.find(Allocation.class, testAllocation.getAllocationId());
     assertNull(find);
@@ -284,6 +319,32 @@ public class AllocationNGTest {
 
     List<Allocation> jAllocationList = testJob.getAllocationList();
     assertFalse(jAllocationList.contains(testAllocation));
+  }
+
+  @Test
+  public void testRemovePropertyChangeCallback() throws Throwable {
+
+    Person testPerson = testAllocation.getPerson();
+    testAllocation.remove(entityManager);
+
+    final TestListener testListener = new TestListener();
+    testPerson.addPropertyChangeListener(testListener);
+
+    testAllocation.remove(entityManager);
+
+    final int expectedCallbackCount = 1;
+
+    try {
+      EventQueue.invokeAndWait(new Runnable() {
+        @Override
+        public void run() {
+          assertEquals(testListener.called, expectedCallbackCount);
+          assertEquals(testListener.lastEvt, Person.PROP_ALLOCATIONREMOVED);
+        }
+      });
+    } catch (InvocationTargetException ex) {
+      throw ex.getCause();
+    }
   }
 
   /**

@@ -138,13 +138,23 @@ public class PersonAssignmentTableCellPanel extends JLabel {
       if (availabilityId != null) {
         Availability.addPropertyChangeListener(nodeListener, availabilityId);
       }
+      refresh();
+    }
+  }
+
+  void setValue(Object value) {
+    if (value instanceof Integer) {
+      setAllocationId((Integer) value);
+    } else {
+      setAllocationId(null);
     }
   }
 
   /**
-   * Displays the given allocation-record. The information retrieved is:
+   * Displays the given allocation-record.
    *
-   * 1) the event (scheduling) 2) the contest name.
+   * The given allocation recode is used to retrieve the information to display.
+   * This is: the event (scheduling) and the contest name.
    *
    * @param allocationId
    */

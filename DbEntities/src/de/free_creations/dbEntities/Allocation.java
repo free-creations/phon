@@ -119,10 +119,19 @@ public class Allocation implements Serializable, DbEntity {
   public void remove(EntityManager entityManager) {
     entityManager.remove(this);
     entityManager.flush();
-  //  setPerson(null);
-  //  setEvent(null);
-  //  setJob(null);
+    if (person != null) {
+      person.firePropertyChange(Person.PROP_ALLOCATIONREMOVED, null, identity());
+    }
+    if (event != null) {
+      event.firePropertyChange(Event.PROP_ALLOCATIONREMOVED, null, identity());
+    }
+    if (job != null) {
+      job.firePropertyChange(Job.PROP_ALLOCATIONREMOVED, null, identity());
+    }
 
+    //  setPerson(null); << crashes EclipseLink (why?)
+    //  setEvent(null);
+    //  setJob(null);
   }
 
   public Integer getAllocationId() {

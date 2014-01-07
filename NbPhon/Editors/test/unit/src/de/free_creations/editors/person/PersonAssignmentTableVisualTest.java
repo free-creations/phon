@@ -59,7 +59,7 @@ public class PersonAssignmentTableVisualTest extends javax.swing.JFrame {
 
     jScrollPane1 = new javax.swing.JScrollPane();
     assignemtTableAbove = new de.free_creations.editors.person.PersonAssignmentTable();
-    btnSetPersonTo56 = new javax.swing.JButton();
+    btnSetPersonTo_1 = new javax.swing.JButton();
     setPersonToNull = new javax.swing.JButton();
     setPersonToNullBelow = new javax.swing.JButton();
     btnSetPersonTo56Below = new javax.swing.JButton();
@@ -68,13 +68,12 @@ public class PersonAssignmentTableVisualTest extends javax.swing.JFrame {
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-    assignemtTableAbove.setRowHeight(32);
     jScrollPane1.setViewportView(assignemtTableAbove);
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnSetPersonTo56, org.openide.util.NbBundle.getMessage(PersonAssignmentTableVisualTest.class, "PersonAssignmentTableVisualTest.btnSetPersonTo56.text")); // NOI18N
-    btnSetPersonTo56.addActionListener(new java.awt.event.ActionListener() {
+    org.openide.awt.Mnemonics.setLocalizedText(btnSetPersonTo_1, org.openide.util.NbBundle.getMessage(PersonAssignmentTableVisualTest.class, "PersonAssignmentTableVisualTest.btnSetPersonTo_1.text")); // NOI18N
+    btnSetPersonTo_1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        btnSetPersonTo56ActionPerformed(evt);
+        btnSetPersonTo_1ActionPerformed(evt);
       }
     });
 
@@ -99,7 +98,6 @@ public class PersonAssignmentTableVisualTest extends javax.swing.JFrame {
       }
     });
 
-    assignmentTableBelow.setRowHeight(32);
     jScrollPane4.setViewportView(assignmentTableBelow);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -115,7 +113,7 @@ public class PersonAssignmentTableVisualTest extends javax.swing.JFrame {
               .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
               .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                  .addComponent(btnSetPersonTo56, javax.swing.GroupLayout.Alignment.LEADING)
+                  .addComponent(btnSetPersonTo_1, javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(setPersonToNull, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE)))
             .addGap(8, 8, 8))
@@ -131,7 +129,7 @@ public class PersonAssignmentTableVisualTest extends javax.swing.JFrame {
         .addGap(9, 9, 9)
         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(btnSetPersonTo56)
+        .addComponent(btnSetPersonTo_1)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(setPersonToNull)
         .addGap(24, 24, 24)
@@ -146,10 +144,10 @@ public class PersonAssignmentTableVisualTest extends javax.swing.JFrame {
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-  private void btnSetPersonTo56ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetPersonTo56ActionPerformed
+  private void btnSetPersonTo_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetPersonTo_1ActionPerformed
     // TODO add your handling code here:
-    assignemtTableAbove.setPersonId(56);
-  }//GEN-LAST:event_btnSetPersonTo56ActionPerformed
+    assignemtTableAbove.setPersonId(1);
+  }//GEN-LAST:event_btnSetPersonTo_1ActionPerformed
 
   private void setPersonToNullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setPersonToNullActionPerformed
     // TODO add your handling code here:
@@ -211,8 +209,8 @@ public class PersonAssignmentTableVisualTest extends javax.swing.JFrame {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private de.free_creations.editors.person.PersonAssignmentTable assignemtTableAbove;
   private de.free_creations.editors.person.PersonAssignmentTable assignmentTableBelow;
-  private javax.swing.JButton btnSetPersonTo56;
   private javax.swing.JButton btnSetPersonTo56Below;
+  private javax.swing.JButton btnSetPersonTo_1;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane4;
   private javax.swing.JButton setPersonToNull;

@@ -201,7 +201,7 @@ public class AllocationTable extends JTable {
     }
   };
 
-  private final AllocationTableCellRenderer renderer;
+  private final AllocationTableCellRenderer allocationTableRenderer;
 
   private class AllocationTableCellEditor extends AbstractCellEditor
           implements TableCellEditor, ActionListener {
@@ -273,7 +273,7 @@ public class AllocationTable extends JTable {
       _renderer = new AllocationTableCellRenderer();
       setTransferHandler(transferHandler);
     }
-    renderer = _renderer;
+    allocationTableRenderer = _renderer;
     rowHeight = 24 + 6;
     gridColor = Color.lightGray;
     showHorizontalLines = true;
@@ -285,10 +285,10 @@ public class AllocationTable extends JTable {
 
   @Override
   public TableCellRenderer getCellRenderer(int row, int column) {
-    if (renderer == null) {
+    if (allocationTableRenderer == null) {
       return super.getCellRenderer(row, column);
     } else {
-      return renderer;
+      return allocationTableRenderer;
     }
   }
 

@@ -38,7 +38,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -431,7 +430,7 @@ public class Person implements Serializable, DbEntity {
             new EntityIdentity(Person.class, personId));
   }
 
-  private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+  protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
     PropertyChangeManager.instance().firePropertyChange(
             identity(),
             propertyName, oldValue, newValue);

@@ -18,71 +18,104 @@ package de.free_creations.editors.person;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Availability;
-import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.TimeSlot;
+import de.free_creations.editors.contest.TimeTableCellPanel;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellEditor;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 /**
  * Shows the allocations of one person...
- * 
+ *
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class PersonAssignmentTable extends JTable {
 
   private static final Color disabledColor = new Color(170, 170, 170);
-  private final MouseListener assignemtTableMouseListener = new MouseAdapter() {
+  private static final Color headerColorLight = new Color(226, 230, 233);
+  private static final Color headerColorDark = new Color(199, 207, 214);
+
+  /**
+   * The CellAdaptor forwards "PROP_VALUE_CHANGED" messages from an individual
+   * cell to the table model.
+   */
+  private class CellAdaptor implements PropertyChangeListener {
+
+    private final int row;
+    private final int col;
+
+    public CellAdaptor(int row, int col) {
+      this.row = row;
+      this.col = col;
+
+    }
+
     @Override
-    public void mouseClicked(MouseEvent evt) {
-      if (evt.getClickCount() == 2) {
-        int col = columnAtPoint(evt.getPoint());
-        int row = rowAtPoint(evt.getPoint());
-        if (col == 0) {
-          toggleRow(row);
-        }
+    public void propertyChange(PropertyChangeEvent evt) {
+      if (TimeTableCellPanel.PROP_VALUE_CHANGED.equals(evt.getPropertyName())) {
+        ((AbstractTableModel) getModel()).fireTableCellUpdated(row, col);
       }
     }
-  };
-  private final MouseListener headerMouseListener = new MouseAdapter() {
+  }
+
+  private class PersonAssignmentTableCellRenderer extends DefaultTableCellRenderer {
+
+    private final JLabel defaultRenderer = new JLabel();
+
     @Override
-    public void mouseClicked(MouseEvent evt) {
-      if (evt.getClickCount() == 2) {
-        int col = columnAtPoint(evt.getPoint());
-        if (col == 0) {
-          toggleTable();
-        } else {
-          toggleColumn(col);
-        }
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row, int column) {
+
+      JLabel result = defaultRenderer;
+      defaultRenderer.setOpaque(true);
+      defaultRenderer.setBackground(Color.WHITE); // the default
+
+      String defaultText = (value == null) ? "" : value.toString();
+      defaultRenderer.setText(defaultText);
+      if (column < 1) {
+        // the column header
+        defaultRenderer.setBackground(headerColorLight);
+      } else {
+        PersonAssignmentTableCellPanel tableCellPanel = getTableCellPanel(row, column);
+        tableCellPanel.setValue(value);
+        tableCellPanel.setSelected(isSelected);
+        result = tableCellPanel;
       }
+      if (hasFocus) {
+        result.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+      } else {
+        result.setBorder(null);
+      }
+      return result;
     }
   };
+  private final PersonAssignmentTableCellRenderer personAssignmentTableCellRenderer;
 
   public PersonAssignmentTable() {
     super();
+    PersonAssignmentTableCellRenderer _rendrer = null;
     if (java.beans.Beans.isDesignTime()) {
       setModel(makeDesignTimeModel());
       rowHeight = 2 * rowHeight;
       gridColor = Color.lightGray;
     } else {
-      tableHeader.addMouseListener(headerMouseListener);
-      addMouseListener(assignemtTableMouseListener);
+      _rendrer = new PersonAssignmentTableCellRenderer();
       setCellSelectionEnabled(true);
       showHorizontalLines = true;
       rowHeight = 2 * rowHeight;
@@ -92,7 +125,49 @@ public class PersonAssignmentTable extends JTable {
       setModel(timeTableModel);
 
     }
+    personAssignmentTableCellRenderer = _rendrer;
   }
+
+  /**
+   * overwritten to in order to use the cell renderer defined in constructor
+   *
+   * @param row
+   * @param column
+   * @return
+   */
+  @Override
+  public TableCellRenderer getCellRenderer(int row, int column) {
+    if (personAssignmentTableCellRenderer == null) {
+      return super.getCellRenderer(row, column);
+    } else {
+      return personAssignmentTableCellRenderer;
+    }
+  }
+
+  /**
+   * Cache for the panels that are used to display a single cell.
+   *
+   * @param table
+   * @param row
+   * @param column
+   * @return
+   */
+  private PersonAssignmentTableCellPanel getTableCellPanel(int row, int column) {
+    int hash = column * maxRows + row;
+    if (!cellCache.containsKey(hash)) {
+      PersonAssignmentTableCellPanel allocationTableCellPanel = new PersonAssignmentTableCellPanel(
+              disabledColor,
+              getSelectionBackground(),
+              getSelectionForeground());
+
+      CellAdaptor cellAdaptor = new CellAdaptor(row, column);
+      allocationTableCellPanel.addPropertyChangeListener(cellAdaptor);
+      cellCache.put(hash, allocationTableCellPanel);
+    }
+    return cellCache.get(hash);
+  }
+  private final HashMap<Integer, PersonAssignmentTableCellPanel> cellCache = new HashMap<>();
+  private static final int maxRows = 10007;
 
   public void setPersonId(Integer personId) {
     TableModel oldModel = getModel();
@@ -107,161 +182,6 @@ public class PersonAssignmentTable extends JTable {
     AssignemtTableModel timeTableModel = new AssignemtTableModel(personId);
     setModel(timeTableModel);
     timeTableModel.startListening();
-  }
-
-  private void toggleRow(int row) {
-    if (dataModel instanceof AssignemtTableModel) {
-      ((AssignemtTableModel) dataModel).toggleRow(row);
-    }
-  }
-
-  private void toggleTable() {
-    if (dataModel instanceof AssignemtTableModel) {
-      ((AssignemtTableModel) dataModel).toggleTable();
-    }
-  }
-
-  private void toggleColumn(int col) {
-    if (dataModel instanceof AssignemtTableModel) {
-      ((AssignemtTableModel) dataModel).toggleColumn(col);
-    }
-  }
-
-  /**
-   * Avoid selection on the left-most column (the row-header column).
-   *
-   * @param row
-   * @param column
-   * @return true for all cells except those in column 0.
-   */
-//  @Override
-//  public boolean isCellSelected(int row, int column) {
-//    return (column > 0) ? super.isCellSelected(row, column) : false;
-//  }
-
-  /**
-   * Cells that correspond to a time-slot that cannot be found in the "ZEIT"
-   * table are overlaid with a blank label.
-   *
-   * @param renderer
-   * @param row
-   * @param column
-   * @return
-   */
-  @Override
-  public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-    if (isCellVisible(row, column)) {
-      Component preparedRenderer = super.prepareRenderer(renderer, row, column);
-      preparedRenderer.setBackground(Color.WHITE);
-      if (column != 0) {
-        if (!isPersonAvailable(row, column)) {
-          preparedRenderer.setBackground(disabledColor);
-        } else {
-
-        }
-      }
-      return preparedRenderer;
-    } else {
-      JLabel label = new JLabel();
-      label.setBackground(disabledColor);
-      label.setOpaque(true);
-      return label;
-    }
-  }
-
-  /**
-   * Cells that correspond to a time-slot that cannot be found in the "ZEIT"
-   * table are overlaid with a blank label.
-   *
-   * @param editor
-   * @param row
-   * @param column
-   * @return
-   */
-  @Override
-  public Component prepareEditor(TableCellEditor editor, int row, int column) {
-    if (isCellVisible(row, column)) {
-      return super.prepareEditor(editor, row, column);
-    } else {
-      JLabel label = new JLabel();
-      label.setBackground(disabledColor);
-      label.setOpaque(true);
-      return label;
-    }
-  }
-
-  /**
-   * Decide which cells should be blanked out (be invisible).
-   *
-   * Cells that correspond to a time-slot that cannot be found in the "ZEIT"
-   * table are overlaid with a blank label.
-   *
-   * @param row
-   * @param column
-   * @return true if the cell should be as normal.
-   */
-  private boolean isCellVisible(int row, int column) {
-    if (java.beans.Beans.isDesignTime()) {
-      return true;
-    }
-    if (column == 0) {
-      return true;
-    }
-    try {
-      TimeSlot t = Manager.getTimeSlotCollection().findEntity(column - 1, row);
-      if (t == null) {
-        return false;
-      } else {
-        return true;
-      }
-    } catch (DataBaseNotReadyException ex) {
-      return false;
-    }
-  }
-
-  /**
-   * Get the availability-record for the time-slot corresponding to the row and
-   * column.
-   *
-   * @param rowIndex
-   * @param columnIndex the column relative to the table (one offset with
-   * Manager.getTimeSlotCollection)
-   * @return
-   */
-  private Availability getAvailabilityEntity(int rowIndex, int columnIndex) {
-    if (dataModel instanceof AssignemtTableModel) {
-      try {
-        Integer personId = ((AssignemtTableModel) dataModel).getPersonId();
-        Person p = Manager.getPersonCollection().findEntity(personId);
-        List<Availability> emptyVv = Collections.emptyList();
-        List<Availability> vv = (p == null) ? emptyVv : p.getAvailabilityList();
-        TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
-        for (Availability v : vv) {
-          if (Objects.equals(t, v.getTimeSlot())) {
-            return v;
-          }
-        }
-      } catch (DataBaseNotReadyException ignored) {
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Get the availability for the time-slot corresponding to the row and column.
-   *
-   * @param rowIndex
-   * @param columnIndex the column relative to the table
-   * @return
-   */
-  private boolean isPersonAvailable(int rowIndex, int columnIndex) {
-    assert (columnIndex > 0);
-    Availability a = getAvailabilityEntity(rowIndex, columnIndex);
-    if (a != null) {
-      return a.isAvailable();
-    } else {
-      return false;
-    }
   }
 
   /**
@@ -305,6 +225,11 @@ public class PersonAssignmentTable extends JTable {
 
       timeOfDayNames = tt.timeOfDayNames();
       rowCount = timeOfDayNames.length;
+      for (int row = 0; row < rowCount; row++) {
+        for (int column = 0; column < columnCount; column++) {
+          getTableCellPanel(row, column).startListening(getAvailabilityId(row, column));
+        }
+      }
     }
 
     @Override
@@ -324,23 +249,46 @@ public class PersonAssignmentTable extends JTable {
      * Manager.getTimeSlotCollection)
      * @return
      */
-    private Allocation getAssignmentEntity(int rowIndex, int columnIndex) {
+    public Allocation getAllocationEntity(int rowIndex, int columnIndex) {
       try {
         Person p = Manager.getPersonCollection().findEntity(personId);
-        List<Allocation> emptyAa = Collections.emptyList();
-        List<Allocation> aa = (p == null) ? emptyAa : p.getAllocationList();
         TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
-        if (t == null) {
-          return null;
-        }
-        for (Allocation a : aa) {
-          Event event = a.getEvent();
-          if (event != null) {
-            if (Objects.equals(t, event.getTimeSlot())) {
-              return a;
-            }
-          }
-        }
+        return Manager.getAllocationCollection().findEntity(p, t);
+      } catch (DataBaseNotReadyException ignored) {
+      }
+      return null;
+    }
+
+    /**
+     * Returns the availability of the person set in dataModel for the time
+     * corresponding to row and column.
+     *
+     * @param row
+     * @param column
+     * @return
+     */
+    private Integer getAvailabilityId(int row, int column) {
+      Availability a = getAvailabiltyEntity(row, column);
+      if (a != null) {
+        return a.getAvailabilityId();
+      }
+      return null;
+    }
+
+    /**
+     * Determine the availability of the person for the time-slot that
+     * corresponds to the given position.
+     *
+     * @param rowIndex
+     * @param columnIndex the column relative to the table (one offset with
+     * Manager.getTimeSlotCollection)
+     * @return
+     */
+    private Availability getAvailabiltyEntity(int rowIndex, int columnIndex) {
+      try {
+        Person p = Manager.getPersonCollection().findEntity(personId);
+        TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
+        return Manager.getAvailabilityCollection().findEntity(p, t);
       } catch (DataBaseNotReadyException ignored) {
       }
       return null;
@@ -354,16 +302,14 @@ public class PersonAssignmentTable extends JTable {
      * @param columnIndex the column relative to the table
      * @return
      */
-    private String getAlloactionValue(int rowIndex, int columnIndex) {
+    private Integer getAlloactionId(int rowIndex, int columnIndex) {
       assert (columnIndex > 0);
-      Allocation a = getAssignmentEntity(rowIndex, columnIndex);
-      String result = "";
+      Allocation a = getAllocationEntity(rowIndex, columnIndex);
       if (a != null) {
-        result = String.format("%s",
-                a.getEvent());
+        return a.getAllocationId();
+      } else {
+        return null;
       }
-      return result;
-
     }
 
     @Override
@@ -384,7 +330,7 @@ public class PersonAssignmentTable extends JTable {
       if (columnIndex == 0) {
         return timeOfDayNames[rowIndex];
       } else {
-        return getAlloactionValue(rowIndex, columnIndex);
+        return getAlloactionId(rowIndex, columnIndex);
       }
     }
 
@@ -449,38 +395,15 @@ public class PersonAssignmentTable extends JTable {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      if (Person.PROP_AVAILABILITY.equals(evt.getPropertyName())) {
-        fireTableDataChanged();
+      String propertyName = evt.getPropertyName();
+      if (propertyName != null) {
+        switch (propertyName) {
+          case (Person.PROP_ALLOCATIONADDED):
+          case (Person.PROP_ALLOCATIONREMOVED):
+            fireTableDataChanged();
+        }
       }
     }
 
-    public void toggleRow(int row) {
-      if (personId != null) {
-//        boolean newVal = !rowMeanValue(row);
-//        for (int col = 1; col <= columnCount; col++) {
-//          setValueAt(newVal, row, col);
-//        }
-      }
-    }
-
-    public void toggleTable() {
-      if (personId != null) {
-//        boolean newVal = !tableMeanValue();
-//        for (int row = 0; row < rowCount; row++) {
-//          for (int col = 1; col <= columnCount; col++) {
-//            setValueAt(newVal, row, col);
-//          }
-//        }
-      }
-    }
-
-    public void toggleColumn(int col) {
-      if (personId != null) {
-//        boolean newVal = !columnMeanValue(col);
-//        for (int row = 0; row < rowCount; row++) {
-//          setValueAt(newVal, row, col);
-//        }
-      }
-    }
   }
 }

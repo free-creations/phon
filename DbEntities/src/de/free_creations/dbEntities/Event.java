@@ -250,7 +250,7 @@ public class Event implements Serializable, DbEntity {
             new EntityIdentity(Event.class, eventId));
   }
 
-  private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+  protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
     PropertyChangeManager.instance().firePropertyChange(
             identity(),
             propertyName, oldValue, newValue);
