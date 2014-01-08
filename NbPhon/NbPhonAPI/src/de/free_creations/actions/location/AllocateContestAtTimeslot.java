@@ -30,8 +30,8 @@ import java.util.Objects;
  * This rule applies when a location is used at a given time for a specific
  * contest.
  *
- * All events that were allocated to this room at the given time-slot first
- * de-allocated, before allocating the new contest.
+ * All events that were allocated to this room at the given time-slot must first
+ * be de-allocated, before allocating the new contest.
  *
  * @author Harald Postner<harald at free-creations.de>
  */

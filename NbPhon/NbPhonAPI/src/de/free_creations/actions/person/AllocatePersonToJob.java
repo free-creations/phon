@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.actions.contest;
+package de.free_creations.actions.person;
 
 import de.free_creations.actions.CheckedAction;
 import static de.free_creations.actions.CheckedAction.Severity.*;
 import de.free_creations.dbEntities.Allocation;
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Person;
@@ -39,18 +40,28 @@ import java.util.Objects;
  *
  * @author Harald Postner<harald at free-creations.de>
  */
-public class AllocatePersonForEvent implements CheckedAction {
+public class AllocatePersonToJob implements CheckedAction {
 
-  private final Integer eventId;
-  private final Integer newPersonId;
+  private final Integer personId;
+  private final Integer contestId;
   private final String jobId;
+  private final Integer timeSlotId;
 
-  public AllocatePersonForEvent(Integer eventId, Integer newPersonId, String jobId) {
-    this.eventId = eventId;
-    assert (eventId != null);
-    this.newPersonId = newPersonId; // can be null
+  /**
+   *
+   * @param personId the person (never null)
+   * @param contestId if null, the person will be freed from all jobs at
+   * time-slot time.
+   * @param jobId the job (irrelevant if contestId is null)
+   * @param timeSlotId the time (never null)
+   */
+  public AllocatePersonToJob(Integer personId, Integer contestId, String jobId, Integer timeSlotId) {
+    this.personId = personId;
+    assert (personId != null);
+    this.contestId = contestId;
     this.jobId = jobId;
-    assert (jobId != null);
+    this.timeSlotId = timeSlotId;
+    assert (timeSlotId != null);
   }
 
   @Override
@@ -76,58 +87,66 @@ public class AllocatePersonForEvent implements CheckedAction {
   @Override
   public void apply(int ignored) throws DataBaseNotReadyException {
 
-    Event event = Manager.getEventCollection().findEntity(eventId);
-    if (event == null) {
-      throw new RuntimeException(String.format("Invalid Event Id %s.", eventId));
+    Person person = Manager.getPersonCollection().findEntity(personId);
+    if (person == null) {
+      throw new RuntimeException(String.format("Invalid Person Id %s.", personId));
+    }
+    TimeSlot timeSlot = Manager.getTimeSlotCollection().findEntity(timeSlotId);
+    if (timeSlot == null) {
+      throw new RuntimeException(String.format("Invalid TimeSlot Id %s.", timeSlotId));
+    }
+
+    List<Allocation> aTemp = Manager.getAllocationCollection().findAll(person, timeSlot);
+
+    // the requested allocation might already be realized.
+    if (isRequestedAllocation(aTemp)) {
+      return; // OK there is nothing to do.
+    }
+
+    // remove all persons-allocation previously assigned to this person for the given time (should  be 0 or 1);
+    ArrayList<Allocation> aSnapShot = new ArrayList<>(aTemp);
+    for (Allocation a : aSnapShot) {
+      Manager.getAllocationCollection().removeEntity(a);
+    }
+    if (contestId == null) {
+      return;
+    }
+
+    // --- from here: contestId != null
+    Contest contest = Manager.getContestCollection().findEntity(contestId);
+    if (contest == null) {
+      throw new RuntimeException(String.format("Invalid Contest Id %s.", contestId));
     }
     Job job = Manager.getJobCollection().findEntity(jobId);
     if (job == null) {
       throw new RuntimeException(String.format("Invalid Job Id %s.", jobId));
     }
-    // remove all persons-allocation previously assigned to this job (should  be 0 or 1);
-    List<Allocation> aTemp = Manager.getAllocationCollection().findAll(event, job);
-    // the requested allocation might already be realized.
-    if (isRequestedAllocation(aTemp)) {
-      return; // OK there is nothing to do.
-    }
-    ArrayList<Allocation> aSnapShot = new ArrayList<>(aTemp);
-    for (Allocation a : aSnapShot) {
-      Manager.getAllocationCollection().removeEntity(a);
-    }
 
-    if (newPersonId == null) {
-      return;
+    Event event = Manager.getEventCollection().findEntity(contest, timeSlot);
+    if (event == null) {
+      throw new RuntimeException(String.format("No event for %s, %s.", contest, timeSlot));
     }
-    // --- from here: newPersonId != null
-    Person person = Manager.getPersonCollection().findEntity(newPersonId);
-    if (person == null) {
-      throw new RuntimeException(String.format("Invalid Person Id %s.", newPersonId));
-    }
-
-    // remove all allocation for this person at the given time
-    TimeSlot timeSlot = event.getTimeSlot();
-    assert (timeSlot != null);
-    aTemp = Manager.getAllocationCollection().findAll(person, timeSlot);
+    // remove all other allocations for the given job at the given time
+    aTemp = Manager.getAllocationCollection().findAll(event, job);
     aSnapShot = new ArrayList<>(aTemp);
     for (Allocation a : aSnapShot) {
       Manager.getAllocationCollection().removeEntity(a);
     }
 
-    // now proceed to the new allocation
+    // sight, finally we can proceed to the new allocation
     Manager.getAllocationCollection().newEntity(person, event, job);
-
   }
 
   /**
    * Check if the given allocation represents the wanted situation. (note we
-   * assume that the the given allocations are linked to the event and job in
-   * question)
+   * assume that the the given allocations are linked to the person and timeSlot
+   * in question)
    *
    * @param aTemp
    * @return
    */
   private boolean isRequestedAllocation(List<Allocation> aTemp) {
-    if (newPersonId == null) {
+    if (contestId == null) {
       if (aTemp.isEmpty()) {
         return true;
       }
@@ -136,12 +155,27 @@ public class AllocatePersonForEvent implements CheckedAction {
       return false; // aTemp.size >  1 is always wrong!
     }
     Allocation alloc = aTemp.get(0);
-    Person person = alloc.getPerson();
-    if (person == null) {
+    Event event = alloc.getEvent();
+    if (event == null) {
+      return false;
+    }
+    Contest contest = event.getContest();
+    if (contest == null) {
+      return false;
+    }
+    if (!Objects.equals(contest.getContestId(), contestId)) {
+      return false;
+    }
+    Job job = alloc.getJob();
+    if (job == null) {
+      return false;
+    }
+    if (!Objects.equals(job.getJobId(), jobId)) {
       return false;
     }
 
-    return Objects.equals(person.getPersonId(), newPersonId);
+    //
+    return true;
   }
 
 }

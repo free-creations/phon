@@ -15,26 +15,34 @@
  */
 package de.free_creations.editors.person;
 
+import de.free_creations.actions.person.AllocatePersonToJob;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Availability;
 import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.editors.contest.TimeTableCellPanel;
+import de.free_creations.nbPhon4Netbeans.ContestJobNode;
+import de.free_creations.nbPhon4Netbeans.ContestJobNode.TransferData;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.TimeSlotCollection;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.TransferHandler;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+import org.openide.util.Exceptions;
 
 /**
  * Shows the allocations of one person...
@@ -46,6 +54,42 @@ public class PersonAssignmentTable extends JTable {
   private static final Color disabledColor = new Color(170, 170, 170);
   private static final Color headerColorLight = new Color(226, 230, 233);
   private static final Color headerColorDark = new Color(199, 207, 214);
+
+  private final TransferHandler transferHandler = new TransferHandler() {
+    @Override
+    public boolean canImport(TransferHandler.TransferSupport support) {
+
+      return (support.isDataFlavorSupported(ContestJobNode.CONTESTJOB_NODE_FLAVOR));
+
+    }
+
+    @Override
+    public boolean importData(TransferHandler.TransferSupport support) {
+      try {
+        TransferData data = (TransferData) support.getTransferable().getTransferData(ContestJobNode.CONTESTJOB_NODE_FLAVOR);
+        int col = getSelectedColumn();
+        int row = getSelectedRow();
+        if (col > 0) {
+          Integer contestId = data.contestId;
+          String jobId = data.jobId;
+          Integer personId = getPersonId();
+          Integer timeSlotId = getTimeSlotId(row, col);
+          AllocatePersonToJob action
+                  = new AllocatePersonToJob(personId,
+                          contestId,
+                          jobId,
+                          timeSlotId);
+          action.apply(0);
+          return true;
+
+        }
+        return false;
+      } catch (DataBaseNotReadyException | ClassCastException | UnsupportedFlavorException | IOException ex) {
+        Exceptions.printStackTrace(ex);
+        return false;
+      }
+    }
+  };
 
   /**
    * The CellAdaptor forwards "PROP_VALUE_CHANGED" messages from an individual
@@ -120,6 +164,7 @@ public class PersonAssignmentTable extends JTable {
       showHorizontalLines = true;
       rowHeight = 2 * rowHeight;
       gridColor = Color.lightGray;
+      setTransferHandler(transferHandler);
 
       AssignemtTableModel timeTableModel = new AssignemtTableModel(null);
       setModel(timeTableModel);
@@ -169,6 +214,18 @@ public class PersonAssignmentTable extends JTable {
   private final HashMap<Integer, PersonAssignmentTableCellPanel> cellCache = new HashMap<>();
   private static final int maxRows = 10007;
 
+  @Override
+  public JPopupMenu getComponentPopupMenu() {
+    int col = columnAtPoint(getMousePosition());
+    int row = rowAtPoint(getMousePosition());
+    if (col > 0) {
+      PersonAssignmentTableCellPanel tableCellPanel = getTableCellPanel(row, col);
+      return tableCellPanel.getComponentPopupMenu();
+    } else {
+      return null;
+    }
+  }
+
   public void setPersonId(Integer personId) {
     TableModel oldModel = getModel();
     if (oldModel instanceof AssignemtTableModel) {
@@ -182,6 +239,24 @@ public class PersonAssignmentTable extends JTable {
     AssignemtTableModel timeTableModel = new AssignemtTableModel(personId);
     setModel(timeTableModel);
     timeTableModel.startListening();
+  }
+
+  public Integer getPersonId() {
+    TableModel model = getModel();
+    if (model instanceof AssignemtTableModel) {
+      return ((AssignemtTableModel) model).getPersonId();
+    } else {
+      return null;
+    }
+  }
+
+  public Integer getTimeSlotId(int row, int col) {
+    TableModel model = getModel();
+    if (model instanceof AssignemtTableModel) {
+      return ((AssignemtTableModel) model).getTimeSlotId(row, col);
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -213,7 +288,7 @@ public class PersonAssignmentTable extends JTable {
     private final Integer personId;
     private final String[] timeOfDayNames;
     private final String[] dayNames;
-    private final int columnCount; // the number of data columns (first column not included)
+    private final int dataColumnCount; // the number of data columns (first column not included)
     private final int rowCount; // the number of data rows (header row not included)
 
     public AssignemtTableModel(Integer personId) {
@@ -221,13 +296,13 @@ public class PersonAssignmentTable extends JTable {
       TimeSlotCollection tt = Manager.getTimeSlotCollection();
 
       dayNames = tt.dayNames();
-      columnCount = dayNames.length;
+      dataColumnCount = dayNames.length;
 
       timeOfDayNames = tt.timeOfDayNames();
       rowCount = timeOfDayNames.length;
       for (int row = 0; row < rowCount; row++) {
-        for (int column = 0; column < columnCount; column++) {
-          getTableCellPanel(row, column).startListening(getAvailabilityId(row, column));
+        for (int dataCol = 0; dataCol < dataColumnCount; dataCol++) {
+          getTableCellPanel(row, dataCol + 1).startListening(getAvailabilityId(row, dataCol + 1));
         }
       }
     }
@@ -242,6 +317,35 @@ public class PersonAssignmentTable extends JTable {
     }
 
     /**
+     * 
+     * @param rowIndex
+     * @param columnIndex the column relative to the table
+     * @return 
+     */
+    public TimeSlot getTimeSlotEntity(int rowIndex, int columnIndex) {
+      try {
+        return Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
+      } catch (DataBaseNotReadyException ignored) {
+        return null;
+      }
+    }
+
+    /**
+     * 
+     * @param rowIndex
+     * @param columnIndex the column relative to the table
+     * @return 
+     */
+    public Integer getTimeSlotId(int rowIndex, int columnIndex) {
+      TimeSlot t = getTimeSlotEntity(rowIndex, columnIndex);
+      if (t != null) {
+        return t.getTimeSlotId();
+      } else {
+        return null;
+      }
+    }
+
+    /**
      * Get the entity that shall be displayed in the given position.
      *
      * @param rowIndex
@@ -252,7 +356,7 @@ public class PersonAssignmentTable extends JTable {
     public Allocation getAllocationEntity(int rowIndex, int columnIndex) {
       try {
         Person p = Manager.getPersonCollection().findEntity(personId);
-        TimeSlot t = Manager.getTimeSlotCollection().findEntity(columnIndex - 1, rowIndex);
+        TimeSlot t = getTimeSlotEntity( rowIndex,  columnIndex);
         return Manager.getAllocationCollection().findEntity(p, t);
       } catch (DataBaseNotReadyException ignored) {
       }
@@ -264,7 +368,7 @@ public class PersonAssignmentTable extends JTable {
      * corresponding to row and column.
      *
      * @param row
-     * @param column
+     * @param column the column relative to the table
      * @return
      */
     private Integer getAvailabilityId(int row, int column) {
@@ -314,7 +418,7 @@ public class PersonAssignmentTable extends JTable {
 
     @Override
     public int getColumnCount() {
-      return columnCount + 1;
+      return dataColumnCount + 1;
     }
 
     /**

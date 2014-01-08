@@ -32,7 +32,6 @@ import org.openide.nodes.Children;
 import org.openide.util.datatransfer.ExTransferable;
 import static de.free_creations.nbPhon4Netbeans.IconManager.*;
 import de.free_creations.nbPhonAPI.Manager;
-import org.openide.util.Exceptions;
 
 /**
  * Visualizes a job within a contest.
@@ -50,11 +49,27 @@ public class ContestJobNode extends AbstractNode {
       super(ContestJobNode.class, "ContestJob");
     }
   }
+  
+  public static class TransferData{
+    public final Integer contestId;
+    public final String jobId;
+
+    public TransferData(Integer contestId, String jobId) {
+      this.contestId = contestId;
+      this.jobId = jobId;
+    }
+
+    @Override
+    public String toString() {
+      return "TransferData{" + "contestId=" + contestId + ", jobId=" + jobId + '}';
+    }
+    
+  }
 
   /**
    * The transferable that is transfered in a Drag and Drop action.
    */
-  public class ContestJobNodeTransferable extends ExTransferable.Single {
+  public static class ContestJobNodeTransferable extends ExTransferable.Single {
 
     public final Integer transferContestId;
     public final String transferJobId;
@@ -71,8 +86,8 @@ public class ContestJobNode extends AbstractNode {
      * @return
      */
     @Override
-    protected String getData() {
-      return transferJobId;
+    protected TransferData getData() {
+      return new TransferData(transferContestId, transferJobId);
     }
   }
   public static final DataFlavor CONTESTJOB_NODE_FLAVOR = new ContestJobNodeFlavor();
