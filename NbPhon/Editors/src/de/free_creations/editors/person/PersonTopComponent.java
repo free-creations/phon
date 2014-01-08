@@ -88,64 +88,38 @@ public final class PersonTopComponent extends CloneableTopComponent {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    PersonId = new javax.swing.JTextField();
-    edPersontype = new javax.swing.JComboBox();
-    edHerrFrau = new javax.swing.JComboBox();
-    edNachname = new javax.swing.JTextField();
+    jLabel11 = new javax.swing.JLabel();
+    jScrollPane4 = new javax.swing.JScrollPane();
+    jPanel2 = new javax.swing.JPanel();
     edVorname = new javax.swing.JTextField();
     edPlz = new javax.swing.JTextField();
+    edHerrFrau = new javax.swing.JComboBox();
+    jScrollPane3 = new javax.swing.JScrollPane();
+    timeTable = new de.free_creations.editors.person.TimeTable();
+    edNachname = new javax.swing.JTextField();
+    jScrollPane2 = new javax.swing.JScrollPane();
+    edNotiz = new javax.swing.JTextArea();
+    PersonId = new javax.swing.JTextField();
+    edPersontype = new javax.swing.JComboBox();
+    teamPanel = new de.free_creations.editors.person.PersonTeamPanel();
+    edContestType = new de.free_creations.editors.person.ContestTypeComboBox();
     edWohnort = new javax.swing.JTextField();
     edStrasse = new javax.swing.JTextField();
-    edFestnetz = new javax.swing.JTextField();
-    edHandy = new javax.swing.JTextField();
-    edEMail = new javax.swing.JTextField();
-    jLabel4 = new javax.swing.JLabel();
-    jLabel5 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();
     jLabel6 = new javax.swing.JLabel();
     jLabel7 = new javax.swing.JLabel();
     jLabel8 = new javax.swing.JLabel();
+    edHandy = new javax.swing.JTextField();
+    edEMail = new javax.swing.JTextField();
+    jLabel4 = new javax.swing.JLabel();
+    jLabel5 = new javax.swing.JLabel();
     jLabel1 = new javax.swing.JLabel();
-    jPanel1 = new javax.swing.JPanel();
-    jLabel3 = new javax.swing.JLabel();
-    jLabel9 = new javax.swing.JLabel();
-    jScrollPane3 = new javax.swing.JScrollPane();
-    timeTable = new de.free_creations.editors.person.TimeTable();
-    jLabel11 = new javax.swing.JLabel();
-    teamPanel = new de.free_creations.editors.person.PersonTeamPanel();
-    edContestType = new de.free_creations.editors.person.ContestTypeComboBox();
-    jScrollPane2 = new javax.swing.JScrollPane();
-    edNotiz = new javax.swing.JTextArea();
-    jLabel12 = new javax.swing.JLabel();
-    jLabel13 = new javax.swing.JLabel();
+    edFestnetz = new javax.swing.JTextField();
     jScrollPane1 = new javax.swing.JScrollPane();
     assignmentTable = new de.free_creations.editors.person.PersonAssignmentTable();
+    jLabel13 = new javax.swing.JLabel();
 
-    PersonId.setEditable(false);
-    PersonId.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.PersonId.text")); // NOI18N
-
-    edPersontype.setEditable(true);
-    edPersontype.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Kind", "Jugendlich", "Erwachsen", "Lehrer" }));
-    edPersontype.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        edPersontypeActionPerformed(evt);
-      }
-    });
-
-    edHerrFrau.setEditable(true);
-    edHerrFrau.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hr.", "Fr." }));
-    edHerrFrau.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        edHerrFrauActionPerformed(evt);
-      }
-    });
-
-    edNachname.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.edNachname.text")); // NOI18N
-    edNachname.addFocusListener(new java.awt.event.FocusAdapter() {
-      public void focusLost(java.awt.event.FocusEvent evt) {
-        edNachnameFocusLost(evt);
-      }
-    });
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel11.text")); // NOI18N
 
     edVorname.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.edVorname.text")); // NOI18N
     edVorname.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -158,6 +132,45 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edPlz.addFocusListener(new java.awt.event.FocusAdapter() {
       public void focusLost(java.awt.event.FocusEvent evt) {
         edPlzFocusLost(evt);
+      }
+    });
+
+    edHerrFrau.setEditable(true);
+    edHerrFrau.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Hr.", "Fr." }));
+    edHerrFrau.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        edHerrFrauActionPerformed(evt);
+      }
+    });
+
+    jScrollPane3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+    jScrollPane3.setViewportView(timeTable);
+
+    edNachname.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.edNachname.text")); // NOI18N
+    edNachname.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edNachnameFocusLost(evt);
+      }
+    });
+
+    edNotiz.setColumns(20);
+    edNotiz.setRows(5);
+    jScrollPane2.setViewportView(edNotiz);
+
+    PersonId.setEditable(false);
+    PersonId.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.PersonId.text")); // NOI18N
+
+    edPersontype.setEditable(true);
+    edPersontype.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Kind", "Jugendlich", "Erwachsen", "Lehrer" }));
+    edPersontype.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        edPersontypeActionPerformed(evt);
+      }
+    });
+
+    edContestType.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        edContestTypeActionPerformed(evt);
       }
     });
 
@@ -175,12 +188,13 @@ public final class PersonTopComponent extends CloneableTopComponent {
       }
     });
 
-    edFestnetz.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.edFestnetz.text")); // NOI18N
-    edFestnetz.addFocusListener(new java.awt.event.FocusAdapter() {
-      public void focusLost(java.awt.event.FocusEvent evt) {
-        edFestnetzFocusLost(evt);
-      }
-    });
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel2.text")); // NOI18N
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel6.text")); // NOI18N
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel7.text")); // NOI18N
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel8.text")); // NOI18N
 
     edHandy.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.edHandy.text")); // NOI18N
     edHandy.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -200,178 +214,135 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel5.text")); // NOI18N
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel2.text")); // NOI18N
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel6.text")); // NOI18N
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel7.text")); // NOI18N
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel8.text")); // NOI18N
-
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel1.text")); // NOI18N
 
-    jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jPanel1.border.title"))); // NOI18N
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel3.text")); // NOI18N
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel9.text")); // NOI18N
-    jLabel9.setPreferredSize(new java.awt.Dimension(70, 15));
-
-    jScrollPane3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-    jScrollPane3.setViewportView(timeTable);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel11.text")); // NOI18N
-
-    edContestType.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        edContestTypeActionPerformed(evt);
+    edFestnetz.setText(org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.edFestnetz.text")); // NOI18N
+    edFestnetz.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edFestnetzFocusLost(evt);
       }
     });
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(jPanel1Layout.createSequentialGroup()
-            .addComponent(jLabel11)
-            .addGap(119, 119, 119))
-          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-            .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(jPanel1Layout.createSequentialGroup()
-            .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(0, 0, Short.MAX_VALUE))
-          .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
-        .addContainerGap())
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addComponent(jLabel3)
-        .addGap(0, 0, Short.MAX_VALUE))
-    );
-    jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addComponent(jLabel3)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel11))
-        .addGap(0, 0, 0)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    );
-
-    edNotiz.setColumns(20);
-    edNotiz.setRows(5);
-    jScrollPane2.setViewportView(edNotiz);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel12.text")); // NOI18N
+    jScrollPane1.setViewportView(assignmentTable);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel13.text")); // NOI18N
 
-    jScrollPane1.setViewportView(assignmentTable);
+    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    jPanel2.setLayout(jPanel2Layout);
+    jPanel2Layout.setHorizontalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel2Layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jScrollPane1)
+          .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+          .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
+          .addGroup(jPanel2Layout.createSequentialGroup()
+            .addComponent(edHerrFrau, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(19, 19, 19)
+            .addComponent(edPersontype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(PersonId, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+              .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addComponent(jLabel7)
+                  .addComponent(edFestnetz, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addComponent(jLabel8)
+                  .addComponent(edHandy, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
+              .addComponent(jLabel1)
+              .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addComponent(jLabel4)
+                  .addComponent(edPlz, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addComponent(jLabel5)
+                  .addComponent(edWohnort, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+              .addComponent(edNachname)
+              .addComponent(edContestType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(edEMail)
+              .addComponent(edStrasse)
+              .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                  .addComponent(jLabel6)
+                  .addComponent(jLabel2)
+                  .addComponent(jLabel13))
+                .addGap(0, 0, Short.MAX_VALUE))
+              .addComponent(edVorname))))
+        .addContainerGap())
+    );
+    jPanel2Layout.setVerticalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel2Layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(PersonId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(edPersontype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(edHerrFrau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jLabel2)
+          .addComponent(jLabel1))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(edNachname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(edVorname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jLabel4)
+          .addComponent(jLabel5)
+          .addComponent(jLabel6))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addComponent(edPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(edStrasse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(edWohnort, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addComponent(jLabel7)
+            .addComponent(jLabel13)))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(edFestnetz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(edHandy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(edEMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(9, 9, 9)
+        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(18, 18, 18))
+    );
+
+    jScrollPane4.setViewportView(jPanel2);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(PersonId, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(121, 121, 121)
-            .addComponent(edPersontype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addComponent(jLabel12)
-          .addComponent(jScrollPane1)
-          .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
-          .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addComponent(jLabel7)
-                  .addComponent(edPlz, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                  .addComponent(edFestnetz, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addComponent(jLabel8)
-                  .addComponent(edHandy)))
-              .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addComponent(edHerrFrau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                  .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addComponent(jLabel5)
-                  .addComponent(jLabel1)
-                  .addComponent(edNachname)
-                  .addComponent(edWohnort))))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(edEMail)
-              .addComponent(edStrasse)
-              .addComponent(edVorname, javax.swing.GroupLayout.Alignment.TRAILING)
-              .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addComponent(jLabel13)
-                  .addComponent(jLabel6)
-                  .addComponent(jLabel2))
-                .addGap(0, 0, Short.MAX_VALUE)))))
-        .addContainerGap())
+      .addGroup(layout.createSequentialGroup()
+        .addGap(2, 2, 2)
+        .addComponent(jScrollPane4)
+        .addGap(0, 0, 0))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(PersonId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(edPersontype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jLabel2)
-          .addComponent(jLabel1))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(edNachname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(edHerrFrau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(edVorname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel4)
-          .addComponent(jLabel5)
-          .addComponent(jLabel6))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(edPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(edWohnort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(edStrasse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel7)
-          .addComponent(jLabel8)
-          .addComponent(jLabel13))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(edFestnetz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(edHandy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(edEMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel12)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+      .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -548,20 +519,18 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private javax.swing.JTextField edWohnort;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel11;
-  private javax.swing.JLabel jLabel12;
   private javax.swing.JLabel jLabel13;
   private javax.swing.JLabel jLabel2;
-  private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
   private javax.swing.JLabel jLabel5;
   private javax.swing.JLabel jLabel6;
   private javax.swing.JLabel jLabel7;
   private javax.swing.JLabel jLabel8;
-  private javax.swing.JLabel jLabel9;
-  private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JScrollPane jScrollPane3;
+  private javax.swing.JScrollPane jScrollPane4;
   private de.free_creations.editors.person.PersonTeamPanel teamPanel;
   private de.free_creations.editors.person.TimeTable timeTable;
   // End of variables declaration//GEN-END:variables
