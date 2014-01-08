@@ -474,20 +474,61 @@ public final class PersonTopComponent extends CloneableTopComponent {
     }
   }//GEN-LAST:event_edContestTypeActionPerformed
 
+  private JobType getJobtypeTeacher() {
+    try {
+      return Manager.getJobTypeCollection().findEntity("LEHRER");
+    } catch (DataBaseNotReadyException ex) {
+      return null;
+    }
+  }
+
+  private JobType getJobtypeHelper() {
+    try {
+      return Manager.getJobTypeCollection().findEntity("HELFER");
+    } catch (DataBaseNotReadyException ex) {
+      return null;
+    }
+  }
+
+
   private void edPersontypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edPersontypeActionPerformed
-    // TODO add your handling code here:
+    Person p = thisPerson();
+    if (p != null) {
+      String newT = (String) edPersontype.getSelectedItem();
+      String oldT = personType(p);
+      if (!Objects.equals(oldT, newT)) {
+        switch (newT) {
+          case ("Kind"):
+            p.setAgegroup("KIND");
+            p.setJobType(getJobtypeHelper());
+            break;
+          case ("Jugendlich"):
+            p.setAgegroup("JUGENDLICH");
+            p.setJobType(getJobtypeHelper());
+            break;
+          case ("Erwachsen"):
+            p.setAgegroup("ERWACHSEN");
+            p.setJobType(getJobtypeHelper());
+            break;
+          case ("Lehrer"):
+            p.setAgegroup("ERWACHSEN");
+            p.setJobType(getJobtypeTeacher());
+            break;
+        }
+      }
+    }
   }//GEN-LAST:event_edPersontypeActionPerformed
 
   private void edHerrFrauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edHerrFrauActionPerformed
     Person p = thisPerson();
     if (p != null) {
       String oldG = p.getGender();
-      String newG = (String)edHerrFrau.getSelectedItem();
+      String newG = (String) edHerrFrau.getSelectedItem();
       if (!Objects.equals(oldG, newG)) {
         p.setGender(newG);
       }
     }
-    
+
   }//GEN-LAST:event_edHerrFrauActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -579,7 +620,6 @@ public final class PersonTopComponent extends CloneableTopComponent {
     }
     setDisplayName(String.format("%s, %s", person.getSurname(), person.getGivenname()));
     PersonId.setText(noNull(person.getPersonId()));
-    edPersontype.setSelectedItem(noNull(person.getAgegroup()));
     edEMail.setText(noNull(person.getEmail()));
     edFestnetz.setText(noNull(person.getTelephone()));
     //  edFunction.setSelectedItem(person.getGewuenschtefunktion());
@@ -593,7 +633,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edContestType.setSelectedContestType(person.getContestType());
     edWohnort.setText(noNull(person.getCity()));
     edPersontype.setSelectedItem(personType(person));
-    //   teamPanel.setPersonId(person.getPersonid());
+    teamPanel.setPersonId(person.getPersonId());
   }
 
   private String personType(Person person) {
@@ -601,12 +641,12 @@ public final class PersonTopComponent extends CloneableTopComponent {
       return null;
     }
     JobType jobType = person.getJobType();
-    String jobTypeId = (jobType == null)?null:jobType.getJobTypeId();
+    String jobTypeId = (jobType == null) ? null : jobType.getJobTypeId();
     if ("LEHRER".equals(jobTypeId)) {
       return "Lehrer";
     }
     String agegroup = person.getAgegroup();
-    if(agegroup==null){
+    if (agegroup == null) {
       return null;
     }
     switch (agegroup) {
@@ -620,7 +660,6 @@ public final class PersonTopComponent extends CloneableTopComponent {
         return "Erwachsen";
     }
   }
-
 
   private Integer findTeamleaderId(Person person) {
 //    if (person == null) {

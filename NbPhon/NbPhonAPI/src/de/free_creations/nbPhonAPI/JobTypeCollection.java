@@ -70,7 +70,7 @@ public class JobTypeCollection implements EntityCollection<JobType, String> {
       try {
         Manager.ping();
         EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<JobType> query = entityManager.createNamedQuery("Job.findAll", JobType.class);
+        TypedQuery<JobType> query = entityManager.createNamedQuery("JobType.findAll", JobType.class);
         List<JobType> ff = query.getResultList();
         return ff;
       } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
