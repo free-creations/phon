@@ -31,7 +31,7 @@ import java.util.Date;
  */
 public class GeneratePersonTable {
 
-  private final int maxCount = 60;
+  private final int maxCount = 300; // must be less than there are records in FakeNames.csv (500)
   private final int timeSlotCount = 15; // must be the same as in "populateCoreTables.sql"
 
   private final double availabilty = 0.3;
