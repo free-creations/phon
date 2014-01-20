@@ -34,3 +34,6 @@
 /InstallNSIS/dist/install-Phon.exe
 /DbEntities/test/de/free_creations/dbEntities/experiments/
 /phonDb/data/phonDb/seg0/
+/phonDb/data/phonDb/log/
+/phonDb/data/phonDb/tmp/
+/phonDb/data/phonDb/db.lck
