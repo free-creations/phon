@@ -18,6 +18,8 @@
 --                      D r o p (o l d)    T a b l e s
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
+DROP TRIGGER InsertAllocationLastChange;
+DROP TRIGGER UpdatePersonLastChange;
 
 ALTER TABLE "APP"."AVAILABILITY" DROP CONSTRAINT "AVAILABILITY_FK1";
 ALTER TABLE "APP"."AVAILABILITY" DROP CONSTRAINT "AVAILABILITY_FK2";
@@ -92,7 +94,7 @@ CREATE TABLE "APP"."PERSON" (
   "TEAM" INTEGER, -- the team in which this person wants to be integrated
   "JOBTYPE" VARCHAR(50), -- the type of job this person wants to take over
   "CONTESTTYPE" VARCHAR(50), -- the type of contest this person wants to be allocated
-  "LASTCHANGE" TIMESTAMP
+  "LASTCHANGE" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- -----------------------------------------------------------------------------
 -- Table CONTEST
@@ -117,7 +119,7 @@ CREATE TABLE "APP"."AVAILABILITY" (
   "PERSON" INTEGER NOT NULL, -- foreign key into PERSON table
   "TIMESLOT" INTEGER NOT NULL, -- foreign key into TIMESLOT table
   "AVAILABLE" INTEGER, -- 1= person is available for this time-slot, 0= person is not available.
-  "LASTCHANGE" TIMESTAMP
+  "LASTCHANGE" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- -----------------------------------------------------------------------------
 -- Table ALLOCATION
@@ -129,8 +131,8 @@ CREATE TABLE "APP"."ALLOCATION" (
   "PERSON" INTEGER NOT NULL,  -- who is allocated, foreign key into PERSON table
   "EVENT" INTEGER NOT NULL, -- to which event is she/he allocated, foreign key into EVENT table
   "JOB" VARCHAR(50), -- to which task is she/he allocated, , foreign key into JOB table
-  "LASTCHANGE" TIMESTAMP, -- when was this record last changed
-  "PLANNER" VARCHAR(50), -- who did change this record the last time
+  "LASTCHANGE" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- when was this record last changed
+  "PLANNER" VARCHAR(50) DEFAULT 'USER', -- who did change this record the last time
   "NOTE" VARCHAR(32000) -- some further notes
 );
 
@@ -297,3 +299,35 @@ ALTER TABLE "APP"."EVENT"
 
 ALTER TABLE "APP"."EVENT" 
   ADD CONSTRAINT "EVENT_UNIQUE" UNIQUE ("CONTEST","TIMESLOT" ); 
+
+-- Triggers
+
+CREATE TRIGGER UpdatePersonLastChange
+  AFTER UPDATE 
+  OF "SURNAME", -- all fields except LASTCHANGE and PERSONID
+     "GIVENNAME" , 
+     "GENDER" , 
+     "ZIPCODE", 
+     "CITY" , 
+     "STREET" , 
+     "TELEPHONE" ,
+     "MOBILE" , 
+     "EMAIL" , 
+     "AGEGROUP" , 
+     "NOTICE" , 
+     "TEAM" , 
+     "JOBTYPE" , 
+     "CONTESTTYPE" 
+  ON "APP"."PERSON" 
+  REFERENCING OLD AS modifiedRow
+  FOR EACH  ROW MODE DB2SQL
+  UPDATE "APP"."PERSON" SET LASTCHANGE = CURRENT_TIMESTAMP
+  WHERE PERSONID=modifiedRow.PERSONID AND modifiedRow.LASTCHANGE <> CURRENT_TIMESTAMP;
+
+
+CREATE TRIGGER InsertAllocationLastChange
+  AFTER INSERT ON "APP"."ALLOCATION"
+  REFERENCING NEW AS newRow
+  FOR EACH  ROW MODE DB2SQL
+  UPDATE "APP"."ALLOCATION" SET LASTCHANGE = CURRENT_TIMESTAMP
+  WHERE ALLOCATIONID=newRow.ALLOCATIONID ;
