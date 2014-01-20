@@ -134,7 +134,7 @@ public class AllocationNGTest {
     entityManager.persist(testPerson);
     entityManager.flush();
 
-    Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, testJob);
+    Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, testJob, "USER");
     Integer allocationId = testItem.getAllocationId();
     assertNotNull(allocationId);
 
@@ -172,7 +172,7 @@ public class AllocationNGTest {
     entityManager.persist(testPerson);
     entityManager.flush();
     TimeSlot testTimeSlot = testEvent.getTimeSlot();
-    Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, testJob);
+    Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, testJob, "USER");
 
     TypedQuery<Allocation> query = entityManager.createNamedQuery("Allocation.findByPersonAndTimeslot", Allocation.class);
     query.setParameter("timeSlot", testTimeSlot);
@@ -230,7 +230,7 @@ public class AllocationNGTest {
     entityManager.persist(tempJob);
     entityManager.flush();
 
-    Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob);
+    Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob, "USER");
 
     TypedQuery<Allocation> query = entityManager.createNamedQuery("Allocation.findByEventAndJob", Allocation.class);
     query.setParameter("event", testEvent);
@@ -258,7 +258,7 @@ public class AllocationNGTest {
     entityManager.persist(tempJob);
     entityManager.flush();
 
-    Allocation newItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob);
+    Allocation newItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob, "USER");
     assertNotNull(newItem);
     assertEquals(testPerson, newItem.getPerson());
     assertEquals(testEvent, newItem.getEvent());
@@ -282,7 +282,7 @@ public class AllocationNGTest {
     testPerson.addPropertyChangeListener(testListener);
 
     // the statement we want to test:
-    Allocation newItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob);
+    Allocation newItem = Allocation.newAllocation(entityManager, testPerson, testEvent, tempJob, "USER");
 
     // verification
     final int expectedCallbackCount = 1;

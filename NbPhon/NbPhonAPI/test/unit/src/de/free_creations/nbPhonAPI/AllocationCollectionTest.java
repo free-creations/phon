@@ -152,7 +152,7 @@ public class AllocationCollectionTest {
     assertTrue("Bad test data?", allocationListBefore.isEmpty());
 
     // Here is the statement that we want to test:
-    Allocation testItem = allocationCollection.newEntity(p, e, j);
+    Allocation testItem = allocationCollection.newEntity(p, e, j, "USER");
 
     // Verify that the result is as expected.
     assertNotNull(testItem);
@@ -187,10 +187,10 @@ public class AllocationCollectionTest {
     Job j2 = Manager.getJobCollection().findEntity(2);
     assertNotNull("Bad test data?", j2);
 
-    Allocation testItem1 = allocationCollection.newEntity(p, e, j1);
+    Allocation testItem1 = allocationCollection.newEntity(p, e, j1, "USER");
 
     // Here is the statement that should throw the exception:
-    Allocation testItem2 = allocationCollection.newEntity(p, e, j2);
+    Allocation testItem2 = allocationCollection.newEntity(p, e, j2, "USER");
 
   }
 

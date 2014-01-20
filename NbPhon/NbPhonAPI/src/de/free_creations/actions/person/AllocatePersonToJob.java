@@ -46,6 +46,7 @@ public class AllocatePersonToJob implements CheckedAction {
   private final Integer contestId;
   private final String jobId;
   private final Integer timeSlotId;
+  private final String planner;
 
   /**
    *
@@ -54,14 +55,17 @@ public class AllocatePersonToJob implements CheckedAction {
    * time-slot time.
    * @param jobId the job (irrelevant if contestId is null)
    * @param timeSlotId the time (never null)
+   * @param planner tells who introduced the allocation. Must be "USER" or
+   * "AUTOMAT".
    */
-  public AllocatePersonToJob(Integer personId, Integer contestId, String jobId, Integer timeSlotId) {
+  public AllocatePersonToJob(Integer personId, Integer contestId, String jobId, Integer timeSlotId, String planner) {
     this.personId = personId;
     assert (personId != null);
     this.contestId = contestId;
     this.jobId = jobId;
     this.timeSlotId = timeSlotId;
     assert (timeSlotId != null);
+    this.planner = planner;
   }
 
   @Override
@@ -134,7 +138,7 @@ public class AllocatePersonToJob implements CheckedAction {
     }
 
     // sight, finally we can proceed to the new allocation
-    Manager.getAllocationCollection().newEntity(person, event, job);
+    Manager.getAllocationCollection().newEntity(person, event, job, planner);
   }
 
   /**

@@ -172,11 +172,11 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
 
   }
 
-  public Allocation newEntity(Person person, Event event, Job job) throws DataBaseNotReadyException {
+  public Allocation newEntity(Person person, Event event, Job job, String planner) throws DataBaseNotReadyException {
     Allocation newAllocation;
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
-      newAllocation = Allocation.newAllocation(entityManager, person, event, job);
+      newAllocation = Allocation.newAllocation(entityManager, person, event, job, planner);
 
     }
     firePropertyChange(PROP_ITEM_ADDED, null, newAllocation.identity());

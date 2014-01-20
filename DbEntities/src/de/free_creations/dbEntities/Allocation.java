@@ -96,7 +96,7 @@ public class Allocation implements Serializable, DbEntity {
     this.allocationId = allocationId;
   }
 
-  public static Allocation newAllocation(EntityManager entityManager, Person person, Event event, Job job) {
+  public static Allocation newAllocation(EntityManager entityManager, Person person, Event event, Job job, String planner) {
     assert (entityManager != null);
     assert (person != null);
     assert (event != null);
@@ -109,6 +109,7 @@ public class Allocation implements Serializable, DbEntity {
     newAllocation.setPerson(person);
     newAllocation.setEvent(event);
     newAllocation.setJob(job);
+    newAllocation.setPlanner(planner);
 
     entityManager.persist(newAllocation);
     entityManager.flush();

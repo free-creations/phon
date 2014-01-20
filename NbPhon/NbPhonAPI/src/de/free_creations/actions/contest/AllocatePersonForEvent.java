@@ -114,7 +114,7 @@ public class AllocatePersonForEvent implements CheckedAction {
     }
 
     // now proceed to the new allocation
-    Manager.getAllocationCollection().newEntity(person, event, job);
+    Manager.getAllocationCollection().newEntity(person, event, job, "USER");
 
   }
 

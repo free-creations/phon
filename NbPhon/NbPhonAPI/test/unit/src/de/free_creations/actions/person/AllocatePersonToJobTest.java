@@ -101,7 +101,7 @@ public class AllocatePersonToJobTest {
             = new AllocatePersonToJob(person.getPersonId(),
                     contest.getContestId(),
                     newJob.getJobId(),
-                    timeSlot.getTimeSlotId());
+                    timeSlot.getTimeSlotId(), "USER");
     action.apply(0);
 
     // now, check whether it is all OK
