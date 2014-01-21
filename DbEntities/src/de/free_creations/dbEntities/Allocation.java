@@ -253,7 +253,7 @@ public class Allocation implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Allocation" + allocationId;
+    return "Allocation[" + allocationId+"]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

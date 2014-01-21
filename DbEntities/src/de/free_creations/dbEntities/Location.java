@@ -231,7 +231,7 @@ public class Location implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "testDb.Location[ locationid=" + locationId + " ]";
+    return "Location[" + locationId + "]";
   }
 
   void removeEvent(Event e) {

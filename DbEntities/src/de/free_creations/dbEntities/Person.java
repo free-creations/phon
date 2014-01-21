@@ -401,7 +401,7 @@ public class Person implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "testDb.Person[ personId=" + personId + " ]";
+    return "Person[" + personId + "]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

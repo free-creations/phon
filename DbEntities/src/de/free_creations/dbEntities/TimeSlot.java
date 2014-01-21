@@ -161,7 +161,7 @@ public class TimeSlot implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "testDb.TimeSlot[ timeSlotId=" + timeSlotId + " ]";
+    return "TimeSlot[" + timeSlotId + "]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

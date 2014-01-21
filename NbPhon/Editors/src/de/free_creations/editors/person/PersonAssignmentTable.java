@@ -78,7 +78,8 @@ public class PersonAssignmentTable extends JTable {
                   = new AllocatePersonToJob(personId,
                           contestId,
                           jobId,
-                          timeSlotId);
+                          timeSlotId,
+                          "USER");
           action.apply(0);
           return true;
 
@@ -317,10 +318,10 @@ public class PersonAssignmentTable extends JTable {
     }
 
     /**
-     * 
+     *
      * @param rowIndex
      * @param columnIndex the column relative to the table
-     * @return 
+     * @return
      */
     public TimeSlot getTimeSlotEntity(int rowIndex, int columnIndex) {
       try {
@@ -331,10 +332,10 @@ public class PersonAssignmentTable extends JTable {
     }
 
     /**
-     * 
+     *
      * @param rowIndex
      * @param columnIndex the column relative to the table
-     * @return 
+     * @return
      */
     public Integer getTimeSlotId(int rowIndex, int columnIndex) {
       TimeSlot t = getTimeSlotEntity(rowIndex, columnIndex);
@@ -356,7 +357,7 @@ public class PersonAssignmentTable extends JTable {
     public Allocation getAllocationEntity(int rowIndex, int columnIndex) {
       try {
         Person p = Manager.getPersonCollection().findEntity(personId);
-        TimeSlot t = getTimeSlotEntity( rowIndex,  columnIndex);
+        TimeSlot t = getTimeSlotEntity(rowIndex, columnIndex);
         return Manager.getAllocationCollection().findEntity(p, t);
       } catch (DataBaseNotReadyException ignored) {
       }

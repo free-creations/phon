@@ -221,7 +221,7 @@ public class Event implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "testDb.Event[ eventId=" + eventId + " ]";
+    return "Event[" + eventId + "]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

@@ -126,7 +126,7 @@ public class JobType implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "testDb.JobType[ jobTypeId=" + jobTypeId + " ]";
+    return "JobType[" + jobTypeId + "]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

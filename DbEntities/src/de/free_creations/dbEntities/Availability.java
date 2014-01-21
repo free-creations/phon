@@ -173,7 +173,7 @@ public class Availability implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "testDb.Availability[ availabilityId=" + availabilityId + " ]";
+    return "Availability[" + availabilityId + "]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

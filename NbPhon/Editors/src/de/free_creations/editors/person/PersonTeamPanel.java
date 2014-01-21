@@ -15,29 +15,35 @@
  */
 package de.free_creations.editors.person;
 
+import de.free_creations.actions.person.JoinPersonInTeam;
 import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.Person;
+import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhon4Netbeans.TeamNode;
 import de.free_creations.nbPhonAPI.TeamCollection;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.PersonCollection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.Objects;
+import javax.swing.TransferHandler;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.util.Exceptions;
 
 /**
- * The PersonTeamPanel shows all persons who are 
- * in the same team as the given person.
+ * The PersonTeamPanel shows all persons who are in the same team as the given
+ * person.
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class PersonTeamPanel extends javax.swing.JPanel
         implements ExplorerManager.Provider {
-
+  
   private final ExplorerManager explorerManager = new ExplorerManager();
   /**
    * The identity of the person who's team is currently been displayed *
@@ -49,6 +55,26 @@ public class PersonTeamPanel extends javax.swing.JPanel
   private TeamNode teamNode = null;
   
   private final Node emptyNode = new AbstractNode(Children.LEAF);
+  
+  private final TransferHandler transferHandler = new TransferHandler() {
+    @Override
+    public boolean canImport(TransferHandler.TransferSupport support) {
+      return support.isDataFlavorSupported(PersonNode.PERSON_NODE_FLAVOR);
+    }
+    
+    @Override
+    public boolean importData(TransferHandler.TransferSupport support) {
+      try {
+        Integer key = (Integer) support.getTransferable().getTransferData(PersonNode.PERSON_NODE_FLAVOR);
+        JoinPersonInTeam action = new JoinPersonInTeam(key, personId);        
+        action.apply(0);        
+        return true;
+      } catch (DataBaseNotReadyException | ClassCastException | UnsupportedFlavorException | IOException ex) {
+        Exceptions.printStackTrace(ex);
+        return false;
+      }
+    }
+  };
 
   /**
    * Creates new form PersonGroupPanel
@@ -60,10 +86,10 @@ public class PersonTeamPanel extends javax.swing.JPanel
     }
     BeanTreeView beanTreeView = (BeanTreeView) scrollPane;
     beanTreeView.setRootVisible(false);
-    beanTreeView.setDropTarget(true);
-
+    beanTreeView.setDropTarget(false); // we'll not use the transfer handler from the TeamRoot node
+    setTransferHandler(transferHandler);
   }
-
+  
   public void setPersonId(Integer personId) {
     Integer old = this.personId;
     this.personId = personId;
@@ -102,7 +128,7 @@ public class PersonTeamPanel extends javax.swing.JPanel
   public ExplorerManager getExplorerManager() {
     return explorerManager;
   }
-
+  
   private void display(Integer personId) {
     try {
       if (personId == null) {
@@ -121,7 +147,7 @@ public class PersonTeamPanel extends javax.swing.JPanel
         return;
       }
       TeamCollection cc = Manager.getTeamCollection();
-      if(teamNode != null){
+      if (teamNode != null) {
         teamNode.detach();
       }
       teamNode = new TeamNode(team.getTeamId(), cc, pp);

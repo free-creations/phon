@@ -113,7 +113,7 @@ public class Job implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Job[ jobId=" + jobId + " ]";
+    return "Job[" + jobId + "]";
   }
 
   @Override

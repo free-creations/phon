@@ -180,7 +180,7 @@ public class Contest implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "testDb.Contest[ contestId=" + contestId + " ]";
+    return "Contest[" + contestId + "]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

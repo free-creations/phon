@@ -143,7 +143,7 @@ public class ContestType implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "testDb.ContestType[ contestTypeId=" + contestTypeId + " ]";
+    return "ContestType[" + contestTypeId + "]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
