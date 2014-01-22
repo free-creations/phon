@@ -71,14 +71,14 @@ public class Location implements Serializable, DbEntity {
   private String gridnumber;
   @OneToMany(mappedBy = "location")
   private List<Event> eventList;
-  public static final String PROP_NAME = "PROP_NAME";
-  public static final String PROP_BUILDING = "PROP_BUILDING";
-  public static final String PROP_STREET = "PROP_STREET";
-  public static final String PROP_TOWN = "PROP_TOWN";
-  public static final String PROP_GRIDNUMBER = "PROP_GRIDNUMBER";
-  public static final String PROP_ROOM = "PROP_ROOM";
-  public static final String PROP_EVENTREMOVED = "PROP_EVENTREMOVED";
-  public static final String PROP_EVENTADDED = "PROP_EVENTADDED";
+  public static final String PROP_NAME = "locPROP_NAME";
+  public static final String PROP_BUILDING = "locPROP_BUILDING";
+  public static final String PROP_STREET = "locPROP_STREET";
+  public static final String PROP_TOWN = "locPROP_TOWN";
+  public static final String PROP_GRIDNUMBER = "locPROP_GRIDNUMBER";
+  public static final String PROP_ROOM = "locPROP_ROOM";
+  public static final String PROP_EVENTREMOVED = "locPROP_EVENTREMOVED";
+  public static final String PROP_EVENTADDED = "locPROP_EVENTADDED";
 
   public Location() {
   }

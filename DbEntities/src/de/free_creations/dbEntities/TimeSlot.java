@@ -81,10 +81,10 @@ public class TimeSlot implements Serializable, DbEntity {
   private List<Availability> availabilityList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "timeSlot")
   private List<Event> eventList;
-  public static final String PROP_EVENTREMOVED = "PROP_EVENTREMOVED";
-  public static final String PROP_EVENTADDED = "PROP_EVENTADDED";
-  public static final String PROP_AVAILABILITYREMOVED = "PROP_AVAILABILITYREMOVED";
-  public static final String PROP_AVAILABILITYADDED = "PROP_AVAILABILITYADDED";
+  public static final String PROP_EVENTREMOVED = "timePROP_EVENTREMOVED";
+  public static final String PROP_EVENTADDED = "timePROP_EVENTADDED";
+  public static final String PROP_AVAILABILITYREMOVED = "timePROP_AVAILABILITYREMOVED";
+  public static final String PROP_AVAILABILITYADDED = "timePROP_AVAILABILITYADDED";
 
   public TimeSlot() {
   }

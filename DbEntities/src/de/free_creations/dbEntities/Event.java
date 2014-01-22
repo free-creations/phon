@@ -78,11 +78,11 @@ public class Event implements Serializable, DbEntity {
   @JoinColumn(name = "CONTEST", referencedColumnName = "CONTESTID")
   @ManyToOne(optional = false)
   private Contest contest;
-  public static final String PROP_SCHEDULED = "PROP_CONFIRMED";
-  public static final String PROP_LOCATION = "PROP_LOCATION";
-  public static final String PROP_CONTEST = "PROP_CONTEST";
-  public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
-  public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
+  public static final String PROP_SCHEDULED = "eventPROP_CONFIRMED";
+  public static final String PROP_LOCATION = "eventPROP_LOCATION";
+  public static final String PROP_CONTEST = "eventPROP_CONTEST";
+  public static final String PROP_ALLOCATIONREMOVED = "eventPROP_ALLOCATIONREMOVED";
+  public static final String PROP_ALLOCATIONADDED = "eventPROP_ALLOCATIONADDED";
 
   protected Event() {
   }

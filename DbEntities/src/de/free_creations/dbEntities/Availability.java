@@ -70,9 +70,9 @@ public class Availability implements Serializable, DbEntity {
   @JoinColumn(name = "PERSON", referencedColumnName = "PERSONID")
   @ManyToOne(optional = false)
   private Person person;
-  public static final String PROP_AVAILABLE = "PROP_AVAILABLE";
-  public static final String PROP_PERSON = "PROP_PERSON";
-  public static final String PROP_TIMESLOT = "PROP_TIMESLOT";
+  public static final String PROP_AVAILABLE = "availPROP_AVAILABLE";
+  public static final String PROP_PERSON = "availPROP_PERSON";
+  public static final String PROP_TIMESLOT = "availPROP_TIMESLOT";
 
   public Availability() {
   }

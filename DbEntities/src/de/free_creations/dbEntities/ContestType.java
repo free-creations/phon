@@ -59,8 +59,8 @@ public class ContestType implements Serializable, DbEntity {
   private List<Contest> contestList;
   @OneToMany(mappedBy = "contestType")
   private List<Person> personList;
-  public static final String PROP_ADD_PERSON = "addPerson";
-  public static final String PROP_REMOVE_PERSON = "removePerson";
+  public static final String PROP_ADD_PERSON = "cTypeAddPerson";
+  public static final String PROP_REMOVE_PERSON = "cTypeRemovePerson";
 
   public ContestType() {
   }

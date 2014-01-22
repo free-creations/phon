@@ -58,8 +58,8 @@ public class Job implements Serializable, DbEntity {
   @JoinColumn(name = "JOBTYPE", referencedColumnName = "JOBTYPEID")
   @ManyToOne(optional = false)
   private JobType jobType;
-  public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
-  public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
+  public static final String PROP_ALLOCATIONREMOVED = "jobPROP_ALLOCATIONREMOVED";
+  public static final String PROP_ALLOCATIONADDED = "jobPROP_ALLOCATIONADDED";
 
   protected Job() {
   }

@@ -55,9 +55,14 @@ public class Team implements Serializable, DbEntity {
   private String name;
   @OneToMany(mappedBy = "team")
   private List<Person> personList;
-  public static final String PROP_ADD_PERSON = "addPerson";
-  public static final String PROP_REMOVE_PERSON = "removePerson";
-  public static final String PROP_NAME = "PROP_NAME";
+  public static final String PROP_ADD_PERSON = "TeamAddPerson";
+  public static final String PROP_REMOVE_PERSON = "TeamRemovePerson";
+  public static final String PROP_NAME = "TeamPROP_NAME";
+  /**
+   * The null team is a virtual team (there is no Team entity) that groups all
+   * persons which are NOT members of a team.
+   */
+  public static final int NULL_TEAM_ID = Integer.MIN_VALUE;
 
   public Team() {
   }

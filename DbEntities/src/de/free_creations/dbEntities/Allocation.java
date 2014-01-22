@@ -83,11 +83,11 @@ public class Allocation implements Serializable, DbEntity {
   @JoinColumn(name = "EVENT", referencedColumnName = "EVENTID")
   @ManyToOne(optional = false)
   private Event event;
-  public static final String PROP_NOTE = "PROP_NOTE";
-  public static final String PROP_PLANNER = "PROP_PLANNER";
-  public static final String PROP_JOB = "PROP_JOB";
-  public static final String PROP_EVENT = "PROP_EVENT";
-  public static final String PROP_PERSON = "PROP_PERSON";
+  public static final String PROP_NOTE = "allocPROP_NOTE";
+  public static final String PROP_PLANNER = "allocPROP_PLANNER";
+  public static final String PROP_JOB = "allocPROP_JOB";
+  public static final String PROP_EVENT = "allocPROP_EVENT";
+  public static final String PROP_PERSON = "allocPROP_PERSON";
 
   protected Allocation() {
   }
@@ -103,6 +103,7 @@ public class Allocation implements Serializable, DbEntity {
     assert (job != null);
     assert (entityManager.contains(person));
     assert (entityManager.contains(event));
+    assert (entityManager.contains(job));
 
     Allocation newAllocation = new Allocation();
 
@@ -118,21 +119,24 @@ public class Allocation implements Serializable, DbEntity {
   }
 
   public void remove(EntityManager entityManager) {
+    if (!entityManager.contains(this)) {
+      return;
+    }
+    setPerson(null);
+    setEvent(null);
+    setJob(null);
     entityManager.remove(this);
     entityManager.flush();
-    if (person != null) {
-      person.firePropertyChange(Person.PROP_ALLOCATIONREMOVED, null, identity());
-    }
-    if (event != null) {
-      event.firePropertyChange(Event.PROP_ALLOCATIONREMOVED, null, identity());
-    }
-    if (job != null) {
-      job.firePropertyChange(Job.PROP_ALLOCATIONREMOVED, null, identity());
-    }
+//    if (person != null) {
+//      person.firePropertyChange(Person.PROP_ALLOCATIONREMOVED, null, identity());
+//    }
+//    if (event != null) {
+//      event.firePropertyChange(Event.PROP_ALLOCATIONREMOVED, null, identity());
+//    }
+//    if (job != null) {
+//      job.firePropertyChange(Job.PROP_ALLOCATIONREMOVED, null, identity());
+//    }
 
-    //  setPerson(null); << crashes EclipseLink (why?)
-    //  setEvent(null);
-    //  setJob(null);
   }
 
   public Integer getAllocationId() {
@@ -179,9 +183,21 @@ public class Allocation implements Serializable, DbEntity {
     return job;
   }
 
+  /**
+   * Sets the job to a new value.
+   *
+   * Note: before deleting a allocation, we'll set the job to null, but we shall not
+   * set "this.job" to null because otherwise EclipseLink will make a table
+   * UPDATE which will result in a
+   * java.sql.SQLIntegrityConstraintViolationException
+   *
+   * @param newValue
+   */
   protected void setJob(Job newValue) {
     Job old = this.job;
-    this.job = newValue;
+    if (newValue != null) {
+      this.job = newValue;
+    }
     if (!Objects.equals(old, newValue)) {
       if (old != null) {
         old.removeAllocation(this);
@@ -195,9 +211,21 @@ public class Allocation implements Serializable, DbEntity {
     }
   }
 
+  /**
+   * Sets the person to a new value.
+   *
+   * Note: before deleting a allocation, we'll set the person to null, but we
+   * shall not set "this.person" to null because otherwise EclipseLink will make
+   * a table UPDATE which will result in a
+   * java.sql.SQLIntegrityConstraintViolationException
+   *
+   * @param newValue
+   */
   protected void setPerson(Person newValue) {
     Person old = this.person;
-    this.person = newValue;
+    if (newValue != null) {
+      this.person = newValue;
+    }
     if (!Objects.equals(old, newValue)) {
       if (old != null) {
         old.removeAllocation(this);
@@ -210,10 +238,21 @@ public class Allocation implements Serializable, DbEntity {
       firePropertyChange(PROP_PERSON, oldId, newId);
     }
   }
-
+  /**
+   * Sets the event to a new value.
+   *
+   * Note: before deleting a allocation, we'll set the event to null, but we
+   * shall not set "this.event" to null because otherwise EclipseLink will make
+   * a table UPDATE which will result in a
+   * java.sql.SQLIntegrityConstraintViolationException
+   *
+   * @param newValue
+   */
   protected void setEvent(Event newValue) {
     Event old = this.event;
-    this.event = newValue;
+    if (newValue != null) {
+      this.event = newValue;
+    }
     if (!Objects.equals(old, newValue)) {
       if (old != null) {
         old.removeAllocation(this);
@@ -253,7 +292,7 @@ public class Allocation implements Serializable, DbEntity {
 
   @Override
   public String toString() {
-    return "Allocation[" + allocationId+"]";
+    return "Allocation[" + allocationId + "]";
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {

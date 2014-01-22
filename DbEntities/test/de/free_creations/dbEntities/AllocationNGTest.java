@@ -325,7 +325,7 @@ public class AllocationNGTest {
   public void testRemovePropertyChangeCallback() throws Throwable {
 
     Person testPerson = testAllocation.getPerson();
-    testAllocation.remove(entityManager);
+
 
     final TestListener testListener = new TestListener();
     testPerson.addPropertyChangeListener(testListener);

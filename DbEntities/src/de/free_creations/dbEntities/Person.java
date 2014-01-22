@@ -113,27 +113,27 @@ public class Person implements Serializable, DbEntity {
   @JoinColumn(name = "CONTESTTYPE", referencedColumnName = "CONTESTTYPEID")
   @ManyToOne
   private ContestType contestType;
-  public static final String PROP_SURNAME = "PROP_SURNAME";
-  public static final String PROP_GENDER = "PROP_GENDER";
-  public static final String PROP_ZIPCODE = "PROP_ZIPCODE";
-  public static final String PROP_CITY = "PROP_CITY";
-  public static final String PROP_TELEPHONE = "PROP_TELEPHONE";
-  public static final String PROP_MOBILE = "PROP_MOBILE";
-  public static final String PROP_EMAIL = "PROP_EMAIL";
-  public static final String PROP_AGEGROUP = "PROP_AGEGROUP";
-  public static final String PROP_NOTICE = "PROP_NOTICE";
-  public static final String PROP_LASTCHANGE = "PROP_LASTCHANGE";
-  public static final String PROP_CONTESTREMOVED = "PROP_CONTESTREMOVED";
-  public static final String PROP_CONTESTADDED = "PROP_CONTESTADDED";
-  public static final String PROP_AVAILABILITYREMOVED = "PROP_AVAILABILITYREMOVED";
-  public static final String PROP_AVAILABILITYADDED = "PROP_AVAILABILITYADDED";
-  public static final String PROP_ALLOCATIONREMOVED = "PROP_ALLOCATIONREMOVED";
-  public static final String PROP_ALLOCATIONADDED = "PROP_ALLOCATIONADDED";
-  public static final String PROP_TEAM = "PROP_TEAM";
-  public static final String PROP_GIVENNAME = "PROP_GIVENNAME";
-  public static final String PROP_JOBTYPE = "PROP_JOBTYPE";
-  public static final String PROP_CONTESTTYPE = "PROP_CONTESTTYPE";
-  public static final String PROP_AVAILABILITY = "PROP_AVAILABILITY";
+  public static final String PROP_SURNAME = "persPROP_SURNAME";
+  public static final String PROP_GENDER = "persPROP_GENDER";
+  public static final String PROP_ZIPCODE = "persPROP_ZIPCODE";
+  public static final String PROP_CITY = "persPROP_CITY";
+  public static final String PROP_TELEPHONE = "persPROP_TELEPHONE";
+  public static final String PROP_MOBILE = "persPROP_MOBILE";
+  public static final String PROP_EMAIL = "persPROP_EMAIL";
+  public static final String PROP_AGEGROUP = "persPROP_AGEGROUP";
+  public static final String PROP_NOTICE = "persPROP_NOTICE";
+  public static final String PROP_LASTCHANGE = "persPROP_LASTCHANGE";
+  public static final String PROP_CONTESTREMOVED = "persPROP_CONTESTREMOVED";
+  public static final String PROP_CONTESTADDED = "persPROP_CONTESTADDED";
+  public static final String PROP_AVAILABILITYREMOVED = "persPROP_AVAILABILITYREMOVED";
+  public static final String PROP_AVAILABILITYADDED = "persPROP_AVAILABILITYADDED";
+  public static final String PROP_ALLOCATIONREMOVED = "persPROP_ALLOCATIONREMOVED";
+  public static final String PROP_ALLOCATIONADDED = "persPROP_ALLOCATIONADDED";
+  public static final String PROP_TEAM = "persPROP_TEAM";
+  public static final String PROP_GIVENNAME = "persPROP_GIVENNAME";
+  public static final String PROP_JOBTYPE = "persPROP_JOBTYPE";
+  public static final String PROP_CONTESTTYPE = "persPROP_CONTESTTYPE";
+  public static final String PROP_AVAILABILITY = "persPROP_AVAILABILITY";
 
   public Person() {
   }
@@ -328,10 +328,16 @@ public class Person implements Serializable, DbEntity {
     this.team = newValue;
     if (!Objects.equals(old, newValue)) {
       if (old != null) {
-        old.removePerson(this);
+        old.removePerson(this);// this will also fire the property change
+      } else {
+        // there is nobody to fire a property change, so we will have to do this
+        firePropertyChangeForNullTeam(Team.PROP_REMOVE_PERSON, this.identity(), null);
       }
       if (newValue != null) {
-        newValue.addPerson(this);
+        newValue.addPerson(this);// this will also fire the property change
+      } else {
+        // there is nobody to fire a property change, so we will have to do this
+        firePropertyChangeForNullTeam(Team.PROP_ADD_PERSON, this.identity(), null);
       }
       EntityIdentity newId = (newValue == null) ? null : newValue.identity();
       EntityIdentity oldId = (old == null) ? null : old.identity();
@@ -435,6 +441,23 @@ public class Person implements Serializable, DbEntity {
             identity(),
             propertyName, oldValue, newValue);
   }
+
+  /**
+   * This function is needed to inform the listeners on the "NULL_TEAM". The
+   * NULL_TEAM is a (virtual) team which holds all persons that are not members
+   * of a team.
+   *
+   * @param propertyName
+   * @param oldValue
+   * @param newValue
+   */
+  protected void firePropertyChangeForNullTeam(String propertyName, Object oldValue, Object newValue) {
+    PropertyChangeManager.instance().firePropertyChange(
+            nullTeamIdentity,
+            propertyName, oldValue, newValue);
+  }
+  private static final EntityIdentity nullTeamIdentity
+          = new EntityIdentity(Team.class, Team.NULL_TEAM_ID);
 
   @Override
   public EntityIdentity identity() {

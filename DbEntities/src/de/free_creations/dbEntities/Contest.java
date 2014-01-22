@@ -67,12 +67,12 @@ public class Contest implements Serializable, DbEntity {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "contest")
   private List<Event> eventList;
 
-  public static final String PROP_NAME = "PROP_NAME";
-  public static final String PROP_CONTESTTYPE = "PROP_CONTESTTYPE";
-  public static final String PROP_PERSON = "PROP_PERSON";
-  public static final String PROP_EVENTREMOVED = "PROP_EVENTREMOVED";
-  public static final String PROP_EVENTADDED = "PROP_EVENTADDED";
-  public static final String PROP_DESCRIPTION = "PROP_DESCRIPTION";
+  public static final String PROP_NAME = "contestPROP_NAME";
+  public static final String PROP_CONTESTTYPE = "contestPROP_CONTESTTYPE";
+  public static final String PROP_PERSON = "contestPROP_PERSON";
+  public static final String PROP_EVENTREMOVED = "contestPROP_EVENTREMOVED";
+  public static final String PROP_EVENTADDED = "contestPROP_EVENTADDED";
+  public static final String PROP_DESCRIPTION = "contestPROP_DESCRIPTION";
 
   public Contest() {
   }

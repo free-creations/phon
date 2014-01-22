@@ -97,7 +97,7 @@ public class TeamNGTest {
   }
 
   @Test
-  public void testPropertyChangeCallback() throws Throwable  {
+  public void testPropertyChangeCallbackForName() throws Throwable {
 
     Team testItem = new Team(Integer.MAX_VALUE);
     final TestListener testListener = new TestListener();
@@ -111,7 +111,7 @@ public class TeamNGTest {
       EventQueue.invokeAndWait(new Runnable() {
         @Override
         public void run() {
-          assertEquals(testListener.called, expectedCallbackCount );
+          assertEquals(testListener.called, expectedCallbackCount);
         }
       });
     } catch (InvocationTargetException ex) {
@@ -120,4 +120,66 @@ public class TeamNGTest {
 
   }
 
+  /**
+   * Verify that when a singleton person gets added to a team, the virtual
+   * NULL_TEAM sends a property change (person removed).
+   *
+   * @throws Throwable
+   */
+  @Test
+  public void testPropertyChangeCallbackForNULL_TEAM_1() throws Throwable {
+
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    final TestListener testListener = new TestListener();
+    Team.addPropertyChangeListener(testListener, Team.NULL_TEAM_ID);
+
+    testPerson.setTeam(testTeam);
+
+    final int expectedCallbackCount = 1;
+
+    try {
+      EventQueue.invokeAndWait(new Runnable() {
+        @Override
+        public void run() {
+          assertEquals(testListener.called, expectedCallbackCount);
+          assertEquals(testListener.lastEvent.getPropertyName(),
+                  Team.PROP_REMOVE_PERSON);
+        }
+      });
+    } catch (InvocationTargetException ex) {
+      throw ex.getCause();
+    }
+  }
+
+  /**
+   * Verify that when a person gets removed from any team, the virtual NULL_TEAM
+   * sends a property change (person added).
+   *
+   * @throws Throwable
+   */
+  @Test
+  public void testPropertyChangeCallbackForNULL_TEAM_2() throws Throwable {
+
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    testPerson.setTeam(testTeam);
+
+    final TestListener testListener = new TestListener();
+    Team.addPropertyChangeListener(testListener, Team.NULL_TEAM_ID);
+
+    testPerson.setTeam(null);
+    final int expectedCallbackCount = 1;
+
+    try {
+      EventQueue.invokeAndWait(new Runnable() {
+        @Override
+        public void run() {
+          assertEquals(testListener.called, expectedCallbackCount);
+          assertEquals(testListener.lastEvent.getPropertyName(),
+                  Team.PROP_ADD_PERSON);
+        }
+      });
+    } catch (InvocationTargetException ex) {
+      throw ex.getCause();
+    }
+  }
 }

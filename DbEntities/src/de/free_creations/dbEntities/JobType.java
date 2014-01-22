@@ -61,8 +61,8 @@ public class JobType implements Serializable, DbEntity {
   private List<Person> personList;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "jobType")
   private List<Job> jobList;
-  public static final String PROP_REMOVE_PERSON = "removePerson";
-  public static final String PROP_ADD_PERSON = "addPerson";
+  public static final String PROP_REMOVE_PERSON = "jobTypeRemovePerson";
+  public static final String PROP_ADD_PERSON = "jobTypeAddPerson";
 
   public JobType() {
   }
