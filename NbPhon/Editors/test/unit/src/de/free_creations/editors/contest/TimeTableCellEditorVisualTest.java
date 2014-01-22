@@ -277,7 +277,7 @@ public class TimeTableCellEditorVisualTest extends javax.swing.JFrame {
     });
   }
 
-  @Test
+//  @Test
   public void showIt() {
     System.out.println("Use \"Run File\" to see this test.");
   }

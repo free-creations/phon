@@ -25,6 +25,8 @@ import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.PersonCollection;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Objects;
 import javax.swing.TransferHandler;
@@ -43,7 +45,7 @@ import org.openide.util.Exceptions;
  */
 public class PersonTeamPanel extends javax.swing.JPanel
         implements ExplorerManager.Provider {
-  
+
   private final ExplorerManager explorerManager = new ExplorerManager();
   /**
    * The identity of the person who's team is currently been displayed *
@@ -53,25 +55,41 @@ public class PersonTeamPanel extends javax.swing.JPanel
    * The team Node that currently shows the team
    */
   private TeamNode teamNode = null;
-  
+
   private final Node emptyNode = new AbstractNode(Children.LEAF);
-  
+
   private final TransferHandler transferHandler = new TransferHandler() {
     @Override
     public boolean canImport(TransferHandler.TransferSupport support) {
       return support.isDataFlavorSupported(PersonNode.PERSON_NODE_FLAVOR);
     }
-    
+
     @Override
     public boolean importData(TransferHandler.TransferSupport support) {
       try {
         Integer key = (Integer) support.getTransferable().getTransferData(PersonNode.PERSON_NODE_FLAVOR);
-        JoinPersonInTeam action = new JoinPersonInTeam(key, personId);        
-        action.apply(0);        
+        JoinPersonInTeam action = new JoinPersonInTeam(key, personId);
+        action.apply(0);
         return true;
       } catch (DataBaseNotReadyException | ClassCastException | UnsupportedFlavorException | IOException ex) {
         Exceptions.printStackTrace(ex);
         return false;
+      }
+    }
+  };
+
+  private final PropertyChangeListener personListener = new PropertyChangeListener() {
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      String propertyName = evt.getPropertyName();
+      if (propertyName == null) {
+        return;
+      }
+      switch (propertyName) {
+        case (Person.PROP_TEAM):
+          display(personId);
+          break;
       }
     }
   };
@@ -89,11 +107,17 @@ public class PersonTeamPanel extends javax.swing.JPanel
     beanTreeView.setDropTarget(false); // we'll not use the transfer handler from the TeamRoot node
     setTransferHandler(transferHandler);
   }
-  
+
   public void setPersonId(Integer personId) {
     Integer old = this.personId;
     this.personId = personId;
     if (!Objects.equals(old, personId)) {
+      if (old != null) {
+        Person.removePropertyChangeListener(personListener, old);
+      }
+      if (personId != null) {
+        Person.addPropertyChangeListener(personListener, personId);
+      }
       display(personId);
     }
   }
@@ -128,7 +152,7 @@ public class PersonTeamPanel extends javax.swing.JPanel
   public ExplorerManager getExplorerManager() {
     return explorerManager;
   }
-  
+
   private void display(Integer personId) {
     try {
       if (personId == null) {
@@ -148,7 +172,7 @@ public class PersonTeamPanel extends javax.swing.JPanel
       }
       TeamCollection cc = Manager.getTeamCollection();
       if (teamNode != null) {
-        teamNode.detach();
+        teamNode.destroy();
       }
       teamNode = new TeamNode(team.getTeamId(), cc, pp);
       explorerManager.setRootContext(teamNode);

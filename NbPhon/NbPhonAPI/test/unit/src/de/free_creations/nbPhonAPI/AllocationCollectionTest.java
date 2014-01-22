@@ -169,6 +169,8 @@ public class AllocationCollectionTest {
 
   /**
    * Test of newEntity method, of class AllocationCollection.
+   * 
+   * One person cannot have two jobs for the same event.
    *
    * @throws de.free_creations.nbPhonAPI.DataBaseNotReadyException
    */
@@ -190,6 +192,7 @@ public class AllocationCollectionTest {
     Allocation testItem1 = allocationCollection.newEntity(p, e, j1, "USER");
 
     // Here is the statement that should throw the exception:
+    System.out.println("### testNewEntity_Boom() Exception is expected!");
     Allocation testItem2 = allocationCollection.newEntity(p, e, j2, "USER");
 
   }

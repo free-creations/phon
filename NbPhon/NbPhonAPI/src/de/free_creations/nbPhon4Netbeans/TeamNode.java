@@ -15,6 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
+import de.free_creations.dbEntities.EntityIdentity;
 import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.Person;
 import static de.free_creations.nbPhon4Netbeans.IconManager.iconManager;
@@ -24,6 +25,8 @@ import java.awt.Image;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +47,7 @@ public class TeamNode extends AbstractNode {
 
   private final Integer teamId;
   private final MutableEntityCollection<Team, Integer> teamManager;
+  private final MutableEntityCollection<Person, Integer> personManager;
 
   private static class PasteAction extends PasteType {
 
@@ -57,13 +61,32 @@ public class TeamNode extends AbstractNode {
 
     @Override
     public Transferable paste() throws IOException {
-      System.out.println("#### pasting Person("+newMemberId+") into team ("+teamId+")");
+      System.out.println("#### pasting Person(" + newMemberId + ") into team (" + teamId + ")");
       return ExTransferable.EMPTY;
     }
 
   }
 
   private static class TeamMembers extends Children.Array {
+
+    private final PropertyChangeListener teamListener = new PropertyChangeListener() {
+
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        String propertyName = evt.getPropertyName();
+        if (propertyName == null) {
+          return;
+        }
+        switch (propertyName) {
+          case (Team.PROP_ADD_PERSON):
+            TeamMembers.this.addItem(evt.getNewValue());
+            break;
+          case (Team.PROP_REMOVE_PERSON):
+            TeamMembers.this.removeItem(evt.getOldValue());
+            break;
+        }
+      }
+    };
 
     private final Integer teamId;
     private final MutableEntityCollection<Team, Integer> teamManager;
@@ -76,6 +99,8 @@ public class TeamNode extends AbstractNode {
       this.teamId = teamId;
       this.teamManager = teamManager;
       this.personManager = personManager;
+      Team.addPropertyChangeListener(teamListener, teamId);
+
     }
 
     @Override
@@ -116,12 +141,47 @@ public class TeamNode extends AbstractNode {
       return result;
     }
 
+    public void destroy() {
+      Team.removePropertyChangeListener(teamListener, teamId);
+    }
+
+    private void addItem(Object o) {
+      // Iam too lazzy to code the adding to the list. Init again will do.
+      nodes = initCollection();
+      refresh();
+//      if (o instanceof EntityIdentity) {
+//        EntityIdentity newPerson = (EntityIdentity) o;
+//        Integer personid = (Integer) newPerson.primaryKey;
+//        //create a node for this new person
+//        PersonNode newNode = new PersonNode(personid, personManager);
+//        newNode.notifyPendingChanges();
+//        if (nodes instanceof ArrayList) {
+//          // if the nodes- list is an ArrayList (as created in initCollection)
+//          // we can insert on top of the list.
+//          ((ArrayList<Node>) nodes).add(0, newNode);
+//        } else {
+//          // otherways, we just insert at the end.
+//          nodes.add(newNode);
+//        }
+//        refresh();
+//      }
+    }
+
+    private void removeItem(Object o) {
+      // Iam too lazzy to code the removal from the list. Init again will do.
+      nodes = initCollection();
+      refresh();
+    }
   };
 
-  protected TeamNode(Children ch, MutableEntityCollection<Team, Integer> teamManager, Integer teamId) {
+  protected TeamNode(Children ch,
+          MutableEntityCollection<Team, Integer> teamManager,
+          MutableEntityCollection<Person, Integer> personManager,
+          Integer teamId) {
     super(ch);
     this.teamId = teamId;
     this.teamManager = teamManager;
+    this.personManager = personManager;
   }
 
   /**
@@ -135,7 +195,7 @@ public class TeamNode extends AbstractNode {
   public TeamNode(Integer teamId,
           MutableEntityCollection<Team, Integer> teamManager,
           MutableEntityCollection<Person, Integer> personManager) {
-    this(makeTeamMembers(teamId, teamManager, personManager), teamManager, teamId);
+    this(makeTeamMembers(teamId, teamManager, personManager), teamManager, personManager, teamId);
   }
 
   protected static Children makeTeamMembers(Integer teamId,
@@ -178,8 +238,18 @@ public class TeamNode extends AbstractNode {
   /**
    * Stop listening on the team entity.
    */
-  public void detach() {
-    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  @Override
+  public void destroy() {
+    Children children = getChildren();
+    if (children instanceof TeamMembers) {
+      ((TeamMembers) children).destroy();
+    }
+
+    try {
+      super.destroy();
+    } catch (IOException ex) {
+      Exceptions.printStackTrace(ex);
+    }
   }
 
   /**

@@ -110,6 +110,9 @@ public class JoinPersonInTeam implements CheckedAction {
       }
     }
     // team_1 != null; team_2 != null;
+    if(team_1.equals(team_2)){
+      return;
+    }
     List<Person> personList_1 = team_1.getPersonList();
     List<Person> personList_2 = team_2.getPersonList();
     int size_1 = (personList_1 == null) ? 0 : personList_1.size();
