@@ -15,11 +15,11 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
-import de.free_creations.dbEntities.EntityIdentity;
 import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.Person;
 import static de.free_creations.nbPhon4Netbeans.IconManager.iconManager;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
+import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.awt.Image;
 import java.awt.datatransfer.Transferable;
@@ -49,6 +49,24 @@ public class TeamNode extends AbstractNode {
   private final MutableEntityCollection<Team, Integer> teamManager;
   private final MutableEntityCollection<Person, Integer> personManager;
 
+  private final PropertyChangeListener teamListener = new PropertyChangeListener() {
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      String propertyName = evt.getPropertyName();
+      if (propertyName == null) {
+        return;
+      }
+      switch (propertyName) {
+        case (Team.PROP_NAME):
+          fireDisplayNameChange(null, getDisplayName());
+          break;
+
+      }
+    }
+
+  };
+
   private static class PasteAction extends PasteType {
 
     private final Integer teamId;
@@ -62,6 +80,21 @@ public class TeamNode extends AbstractNode {
     @Override
     public Transferable paste() throws IOException {
       System.out.println("#### pasting Person(" + newMemberId + ") into team (" + teamId + ")");
+      try {
+        Person newMember = Manager.getPersonCollection().findEntity(newMemberId);
+        if (newMember != null) {
+          if ((teamId == null) || (teamId == Team.NULL_TEAM_ID)) {
+            newMember.setTeam(null);
+          } else {
+            Team team = Manager.getTeamCollection().findEntity(teamId);
+            if (team != null) {
+              newMember.setTeam(team);
+            }
+          }
+        }
+      } catch (DataBaseNotReadyException ex) {
+        Exceptions.printStackTrace(ex);
+      }
       return ExTransferable.EMPTY;
     }
 
@@ -69,7 +102,7 @@ public class TeamNode extends AbstractNode {
 
   private static class TeamMembers extends Children.Array {
 
-    private final PropertyChangeListener teamListener = new PropertyChangeListener() {
+    private final PropertyChangeListener teamMembersListener = new PropertyChangeListener() {
 
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
@@ -99,13 +132,16 @@ public class TeamNode extends AbstractNode {
       this.teamId = teamId;
       this.teamManager = teamManager;
       this.personManager = personManager;
-      Team.addPropertyChangeListener(teamListener, teamId);
-
+      if ((teamId == null) || (teamId == Team.NULL_TEAM_ID)) {
+        Team.addPropertyChangeListener(teamMembersListener, Team.NULL_TEAM_ID);
+      } else {
+        Team.addPropertyChangeListener(teamMembersListener, teamId);
+      }
     }
 
     @Override
     protected Collection<Node> initCollection() {
-      if (teamId == null) {
+      if ((teamId == null) || (teamId == Team.NULL_TEAM_ID)) {
         return singletonTeam();
       } else {
         return regularTeam();
@@ -142,7 +178,7 @@ public class TeamNode extends AbstractNode {
     }
 
     public void destroy() {
-      Team.removePropertyChangeListener(teamListener, teamId);
+      Team.removePropertyChangeListener(teamMembersListener, teamId);
     }
 
     private void addItem(Object o) {
@@ -182,6 +218,8 @@ public class TeamNode extends AbstractNode {
     this.teamId = teamId;
     this.teamManager = teamManager;
     this.personManager = personManager;
+
+    Team.addPropertyChangeListener(teamListener, teamId);
   }
 
   /**
@@ -206,12 +244,16 @@ public class TeamNode extends AbstractNode {
 
   @Override
   public String getName() {
-    if (teamId == null) {
+    if ((teamId == null) || (teamId == Team.NULL_TEAM_ID)) {
       return "Singletons";
     }
     try {
       Team c = teamManager.findEntity(teamId);
-      return String.format("%s", c.getName());
+      if (c != null) {
+        return String.format("%s", c.getName());
+      } else {
+        return String.format("Zombie %s", teamId);
+      }
     } catch (DataBaseNotReadyException ex) {
       return String.format("Team[%s]", teamId);
     }
@@ -219,7 +261,7 @@ public class TeamNode extends AbstractNode {
 
   @Override
   public Image getIcon(int type) {
-    if (teamId == null) {
+    if ((teamId == null) || (teamId == Team.NULL_TEAM_ID)) {
       return iconManager().iconNobody;
     }
     BufferedImage result = iconManager().iconTeam;
@@ -228,7 +270,7 @@ public class TeamNode extends AbstractNode {
 
   @Override
   public Image getOpenedIcon(int type) {
-    if (teamId == null) {
+    if ((teamId == null) || (teamId == Team.NULL_TEAM_ID)) {
       return iconManager().iconNobody;
     }
     BufferedImage result = iconManager().iconTeamOpened;
@@ -244,7 +286,7 @@ public class TeamNode extends AbstractNode {
     if (children instanceof TeamMembers) {
       ((TeamMembers) children).destroy();
     }
-
+    Team.removePropertyChangeListener(teamListener, teamId);
     try {
       super.destroy();
     } catch (IOException ex) {

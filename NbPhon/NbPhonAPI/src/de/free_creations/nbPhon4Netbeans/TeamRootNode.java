@@ -18,6 +18,9 @@ package de.free_creations.nbPhon4Netbeans;
 import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
+import de.free_creations.nbPhonAPI.TeamCollection;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,38 +34,69 @@ import org.openide.nodes.Node;
  */
 public class TeamRootNode extends AbstractNode {
 
-  private static class TeamMembers extends Children.Array {
+  private static class TeamItems extends Children.Array {
 
     private final MutableEntityCollection<Team, Integer> teamManager;
     private final MutableEntityCollection<Person, Integer> personManager;
+    private final PropertyChangeListener teamRootListener = new PropertyChangeListener() {
 
-    private TeamMembers(
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        String propertyName = evt.getPropertyName();
+        if (propertyName == null) {
+          return;
+        }
+        switch (propertyName) {
+          case (TeamCollection.PROP_ITEM_ADDED):
+            TeamItems.this.addItem(evt.getNewValue());
+            break;
+          case (TeamCollection.PROP_ITEM_REMOVED):
+            TeamItems.this.removeItem(evt.getOldValue());
+            break;
+        }
+      }
+    };
+
+    private TeamItems(
             MutableEntityCollection<Team, Integer> teamManager,
             MutableEntityCollection<Person, Integer> personManager) {
 
       this.teamManager = teamManager;
       this.personManager = personManager;
+      teamManager.addPropertyChangeListener(teamRootListener);
     }
 
     @Override
     protected Collection<Node> initCollection() {
       List<Team> cc = teamManager.getAll();
       ArrayList<Node> result = new ArrayList<>();
-      for(Team c:cc){
+      for (Team c : cc) {
         TeamNode cn = new TeamNode(c.getTeamId(), teamManager, personManager);
         result.add(cn);
       }
       // add a special node showing all those persons that are not in a team
-      TeamNode cn = new TeamNode(null, teamManager, personManager);
+      TeamNode cn = new TeamNode(Team.NULL_TEAM_ID, teamManager, personManager);
       result.add(cn);
       return result;
+    }
+
+    private void addItem(Object newValue) {
+      // Iam too lazzy to code the adding to the list. Init again will do.
+      nodes = initCollection();
+      refresh();
+    }
+
+    private void removeItem(Object oldValue) {
+      // Iam too lazzy to code the removal from the list. Init again will do.
+      nodes = initCollection();
+      refresh();
     }
 
   };
 
   public TeamRootNode(MutableEntityCollection<Team, Integer> teamManager,
           MutableEntityCollection<Person, Integer> personManager) {
-    super(new TeamMembers(teamManager, personManager));
+    super(new TeamItems(teamManager, personManager));
   }
 
   @Override
