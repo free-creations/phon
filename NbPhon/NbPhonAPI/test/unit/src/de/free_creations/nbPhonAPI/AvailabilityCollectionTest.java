@@ -77,6 +77,22 @@ public class AvailabilityCollectionTest {
     assertEquals(testAvailability, result);
 
   }
+  
+    /**
+   * Test of findEntity method, of class AvailabilityCollection.
+   * What happens is we pass null values?
+   * @throws java.lang.Exception
+   */
+  @Test
+  public void testFindEntity_Person_TimeSlotNullValue() throws Exception {
+    AvailabilityCollection availabilityCollection = Manager.getAvailabilityCollection();
+
+    // Here is the statement that we test:
+    Availability result = availabilityCollection.findEntity(null, null);
+    assertNull(result);
+
+
+  }
 
   /**
    * Test of findAll method, of class AvailabilityCollection.
