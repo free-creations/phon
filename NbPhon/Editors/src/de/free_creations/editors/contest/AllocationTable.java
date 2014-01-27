@@ -16,6 +16,7 @@
 package de.free_creations.editors.contest;
 
 import de.free_creations.actions.contest.AllocatePersonForEvent;
+import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.TimeSlot;
@@ -554,7 +555,11 @@ public class AllocationTable extends JTable {
       CellKey cellKey = getCellKey(row, col);
       if (cellKey != null) {
         Integer newPersonId = (Integer) aValue;
-        AllocatePersonForEvent action = new AllocatePersonForEvent(cellKey.eventId, newPersonId, cellKey.jobId);
+        AllocatePersonForEvent action = 
+                new AllocatePersonForEvent(cellKey.eventId,
+                        newPersonId, 
+                        cellKey.jobId,
+                        Allocation.PLANNER_USER);
         try {
           action.apply(0);
           //fireTableDataChanged();

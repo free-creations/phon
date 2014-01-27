@@ -15,11 +15,29 @@
  */
 package de.free_creations.actions.automaticAllocation;
 
+import de.free_creations.actions.contest.AllocatePersonForEvent;
+import de.free_creations.actions.rating.AllocationRating;
+import de.free_creations.dbEntities.Allocation;
+import de.free_creations.dbEntities.Event;
+import de.free_creations.dbEntities.Job;
+import de.free_creations.dbEntities.Person;
+import de.free_creations.dbEntities.TimeSlot;
+import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
+import de.free_creations.nbPhonAPI.Manager;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import org.openide.util.Exceptions;
+
 /**
  *
  * @author Harald Postner<harald at free-creations.de>
  */
 public class AutomaticAllocationExecutor {
+  
 
   public static class ProgressIndicator {
 
@@ -38,10 +56,107 @@ public class AutomaticAllocationExecutor {
     }
   }
 
-  private final boolean fullReAllocation;
+  protected class OpenJob implements Comparable<OpenJob> {
+
+    public final Job job;
+    public final Event event;
+
+    public OpenJob(Job job, Event event) {
+      this.job = job;
+      this.event = event;
+    }
+
+    @Override
+    public int hashCode() {
+      int hash = 7;
+      hash = 13 * hash + Objects.hashCode(this.job);
+      hash = 13 * hash + Objects.hashCode(this.event);
+      return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      final OpenJob other = (OpenJob) obj;
+      if (!Objects.equals(this.job, other.job)) {
+        return false;
+      }
+      if (!Objects.equals(this.event, other.event)) {
+        return false;
+      }
+      return true;
+    }
+    @Override
+    public int compareTo(OpenJob other) {
+
+      // put the teachers first
+      if (isTeacher()) {
+        if (!other.isTeacher()) {
+          return -1;
+        }
+      }
+      if (other.isTeacher()) {
+        if (!isTeacher()) {
+          return 1;
+        }
+      }
+      // sort on ascending time
+      int timeCompare = Integer.compare(getTimeSlotId(), other.getTimeSlotId());
+      if (timeCompare != 0) {
+        return timeCompare;
+      }
+      // finally sort on hash value 
+      return Integer.compare(hashCode(), other.hashCode());
+    }
+
+    public int getTimeSlotId() {
+      if (event != null) {
+        TimeSlot timeSlot = event.getTimeSlot();
+        if (timeSlot != null) {
+          return timeSlot.getTimeSlotId();
+        }
+      }
+      return -1;
+    }
+
+    public boolean isTeacher() {
+      return "LEHRER".equals(job.getJobId());
+    }
+
+
+
+  }
+
+  private enum State {
+
+    RemovingOldAllocations,
+    CollectingJobs,
+    AllocatingJobs,
+    Finished
+  }
+  private State currentState;
+  private ProgressIndicator currentProgress;
+  private Iterator<OpenJob> openJobsIterator;
+  // these variables help to update the progress indicator
+  private double currentProgressRatio = 0D;
+  private double progressDelta = 1D;
+  private int stepsToDo = 0;
+  private int stepsDone = 0;
+  private final Object ProgressIndicatorLock = new Object();
 
   public AutomaticAllocationExecutor(boolean fullReAllocation) {
-    this.fullReAllocation = fullReAllocation;
+    if (fullReAllocation) {
+      currentState = State.RemovingOldAllocations;
+      currentProgress = new ProgressIndicator(0, "Removing old allocations.");
+    } else {
+      currentState = State.CollectingJobs;
+      currentProgress = new ProgressIndicator(0, "Collecting Jobs.");
+    }
   }
 
   /**
@@ -51,26 +166,127 @@ public class AutomaticAllocationExecutor {
    * @throws Exception
    */
   public boolean doNext() throws Exception {
-    if (step < 100) {
-      System.out.println("starting step:" + step);
-      if ((!fullReAllocation) && (step > 50)) {
-        throw new Exception("Just for fun.");
-      }
+    switch (currentState) {
+      case RemovingOldAllocations:
+        removeOldAllocations();
+        return true;
+      case CollectingJobs:
+        collectJobs();
+        return true;
+      case AllocatingJobs:
+        allocateJobs();
+        return true;
+      case Finished:
+        return false;
+    }
+    return false;
+  }
 
-      Thread.sleep(100);
+  private void removeOldAllocations() {
+    try {
+      Thread.sleep(500);
+      currentState = State.CollectingJobs;
+      setProgress(new ProgressIndicator(10, "Collecting Jobs."));
+    } catch (InterruptedException ex) {
+      Exceptions.printStackTrace(ex);
+    }
+  }
 
-      System.out.println("ended step:" + step);
-            step++;
-      return true;
-    } else {
-      return false;
+  private void collectJobs() {
+    SortedSet<OpenJob> openJobs = collectOpenJobs();
+    openJobsIterator = openJobs.iterator();
+
+    // prepare the next state
+    stepsToDo = openJobs.size();
+    stepsDone = 0;
+    currentProgressRatio += 0.1D;
+    progressDelta = (1D - currentProgressRatio) / stepsToDo;
+    currentState = State.AllocatingJobs;
+    setProgress(new ProgressIndicator(
+            (int) (currentProgressRatio * 100D),
+            String.format("Step %s of %s", stepsDone + 1, stepsToDo)));
+
+  }
+
+  private void allocateJobs() throws DataBaseNotReadyException {
+    assert (openJobsIterator != null);
+    if (!openJobsIterator.hasNext()) {
+      currentState = State.Finished;
+      setProgress(new ProgressIndicator(100, "Finished"));
+      return;
+    }
+    OpenJob next = openJobsIterator.next();
+    Person person = findBestMatch(next);
+    if (person != null) {
+      Integer eventId = next.event.getEventId();
+      String jobId = next.job.getJobId();
+      Integer personId = person.getPersonId();
+      AllocatePersonForEvent alloc = new AllocatePersonForEvent(eventId, personId, jobId, Allocation.PLANNER_AUTOMAT);
+      alloc.apply(0);
+    }else{
+      System.out.println(">>> no person found for "+next.event+" and "+next.job);
     }
 
+    // prepare the next step
+    stepsDone++;
+    currentProgressRatio += progressDelta;
+    currentState = State.AllocatingJobs;
+    setProgress(new ProgressIndicator(
+            (int) (currentProgressRatio * 100D),
+            String.format("Step %s of %s", stepsDone + 1, stepsToDo)));
+
   }
-  private int step = 0;
 
   public ProgressIndicator getProgress() {
-    return new ProgressIndicator(step, String.format("step %s of 100", step + 1));
+    synchronized (ProgressIndicatorLock) {
+      return currentProgress;
+    }
   }
 
+  public void setProgress(ProgressIndicator pi) {
+    synchronized (ProgressIndicatorLock) {
+      currentProgress = pi;
+    }
+  }
+
+  public SortedSet<OpenJob> collectOpenJobs() {
+    TreeSet<OpenJob> result = new TreeSet<>();
+    List<Event> allEvents = Manager.getEventCollection().getAll();
+    List<Job> allJobs = Manager.getJobCollection().getAll();
+    for (Event e : allEvents) {
+      if (e.isScheduled()) {
+        ArrayList<Job> candidateJobs = new ArrayList<>(allJobs);
+        List<Allocation> eventsAlloctations = e.getAllocationList();
+        for (Allocation a : eventsAlloctations) {
+          candidateJobs.remove(a.getJob());
+        }
+        for (Job openJob : candidateJobs) {
+          OpenJob newOpenJob = new OpenJob(openJob, e);
+          result.add(newOpenJob);
+        }
+      }
+    }
+    return result;
+  }
+
+  public Person findBestMatch(OpenJob openJob) {
+    Person winner = null;
+    int bestScore = Integer.MIN_VALUE;
+    Integer eventId = openJob.event.getEventId();
+    String jobId = openJob.job.getJobId();
+    List<Person> pp = Manager.getPersonCollection().getAll();
+    for (Person p : pp) {
+      Integer personId = p.getPersonId();
+      AllocationRating eval = new AllocationRating(personId, eventId, jobId);
+      int score = eval.getScore();
+      if (score > bestScore) {
+        bestScore = score;
+        winner = p;
+      }
+    }
+    if (bestScore <= AllocationRating.unrealizable) {
+      winner = null;
+    }
+    return winner;
+  }
 }

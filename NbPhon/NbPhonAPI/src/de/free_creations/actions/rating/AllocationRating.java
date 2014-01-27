@@ -85,7 +85,8 @@ public class AllocationRating {
     score += allocationAssessmemnt();
     score += jobAssessmemnt();
     score += contestTypeAssessmemnt();
-    score += teamAssessmemnt();
+    score += teamAssessmemnt();    
+    score += eventAssessmemnt();
     return score;
   }
 
@@ -190,15 +191,16 @@ public class AllocationRating {
     int tempScore = neutral;
     for (Allocation a : aa) {
       Person other = a.getPerson();
-      Team otherPersonsTeam = other.getTeam();
-      if (otherPersonsTeam != null) {
-        if (otherPersonsTeam.equals(wantedTeam)) {
-          tempScore += good;
-        } else {
-          tempScore += veryInconvenient;
+      if (!Objects.equals(other, person)) {
+        Team otherPersonsTeam = other.getTeam();
+        if (otherPersonsTeam != null) {
+          if (otherPersonsTeam.equals(wantedTeam)) {
+            tempScore += good;
+          } else {
+            tempScore += veryInconvenient;
+          }
         }
       }
-
     }
     return tempScore;
   }

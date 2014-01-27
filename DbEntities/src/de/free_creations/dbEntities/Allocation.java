@@ -89,6 +89,9 @@ public class Allocation implements Serializable, DbEntity {
   public static final String PROP_EVENT = "allocPROP_EVENT";
   public static final String PROP_PERSON = "allocPROP_PERSON";
 
+  public static final String PLANNER_USER = "USER";
+  public static final String PLANNER_AUTOMAT = "AUTOMAT";
+
   protected Allocation() {
   }
 
@@ -186,8 +189,8 @@ public class Allocation implements Serializable, DbEntity {
   /**
    * Sets the job to a new value.
    *
-   * Note: before deleting a allocation, we'll set the job to null, but we shall not
-   * set "this.job" to null because otherwise EclipseLink will make a table
+   * Note: before deleting a allocation, we'll set the job to null, but we shall
+   * not set "this.job" to null because otherwise EclipseLink will make a table
    * UPDATE which will result in a
    * java.sql.SQLIntegrityConstraintViolationException
    *
@@ -238,6 +241,7 @@ public class Allocation implements Serializable, DbEntity {
       firePropertyChange(PROP_PERSON, oldId, newId);
     }
   }
+
   /**
    * Sets the event to a new value.
    *

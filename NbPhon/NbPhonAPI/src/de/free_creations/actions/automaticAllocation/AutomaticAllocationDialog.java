@@ -52,8 +52,8 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
       AutomaticAllocationExecutor exe = new AutomaticAllocationExecutor(fullReAllocation);
       boolean more = true;
       while (more && (!halted)) {
-        more = exe.doNext();
         publish(exe.getProgress());
+        more = exe.doNext();
       }
       return null;
     }

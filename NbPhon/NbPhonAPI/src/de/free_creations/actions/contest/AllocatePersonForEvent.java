@@ -45,10 +45,10 @@ public class AllocatePersonForEvent implements CheckedAction {
   private final Integer newPersonId;
   private final String jobId;
 
-  public AllocatePersonForEvent(Integer eventId, Integer newPersonId, String jobId) {
+  public AllocatePersonForEvent(Integer eventId, Integer newPersonId, String jobId, String planner) {
     this.eventId = eventId;
     assert (eventId != null);
-    this.newPersonId = newPersonId; // can be null
+    this.newPersonId = newPersonId; // if null, any existing allocation shall be removed
     this.jobId = jobId;
     assert (jobId != null);
   }

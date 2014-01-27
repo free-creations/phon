@@ -22,10 +22,7 @@ import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 
 /**
- * This rule applies when the location is assigned to a contest.
- *
- * All events that were located in this location at the given time-slot must
- * first be de-located, before locating the new contest.
+ * This rule applies when an event changes schedule.
  *
  * @author Harald Postner<harald at free-creations.de>
  */
