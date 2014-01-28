@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -32,7 +33,7 @@ public class GenerateContestTable {
 
   private final int timeSlotCount = 15; // must be the same as in "populateCoreTables.sql"
   private final int locationCount = 19; // must be the same as in "populateExampleData.sql"
-  private final int personCount = 30; // must be less or equal as in "GenreatePersonTable.java"
+  private final int personCount = 30; // range to pick reponsibels from, must be less or equal as in "GenreatePersonTable.java"
   private final double undefinedPersonRatio = 0.3; // the ratio of null values in personId
   private final double unscheduledEventRatio = 0.1; // the ratio of not yet scheuled events
 
@@ -86,14 +87,18 @@ public class GenerateContestTable {
 
   private void makeContestRecord(PrintWriter output, String line, int contestId) {
     CsvReader csv = new CsvReader(line);
+    String resonsiblePerson = randomPerson();
+    String contestType = csv.item(0);
+    registerResponsiblePerson(resonsiblePerson, contestType);
 
     String outLine
             = "INSERT INTO \"APP\".\"CONTEST\" VALUES("
             + contestId + ","
-            + "'" + csv.item(0) + "',"// CONTESTTYPE
+            + "'" + contestType + "',"// CONTESTTYPE
             + "'" + csv.item(1) + "'," // NAME
             + "'" + csv.item(2) + "'," // DESCRIPTION
-            + randomPerson()
+            + resonsiblePerson + "," // PERSON
+            + "NULL" //PRIORITY
             + ");";
 
     output.println(outLine);
@@ -116,14 +121,31 @@ public class GenerateContestTable {
     output.println("ALTER TABLE \"APP\".\"CONTEST\" ALTER COLUMN CONTESTID RESTART WITH "
             + (lineCount + 1)
             + " ;");
+
+    output.println("--");
+    updatePersons(output);
+
+    output.println("-- insert one dummy allocation for the unit tests");
+    output.println(
+            "INSERT INTO \"APP\".\"ALLOCATION\" VALUES(DEFAULT,1,1,'LEHRER',CURRENT_TIMESTAMP,'AUTOMAT',NULL,NULL);"
+    );
+
     output.println("--");
     output.println("/*");
-    output.println("" + lineCount + " records written");
+    output.println("" + lineCount + " contest-records written");
     output.println("*/");
+  }
 
-    output.println(
-            "INSERT INTO \"APP\".\"ALLOCATION\" VALUES(DEFAULT,1,1,'LEHRER',CURRENT_TIMESTAMP,NULL,NULL);"
-    );
+  private void updatePersons(PrintWriter output) {
+    for (PersonRecord p : responsibePersons) {
+      output.println(
+              "UPDATE APP.PERSON SET "
+              + "\"JOBTYPE\" = 'LEHRER', "
+              + "\"CONTESTTYPE\" = '" + p.contestType + "'"
+              + " WHERE PERSONID = " + p.resonsiblePerson + ";"
+      );
+    }
+
   }
 
   private void makeEventRecords(PrintWriter output, int contestId) {
@@ -164,6 +186,27 @@ public class GenerateContestTable {
     } else {
       return "1";
     }
+  }
+
+  private class PersonRecord {
+
+    public final String resonsiblePerson;
+    public final String contestType;
+
+    public PersonRecord(String resonsiblePerson, String contestType) {
+      this.resonsiblePerson = resonsiblePerson;
+      this.contestType = contestType;
+    }
+  }
+
+  private final ArrayList<PersonRecord> responsibePersons
+          = new ArrayList<>();
+
+  private void registerResponsiblePerson(String resonsiblePerson, String contestType) {
+    if ("NULL".equals(resonsiblePerson)) {
+      return;
+    }
+    responsibePersons.add(new PersonRecord(resonsiblePerson, contestType));
   }
 
 }

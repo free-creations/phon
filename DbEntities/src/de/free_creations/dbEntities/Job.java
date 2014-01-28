@@ -32,9 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The Job Table is pre-populated, therfore no public constructor and
- * no public setters.
- * 
+ * The Job Table is pre-populated, therfore no public constructor and no public
+ * setters.
+ *
  * @author Harald <Harald at free-creations.de>
  */
 @Entity
@@ -45,6 +45,9 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Job.findByJobId", query = "SELECT j FROM Job j WHERE j.jobId = :jobId"),
   @NamedQuery(name = "Job.findByName", query = "SELECT j FROM Job j WHERE j.name = :name")})
 public class Job implements Serializable, DbEntity {
+
+  @Column(name = "PRIORITY")
+  private Integer priority;
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -66,8 +69,9 @@ public class Job implements Serializable, DbEntity {
 
   /**
    * Only for test within this package.
+   *
    * @param jobId
-   * @param jobType 
+   * @param jobType
    */
   protected Job(String jobId, JobType jobType) {
     this.jobId = jobId;
@@ -178,4 +182,9 @@ public class Job implements Serializable, DbEntity {
     allocationList.add(a);
     firePropertyChange(PROP_ALLOCATIONADDED, null, a.identity());
   }
+
+  public Integer getPriority() {
+    return priority;
+  }
+
 }

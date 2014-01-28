@@ -36,11 +36,15 @@ import java.util.Objects;
  */
 public class AllocationRating {
 
-  public static final int unrealizable = Integer.MIN_VALUE / 1000;
+  /**
+   * the threshold which we consider an impossible allocation.
+   */
+  public static final int threshold = Integer.MIN_VALUE / 1000;
+  public static final int good = 32;
+  public static final int unrealizable = threshold - (100 * good);
   public static final int veryInconvenient = -124;
   public static final int inconvenient = -32;
   public static final int neutral = 0;
-  public static final int good = 32;
 
   private final Integer personId;
   private final Integer eventId;
@@ -85,7 +89,7 @@ public class AllocationRating {
     score += allocationAssessmemnt();
     score += jobAssessmemnt();
     score += contestTypeAssessmemnt();
-    score += teamAssessmemnt();    
+    score += teamAssessmemnt();
     score += eventAssessmemnt();
     return score;
   }
@@ -126,8 +130,13 @@ public class AllocationRating {
     for (Allocation a : allocationList) {
       Event e = a.getEvent();
       if (Objects.equals(e.getTimeSlot(), timeSlot)) {
+        // the person has an appointment at the given time
+        // ... lets verify if it is for an other event-job
         if (!Objects.equals(e, event)) {
-          return unrealizable;
+          if (!Objects.equals(job, a.getJob())) {
+            // oops we have really an other job at the same time
+            return unrealizable;
+          }
         }
       }
     }

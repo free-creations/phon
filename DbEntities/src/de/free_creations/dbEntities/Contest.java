@@ -48,6 +48,9 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Contest.findByName", query = "SELECT c FROM Contest c WHERE c.name = :name")})
 public class Contest implements Serializable, DbEntity {
 
+  @Column(name = "PRIORITY")
+  private Integer priority;
+
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,6 +76,7 @@ public class Contest implements Serializable, DbEntity {
   public static final String PROP_EVENTREMOVED = "contestPROP_EVENTREMOVED";
   public static final String PROP_EVENTADDED = "contestPROP_EVENTADDED";
   public static final String PROP_DESCRIPTION = "contestPROP_DESCRIPTION";
+  public static final String PROP_PRIORITY = "contestPROP_PRIORITY";
 
   public Contest() {
   }
@@ -244,5 +248,17 @@ public class Contest implements Serializable, DbEntity {
     }
     eventList.add(e);
     firePropertyChange(PROP_EVENTADDED, null, e.identity());
+  }
+
+  public Integer getPriority() {
+    return priority;
+  }
+
+  public void setPriority(Integer priority) {
+    Integer old = this.priority;
+    this.priority = priority;
+    if (!Objects.equals(old, priority)) {
+      firePropertyChange(PROP_PRIORITY, old, priority);
+    }
   }
 }

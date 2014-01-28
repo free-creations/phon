@@ -61,6 +61,9 @@ import javax.xml.bind.annotation.XmlRootElement;
   @NamedQuery(name = "Allocation.findByNote", query = "SELECT a FROM Allocation a WHERE a.note = :note")})
 public class Allocation implements Serializable, DbEntity {
 
+  @Column(name = "COMMITED")
+  private Integer commited;
+
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,6 +91,7 @@ public class Allocation implements Serializable, DbEntity {
   public static final String PROP_JOB = "allocPROP_JOB";
   public static final String PROP_EVENT = "allocPROP_EVENT";
   public static final String PROP_PERSON = "allocPROP_PERSON";
+  public static final String PROP_COMMITED = "allocPROP_COMMITED";
 
   public static final String PLANNER_USER = "USER";
   public static final String PLANNER_AUTOMAT = "AUTOMAT";
@@ -130,15 +134,6 @@ public class Allocation implements Serializable, DbEntity {
     setJob(null);
     entityManager.remove(this);
     entityManager.flush();
-//    if (person != null) {
-//      person.firePropertyChange(Person.PROP_ALLOCATIONREMOVED, null, identity());
-//    }
-//    if (event != null) {
-//      event.firePropertyChange(Event.PROP_ALLOCATIONREMOVED, null, identity());
-//    }
-//    if (job != null) {
-//      job.firePropertyChange(Job.PROP_ALLOCATIONREMOVED, null, identity());
-//    }
 
   }
 
@@ -350,5 +345,22 @@ public class Allocation implements Serializable, DbEntity {
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(Allocation.class, allocationId);
+  }
+
+  public boolean isCommited() {
+    if (commited == null) {
+      return false;
+    }
+
+    return commited > 0;
+  }
+
+  public void setCommited(boolean value) {
+    boolean old = isCommited();
+    if (old == value) {
+      return;
+    }
+    commited = (value) ? 1 : 0;
+    firePropertyChange(PROP_COMMITED, old, value);
   }
 }

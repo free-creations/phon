@@ -29,10 +29,10 @@ INSERT INTO "APP"."JOBTYPE" VALUES('HELFER', 'Helfer','helper.png');
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
 DELETE FROM "APP"."JOB";
-INSERT INTO "APP"."JOB" VALUES('LEHRER', 'LEHRER', 'Lehrkraft');
-INSERT INTO "APP"."JOB" VALUES('HELFER1','HELFER', 'Helfer 1');
-INSERT INTO "APP"."JOB" VALUES('HELFER2','HELFER', 'Helfer 2');
-INSERT INTO "APP"."JOB" VALUES('HELFER3','HELFER', 'Helfer 3');
+INSERT INTO "APP"."JOB" VALUES('LEHRER', 'LEHRER', 1, 'Lehrkraft');
+INSERT INTO "APP"."JOB" VALUES('HELFER1','HELFER', 2, 'Helfer 1');
+INSERT INTO "APP"."JOB" VALUES('HELFER2','HELFER', 3, 'Helfer 2');
+INSERT INTO "APP"."JOB" VALUES('HELFER3','HELFER', 4, 'Helfer 3');
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------

@@ -65,6 +65,8 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Person.findByNotice", query = "SELECT p FROM Person p WHERE p.notice = :notice"),
   @NamedQuery(name = "Person.findByLastchange", query = "SELECT p FROM Person p WHERE p.lastchange = :lastchange")})
 public class Person implements Serializable, DbEntity {
+  @OneToMany(mappedBy = "person")
+  private List<Team> teamList;
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -481,7 +483,7 @@ public class Person implements Serializable, DbEntity {
   }
 
   /**
-   * Add a contest for which this person is responsible.
+   * Add a contest for which this person will be  responsible.
    *
    * @param c
    */
@@ -562,5 +564,24 @@ public class Person implements Serializable, DbEntity {
     }
     allocationList.add(a);
     firePropertyChange(PROP_ALLOCATIONADDED, null, a.identity());
+  }
+
+  /**
+   * Get the list of Teams for which this person is the leader.
+   * @return 
+   */
+  @XmlTransient
+  public List<Team> getTeamList() {
+    return teamList;
+  }
+  
+  
+
+  public void setTeamList(List<Team> teamList) {
+    this.teamList = teamList;
+  }
+
+  private void addTeam(Team t) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

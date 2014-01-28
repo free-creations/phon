@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openide.util.Exceptions;
 
 /**
@@ -37,7 +39,8 @@ import org.openide.util.Exceptions;
  * @author Harald Postner<harald at free-creations.de>
  */
 public class AutomaticAllocationExecutor {
-  
+
+  static final private Logger logger = Logger.getLogger(AutomaticAllocationExecutor.class.getName());
 
   public static class ProgressIndicator {
 
@@ -91,6 +94,7 @@ public class AutomaticAllocationExecutor {
       }
       return true;
     }
+
     @Override
     public int compareTo(OpenJob other) {
 
@@ -127,8 +131,6 @@ public class AutomaticAllocationExecutor {
     public boolean isTeacher() {
       return "LEHRER".equals(job.getJobId());
     }
-
-
 
   }
 
@@ -221,10 +223,11 @@ public class AutomaticAllocationExecutor {
       Integer eventId = next.event.getEventId();
       String jobId = next.job.getJobId();
       Integer personId = person.getPersonId();
+      logger.log(Level.FINER, "allocate {0} to {1}, {2}", new Object[]{person, next.event, next.job});
       AllocatePersonForEvent alloc = new AllocatePersonForEvent(eventId, personId, jobId, Allocation.PLANNER_AUTOMAT);
       alloc.apply(0);
-    }else{
-      System.out.println(">>> no person found for "+next.event+" and "+next.job);
+    } else {
+      logger.log(Level.INFO, "no person found for {0} and {1}", new Object[]{next.event, next.job});
     }
 
     // prepare the next step
@@ -284,9 +287,11 @@ public class AutomaticAllocationExecutor {
         winner = p;
       }
     }
-    if (bestScore <= AllocationRating.unrealizable) {
+    if (bestScore <= (AllocationRating.threshold)) {
       winner = null;
     }
+    logger.log(Level.FINER, "best match {0} score {1}", new Object[]{winner, bestScore});
+
     return winner;
   }
 }

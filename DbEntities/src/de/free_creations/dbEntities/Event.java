@@ -286,4 +286,5 @@ public class Event implements Serializable, DbEntity {
     allocationList.add(a);
     firePropertyChange(PROP_ALLOCATIONADDED, null, a.identity());
   }
+
 }

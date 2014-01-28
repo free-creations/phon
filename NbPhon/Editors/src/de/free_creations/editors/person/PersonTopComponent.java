@@ -55,7 +55,7 @@ import org.openide.windows.CloneableTopComponent;
 })
 @SuppressWarnings({"rawtypes", "unchecked"})
 public final class PersonTopComponent extends CloneableTopComponent {
-
+  
   private Integer currentKey = null;
   private final PersonCollection personCollection = Manager.getPersonCollection();
   private final PropertyChangeListener listener = new PropertyChangeListener() {
@@ -65,15 +65,15 @@ public final class PersonTopComponent extends CloneableTopComponent {
       if (p != null) {
         refreshView(p);
       }
-
+      
     }
   };
-
+  
   public PersonTopComponent() {
     initComponents();
     setName(Bundle.CTL_PersonTopComponent());
   }
-
+  
   PersonTopComponent(Integer key) {
     this();
     viewPersonRecord(key);
@@ -155,6 +155,11 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
     edNotiz.setColumns(20);
     edNotiz.setRows(5);
+    edNotiz.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        edNotizFocusLost(evt);
+      }
+    });
     jScrollPane2.setViewportView(edNotiz);
 
     PersonId.setEditable(false);
@@ -258,11 +263,11 @@ public final class PersonTopComponent extends CloneableTopComponent {
               .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(jLabel4)
-                  .addComponent(edPlz, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                  .addComponent(edPlz, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(jLabel5)
-                  .addComponent(edWohnort, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                  .addComponent(edWohnort, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
               .addComponent(edNachname)
               .addComponent(edContestType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -300,11 +305,11 @@ public final class PersonTopComponent extends CloneableTopComponent {
           .addComponent(jLabel5)
           .addComponent(jLabel6))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
           .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
             .addComponent(edPlz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(edStrasse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addComponent(edWohnort, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(edWohnort))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -444,7 +449,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       }
     }
   }//GEN-LAST:event_edContestTypeActionPerformed
-
+  
   private JobType getJobtypeTeacher() {
     try {
       return Manager.getJobTypeCollection().findEntity("LEHRER");
@@ -452,7 +457,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       return null;
     }
   }
-
+  
   private JobType getJobtypeHelper() {
     try {
       return Manager.getJobTypeCollection().findEntity("HELFER");
@@ -460,7 +465,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       return null;
     }
   }
-
+  
 
   private void edPersontypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edPersontypeActionPerformed
     Person p = thisPerson();
@@ -502,6 +507,17 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
   }//GEN-LAST:event_edHerrFrauActionPerformed
 
+  private void edNotizFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edNotizFocusLost
+    Person p = thisPerson();
+    if (p != null) {
+      String oldG = p.getNotice();
+      String newG = edNotiz.getText();
+      if (!Objects.equals(oldG, newG)) {
+        p.setNotice(newG);
+      }
+    }
+  }//GEN-LAST:event_edNotizFocusLost
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField PersonId;
   private de.free_creations.editors.person.PersonAssignmentTable assignmentTable;
@@ -539,31 +555,31 @@ public final class PersonTopComponent extends CloneableTopComponent {
   public void componentOpened() {
     // TODO add custom code on component opening
   }
-
+  
   @Override
   public void componentClosed() {
     // TODO add custom code on component closing
   }
-
+  
   void writeProperties(java.util.Properties p) {
     // better to version settings since initial version as advocated at
     // http://wiki.apidesign.org/wiki/PropertyFiles
     p.setProperty("version", "1.0");
     // TODO store your settings
   }
-
+  
   void readProperties(java.util.Properties p) {
     String version = p.getProperty("version");
     // TODO read your settings according to their version
   }
-
+  
   public void viewPersonRecord(Integer newKey) {
     if (currentKey != newKey) {
-
+      
       Person.removePropertyChangeListener(listener, currentKey);
       currentKey = newKey;
       Person person = thisPerson();
-
+      
       if (person != null) {
         Person.addPropertyChangeListener(listener, newKey);
         refreshView(person);
@@ -572,7 +588,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       assignmentTable.setPersonId(newKey);
     }
   }
-
+  
   private Person thisPerson() {
     Person p = null;
     try {
@@ -582,7 +598,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
     }
     return p;
   }
-
+  
   private void refreshView(Person person) {
     if (person == null) {
       return;
@@ -603,8 +619,9 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edWohnort.setText(noNull(person.getCity()));
     edPersontype.setSelectedItem(personType(person));
     teamPanel.setPersonId(person.getPersonId());
+    edNotiz.setText(person.getNotice());
   }
-
+  
   private String personType(Person person) {
     if (person == null) {
       return null;
@@ -629,7 +646,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
         return "Erwachsen";
     }
   }
-
+  
   private Integer findTeamleaderId(Person person) {
 //    if (person == null) {
 //      return null;
@@ -640,9 +657,9 @@ public final class PersonTopComponent extends CloneableTopComponent {
 //    }
 //    return p.getPersonid();
     return null;
-
+    
   }
-
+  
   private String noNull(Integer i) {
     if (i == null) {
       return "";
@@ -650,7 +667,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       return i.toString();
     }
   }
-
+  
   private String noNull(String s) {
     if (s == null) {
       return "";
