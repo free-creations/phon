@@ -21,6 +21,7 @@ import de.free_creations.dbEntities.TimeSlot;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -67,9 +68,9 @@ public class AvailabilityCollection implements MutableEntityCollection<Availabil
   }
 
   /**
-   * Searches the availability-record for a given person and a given time-slot. If
-   * (by error) more than one such records exists, the first one is returned and
-   * a warning is logged.
+   * Searches the availability-record for a given person and a given time-slot.
+   * If (by error) more than one such records exists, the first one is returned
+   * and a warning is logged.
    *
    * @param p the location
    * @param t the time-slot
@@ -101,6 +102,28 @@ public class AvailabilityCollection implements MutableEntityCollection<Availabil
    * @throws DataBaseNotReadyException
    */
   public List<Availability> findAll(Person p, TimeSlot t) throws DataBaseNotReadyException {
+    if (p == null) {
+      return Collections.emptyList();
+    }
+    if (t == null) {
+      return Collections.emptyList();
+    }
+    synchronized (Manager.databaseAccessLock) {
+      ArrayList<Availability> result = new ArrayList<>();
+      List<Availability> personAvail = p.getAvailabilityList();
+      for (Availability a : personAvail) {
+        TimeSlot timeSlot = a.getTimeSlot();
+        assert (timeSlot != null);
+        if (timeSlot.equals(t)) {
+          result.add(a);
+        }
+      }
+      return result;
+    }
+
+  }
+
+  public List<Availability> findAllSlow(Person p, TimeSlot t) throws DataBaseNotReadyException {
     synchronized (Manager.databaseAccessLock) {
       TypedQuery<Availability> query = Manager.getEntityManager().createNamedQuery("Availability.findByPersonAndTimeslot", Availability.class);
       query.setParameter("timeSlot", t);
@@ -110,8 +133,6 @@ public class AvailabilityCollection implements MutableEntityCollection<Availabil
       return resultList;
     }
   }
-
-
 
   @Override
   public void removeEntity(Integer key) throws DataBaseNotReadyException {

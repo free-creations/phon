@@ -22,6 +22,7 @@ import de.free_creations.dbEntities.TimeSlot;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -102,6 +103,29 @@ public class EventCollection implements MutableEntityCollection<Event, Integer> 
    * @throws DataBaseNotReadyException
    */
   public List<Event> findAll(Location l, TimeSlot t) throws DataBaseNotReadyException {
+    if (l == null) {
+      return Collections.emptyList();
+    }
+    if (t == null) {
+      return Collections.emptyList();
+    }
+    synchronized (Manager.databaseAccessLock) {
+      ArrayList<Event> result = new ArrayList<>();
+      List<Event> locationsEvents = l.getEventList();
+      for (Event e : locationsEvents) {
+        TimeSlot timeSlot = e.getTimeSlot();
+        assert (timeSlot != null);
+        if (timeSlot.equals(t)) {
+          result.add(e);
+        }
+      }
+
+      return result;
+    }
+
+  }
+
+  public List<Event> findAllSlow(Location l, TimeSlot t) throws DataBaseNotReadyException {
     synchronized (Manager.databaseAccessLock) {
       TypedQuery<Event> query = Manager.getEntityManager().createNamedQuery("Event.findByLocationAndTimeslot", Event.class);
       query.setParameter("timeSlot", t);
@@ -112,7 +136,35 @@ public class EventCollection implements MutableEntityCollection<Event, Integer> 
     }
   }
 
+  /**
+   * Find the event for a given contest that happen at a given time.
+   *
+   * @param c
+   * @param t
+   * @return
+   * @throws DataBaseNotReadyException
+   */
   public Event findEntity(Contest c, TimeSlot t) throws DataBaseNotReadyException {
+    if (c == null) {
+      return null;
+    }
+    if (t == null) {
+      return null;
+    }
+    synchronized (Manager.databaseAccessLock) {
+      List<Event> contestsEvents = c.getEventList();
+      for(Event e: contestsEvents){
+        TimeSlot timeSlot = e.getTimeSlot();
+        assert(timeSlot != null);
+        if(timeSlot.equals(t)){
+          return e;
+        }
+      }
+      return null;
+    }
+  }
+
+  public Event findEntitySlow(Contest c, TimeSlot t) throws DataBaseNotReadyException {
     synchronized (Manager.databaseAccessLock) {
       TypedQuery<Event> query = Manager.getEntityManager().createNamedQuery("Event.findByContestAndTimeslot", Event.class);
       query.setParameter("timeSlot", t);

@@ -23,8 +23,10 @@ import de.free_creations.dbEntities.TimeSlot;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -105,6 +107,28 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
    * @throws DataBaseNotReadyException
    */
   public List<Allocation> findAll(Person p, TimeSlot t) throws DataBaseNotReadyException {
+    if (p == null) {
+      return Collections.emptyList();
+    }
+    if (t == null) {
+      return Collections.emptyList();
+    }
+    synchronized (Manager.databaseAccessLock) {
+      ArrayList<Allocation> result = new ArrayList<>();
+      List<Allocation> personsAllocs = p.getAllocationList();
+      for (Allocation a : personsAllocs) {
+        Event event = a.getEvent();
+        assert (event != null);
+        TimeSlot timeSlot = event.getTimeSlot();
+        if (Objects.equals(timeSlot, t)) {
+          result.add(a);
+        }
+      }
+      return result;
+    }
+  }
+
+  public List<Allocation> findAllSlow(Person p, TimeSlot t) throws DataBaseNotReadyException {
     synchronized (Manager.databaseAccessLock) {
       TypedQuery<Allocation> query = Manager.getEntityManager().createNamedQuery("Allocation.findByPersonAndTimeslot", Allocation.class);
       query.setParameter("timeSlot", t);
@@ -152,6 +176,28 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
    * @throws DataBaseNotReadyException
    */
   public List<Allocation> findAll(Event e, Job j) throws DataBaseNotReadyException {
+    if (e == null) {
+      return Collections.emptyList();
+    }
+    if (j == null) {
+      return Collections.emptyList();
+    }
+    synchronized (Manager.databaseAccessLock) {
+      ArrayList<Allocation> result = new ArrayList<>();
+      List<Allocation> eventsAllocs = e.getAllocationList();
+      for (Allocation a : eventsAllocs) {
+        Job job = a.getJob();
+        assert (job != null);
+        if (job.equals(j)) {
+          result.add(a);
+        }
+      }
+
+      return result;
+    }
+  }
+
+  public List<Allocation> findAllSlow(Event e, Job j) throws DataBaseNotReadyException {
     synchronized (Manager.databaseAccessLock) {
       TypedQuery<Allocation> query = Manager.getEntityManager().createNamedQuery("Allocation.findByEventAndJob", Allocation.class);
       query.setParameter("event", e);
