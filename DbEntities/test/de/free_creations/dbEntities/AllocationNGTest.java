@@ -19,6 +19,7 @@ import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
@@ -107,7 +108,7 @@ public class AllocationNGTest {
     assertEquals(expected, testAllocation.identity());
   }
 
-  @Test
+  @Test(enabled = true)
   public void testPropertyChangeCallback() throws InterruptedException, InvocationTargetException {
 
     Allocation testItem = new Allocation(Integer.MAX_VALUE);
@@ -135,7 +136,11 @@ public class AllocationNGTest {
     entityManager.persist(testPerson);
     entityManager.flush();
 
+    // the statement we want to test
     Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, testJob, "USER");
+
+    entityManager.flush();
+
     long allocationId = testItem.getAllocationId();
     assertTrue(allocationId > 0);
     System.out.println("...testItem.getAllocationId()=" + allocationId);
@@ -152,19 +157,54 @@ public class AllocationNGTest {
     assertNotNull(jAllocationList);
     assertTrue(jAllocationList.contains(testItem));
 
-//    testItem.remove(entityManager);
-//
-//    pAllocationList = testPerson.getAllocationList();
-//    assertFalse(pAllocationList.contains(testItem));
-//
-//    eAllocationList = testEvent.getAllocationList();
-//    assertFalse(eAllocationList.contains(testItem));
-//
-//    jAllocationList = testJob.getAllocationList();
-//    assertFalse(jAllocationList.contains(testItem));
-//
-//    Allocation find = entityManager.find(Allocation.class, allocationId);
-//    assertNull(find);
+  }
+
+  /**
+   * Verify whether it is possible to remove Allocation records and create them
+   * again afterwards.
+   *
+   * The problem is, if we do not flush after deleting we'll get a constraint
+   * violation on "ALLOCATION_UNIQUE"
+   *
+   * @throws InterruptedException
+   * @throws InvocationTargetException
+   */
+  @Test(enabled = true)
+  public void testMakeAndRemoveManyAllocations() throws InterruptedException, InvocationTargetException {
+    // verify that the one to many relations are correctly updated
+    System.out.println("testMakeAndRemoveManyAllocations()");
+
+    Person testPerson = new Person(Integer.MAX_VALUE);
+    entityManager.persist(testPerson);
+    entityManager.flush();
+
+    TypedQuery<Event> query = entityManager.createNamedQuery("Event.findAll", Event.class);
+    List<Event> ee = query.getResultList();
+    // the statement we want to test
+
+    ArrayList<Allocation> tempItems = new ArrayList<>();
+    for (Event e : ee) {
+      Allocation testItem = Allocation.newAllocation(entityManager, testPerson, e, testJob, "USER");
+      tempItems.add(testItem);
+      long allocationId = testItem.getAllocationId();
+      assertTrue(allocationId > 0);
+      System.out.println("...testItem1.getAllocationId()=" + allocationId);
+    }
+    entityManager.flush();
+
+    for (Allocation a : tempItems) {
+      a.remove(entityManager);
+    }
+
+    for (Event e : ee) {
+      Allocation testItem = Allocation.newAllocation(entityManager, testPerson, e, testJob, "USER");
+      tempItems.add(testItem);
+      long allocationId = testItem.getAllocationId();
+      assertTrue(allocationId > 0);
+      System.out.println("...testItem2.getAllocationId()=" + allocationId);
+    }
+    entityManager.flush();
+
   }
 
   @Test(enabled = true)
@@ -250,7 +290,7 @@ public class AllocationNGTest {
   /**
    * Test of newAllocation method, of class Allocation.
    */
-  @Test
+  @Test(enabled = true)
   public void testNewAllocation() {
     Person testPerson = new Person(Integer.MAX_VALUE);
     entityManager.persist(testPerson);
@@ -268,7 +308,7 @@ public class AllocationNGTest {
 
   }
 
-  @Test
+  @Test(enabled = true)
   public void testNewAllocationPropertyChangeCallback() throws Throwable {
 
     // preparation ---
@@ -305,7 +345,7 @@ public class AllocationNGTest {
   /**
    * Test of remove method, of class Allocation.
    */
-  @Test
+  @Test(enabled = true)
   public void testRemove() {
     Person testPerson = testAllocation.getPerson();
     testAllocation.remove(entityManager);
@@ -323,7 +363,7 @@ public class AllocationNGTest {
     assertFalse(jAllocationList.contains(testAllocation));
   }
 
-  @Test
+  @Test(enabled = true)
   public void testRemovePropertyChangeCallback() throws Throwable {
 
     Person testPerson = testAllocation.getPerson();
@@ -351,42 +391,42 @@ public class AllocationNGTest {
   /**
    * Test of getAllocationId method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testGetAllocationId() {
   }
 
   /**
    * Test of getLastchange method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testGetLastchange() {
   }
 
   /**
    * Test of setLastchange method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testSetLastchange() {
   }
 
   /**
    * Test of getPlanner method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testGetPlanner() {
   }
 
   /**
    * Test of setPlanner method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testSetPlanner() {
   }
 
   /**
    * Test of getNote method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testGetNote() {
   }
 
@@ -400,91 +440,91 @@ public class AllocationNGTest {
   /**
    * Test of getPerson method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testGetPerson() {
   }
 
   /**
    * Test of getJob method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testGetJob() {
   }
 
   /**
    * Test of setJob method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testSetJob() {
   }
 
   /**
    * Test of setPerson method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testSetPerson() {
   }
 
   /**
    * Test of setEvent method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testSetEvent() {
   }
 
   /**
    * Test of getEvent method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testGetEvent() {
   }
 
   /**
    * Test of hashCode method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testHashCode() {
   }
 
   /**
    * Test of equals method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testEquals() {
   }
 
   /**
    * Test of toString method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testToString() {
   }
 
   /**
    * Test of addPropertyChangeListener method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testAddPropertyChangeListener_PropertyChangeListener() {
   }
 
   /**
    * Test of addPropertyChangeListener method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testAddPropertyChangeListener_PropertyChangeListener_Integer() {
   }
 
   /**
    * Test of removePropertyChangeListener method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testRemovePropertyChangeListener_PropertyChangeListener() {
   }
 
   /**
    * Test of removePropertyChangeListener method, of class Allocation.
    */
-  @Test
+  @Test(enabled = false)
   public void testRemovePropertyChangeListener_PropertyChangeListener_Integer() {
   }
 }

@@ -556,7 +556,7 @@ public class AllocationTable extends JTable {
       if (cellKey != null) {
         Integer newPersonId = (Integer) aValue;
         AllocatePersonForEvent action = 
-                new AllocatePersonForEvent(cellKey.eventId,
+                new AllocatePersonForEvent(true, cellKey.eventId,
                         newPersonId, 
                         cellKey.jobId,
                         Allocation.PLANNER_USER);

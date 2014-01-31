@@ -134,6 +134,18 @@ public class Allocation implements Serializable, DbEntity {
   }
 
   public void remove(EntityManager entityManager) {
+    remove(entityManager, false);
+  }
+
+  /**
+   * Removes this Allocation from the entity manager.
+   *
+   * @param entityManager
+   * @param withoutFlush if set to false, the entity manager will not be
+   * flushed. This can be used to delete a many Allocations and doing the
+   * flushing afterwards.
+   */
+  public void remove(EntityManager entityManager, boolean withoutFlush) {
     if (!entityManager.contains(this)) {
       return;
     }
@@ -141,8 +153,9 @@ public class Allocation implements Serializable, DbEntity {
     setEvent(null);
     setJob(null);
     entityManager.remove(this);
-
-
+    if (!withoutFlush) {
+      entityManager.flush();
+    }
   }
 
   public long getAllocationId() {
@@ -298,8 +311,6 @@ public class Allocation implements Serializable, DbEntity {
     }
     return true;
   }
-
-
 
   @Override
   public String toString() {

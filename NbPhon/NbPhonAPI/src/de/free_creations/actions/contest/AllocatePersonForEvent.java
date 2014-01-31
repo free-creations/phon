@@ -50,7 +50,12 @@ public class AllocatePersonForEvent implements CheckedAction {
   private final String jobId;
   private final String  planner;
 
-  public AllocatePersonForEvent(Integer eventId, Integer newPersonId, String jobId, String planner) {
+  public AllocatePersonForEvent(
+          boolean removeClashing, 
+          Integer eventId, 
+          Integer newPersonId, 
+          String jobId, 
+          String planner) {
     this.eventId = eventId;
     assert (eventId != null);
     this.newPersonId = newPersonId; // if null, any existing allocation shall be removed
@@ -97,12 +102,10 @@ public class AllocatePersonForEvent implements CheckedAction {
     List<Allocation> aTemp = Manager.getAllocationCollection().findAll(event, job);
     // the requested allocation might already be realized.
     if (isRequestedAllocation(aTemp)) {
-      logger.log(Level.FINER, "Person[{0}] is allready allocated to {1}, {2}. Nothing to do.", new Object[]{newPersonId, event, job});
       return; // OK there is nothing to do.
     }
     ArrayList<Allocation> aSnapShot = new ArrayList<>(aTemp);
     for (Allocation a : aSnapShot) {
-      logger.log(Level.FINER, "removing other persons allocation {0}, {1}, {2}", new Object[]{a.getPerson(), a.getEvent(), a.getJob()});
       Manager.getAllocationCollection().removeEntity(a);
     }
 
@@ -124,7 +127,7 @@ public class AllocatePersonForEvent implements CheckedAction {
       logger.log(Level.FINER, "removing this persons simultaneous allocation {0}, {1}, {2}", new Object[]{a.getPerson(), a.getEvent(), a.getJob()});
       Manager.getAllocationCollection().removeEntity(a);
     }
-
+    
     // now proceed to the new allocation
     Manager.getAllocationCollection().newEntity(person, event, job, planner);
 

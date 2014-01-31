@@ -105,7 +105,7 @@ public class AllocatePersonForEventTest {
 
     // here is the statement that we want to test
     AllocatePersonForEvent action
-            = new AllocatePersonForEvent(newEvent.getEventId(), person.getPersonId(), newJob.getJobId(), PLANNER_USER);
+            = new AllocatePersonForEvent(true, newEvent.getEventId(), person.getPersonId(), newJob.getJobId(), PLANNER_USER);
     action.apply(0);
 
     // now, check whether it is all OK
@@ -161,7 +161,7 @@ public class AllocatePersonForEventTest {
 
     // here is the statement that we want to test
     AllocatePersonForEvent action
-            = new AllocatePersonForEvent(newEvent.getEventId(), person.getPersonId(), newJob.getJobId(), PLANNER_USER);
+            = new AllocatePersonForEvent(true, newEvent.getEventId(), person.getPersonId(), newJob.getJobId(), PLANNER_USER);
     action.apply(0);
 
     // now, check whether it is all OK
@@ -210,7 +210,7 @@ public class AllocatePersonForEventTest {
 
     // here is the statement that we want to test
     AllocatePersonForEvent action
-            = new AllocatePersonForEvent(event.getEventId(), newPerson.getPersonId(), job.getJobId(), PLANNER_USER);
+            = new AllocatePersonForEvent(true, event.getEventId(), newPerson.getPersonId(), job.getJobId(), PLANNER_USER);
     action.apply(0);
 
     // now, check whether it is all OK

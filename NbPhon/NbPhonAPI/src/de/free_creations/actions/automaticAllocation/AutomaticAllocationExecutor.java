@@ -224,7 +224,7 @@ public class AutomaticAllocationExecutor {
       String jobId = next.job.getJobId();
       Integer personId = person.getPersonId();
       logger.log(Level.FINER, "allocate {0} to {1}, {2}", new Object[]{person, next.event, next.job});
-      AllocatePersonForEvent alloc = new AllocatePersonForEvent(eventId, personId, jobId, Allocation.PLANNER_AUTOMAT);
+      AllocatePersonForEvent alloc = new AllocatePersonForEvent(true, eventId, personId, jobId, Allocation.PLANNER_AUTOMAT);
       alloc.apply(0);
     } else {
       logger.log(Level.INFO, "no person found for {0} and {1}", new Object[]{next.event, next.job});
