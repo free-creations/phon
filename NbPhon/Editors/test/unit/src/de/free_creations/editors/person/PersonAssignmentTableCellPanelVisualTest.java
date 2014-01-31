@@ -135,7 +135,7 @@ public class PersonAssignmentTableCellPanelVisualTest extends javax.swing.JFrame
 
   private void btnSetNullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetNullActionPerformed
     // TODO add your handling code here:
-    personAssignmentTableCellPanel1.setAllocationId(null);
+    personAssignmentTableCellPanel1.setAllocationId(-1);
   }//GEN-LAST:event_btnSetNullActionPerformed
   private Event event = null;
   Availability avail = null;
@@ -144,7 +144,7 @@ public class PersonAssignmentTableCellPanelVisualTest extends javax.swing.JFrame
     personAssignmentTableCellPanel1.setAllocationId(1);
     event = null;
     try {
-      Allocation a = Manager.getAllocationCollection().findEntity(1);
+      Allocation a = Manager.getAllocationCollection().findEntity(1L);
       event = (a == null) ? null : a.getEvent();
       TimeSlot timeSlot = (event == null) ? null : event.getTimeSlot();
       Person person = (a == null) ? null : a.getPerson();

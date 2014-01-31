@@ -88,9 +88,9 @@ public class Manager {
   /**
    * A rapid check, to verify whether the database is still alive.
    *
-   * This check is recommended before doing complex queries (like "getAll"),
-   * because the execution of such queries on a dead database might take several
-   * minutes before ending on a time out.
+   * This check is recommended before doing complex queries (like "getAll"). The
+   * execution of such queries on a dead database might take several minutes
+   * before ending on a time out.
    *
    * @throws ConnectionLostException
    */
@@ -101,17 +101,24 @@ public class Manager {
     }
     synchronized (databaseAccessLock) {
       try {
+        long currentTimeMillis = System.currentTimeMillis();
+        if ((currentTimeMillis - lastGoodPingMillis) < 500) {
+          // database was alive half a second ago, we assume it is still so.
+          return;
+        }
         Query q = getEntityManager().createNamedQuery("ping");
         List resultList = q.getResultList();
         if (resultList != null) {
+          lastGoodPingMillis = System.currentTimeMillis();
           return; // normal exit
         }
       } catch (Throwable ex) {
-        // ignore all exceptions. ConnectionLostException wilkl be thrown anyway.
+        // ignore all exceptions. ConnectionLostException will be thrown anyway.
       }
       throw new ConnectionLostException();
     }
   }
+  private static long lastGoodPingMillis = Long.MIN_VALUE;
 
   /**
    * Commits the current transaction and starts a new one.

@@ -407,13 +407,13 @@ public class PersonAssignmentTable extends JTable {
      * @param columnIndex the column relative to the table
      * @return
      */
-    private Integer getAlloactionId(int rowIndex, int columnIndex) {
+    private long getAlloactionId(int rowIndex, int columnIndex) {
       assert (columnIndex > 0);
       Allocation a = getAllocationEntity(rowIndex, columnIndex);
       if (a != null) {
         return a.getAllocationId();
       } else {
-        return null;
+        return -1;
       }
     }
 

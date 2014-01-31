@@ -67,8 +67,8 @@ public class AllocationCollectionTest {
    */
   @Test
   public void testFindEntity_Integer() throws Exception {
-    // we assume that the test database contains at least one record
-    Allocation c = allocationCollection.findEntity(1);
+    // we assume that the test database contains at least one record (with allocId =1)
+    Allocation c = allocationCollection.findEntity(1L);
     assertNotNull("Bad test data?", c);
     assertEquals((int) c.getAllocationId(), 1);
   }
@@ -206,7 +206,7 @@ public class AllocationCollectionTest {
   public void testRemoveEntity_Integer() throws DataBaseNotReadyException {
     // we assume that the test database contains at least one record
     // and that this allocation has some members attached.
-    Integer key = 1;
+    Long key = 1L;
     Allocation a = allocationCollection.findEntity(key);
     assertNotNull("Bad test data?", a);
     Person p = a.getPerson();
@@ -229,14 +229,14 @@ public class AllocationCollectionTest {
   public void testRemoveEntity_Allocation() throws DataBaseNotReadyException {
     // we assume that the test database contains at least one record
     // and that this allocation has some members attached.
-    Allocation a = allocationCollection.findEntity(1);
+    Allocation a = allocationCollection.findEntity(1L);
     assertNotNull("Bad test data?", a);
     Person p = a.getPerson();
     assertNotNull("Bad test data?", p);
 
     allocationCollection.removeEntity(a);
 
-    assertNull(allocationCollection.findEntity(1));
+    assertNull(allocationCollection.findEntity(1L));
     for (Allocation pa : p.getAllocationList()) {
       assertFalse(Objects.equals(a, pa));
     }

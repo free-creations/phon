@@ -36,7 +36,7 @@ import javax.persistence.TypedQuery;
  *
  * @author Harald Postner <Harald at free-creations.de>
  */
-public class AllocationCollection implements MutableEntityCollection<Allocation, Integer> {
+public class AllocationCollection implements MutableEntityCollection<Allocation, Long> {
 
   private static final Logger logger = Logger.getLogger(AllocationCollection.class.getName());
 
@@ -61,7 +61,7 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
   }
 
   @Override
-  public Allocation findEntity(Integer key) throws DataBaseNotReadyException {
+  public Allocation findEntity(Long key) throws DataBaseNotReadyException {
     if (key == null) {
       return null;
     }
@@ -230,7 +230,7 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
   }
 
   @Override
-  public void removeEntity(Integer key) throws DataBaseNotReadyException {
+  public void removeEntity(Long key) throws DataBaseNotReadyException {
     removeEntity(findEntity(key));
   }
 

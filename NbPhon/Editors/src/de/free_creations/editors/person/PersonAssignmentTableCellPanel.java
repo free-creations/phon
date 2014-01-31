@@ -86,7 +86,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
   private final ColorPair errorColors;
   private final ColorPair doubleErrorColors;
 
-  private Integer allocationId = null;
+  private long allocationId = -1L;
   private Integer eventId;
   private Integer availabilityId;
   private Integer contestId;
@@ -120,7 +120,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     }
   }
 
-  public Integer getAllocationId() {
+  public long getAllocationId() {
     return allocationId;
   }
 
@@ -143,10 +143,10 @@ public class PersonAssignmentTableCellPanel extends JLabel {
   }
 
   void setValue(Object value) {
-    if (value instanceof Integer) {
-      setAllocationId((Integer) value);
+    if (value instanceof Long) {
+      setAllocationId((Long) value);
     } else {
-      setAllocationId(null);
+      setAllocationId(-1);
     }
   }
 
@@ -158,10 +158,10 @@ public class PersonAssignmentTableCellPanel extends JLabel {
    *
    * @param allocationId
    */
-  public void setAllocationId(Integer allocationId) {
-    Integer oldAllocationId = this.allocationId;
+  public void setAllocationId(long allocationId) {
+    long oldAllocationId = this.allocationId;
     this.allocationId = allocationId;
-    if (Objects.equals(oldAllocationId, allocationId)) {
+    if (oldAllocationId == allocationId) {
       return;
     }
     Integer oldEventId = eventId;
@@ -173,29 +173,28 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     Event.removePropertyChangeListener(nodeListener, oldEventId);
     Contest.removePropertyChangeListener(nodeListener, oldContestId);
 
-    if (allocationId != null) {
-      try {
-        Allocation alloc = Manager.getAllocationCollection().findEntity(allocationId);
-        if (alloc != null) {
-          Job job = alloc.getJob();
-          jobId = (job == null) ? null : job.getJobId();
-          Event event = alloc.getEvent();
-          if (event != null) {
-            eventId = event.getEventId();
-            Contest contest = event.getContest();
-            if (contest != null) {
-              contestId = contest.getContestId();
-              contest.addPropertyChangeListener(nodeListener);
-              ContestNode tempNode = new ContestNode(contestId, Manager.getContestCollection());
-              popupMenu = tempNode.getContextMenu();
-              tempNode.destroy();
-            }
-            event.addPropertyChangeListener(nodeListener);
+    try {
+      Allocation alloc = Manager.getAllocationCollection().findEntity(allocationId);
+      if (alloc != null) {
+        Job job = alloc.getJob();
+        jobId = (job == null) ? null : job.getJobId();
+        Event event = alloc.getEvent();
+        if (event != null) {
+          eventId = event.getEventId();
+          Contest contest = event.getContest();
+          if (contest != null) {
+            contestId = contest.getContestId();
+            contest.addPropertyChangeListener(nodeListener);
+            ContestNode tempNode = new ContestNode(contestId, Manager.getContestCollection());
+            popupMenu = tempNode.getContextMenu();
+            tempNode.destroy();
           }
+          event.addPropertyChangeListener(nodeListener);
         }
-      } catch (DataBaseNotReadyException ex) {
       }
+    } catch (DataBaseNotReadyException ex) {
     }
+
     this.setComponentPopupMenu(popupMenu);
     refresh();
   }
@@ -203,7 +202,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
   private void refresh() {
     Icon icon = null;
     String text = null;
-    if (allocationId != null) {
+    if (allocationId != -1) {
       Image image = ContestJobNode.getIcon(contestId, jobId);
       icon = (image == null) ? null : new ImageIcon(image);
       text = ContestJobNode.getLongHtmlDescription(contestId, jobId);
@@ -224,7 +223,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     } catch (DataBaseNotReadyException ex) {
     }
 
-    if (allocationId == null) {
+    if (allocationId == -1) {
       if (isAvailable) {
         return defaultColors;
       } else {
