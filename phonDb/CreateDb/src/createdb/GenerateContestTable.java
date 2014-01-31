@@ -110,6 +110,7 @@ public class GenerateContestTable {
     output.println("*/");
     output.println("DELETE FROM \"APP\".\"EVENT\";");
     output.println("DELETE FROM \"APP\".\"CONTEST\";");
+    output.println("DELETE FROM \"APP\".\"ALLOCATION\";");
     output.println("ALTER TABLE \"APP\".\"CONTEST\" ALTER COLUMN CONTESTID RESTART WITH 1;");
     output.println("ALTER TABLE \"APP\".\"EVENT\" ALTER COLUMN EVENTID RESTART WITH 1;");
     output.println("--");
@@ -127,7 +128,7 @@ public class GenerateContestTable {
 
     output.println("-- insert one dummy allocation for the unit tests");
     output.println(
-            "INSERT INTO \"APP\".\"ALLOCATION\" VALUES(DEFAULT,1,1,'LEHRER',CURRENT_TIMESTAMP,'AUTOMAT',NULL,NULL);"
+            "INSERT INTO \"APP\".\"ALLOCATION\" VALUES(1,1,1,'LEHRER',CURRENT_TIMESTAMP,'AUTOMAT',NULL,NULL);"
     );
 
     output.println("--");

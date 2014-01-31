@@ -31,6 +31,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -61,15 +62,19 @@ import javax.xml.bind.annotation.XmlRootElement;
   @NamedQuery(name = "Allocation.findByNote", query = "SELECT a FROM Allocation a WHERE a.note = :note")})
 public class Allocation implements Serializable, DbEntity {
 
-  @Column(name = "COMMITED")
-  private Integer commited;
-
   private static final long serialVersionUID = 1L;
+
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Basic(optional = false)
+  @TableGenerator(name = "SEQ_GEN_ALLOC",
+          table = "SEQUENCES",
+          pkColumnName = "SEQ_NAME",
+          valueColumnName = "SEQ_NUMBER",
+          pkColumnValue = "SEQ_ALLOCATION",
+          allocationSize = 10000)
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "SEQ_GEN_ALLOC")
   @Column(name = "ALLOCATIONID")
-  private Integer allocationId;
+  private long allocationId;
+
   @Column(name = "LASTCHANGE")
   @Temporal(TemporalType.TIMESTAMP)
   private Date lastchange;
@@ -86,6 +91,10 @@ public class Allocation implements Serializable, DbEntity {
   @JoinColumn(name = "EVENT", referencedColumnName = "EVENTID")
   @ManyToOne(optional = false)
   private Event event;
+
+  @Column(name = "COMMITED")
+  private Integer commited;
+
   public static final String PROP_NOTE = "allocPROP_NOTE";
   public static final String PROP_PLANNER = "allocPROP_PLANNER";
   public static final String PROP_JOB = "allocPROP_JOB";
@@ -120,7 +129,6 @@ public class Allocation implements Serializable, DbEntity {
     newAllocation.setPlanner(planner);
 
     entityManager.persist(newAllocation);
-    entityManager.flush();
 
     return newAllocation;
   }
@@ -133,11 +141,11 @@ public class Allocation implements Serializable, DbEntity {
     setEvent(null);
     setJob(null);
     entityManager.remove(this);
-    entityManager.flush();
+
 
   }
 
-  public Integer getAllocationId() {
+  public long getAllocationId() {
     return allocationId;
   }
 
@@ -271,23 +279,27 @@ public class Allocation implements Serializable, DbEntity {
 
   @Override
   public int hashCode() {
-    int hash = 0;
-    hash += (allocationId != null ? allocationId.hashCode() : 0);
+    int hash = 3;
+    hash = 61 * hash + (int) (this.allocationId ^ (this.allocationId >>> 32));
     return hash;
   }
 
   @Override
-  public boolean equals(Object object) {
-    // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Allocation)) {
+  public boolean equals(Object obj) {
+    if (obj == null) {
       return false;
     }
-    Allocation other = (Allocation) object;
-    if ((this.allocationId == null && other.allocationId != null) || (this.allocationId != null && !this.allocationId.equals(other.allocationId))) {
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Allocation other = (Allocation) obj;
+    if (this.allocationId != other.allocationId) {
       return false;
     }
     return true;
   }
+
+
 
   @Override
   public String toString() {
@@ -295,7 +307,6 @@ public class Allocation implements Serializable, DbEntity {
   }
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    assert (this.allocationId != null);
     addPropertyChangeListener(listener, this.allocationId);
   }
 
@@ -307,7 +318,7 @@ public class Allocation implements Serializable, DbEntity {
    * @param listener
    * @param allocationid
    */
-  public static void addPropertyChangeListener(PropertyChangeListener listener, Integer allocationid) {
+  public static void addPropertyChangeListener(PropertyChangeListener listener, long allocationid) {
     PropertyChangeManager.instance().addPropertyChangeListener(listener,
             new EntityIdentity(Allocation.class, allocationid));
   }
@@ -330,7 +341,7 @@ public class Allocation implements Serializable, DbEntity {
    * @param listener the listener to be removed.
    * @param allocationId
    */
-  public static void removePropertyChangeListener(PropertyChangeListener listener, Integer allocationId) {
+  public static void removePropertyChangeListener(PropertyChangeListener listener, long allocationId) {
     PropertyChangeManager.instance().removePropertyChangeListener(listener,
             new EntityIdentity(Allocation.class, allocationId));
 

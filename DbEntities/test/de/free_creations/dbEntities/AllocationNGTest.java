@@ -129,14 +129,16 @@ public class AllocationNGTest {
   @Test(enabled = true)
   public void testnewAllocation() throws InterruptedException, InvocationTargetException {
     // verify that the one to many relations are correctly updated
+    System.out.println("testnewAllocation()");
 
     Person testPerson = new Person(Integer.MAX_VALUE);
     entityManager.persist(testPerson);
     entityManager.flush();
 
     Allocation testItem = Allocation.newAllocation(entityManager, testPerson, testEvent, testJob, "USER");
-    Integer allocationId = testItem.getAllocationId();
-    assertNotNull(allocationId);
+    long allocationId = testItem.getAllocationId();
+    assertTrue(allocationId > 0);
+    System.out.println("...testItem.getAllocationId()=" + allocationId);
 
     List<Allocation> pAllocationList = testPerson.getAllocationList();
     assertNotNull(pAllocationList);
@@ -325,7 +327,6 @@ public class AllocationNGTest {
   public void testRemovePropertyChangeCallback() throws Throwable {
 
     Person testPerson = testAllocation.getPerson();
-
 
     final TestListener testListener = new TestListener();
     testPerson.addPropertyChangeListener(testListener);
