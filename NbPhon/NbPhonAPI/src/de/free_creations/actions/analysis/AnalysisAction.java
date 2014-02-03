@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.actions.automaticAllocation;
+package de.free_creations.actions.analysis;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -27,23 +27,23 @@ import org.openide.windows.WindowManager;
 
 @ActionID(
         category = "Edit",
-        id = "de.free_creations.actions.automaticAllocation.AutomaticAllocationAction"
+        id = "de.free_creations.actions.analysis.AnalysisAction"
 )
 @ActionRegistration(
-        iconBase = "de/free_creations/actions/automaticAllocation/allocate.png",
-        displayName = "#CTL_AutomaticAllocationAction"
+        iconBase = "de/free_creations/actions/analysis/analysis.png",
+        displayName = "#CTL_AnalysisAction"
 )
 @ActionReferences({
-  @ActionReference(path = "Menu/Edit", position = -100),
-  @ActionReference(path = "Toolbars/File", position = 1000)
+  @ActionReference(path = "Menu/Edit", position = -200, separatorBefore = -250),
+  @ActionReference(path = "Toolbars/File", position = 2000)
 })
-@Messages("CTL_AutomaticAllocationAction=Allocate")
-public final class AutomaticAllocationAction implements ActionListener {
+@Messages("CTL_AnalysisAction=Analysis")
+public final class AnalysisAction implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
     Frame mainWindow = WindowManager.getDefault().getMainWindow();
-    AutomaticAllocationDialog dialog = new AutomaticAllocationDialog(mainWindow, true);
+    AnalysisDialog dialog = new AnalysisDialog(mainWindow, true);
     dialog.setVisible(true);
   }
 }

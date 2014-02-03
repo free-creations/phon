@@ -19,6 +19,7 @@ import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.util.StringArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -37,6 +38,8 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
 
   private final String[] timeOfDayNames;
   private final String[] dayNames;
+  private List<TimeSlot> timeSlotCache = null;
+  private final Object timeSlotCacheLock = new Object();
 
   /**
    * The constructor is protected, in order to ensure the singleton pattern.
@@ -64,24 +67,29 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
   }
 
   /**
-   * Returns the list of all entries in table ZEIT.
+   * Returns the list of all entries in table TimeSlot.
    *
    * If the connection to the database cannot be established, an empty list will
    * be returned.
    *
-   * @return the list of all entries in table ZEIT
+   * @return the list of all entries in table TimeSlot
    */
   @Override
   public final List<TimeSlot> getAll() {
-    synchronized (Manager.databaseAccessLock) {
-      try {
-        Manager.ping();
-        EntityManager entityManager = Manager.getEntityManager();
-        TypedQuery<TimeSlot> query = entityManager.createNamedQuery("TimeSlot.findAll", TimeSlot.class);
-        return query.getResultList();
-      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
-        return Collections.emptyList();
+    synchronized (timeSlotCacheLock) {
+      if (timeSlotCache == null) {
+        synchronized (Manager.databaseAccessLock) {
+          try {
+            Manager.ping();
+            EntityManager entityManager = Manager.getEntityManager();
+            TypedQuery<TimeSlot> query = entityManager.createNamedQuery("TimeSlot.findAll", TimeSlot.class);
+            timeSlotCache = query.getResultList();
+          } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
+            timeSlotCache = Collections.emptyList();
+          }
+        }
       }
+      return timeSlotCache;
     }
   }
 
@@ -102,6 +110,20 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
    * @throws DataBaseNotReadyException
    */
   public TimeSlot findEntity(int day, int timeOfDay) throws DataBaseNotReadyException {
+    synchronized (Manager.databaseAccessLock) {
+      List<TimeSlot> tt = getAll();
+      for (TimeSlot t : tt) {
+        if (Objects.equals(t.getDayIdx(), day + 1)) {
+          if (Objects.equals(t.getTimeOfDayIdx(), timeOfDay + 1)) {
+            return t;
+          }
+        }
+      }
+      return null;
+    }
+  }
+
+  public TimeSlot findEntitySlow(int day, int timeOfDay) throws DataBaseNotReadyException {
     final String qlString
             = "SELECT t FROM TimeSlot t "
             + "WHERE t.dayIdx = :dayIdx "
