@@ -70,9 +70,12 @@
             </test-dependencies>
             <public-packages>
                 <package>de.free_creations.actions</package>
+                <package>de.free_creations.actions.automaticAllocation</package>
                 <package>de.free_creations.actions.contest</package>
+                <package>de.free_creations.actions.event</package>
                 <package>de.free_creations.actions.location</package>
                 <package>de.free_creations.actions.person</package>
+                <package>de.free_creations.actions.rating</package>
                 <package>de.free_creations.dbEntities</package>
                 <package>de.free_creations.nbPhon4Netbeans</package>
                 <package>de.free_creations.nbPhonAPI</package>

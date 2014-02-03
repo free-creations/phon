@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.free_creations.actions.contest;
+package de.free_creations.actions.event;
 
 import de.free_creations.dbEntities.Allocation;
 import static de.free_creations.dbEntities.Allocation.PLANNER_USER;
@@ -106,7 +106,7 @@ public class AllocatePersonForEventTest {
     // here is the statement that we want to test
     AllocatePersonForEvent action
             = new AllocatePersonForEvent(true, newEvent.getEventId(), person.getPersonId(), newJob.getJobId(), PLANNER_USER);
-    action.apply(0);
+    action.apply();
 
     // now, check whether it is all OK
     List<Allocation> personAtTime = Manager.getAllocationCollection().findAll(person, timeSlot);
@@ -162,7 +162,7 @@ public class AllocatePersonForEventTest {
     // here is the statement that we want to test
     AllocatePersonForEvent action
             = new AllocatePersonForEvent(true, newEvent.getEventId(), person.getPersonId(), newJob.getJobId(), PLANNER_USER);
-    action.apply(0);
+    action.apply();
 
     // now, check whether it is all OK
     List<Allocation> personAtTime = Manager.getAllocationCollection().findAll(person, timeSlot);
@@ -211,7 +211,7 @@ public class AllocatePersonForEventTest {
     // here is the statement that we want to test
     AllocatePersonForEvent action
             = new AllocatePersonForEvent(true, event.getEventId(), newPerson.getPersonId(), job.getJobId(), PLANNER_USER);
-    action.apply(0);
+    action.apply();
 
     // now, check whether it is all OK
     List<Allocation> newPersonAtTime = Manager.getAllocationCollection().findAll(newPerson, timeSlot);

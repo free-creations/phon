@@ -234,6 +234,14 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
     removeEntity(findEntity(key));
   }
 
+  /**
+   * Remove the given allocation from the database.
+   *
+   * The database will be flushed after each removal.
+   *
+   * @param allocation
+   * @throws DataBaseNotReadyException
+   */
   public void removeEntity(Allocation allocation) throws DataBaseNotReadyException {
     if (allocation == null) {
       return;
@@ -243,6 +251,25 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
       allocation.remove(entityManager);
     }
     firePropertyChange(PROP_ITEM_REMOVED, allocation.identity(), null);
+  }
+
+  /**
+   * Remove a list of allocations from the database.
+   *
+   * The database will be flushed only when the whole list has been deleted.
+   *
+   * @param allocactions
+   * @throws DataBaseNotReadyException
+   */
+  public void removeAll(List<Allocation> allocactions) throws DataBaseNotReadyException {
+    synchronized (Manager.databaseAccessLock) {
+      EntityManager entityManager = Manager.getEntityManager();
+      for (Allocation a : allocactions) {
+        a.remove(entityManager, true);
+      }
+      entityManager.flush();
+    }
+    firePropertyChange(PROP_ITEM_LIST_CHANGED, null, null);
   }
 
   @Override
@@ -269,4 +296,5 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
       });
     }
   }
+
 }

@@ -15,7 +15,7 @@
  */
 package de.free_creations.actions.automaticAllocation;
 
-import de.free_creations.actions.contest.AllocatePersonForEvent;
+import de.free_creations.actions.event.AllocatePersonForEvent;
 import de.free_creations.actions.rating.AllocationRating;
 import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Event;
@@ -224,8 +224,12 @@ public class AutomaticAllocationExecutor {
       String jobId = next.job.getJobId();
       Integer personId = person.getPersonId();
       logger.log(Level.FINER, "allocate {0} to {1}, {2}", new Object[]{person, next.event, next.job});
-      AllocatePersonForEvent alloc = new AllocatePersonForEvent(true, eventId, personId, jobId, Allocation.PLANNER_AUTOMAT);
-      alloc.apply(0);
+      AllocatePersonForEvent alloc = new AllocatePersonForEvent(false, eventId, personId, jobId, Allocation.PLANNER_AUTOMAT);
+      try {
+        alloc.apply();
+      } catch (AllocatePersonForEvent.AllocationException ex) {
+       logger.log(Level.SEVERE,"Allocation failed.", ex   );
+      }
     } else {
       logger.log(Level.INFO, "no person found for {0} and {1}", new Object[]{next.event, next.job});
     }
