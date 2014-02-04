@@ -228,7 +228,7 @@ public class AutomaticAllocationExecutor {
       try {
         alloc.apply();
       } catch (AllocatePersonForEvent.AllocationException ex) {
-       logger.log(Level.SEVERE,"Allocation failed.", ex   );
+        logger.log(Level.SEVERE, "Allocation failed.", ex);
       }
     } else {
       logger.log(Level.INFO, "no person found for {0} and {1}", new Object[]{next.event, next.job});
@@ -279,22 +279,19 @@ public class AutomaticAllocationExecutor {
   public Person findBestMatch(OpenJob openJob) {
     Person winner = null;
     int bestScore = Integer.MIN_VALUE;
-    Integer eventId = openJob.event.getEventId();
-    String jobId = openJob.job.getJobId();
+    Event event = openJob.event;
+    Job job = openJob.job;
     List<Person> pp = Manager.getPersonCollection().getAll();
     for (Person p : pp) {
-      Integer personId = p.getPersonId();
-      AllocationRating eval = new AllocationRating(personId, eventId, jobId);
-      int score = eval.getScore();
-      if (score > bestScore) {
-        bestScore = score;
-        winner = p;
+      AllocationRating eval = new AllocationRating(p, event, job);
+      if (eval.isRealisable()) {
+        int score = eval.getScore();
+        if (score > bestScore) {
+          bestScore = score;
+          winner = p;
+        }
       }
     }
-    if (bestScore <= (AllocationRating.threshold)) {
-      winner = null;
-    }
-    logger.log(Level.FINER, "best match {0} score {1}", new Object[]{winner, bestScore});
 
     return winner;
   }

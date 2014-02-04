@@ -29,6 +29,7 @@ import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import java.util.List;
 import java.util.Objects;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -46,102 +47,94 @@ public class AllocationRating {
   public static final int inconvenient = -32;
   public static final int neutral = 0;
 
-  private final Integer personId;
-  private final Integer eventId;
-  private final String jobId;
+  private final Person person;
+  private final Event event;
+  private final Job job;
+  private final TimeSlot timeSlot;
   private int score = neutral;
 
+  /**
+   * Constructs a new rating calculator.
+   *
+   * Note the functions getScore() isClashing() must be called within the same
+   * thread as this constructor.
+   *
+   * @param personId
+   * @param eventId
+   * @param jobId
+   */
   public AllocationRating(Integer personId, Integer eventId, String jobId) {
-    this.personId = personId;
-    this.eventId = eventId;
-    this.jobId = jobId;
+
+    Person _person = null;
+    Event _event = null;
+    Job _job = null;
+    TimeSlot _timeSlot = null;
+    try {
+      _person = Manager.getPersonCollection().findEntity(personId);
+      _event = Manager.getEventCollection().findEntity(eventId);
+      _job = Manager.getJobCollection().findEntity(jobId);
+      _timeSlot = _event.getTimeSlot();
+    } catch (DataBaseNotReadyException ex) {
+    } finally {
+      person = _person;
+      event = _event;
+      job = _job;
+      timeSlot = _timeSlot;
+    }
+    if (person == null) {
+      throw new RuntimeException("Invalid Person[" + personId + "]");
+    }
+    if (event == null) {
+      throw new RuntimeException("Invalid Event[" + eventId + "]");
+    }
+    if (job == null) {
+      throw new RuntimeException("Invalid Job[" + jobId + "]");
+    }
+    if (timeSlot == null) {
+      throw new RuntimeException("Event[" + eventId + "] has timeslot null.");
+    }
+  }
+
+  /**
+   * Constructs a new rating calculator.
+   *
+   * Note the functions getScore() isClashing() must be called within the same
+   * thread as this constructor.
+   *
+   * @param person
+   * @param event
+   * @param job
+   */
+  public AllocationRating(Person person, Event event, Job job) {
+    this.person = person;
+    this.event = event;
+    this.job = job;
+    this.timeSlot = event.getTimeSlot();
+    if (person == null) {
+      throw new RuntimeException("Null Person.");
+    }
+    if (event == null) {
+      throw new RuntimeException("Null Event.");
+    }
+    if (job == null) {
+      throw new RuntimeException("Null Job.");
+    }
+    if (timeSlot == null) {
+      throw new RuntimeException("Null Timeslot.");
+    }
   }
 
   public int getScore() {
-    try {
-      return scoreCalc();
-    } catch (DataBaseNotReadyException ex) {
-      return neutral;
-    }
+    return scoreCalc();
   }
 
-  Person person;
-  Event event;
-  Job job;
-
-  private int scoreCalc() throws DataBaseNotReadyException {
+  private int scoreCalc() {
     score = neutral;
-    person = Manager.getPersonCollection().findEntity(personId);
-    if (person == null) {
-      return 0;
-    }
-    event = Manager.getEventCollection().findEntity(eventId);
-    if (event == null) {
-      return 0;
-    }
-    job = Manager.getJobCollection().findEntity(jobId);
-    if (job == null) {
-      return 0;
-    }
-
     //---
-    score += availabilityAssessmemnt();
-    score += allocationAssessmemnt();
     score += jobAssessmemnt();
     score += contestTypeAssessmemnt();
     score += teamAssessmemnt();
-    score += eventAssessmemnt();
     return score;
-  }
-
-  /**
-   * unrealizable if the person is not available for the event.
-   *
-   * @return
-   */
-  private int availabilityAssessmemnt() throws DataBaseNotReadyException {
-    TimeSlot timeSlot = event.getTimeSlot();
-    List<Availability> availabilityList = person.getAvailabilityList();
-    Availability availability = null;
-    for (Availability a : availabilityList) {
-      if (timeSlot.equals(a.getTimeSlot())) {
-        availability = a;
-        break;
-      }
-    }
-    if (availability == null) {
-      return unrealizable;
-    }
-    if (availability.isAvailable()) {
-      return neutral;
-    } else {
-      return unrealizable;
-    }
-  }
-
-  /**
-   * unrealizable if the person has an other appointment.
-   *
-   * @return
-   */
-  private int allocationAssessmemnt() throws DataBaseNotReadyException {
-    TimeSlot timeSlot = event.getTimeSlot();
-    List<Allocation> allocationList = person.getAllocationList();
-    for (Allocation a : allocationList) {
-      Event e = a.getEvent();
-      if (Objects.equals(e.getTimeSlot(), timeSlot)) {
-        // the person has an appointment at the given time
-        // ... lets verify if it is for an other event-job
-        if (!Objects.equals(e, event)) {
-          if (!Objects.equals(job, a.getJob())) {
-            // oops we have really an other job at the same time
-            return unrealizable;
-          }
-        }
-      }
-    }
-
-    return neutral;
   }
 
   /**
@@ -151,7 +144,7 @@ public class AllocationRating {
    * @return
    * @throws DataBaseNotReadyException
    */
-  private int jobAssessmemnt() throws DataBaseNotReadyException {
+  private int jobAssessmemnt() {
     JobType wantedJobType = person.getJobType();
     if (wantedJobType == null) {
       return neutral;
@@ -170,7 +163,7 @@ public class AllocationRating {
    * @return
    * @throws DataBaseNotReadyException
    */
-  private int contestTypeAssessmemnt() throws DataBaseNotReadyException {
+  private int contestTypeAssessmemnt() {
     ContestType wantedContestType = person.getContestType();
     if (wantedContestType == null) {
       return neutral;
@@ -187,7 +180,7 @@ public class AllocationRating {
     }
   }
 
-  private int teamAssessmemnt() throws DataBaseNotReadyException {
+  private int teamAssessmemnt() {
     Team wantedTeam = person.getTeam();
     if (wantedTeam == null) {
       return neutral;
@@ -214,12 +207,59 @@ public class AllocationRating {
     return tempScore;
   }
 
-  private int eventAssessmemnt() throws DataBaseNotReadyException {
-    if (event.isScheduled()) {
-      return neutral;
-    } else {
-      return unrealizable;
+  /**
+   * Determine whether the proposed job can be allocated to the person.
+   *
+   * @return true if the proposed job does not clash with an other allocation
+   * and the person is available at given time.
+   */
+  public boolean isRealisable() {
+    return (!isClashing()) && isAvailable();
+  }
+
+  /**
+   * Determine whether the person is available at the given time.
+   *
+   * @return true if the person has marked the given time-slot as available.
+   */
+  public boolean isAvailable() {
+    List<Availability> availabilityList = person.getAvailabilityList();
+    for (Availability a : availabilityList) {
+      if (timeSlot.equals(a.getTimeSlot())) {
+        return a.isAvailable();
+      }
     }
+    // should never happen. Database in error.
+    return false;
+  }
+
+  /**
+   * Determines whether the proposed allocation is clashing with an other
+   * allocation.
+   *
+   * Note: if the person is already allocated to the given event, this function
+   * will always return true.
+   *
+   * @return true if the person has an other allocation at the proposed time.
+   * Note: true is also returned if the required entities can not be accessed.
+   */
+  public boolean isClashing() {
+
+    List<Allocation> aa = person.getAllocationList();
+    for (Allocation a : aa) {
+      Event e = a.getEvent();
+      if (e == null) {
+        // should never happen. Database in error.
+        return true;
+      }
+      TimeSlot t = e.getTimeSlot();
+      if (timeSlot.equals(t)) {
+        // well this IS a clash.
+        return true;
+      }
+    }
+    // OK no clash.
+    return false;
   }
 
 }

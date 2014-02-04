@@ -35,7 +35,7 @@ public class GeneratePersonTable {
   private final int timeSlotCount = 15; // must be the same as in "populateCoreTables.sql"
 
   private final double availabilty = 0.3;
-  private final double teacherRatio = 0.05; // note: "Generate conetst table will add some 30 teachers
+  private final double teacherRatio = 0.2; // note: "Generate contest table will add some 30 teachers
   private final double childrenRatio = 0.2;
   private final double teenagerRatio = 0.4; // note: adult ratio is (1.0-teenagerRatio-childrenRatio)
   private final double meanTeamSize = 10;
