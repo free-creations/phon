@@ -81,6 +81,7 @@ public class RequirementPlanningExecutor {
         lowPrioRequired[idx] += lowPrioJobCount;
       }
     }
+    // assess the number of Available
     List<Availability> aa = Manager.getAvailabilityCollection().getAll();
     for (Availability a : aa) {
       if (a.isAvailable()) {
@@ -94,6 +95,13 @@ public class RequirementPlanningExecutor {
         } else {
           lowPrioAvailable[idx]++;
         }
+      }
+    }
+    // if there are superfluous high-prio we can use them for low-prio
+    for (int idx=0;idx<timeSlotCount;idx++){
+      int superFlous = highPrioAvailable[idx] - highPrioRequired[idx];
+      if(superFlous >0){
+        lowPrioAvailable[idx] += superFlous;
       }
     }
 

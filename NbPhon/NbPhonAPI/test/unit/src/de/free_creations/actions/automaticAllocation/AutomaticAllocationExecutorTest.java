@@ -15,7 +15,7 @@
  */
 package de.free_creations.actions.automaticAllocation;
 
-import de.free_creations.actions.automaticAllocation.AutomaticAllocationExecutor.OpenJob;
+import de.free_creations.actions.automaticAllocation.AutomaticAllocationExecutor.Task;
 import de.free_creations.actions.rating.AllocationRating;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.Manager;
@@ -86,9 +86,10 @@ public class AutomaticAllocationExecutorTest {
     System.out.println("testCollectOpenJobs ");
     AutomaticAllocationExecutor exec = new AutomaticAllocationExecutor(false);
     // the statement we want to test...
-    SortedSet<OpenJob> openJobs = exec.collectOpenJobs();
-    assertNotNull(openJobs);
-    int openJobCount = openJobs.size();
+    SortedSet<Task> openTasks = exec.collectOpenJobs();
+    // if somebody has run the automatic allocation and has commited threr wont be any open tasks
+    assertNotNull("Bad test data?",openTasks);
+    int openJobCount = openTasks.size();
 
     // let's verify whether openJobCount is plausible
     int allocCount = Manager.getAllocationCollection().getAll().size();
@@ -105,7 +106,7 @@ public class AutomaticAllocationExecutorTest {
 
     // we assume that there is at least one teacher-job in the testdata
     int teacherCount = 0;
-    for (OpenJob oj : openJobs) {
+    for (Task oj : openTasks) {
       if (oj.isTeacher()) {
         teacherCount++;
       }
@@ -113,11 +114,11 @@ public class AutomaticAllocationExecutorTest {
     assertTrue("Bad test data?", teacherCount > 0);
 
     // teachers-jobs must be first in the set
-    assertTrue("Bad test data?", openJobs.first().isTeacher());
+    assertTrue("Bad test data?", openTasks.first().isTeacher());
 
     // all teachers must be in a sequence
     boolean expectingTeacher = true;
-    for (OpenJob oj : openJobs) {
+    for (Task oj : openTasks) {
       if (oj.isTeacher()) {
         assertTrue(expectingTeacher);
       } else {
@@ -134,8 +135,9 @@ public class AutomaticAllocationExecutorTest {
     System.out.println("findBestMatch");
 
     AutomaticAllocationExecutor exec = new AutomaticAllocationExecutor(false);
-    SortedSet<OpenJob> openJobs = exec.collectOpenJobs();
-    OpenJob openJob = openJobs.first();
+    SortedSet<Task> openJobs = exec.collectOpenJobs();
+    assertFalse(openJobs.isEmpty());
+    Task openJob = openJobs.first();
 
     // the statement we want to test...
     Person bestMatch = exec.findBestMatch(openJob);

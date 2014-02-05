@@ -18,6 +18,7 @@ package de.free_creations.actions.automaticAllocation;
 import de.free_creations.actions.event.AllocatePersonForEvent;
 import de.free_creations.actions.rating.AllocationRating;
 import de.free_creations.dbEntities.Allocation;
+import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Person;
@@ -32,7 +33,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -41,6 +41,7 @@ import org.openide.util.Exceptions;
 public class AutomaticAllocationExecutor {
 
   static final private Logger logger = Logger.getLogger(AutomaticAllocationExecutor.class.getName());
+  private String processQuality = "";
 
   public static class ProgressIndicator {
 
@@ -59,12 +60,15 @@ public class AutomaticAllocationExecutor {
     }
   }
 
-  protected class OpenJob implements Comparable<OpenJob> {
+  /**
+   * Combination of a job and the event when the job should done.
+   */
+  protected class Task implements Comparable<Task> {
 
     public final Job job;
     public final Event event;
 
-    public OpenJob(Job job, Event event) {
+    public Task(Job job, Event event) {
       this.job = job;
       this.event = event;
     }
@@ -85,7 +89,7 @@ public class AutomaticAllocationExecutor {
       if (getClass() != obj.getClass()) {
         return false;
       }
-      final OpenJob other = (OpenJob) obj;
+      final Task other = (Task) obj;
       if (!Objects.equals(this.job, other.job)) {
         return false;
       }
@@ -95,20 +99,31 @@ public class AutomaticAllocationExecutor {
       return true;
     }
 
+    /**
+     * The sort order determines in which order the free tasks are allocated.
+     *
+     * @param other
+     * @return
+     */
     @Override
-    public int compareTo(OpenJob other) {
+    public int compareTo(Task other) {
 
-      // put the teachers first
-      if (isTeacher()) {
-        if (!other.isTeacher()) {
-          return -1;
-        }
+      // sort on contest priority
+      Contest thisContest = event.getContest();
+      Contest otherContest = other.event.getContest();
+      int thisContestPrio = (thisContest.getPriority() == null) ? 0 : thisContest.getPriority();
+      int otherContestPrio = (otherContest.getPriority() == null) ? 0 : otherContest.getPriority();
+      int contestCompare = Integer.compare(thisContestPrio, otherContestPrio);
+      if (contestCompare != 0) {
+        return contestCompare;
       }
-      if (other.isTeacher()) {
-        if (!isTeacher()) {
-          return 1;
-        }
+
+      // sort on job priority
+      int jobCompare = Integer.compare(job.getPriority(), other.job.getPriority());
+      if (jobCompare != 0) {
+        return jobCompare;
       }
+
       // sort on ascending time
       int timeCompare = Integer.compare(getTimeSlotId(), other.getTimeSlotId());
       if (timeCompare != 0) {
@@ -136,14 +151,15 @@ public class AutomaticAllocationExecutor {
 
   private enum State {
 
-    RemovingOldAllocations,
-    CollectingJobs,
-    AllocatingJobs,
+    RemovingAllAllocations,
+    RemovingBadAllocations,
+    CollectingTasks,
+    AllocatingTasks,
     Finished
   }
   private State currentState;
   private ProgressIndicator currentProgress;
-  private Iterator<OpenJob> openJobsIterator;
+  private Iterator<Task> openJobsIterator;
   // these variables help to update the progress indicator
   private double currentProgressRatio = 0D;
   private double progressDelta = 1D;
@@ -153,11 +169,11 @@ public class AutomaticAllocationExecutor {
 
   public AutomaticAllocationExecutor(boolean fullReAllocation) {
     if (fullReAllocation) {
-      currentState = State.RemovingOldAllocations;
-      currentProgress = new ProgressIndicator(0, "Removing old allocations.");
+      currentState = State.RemovingAllAllocations;
+      currentProgress = new ProgressIndicator(0, "Removing all allocations...");
     } else {
-      currentState = State.CollectingJobs;
-      currentProgress = new ProgressIndicator(0, "Collecting Jobs.");
+      currentState = State.RemovingBadAllocations;
+      currentProgress = new ProgressIndicator(0, "Removing bad allocations...");
     }
   }
 
@@ -169,14 +185,17 @@ public class AutomaticAllocationExecutor {
    */
   public boolean doNext() throws Exception {
     switch (currentState) {
-      case RemovingOldAllocations:
-        removeOldAllocations();
+      case RemovingAllAllocations:
+        removeAllAllocations();
         return true;
-      case CollectingJobs:
-        collectJobs();
+      case RemovingBadAllocations:
+        removeBadAllocations();
         return true;
-      case AllocatingJobs:
-        allocateJobs();
+      case CollectingTasks:
+        collectTasks();
+        return true;
+      case AllocatingTasks:
+        allocateTasks();
         return true;
       case Finished:
         return false;
@@ -184,18 +203,26 @@ public class AutomaticAllocationExecutor {
     return false;
   }
 
-  private void removeOldAllocations() {
-    try {
-      Thread.sleep(500);
-      currentState = State.CollectingJobs;
-      setProgress(new ProgressIndicator(10, "Collecting Jobs."));
-    } catch (InterruptedException ex) {
-      Exceptions.printStackTrace(ex);
-    }
+  private void removeAllAllocations() throws DataBaseNotReadyException {
+    ArrayList<Allocation> aa = new ArrayList<>(Manager.getAllocationCollection().getAll());
+    int allocCount = aa.size();
+    Manager.getAllocationCollection().removeAll(aa);
+    // prepare next state
+    currentState = State.CollectingTasks;
+    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...",allocCount)));
   }
 
-  private void collectJobs() {
-    SortedSet<OpenJob> openJobs = collectOpenJobs();
+  private void removeBadAllocations() throws DataBaseNotReadyException {
+    ArrayList<Allocation> aa = new ArrayList<>(Manager.getAllocationCollection().getAll());
+    int allocCount = aa.size();
+    Manager.getAllocationCollection().removeAll(aa);
+    // prepare next state
+    currentState = State.CollectingTasks;
+    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...",allocCount)));
+  }
+
+  private void collectTasks() {
+    SortedSet<Task> openJobs = collectOpenJobs();
     openJobsIterator = openJobs.iterator();
 
     // prepare the next state
@@ -203,27 +230,28 @@ public class AutomaticAllocationExecutor {
     stepsDone = 0;
     currentProgressRatio += 0.1D;
     progressDelta = (1D - currentProgressRatio) / stepsToDo;
-    currentState = State.AllocatingJobs;
+    currentState = State.AllocatingTasks;
     setProgress(new ProgressIndicator(
             (int) (currentProgressRatio * 100D),
             String.format("Step %s of %s", stepsDone + 1, stepsToDo)));
 
   }
 
-  private void allocateJobs() throws DataBaseNotReadyException {
+  private void allocateTasks() throws DataBaseNotReadyException {
     assert (openJobsIterator != null);
     if (!openJobsIterator.hasNext()) {
+      // iterator empty we are finished
+      processQuality = "Improved by";
       currentState = State.Finished;
-      setProgress(new ProgressIndicator(100, "Finished"));
+      setProgress(new ProgressIndicator(100, "Finished."));
       return;
     }
-    OpenJob next = openJobsIterator.next();
+    Task next = openJobsIterator.next();
     Person person = findBestMatch(next);
     if (person != null) {
       Integer eventId = next.event.getEventId();
       String jobId = next.job.getJobId();
       Integer personId = person.getPersonId();
-      logger.log(Level.FINER, "allocate {0} to {1}, {2}", new Object[]{person, next.event, next.job});
       AllocatePersonForEvent alloc = new AllocatePersonForEvent(false, eventId, personId, jobId, Allocation.PLANNER_AUTOMAT);
       try {
         alloc.apply();
@@ -237,10 +265,10 @@ public class AutomaticAllocationExecutor {
     // prepare the next step
     stepsDone++;
     currentProgressRatio += progressDelta;
-    currentState = State.AllocatingJobs;
+    currentState = State.AllocatingTasks;
     setProgress(new ProgressIndicator(
             (int) (currentProgressRatio * 100D),
-            String.format("Step %s of %s", stepsDone + 1, stepsToDo)));
+            String.format("Step %s of %s ...", stepsDone + 1, stepsToDo)));
 
   }
 
@@ -256,8 +284,20 @@ public class AutomaticAllocationExecutor {
     }
   }
 
-  public SortedSet<OpenJob> collectOpenJobs() {
-    TreeSet<OpenJob> result = new TreeSet<>();
+  public String getProcessQuality() {
+    synchronized (ProgressIndicatorLock) {
+      return processQuality;
+    }
+  }
+
+  public void setProgress(String processQuality) {
+    synchronized (ProgressIndicatorLock) {
+      this.processQuality = processQuality;
+    }
+  }
+
+  public SortedSet<Task> collectOpenJobs() {
+    TreeSet<Task> result = new TreeSet<>();
     List<Event> allEvents = Manager.getEventCollection().getAll();
     List<Job> allJobs = Manager.getJobCollection().getAll();
     for (Event e : allEvents) {
@@ -268,7 +308,7 @@ public class AutomaticAllocationExecutor {
           candidateJobs.remove(a.getJob());
         }
         for (Job openJob : candidateJobs) {
-          OpenJob newOpenJob = new OpenJob(openJob, e);
+          Task newOpenJob = new Task(openJob, e);
           result.add(newOpenJob);
         }
       }
@@ -276,7 +316,7 @@ public class AutomaticAllocationExecutor {
     return result;
   }
 
-  public Person findBestMatch(OpenJob openJob) {
+  public Person findBestMatch(Task openJob) {
     Person winner = null;
     int bestScore = Integer.MIN_VALUE;
     Event event = openJob.event;

@@ -16,6 +16,7 @@
 package de.free_creations.actions.automaticAllocation;
 
 import de.free_creations.actions.automaticAllocation.AutomaticAllocationExecutor.ProgressIndicator;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -37,10 +38,14 @@ import org.openide.util.Exceptions;
  */
 public class AutomaticAllocationDialog extends javax.swing.JDialog {
 
+  private static final String txtStop = "Stop";
+  private static final String txtClose = "Close";
+
   private class Allocator extends SwingWorker<Void, ProgressIndicator> {
 
     private final boolean fullReAllocation;
     private boolean halted;
+    private String endMessage = "";
 
     public Allocator(boolean fullReAllocation) {
       this.fullReAllocation = fullReAllocation;
@@ -53,8 +58,10 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
       boolean more = true;
       while (more && (!halted)) {
         publish(exe.getProgress());
+        Thread.sleep(1); // unfortunate, but we must give the AWT thread some time to refresh
         more = exe.doNext();
       }
+      endMessage = exe.getProcessQuality();
       return null;
     }
 
@@ -72,14 +79,23 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
     @Override
     protected void done() {
       try {
-        get(0, TimeUnit.MICROSECONDS);
-        doClose(); // normal end
+        get(0, TimeUnit.MICROSECONDS); // to make sure the thread has finished
+
+        btnImprove.setEnabled(true);
+        btnAllocationFromScratch.setEnabled(true);
+        lblProcessQuality.setForeground(Color.black);
+        lblProcessQuality.setText(endMessage);
+        stopCloseButton.setText(txtClose);
+        action = null;
+
       } catch (ExecutionException ex) {
         // The Automatic Allocation Executor had a problem.
         Throwable cause = ex.getCause();
-        lblError.setText(cause.getMessage());
-        btnAllocateRemaining.setEnabled(false);
-        btnFullAllocation.setEnabled(false);
+        lblProcessQuality.setForeground(Color.red);
+        lblProcessQuality.setText(cause.getMessage());
+        btnImprove.setEnabled(false);
+        btnAllocationFromScratch.setEnabled(false);
+        stopCloseButton.setText(txtClose);
       } catch (CancellationException | InterruptedException | TimeoutException ex) {
         // This should never happen!!!
         Exceptions.printStackTrace(ex);
@@ -101,7 +117,8 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
       setLocationRelativeTo(parent);
     }
     lblMessage.setText("");
-    lblError.setText("");
+    lblProcessQuality.setText("");
+    stopCloseButton.setText(txtStop);
     // Close the dialog when Esc is pressed
     String cancelName = "cancel";
     InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -124,12 +141,12 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    btnFullAllocation = new javax.swing.JButton();
-    cancelButton = new javax.swing.JButton();
-    btnAllocateRemaining = new javax.swing.JButton();
+    btnImprove = new javax.swing.JButton();
+    btnAllocationFromScratch = new javax.swing.JButton();
+    stopCloseButton = new javax.swing.JButton();
     progressBar = new javax.swing.JProgressBar();
     lblMessage = new javax.swing.JLabel();
-    lblError = new javax.swing.JLabel();
+    lblProcessQuality = new javax.swing.JLabel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     addWindowListener(new java.awt.event.WindowAdapter() {
@@ -138,32 +155,33 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
       }
     });
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnFullAllocation, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.btnFullAllocation.text")); // NOI18N
-    btnFullAllocation.addActionListener(new java.awt.event.ActionListener() {
+    org.openide.awt.Mnemonics.setLocalizedText(btnImprove, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.btnImprove.text")); // NOI18N
+    btnImprove.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        btnFullAllocationActionPerformed(evt);
+        btnImproveActionPerformed(evt);
       }
     });
 
-    org.openide.awt.Mnemonics.setLocalizedText(cancelButton, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.cancelButton.text")); // NOI18N
-    cancelButton.addActionListener(new java.awt.event.ActionListener() {
+    org.openide.awt.Mnemonics.setLocalizedText(btnAllocationFromScratch, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.btnAllocationFromScratch.text")); // NOI18N
+    btnAllocationFromScratch.setDefaultCapable(false);
+    btnAllocationFromScratch.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        cancelButtonActionPerformed(evt);
+        btnAllocationFromScratchActionPerformed(evt);
       }
     });
 
-    org.openide.awt.Mnemonics.setLocalizedText(btnAllocateRemaining, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.btnAllocateRemaining.text")); // NOI18N
-    btnAllocateRemaining.addActionListener(new java.awt.event.ActionListener() {
+    org.openide.awt.Mnemonics.setLocalizedText(stopCloseButton, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.stopCloseButton.text")); // NOI18N
+    stopCloseButton.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        btnAllocateRemainingActionPerformed(evt);
+        stopCloseButtonActionPerformed(evt);
       }
     });
 
     org.openide.awt.Mnemonics.setLocalizedText(lblMessage, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.lblMessage.text")); // NOI18N
 
-    lblError.setForeground(java.awt.Color.red);
-    org.openide.awt.Mnemonics.setLocalizedText(lblError, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.lblError.text")); // NOI18N
-    lblError.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+    lblProcessQuality.setForeground(java.awt.Color.red);
+    org.openide.awt.Mnemonics.setLocalizedText(lblProcessQuality, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.lblProcessQuality.text")); // NOI18N
+    lblProcessQuality.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -173,78 +191,98 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+          .addComponent(lblProcessQuality, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
           .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addGroup(layout.createSequentialGroup()
             .addGap(0, 67, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(btnFullAllocation, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(btnAllocateRemaining, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+              .addComponent(btnAllocationFromScratch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(btnImprove, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(stopCloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGap(0, 68, Short.MAX_VALUE)))
         .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-        .addGap(65, 65, 65)
-        .addComponent(btnFullAllocation)
-        .addGap(18, 18, 18)
-        .addComponent(btnAllocateRemaining)
-        .addGap(48, 48, 48)
-        .addComponent(cancelButton)
+        .addGap(51, 51, 51)
+        .addComponent(btnImprove)
+        .addGap(38, 38, 38)
+        .addComponent(btnAllocationFromScratch)
+        .addGap(42, 42, 42)
+        .addComponent(stopCloseButton)
         .addGap(18, 18, 18)
         .addComponent(lblMessage)
         .addGap(4, 4, 4)
         .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(lblError)
-        .addContainerGap())
+        .addComponent(lblProcessQuality, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+        .addGap(27, 27, 27))
     );
 
-    getRootPane().setDefaultButton(btnFullAllocation);
+    getRootPane().setDefaultButton(btnAllocationFromScratch);
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-    private void btnFullAllocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFullAllocationActionPerformed
-      if (action == null) {
-        action = new Allocator(true);
-        action.execute();
-      }
-    }//GEN-LAST:event_btnFullAllocationActionPerformed
+    private void btnAllocationFromScratchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllocationFromScratchActionPerformed
+      startAllocationAction(true);
+    }//GEN-LAST:event_btnAllocationFromScratchActionPerformed
 
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-      CancelAndClose(null);
-    }//GEN-LAST:event_cancelButtonActionPerformed
+    private void stopCloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopCloseButtonActionPerformed
+
+      if (action == null) {
+        CancelAndClose(null);
+      } else {
+        stop();
+      }
+    }//GEN-LAST:event_stopCloseButtonActionPerformed
+
+  private void startAllocationAction(boolean fullAllocation) {
+    if (action == null) {
+      progressBar.setValue(0);
+      lblMessage.setText("");
+      lblProcessQuality.setText("");
+      btnImprove.setEnabled(false);
+      btnAllocationFromScratch.setEnabled(false);
+      stopCloseButton.setText(txtStop);
+      action = new Allocator(fullAllocation);
+      action.execute();
+    }
+  }
+
+  /**
+   * stop the running action
+   */
+  private void stop() {
+    if (action != null) {
+      action.halt();
+      // wait until the last chunk has been done
+      try {
+        // wait at maximum for three seconds
+        action.get(3000, TimeUnit.MILLISECONDS);
+      } catch (CancellationException | InterruptedException | ExecutionException ex) {
+        //Exceptions.printStackTrace(ex);
+      } catch (TimeoutException ex) {
+        // did not finish the last chunk within 3 seconds. Try to kill the process as the last resort.
+        action.cancel(true);
+        Exceptions.printStackTrace(ex);
+      }
+    }
+    action = null;
+  }
 
   /**
    * Closes the dialog and cancels further allocation work.
    */
     private void CancelAndClose(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_CancelAndClose
-      if (action != null) {
-        action.halt();
-        // wait until the last chunk has been done
-        try {
-          // wait at maximum for three seconds
-          action.get(3000, TimeUnit.MILLISECONDS);
-        } catch (CancellationException | InterruptedException | ExecutionException ex) {
-          //Exceptions.printStackTrace(ex);
-        } catch (TimeoutException ex) {
-          // did not finish the last chunk within 3 seconds. Try to kill the process as the last resort.
-          action.cancel(true);
-          Exceptions.printStackTrace(ex);
-        }
-      }
+      stop();
       doClose();
     }//GEN-LAST:event_CancelAndClose
 
-  private void btnAllocateRemainingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllocateRemainingActionPerformed
-    if (action == null) {
-      action = new Allocator(false);
-      action.execute();
-    }
-  }//GEN-LAST:event_btnAllocateRemainingActionPerformed
+  private void btnImproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImproveActionPerformed
+    startAllocationAction(false);
+  }//GEN-LAST:event_btnImproveActionPerformed
 
   private void doClose() {
     setVisible(false);
@@ -295,12 +333,12 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton btnAllocateRemaining;
-  private javax.swing.JButton btnFullAllocation;
-  private javax.swing.JButton cancelButton;
-  private javax.swing.JLabel lblError;
+  private javax.swing.JButton btnAllocationFromScratch;
+  private javax.swing.JButton btnImprove;
   private javax.swing.JLabel lblMessage;
+  private javax.swing.JLabel lblProcessQuality;
   private javax.swing.JProgressBar progressBar;
+  private javax.swing.JButton stopCloseButton;
   // End of variables declaration//GEN-END:variables
 
 }
