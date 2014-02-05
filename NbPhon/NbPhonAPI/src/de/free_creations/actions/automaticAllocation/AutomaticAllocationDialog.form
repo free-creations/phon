@@ -34,10 +34,10 @@
                   <Component id="lblMessage" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <EmptySpace min="0" pref="67" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnAllocationFromScratch" min="-2" pref="211" max="-2" attributes="0"/>
-                          <Component id="btnImprove" min="-2" pref="211" max="-2" attributes="0"/>
-                          <Component id="stopCloseButton" min="-2" pref="211" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnImprove" pref="211" max="32767" attributes="0"/>
+                          <Component id="stopCloseButton" pref="211" max="32767" attributes="0"/>
+                          <Component id="btnAllocationFromScratch" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="68" max="32767" attributes="0"/>
                   </Group>
@@ -82,14 +82,10 @@
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="de/free_creations/actions/automaticAllocation/Bundle.properties" key="AutomaticAllocationDialog.btnAllocationFromScratch.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
-        <Property name="defaultCapable" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAllocationFromScratchActionPerformed"/>
       </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="getRootPane().setDefaultButton(btnAllocationFromScratch);"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="stopCloseButton">
       <Properties>

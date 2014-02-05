@@ -186,6 +186,10 @@ public class EventCollection implements MutableEntityCollection<Event, Integer> 
 
     synchronized (Manager.databaseAccessLock) {
       EntityManager entityManager = Manager.getEntityManager();
+      assert(contest != null);
+      assert(timeSlot != null);
+      assert(entityManager.contains(contest));
+      assert(entityManager.contains(timeSlot));
       Event newEvent = Event.newEvent(entityManager, contest, timeSlot);
       firePropertyChange(PROP_ITEM_ADDED, null, newEvent.identity());
       return newEvent;

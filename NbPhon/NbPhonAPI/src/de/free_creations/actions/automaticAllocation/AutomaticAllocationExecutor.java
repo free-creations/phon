@@ -151,30 +151,34 @@ public class AutomaticAllocationExecutor {
 
   private enum State {
 
+    Initializing,
     RemovingAllAllocations,
     RemovingBadAllocations,
     CollectingTasks,
     AllocatingTasks,
+    Ending,
     Finished
   }
   private State currentState;
   private ProgressIndicator currentProgress;
-  private Iterator<Task> openJobsIterator;
+  private Iterator<Task> openTasksIterator;
   // these variables help to update the progress indicator
   private double currentProgressRatio = 0D;
   private double progressDelta = 1D;
   private int stepsToDo = 0;
   private int stepsDone = 0;
   private final Object ProgressIndicatorLock = new Object();
+  private final boolean fullReAllocation;
+  private int removedAllocCount = 0;
+  private int qualityBefore = 0;
+  private int allocatedTasks = 0;
+  private int vaccantTasks = 0;
 
   public AutomaticAllocationExecutor(boolean fullReAllocation) {
-    if (fullReAllocation) {
-      currentState = State.RemovingAllAllocations;
-      currentProgress = new ProgressIndicator(0, "Removing all allocations...");
-    } else {
-      currentState = State.RemovingBadAllocations;
-      currentProgress = new ProgressIndicator(0, "Removing bad allocations...");
-    }
+    this.fullReAllocation = fullReAllocation;
+    // prepare next state
+    currentState = State.Initializing;
+    currentProgress = new ProgressIndicator(0, "Initialize...");
   }
 
   /**
@@ -185,6 +189,9 @@ public class AutomaticAllocationExecutor {
    */
   public boolean doNext() throws Exception {
     switch (currentState) {
+      case Initializing:
+        initialize();
+        return true;
       case RemovingAllAllocations:
         removeAllAllocations();
         return true;
@@ -197,33 +204,70 @@ public class AutomaticAllocationExecutor {
       case AllocatingTasks:
         allocateTasks();
         return true;
+      case Ending:
+        doEnding();
+        return true;
       case Finished:
         return false;
     }
     return false;
   }
 
+  private void initialize() {
+    qualityBefore = assessQuality();
+    if (fullReAllocation) {
+      currentState = State.RemovingAllAllocations;
+      currentProgress = new ProgressIndicator(3, "Removing all allocations...");
+    } else {
+      currentState = State.RemovingBadAllocations;
+      currentProgress = new ProgressIndicator(3, "Removing bad allocations...");
+    }
+  }
+
+  private void doEnding() {
+    int qualityAfter = assessQuality();
+
+    float improvmentFactor = 0F;
+    if (qualityAfter != 0) {
+      float delta = qualityAfter - qualityBefore;
+      improvmentFactor = delta / (float) qualityAfter;
+    }
+    setProcessQuality(String.format(
+            "<html>"
+            + "%d Allocations removed.<br>"
+            + "%d new Allocations created.<br>"
+            + "%d Tasks left Vaccant.<br>"
+            + "Overall Quality improved by %.2f %%."
+            + "</html>",
+            removedAllocCount,
+            allocatedTasks,
+            vaccantTasks,
+            improvmentFactor * 100));
+    currentState = State.Finished;
+    setProgress(new ProgressIndicator(100, "Finished."));
+  }
+
   private void removeAllAllocations() throws DataBaseNotReadyException {
     ArrayList<Allocation> aa = new ArrayList<>(Manager.getAllocationCollection().getAll());
-    int allocCount = aa.size();
+    removedAllocCount = aa.size();
     Manager.getAllocationCollection().removeAll(aa);
     // prepare next state
     currentState = State.CollectingTasks;
-    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...",allocCount)));
+    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...", removedAllocCount)));
   }
 
   private void removeBadAllocations() throws DataBaseNotReadyException {
-    ArrayList<Allocation> aa = new ArrayList<>(Manager.getAllocationCollection().getAll());
-    int allocCount = aa.size();
+    List<Allocation> aa = collectBadAllocations();
+    removedAllocCount = aa.size();
     Manager.getAllocationCollection().removeAll(aa);
     // prepare next state
     currentState = State.CollectingTasks;
-    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...",allocCount)));
+    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...", removedAllocCount)));
   }
 
   private void collectTasks() {
     SortedSet<Task> openJobs = collectOpenJobs();
-    openJobsIterator = openJobs.iterator();
+    openTasksIterator = openJobs.iterator();
 
     // prepare the next state
     stepsToDo = openJobs.size();
@@ -238,15 +282,13 @@ public class AutomaticAllocationExecutor {
   }
 
   private void allocateTasks() throws DataBaseNotReadyException {
-    assert (openJobsIterator != null);
-    if (!openJobsIterator.hasNext()) {
+    assert (openTasksIterator != null);
+    if (!openTasksIterator.hasNext()) {
       // iterator empty we are finished
-      processQuality = "Improved by";
-      currentState = State.Finished;
-      setProgress(new ProgressIndicator(100, "Finished."));
+      currentState = State.Ending;
       return;
     }
-    Task next = openJobsIterator.next();
+    Task next = openTasksIterator.next();
     Person person = findBestMatch(next);
     if (person != null) {
       Integer eventId = next.event.getEventId();
@@ -255,10 +297,13 @@ public class AutomaticAllocationExecutor {
       AllocatePersonForEvent alloc = new AllocatePersonForEvent(false, eventId, personId, jobId, Allocation.PLANNER_AUTOMAT);
       try {
         alloc.apply();
+        allocatedTasks++;
       } catch (AllocatePersonForEvent.AllocationException ex) {
+        vaccantTasks++;
         logger.log(Level.SEVERE, "Allocation failed.", ex);
       }
     } else {
+      vaccantTasks++;
       logger.log(Level.INFO, "no person found for {0} and {1}", new Object[]{next.event, next.job});
     }
 
@@ -268,7 +313,7 @@ public class AutomaticAllocationExecutor {
     currentState = State.AllocatingTasks;
     setProgress(new ProgressIndicator(
             (int) (currentProgressRatio * 100D),
-            String.format("Step %s of %s ...", stepsDone + 1, stepsToDo)));
+            String.format("Step %s of %s ...", stepsDone, stepsToDo)));
 
   }
 
@@ -290,7 +335,7 @@ public class AutomaticAllocationExecutor {
     }
   }
 
-  public void setProgress(String processQuality) {
+  private void setProcessQuality(String processQuality) {
     synchronized (ProgressIndicatorLock) {
       this.processQuality = processQuality;
     }
@@ -334,5 +379,59 @@ public class AutomaticAllocationExecutor {
     }
 
     return winner;
+  }
+
+  private List<Allocation> collectBadAllocations() throws DataBaseNotReadyException {
+    ArrayList<Allocation> badAllocs = new ArrayList<>();
+    List<Allocation> aa = Manager.getAllocationCollection().getAll();
+    for (Allocation a : aa) {
+      if (isBad(a)) {
+        badAllocs.add(a);
+      }
+    }
+    return badAllocs;
+  }
+
+  /**
+   * Calculate the overall quality factor of all allocations.
+   */
+  private int assessQuality() {
+    List<Allocation> aa = Manager.getAllocationCollection().getAll();
+    int score = 0;
+    for (Allocation a : aa) {
+      AllocationRating rating = new AllocationRating(a);
+      score += rating.getScore();
+    }
+    return score;
+  }
+
+  /**
+   * Determine if the given allocation is bad, in other words if it is a
+   * candidate for removal.
+   *
+   * @param a
+   * @return return true if the person is not available or the allocation is
+   * redundant or has bad quality factor.
+   */
+  private boolean isBad(Allocation a) {
+    AllocationRating rating = new AllocationRating(a);
+    if (rating.isRedundant()) {
+      // redudant is always bad
+      return true;
+    }
+    if (!rating.isAvailable()) {
+      // person not available is always bad
+      return true;
+    }
+    if (Objects.equals(a.getPlanner(), Allocation.PLANNER_USER)) {
+      // if the planner is the user, we are not looking at the score
+      return false;
+    }
+    int score = rating.getScore();
+    if (score < AllocationRating.badThreshold) {
+      return true;
+    }
+    return false;
+
   }
 }

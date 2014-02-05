@@ -76,20 +76,15 @@ public class TimeSlotCollection implements EntityCollection<TimeSlot, Integer> {
    */
   @Override
   public final List<TimeSlot> getAll() {
-    synchronized (timeSlotCacheLock) {
-      if (timeSlotCache == null) {
-        synchronized (Manager.databaseAccessLock) {
-          try {
-            Manager.ping();
-            EntityManager entityManager = Manager.getEntityManager();
-            TypedQuery<TimeSlot> query = entityManager.createNamedQuery("TimeSlot.findAll", TimeSlot.class);
-            timeSlotCache = query.getResultList();
-          } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
-            timeSlotCache = Collections.emptyList();
-          }
-        }
+    synchronized (Manager.databaseAccessLock) {
+      try {
+        Manager.ping();
+        EntityManager entityManager = Manager.getEntityManager();
+        TypedQuery<TimeSlot> query = entityManager.createNamedQuery("TimeSlot.findAll", TimeSlot.class);
+        return query.getResultList();
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
+        return Collections.emptyList();
       }
-      return timeSlotCache;
     }
   }
 

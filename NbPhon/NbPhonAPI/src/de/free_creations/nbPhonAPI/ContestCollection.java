@@ -86,6 +86,7 @@ public class ContestCollection implements MutableEntityCollection<Contest, Integ
       // attach events for every time-slot
       List<TimeSlot> allTimeslots = Manager.getTimeSlotCollection().getAll();
       for (TimeSlot ts : allTimeslots) {
+        assert(entityManager.contains(ts)); //?????
         Manager.getEventCollection().newEntity(newContest, ts);
       }
       firePropertyChange(PROP_ITEM_ADDED, null, newContest.identity());

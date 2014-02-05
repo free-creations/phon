@@ -22,7 +22,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 
-
 /**
  *
  * @author Harald Postner <Harald at free-creations.de>
@@ -74,7 +73,7 @@ public class ContestCollectionTest {
 
     Contest entity = contestCollection.findEntity(1);
     assertNotNull(entity);
-    assertEquals(1, (int)entity.getContestId());
+    assertEquals(1, (int) entity.getContestId());
   }
 
   /**
@@ -85,7 +84,7 @@ public class ContestCollectionTest {
     System.out.println("testNewEntity");
     Contest entity = contestCollection.newEntity();
     assertNotNull(entity);
-    System.out.println("..."+entity.getContestId());
+    System.out.println("..." + entity.getContestId());
   }
 
   /**
@@ -112,8 +111,8 @@ public class ContestCollectionTest {
   /**
    * Test of contestTypes method, of class ContestCollection.
    */
-  @Test 
+  @Test
   public void testJuryTypes() {
-     //Ignore("Tested with testNewEntity")
+    //Ignore("Tested with testNewEntity")
   }
 }

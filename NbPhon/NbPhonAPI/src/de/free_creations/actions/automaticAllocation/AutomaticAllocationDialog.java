@@ -92,7 +92,7 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
         // The Automatic Allocation Executor had a problem.
         Throwable cause = ex.getCause();
         lblProcessQuality.setForeground(Color.red);
-        lblProcessQuality.setText(cause.getMessage());
+        lblProcessQuality.setText("<html>"+cause.getMessage()+"/<html>");
         btnImprove.setEnabled(false);
         btnAllocationFromScratch.setEnabled(false);
         stopCloseButton.setText(txtClose);
@@ -163,7 +163,6 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
     });
 
     org.openide.awt.Mnemonics.setLocalizedText(btnAllocationFromScratch, org.openide.util.NbBundle.getMessage(AutomaticAllocationDialog.class, "AutomaticAllocationDialog.btnAllocationFromScratch.text")); // NOI18N
-    btnAllocationFromScratch.setDefaultCapable(false);
     btnAllocationFromScratch.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         btnAllocationFromScratchActionPerformed(evt);
@@ -195,10 +194,10 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
           .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addGroup(layout.createSequentialGroup()
             .addGap(0, 67, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(btnAllocationFromScratch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(btnImprove, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(stopCloseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+              .addComponent(btnImprove, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+              .addComponent(stopCloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+              .addComponent(btnAllocationFromScratch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGap(0, 68, Short.MAX_VALUE)))
         .addContainerGap())
     );
@@ -220,14 +219,8 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
         .addGap(27, 27, 27))
     );
 
-    getRootPane().setDefaultButton(btnAllocationFromScratch);
-
     pack();
   }// </editor-fold>//GEN-END:initComponents
-
-    private void btnAllocationFromScratchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllocationFromScratchActionPerformed
-      startAllocationAction(true);
-    }//GEN-LAST:event_btnAllocationFromScratchActionPerformed
 
     private void stopCloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopCloseButtonActionPerformed
 
@@ -283,6 +276,11 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
   private void btnImproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImproveActionPerformed
     startAllocationAction(false);
   }//GEN-LAST:event_btnImproveActionPerformed
+
+  private void btnAllocationFromScratchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllocationFromScratchActionPerformed
+    // TODO add your handling code here:
+    startAllocationAction(true);
+  }//GEN-LAST:event_btnAllocationFromScratchActionPerformed
 
   private void doClose() {
     setVisible(false);

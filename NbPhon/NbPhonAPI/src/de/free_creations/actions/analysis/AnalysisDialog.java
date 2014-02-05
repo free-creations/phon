@@ -148,6 +148,7 @@ public class AnalysisDialog extends javax.swing.JDialog {
     RequirementPlanningExecutor exe = new RequirementPlanningExecutor();
     exe.apply();
     textPane.setText(exe.getHtmlResult());
+    textPane.setCaretPosition(0);
     
   }//GEN-LAST:event_btnRequirementsPlanningActionPerformed
   

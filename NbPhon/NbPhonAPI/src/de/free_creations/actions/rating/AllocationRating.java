@@ -22,14 +22,15 @@ import de.free_creations.dbEntities.ContestType;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.JobType;
+import de.free_creations.dbEntities.Location;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.Team;
 import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -40,12 +41,13 @@ public class AllocationRating {
   /**
    * the threshold which we consider an impossible allocation.
    */
-  public static final int threshold = Integer.MIN_VALUE / 1000;
+  public static final int veryGood = 124;
   public static final int good = 32;
-  public static final int unrealizable = threshold - (100 * good);
   public static final int veryInconvenient = -124;
+  public static final int veryVeryInconvenient = -256;
   public static final int inconvenient = -32;
   public static final int neutral = 0;
+  public static final int badThreshold = good;
 
   private final Person person;
   private final Event event;
@@ -124,6 +126,25 @@ public class AllocationRating {
     }
   }
 
+  public AllocationRating(Allocation allocation) {
+    this.person = allocation.getPerson();
+    this.event = allocation.getEvent();
+    this.job = allocation.getJob();
+    this.timeSlot = event.getTimeSlot();
+    if (person == null) {
+      throw new RuntimeException("Null Person.");
+    }
+    if (event == null) {
+      throw new RuntimeException("Null Event.");
+    }
+    if (job == null) {
+      throw new RuntimeException("Null Job.");
+    }
+    if (timeSlot == null) {
+      throw new RuntimeException("Null Timeslot.");
+    }
+  }
+
   public int getScore() {
     return scoreCalc();
   }
@@ -134,6 +155,7 @@ public class AllocationRating {
     score += jobAssessmemnt();
     score += contestTypeAssessmemnt();
     score += teamAssessmemnt();
+    score += locationAssessmemnt();
     return score;
   }
 
@@ -149,10 +171,25 @@ public class AllocationRating {
     if (wantedJobType == null) {
       return neutral;
     }
-    if (Objects.equals(wantedJobType, job.getJobType())) {
-      return good;
+    if (Objects.equals(job.getPriority(), 1)) {
+      // prio one should mostly go to those who have oped for
+      if (Objects.equals(wantedJobType, job.getJobType())) {
+        return veryGood;
+      } else {
+        // prio one might go to adults
+        if (Objects.equals(person.getAgegroup(), "ERWACHSEN")) {
+          return inconvenient;
+        } else {
+          // but never to children
+          return veryVeryInconvenient;
+        }
+      }
     } else {
-      return veryInconvenient;
+      if (Objects.equals(wantedJobType, job.getJobType())) {
+        return good;
+      } else {
+        return inconvenient;
+      }
     }
   }
 
@@ -164,15 +201,24 @@ public class AllocationRating {
    * @throws DataBaseNotReadyException
    */
   private int contestTypeAssessmemnt() {
+    Contest proposedContest = event.getContest();
+    if (proposedContest == null) {
+      // this should never happen.
+      return neutral;
+    }
+    // if this person is contest leader, we want him/her to be allocated those contests
+    List<Contest> contestLeaderList = person.getContestList();
+    if (!contestLeaderList.isEmpty()) {
+      if (contestLeaderList.contains(proposedContest)) {
+        return veryGood;
+      }
+    }
     ContestType wantedContestType = person.getContestType();
     if (wantedContestType == null) {
       return neutral;
     }
-    Contest c = event.getContest();
-    if (c == null) {
-      return neutral;
-    }
-    ContestType proposedContestType = c.getContestType();
+
+    ContestType proposedContestType = proposedContest.getContestType();
     if (Objects.equals(wantedContestType, proposedContestType)) {
       return good;
     } else {
@@ -183,8 +229,11 @@ public class AllocationRating {
   private int teamAssessmemnt() {
     Team wantedTeam = person.getTeam();
     if (wantedTeam == null) {
+      // no team preference that's OK
       return neutral;
     }
+
+    // check who else is allocated with me. 
     List<Allocation> aa = event.getAllocationList();
     if (aa.isEmpty()) {
       // I am the first person of my team on this event. That's fine.
@@ -197,8 +246,10 @@ public class AllocationRating {
         Team otherPersonsTeam = other.getTeam();
         if (otherPersonsTeam != null) {
           if (otherPersonsTeam.equals(wantedTeam)) {
+            // youpy an other person of my team
             tempScore += good;
           } else {
+            // grrr. a person from an other team
             tempScore += veryInconvenient;
           }
         }
@@ -207,10 +258,33 @@ public class AllocationRating {
     return tempScore;
   }
 
+  private int locationAssessmemnt() {
+    Location proposedLocation = event.getLocation();
+    if (proposedLocation == null) {
+      return neutral;
+    }
+    Integer dayIdx = timeSlot.getDayIdx();
+    ArrayList<Allocation> allocSameDay = new ArrayList<>();
+    List<Allocation> aa = person.getAllocationList();
+    for (Allocation a : aa) {
+      if (Objects.equals(dayIdx, a.getEvent().getTimeSlot().getDayIdx())) {
+        allocSameDay.add(a);
+      }
+    }
+    int tempScore = neutral;
+    for (Allocation a : allocSameDay) {
+      if (!Objects.equals(a.getEvent().getLocation(), proposedLocation)) {
+        tempScore += inconvenient;
+      }
+    }
+    return tempScore;
+
+  }
+
   /**
-   * Determine whether the proposed job can be allocated to the person.
+   * Determine whether the proposed task can be allocated to the person.
    *
-   * @return true if the proposed job does not clash with an other allocation
+   * @return true if the proposed task does not clash with an other allocation
    * and the person is available at given time.
    */
   public boolean isRealisable() {
@@ -238,7 +312,8 @@ public class AllocationRating {
    * allocation.
    *
    * Note: if the person is already allocated to the given event, this function
-   * will always return true.
+   * will always return true, in other words an existing allocation is always
+   * clashing with itself.
    *
    * @return true if the person has an other allocation at the proposed time.
    * Note: true is also returned if the required entities can not be accessed.
@@ -260,6 +335,15 @@ public class AllocationRating {
     }
     // OK no clash.
     return false;
+  }
+
+  /**
+   * Check if the allocation would be (or is) redundant.
+   *
+   * @return true if the event does not take place.
+   */
+  public boolean isRedundant() {
+    return !event.isScheduled();
   }
 
 }
