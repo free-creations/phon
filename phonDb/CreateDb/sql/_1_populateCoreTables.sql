@@ -69,8 +69,8 @@ INSERT INTO "APP"."TIMESLOT" VALUES(10,	4,	1,'2014-04-05','08:00','11:00','Samst
 INSERT INTO "APP"."TIMESLOT" VALUES(11,	4,	2,'2014-04-05','11:00','15:00','Samstag','Sa_Mi','Mittag');
 INSERT INTO "APP"."TIMESLOT" VALUES(12,	4,	3,'2014-04-05','15:00','18:00','Samstag','Sa_Na','Nachmittag');
 
-INSERT INTO "APP"."TIMESLOT" VALUES(13,	5,	1,'2014-04-06','08:00','11:00','Sonntag','Fr_Vo','Vormittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(14,	5,	2,'2014-04-06','11:00','15:00','Sonntag','Fr_Mi','Mittag');
-INSERT INTO "APP"."TIMESLOT" VALUES(15,	5,	3,'2014-04-06','15:00','18:00','Sonntag','Fr_Na','Nachmittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(13,	5,	1,'2014-04-06','08:00','11:00','Sonntag','So_Vo','Vormittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(14,	5,	2,'2014-04-06','11:00','15:00','Sonntag','So_Mi','Mittag');
+INSERT INTO "APP"."TIMESLOT" VALUES(15,	5,	3,'2014-04-06','15:00','18:00','Sonntag','So_Na','Nachmittag');
 
 

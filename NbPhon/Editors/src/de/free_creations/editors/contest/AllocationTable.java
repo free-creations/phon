@@ -275,7 +275,7 @@ public class AllocationTable extends JTable {
       setTransferHandler(transferHandler);
     }
     allocationTableRenderer = _renderer;
-    rowHeight = 24 + 6;
+    rowHeight = 30 + 6;
     gridColor = Color.lightGray;
     showHorizontalLines = true;
     showVerticalLines = true;
