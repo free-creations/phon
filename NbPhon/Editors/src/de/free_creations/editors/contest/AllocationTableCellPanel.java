@@ -227,6 +227,15 @@ public class AllocationTableCellPanel extends JLabel {
     if (personId != null) {
       popupMenu = tempNode.getContextMenu();
     }
+    if (cellKey != null) {
+      if (popupMenu == null) {
+        popupMenu = new JPopupMenu();
+      }
+      popupMenu.insert(new ProposeAllocationAction(cellKey.eventId, cellKey.jobId), 0);
+      if (personId != null) {
+        popupMenu.insert(new JPopupMenu.Separator(), 1);
+      }
+    }
     this.setComponentPopupMenu(popupMenu);
     tempNode.destroy();
   }
