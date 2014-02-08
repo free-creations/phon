@@ -17,6 +17,7 @@ package de.free_creations.editors.contest;
 
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.ContestType;
+import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.ContestCollection;
 import de.free_creations.nbPhonAPI.Manager;
@@ -99,13 +100,13 @@ public final class ContestTopComponent extends CloneableTopComponent {
     jLabel5 = new javax.swing.JLabel();
     edName = new javax.swing.JTextField();
     edContestId = new javax.swing.JLabel();
-    cbResponsible = new javax.swing.JComboBox();
     jLabel3 = new javax.swing.JLabel();
     edDescription = new javax.swing.JTextField();
     jLabel4 = new javax.swing.JLabel();
     jLabel1 = new javax.swing.JLabel();
     edContestType = new de.free_creations.editors.contest.ContestTypeComboBox();
     cbPrio = new javax.swing.JComboBox();
+    responiblePersonsComboBox = new de.free_creations.editors.contest.ResponiblePersonsComboBox();
 
     jSplitPane1.setDividerLocation(300);
     jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -128,8 +129,6 @@ public final class ContestTopComponent extends CloneableTopComponent {
     });
 
     org.openide.awt.Mnemonics.setLocalizedText(edContestId, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.edContestId.text")); // NOI18N
-
-    cbResponsible.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(ContestTopComponent.class, "ContestTopComponent.jLabel3.text")); // NOI18N
 
@@ -158,6 +157,12 @@ public final class ContestTopComponent extends CloneableTopComponent {
       }
     });
 
+    responiblePersonsComboBox.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        responiblePersonsComboBoxActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -183,12 +188,12 @@ public final class ContestTopComponent extends CloneableTopComponent {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(edContestType, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
                   .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addComponent(cbResponsible, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(responiblePersonsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jLabel5)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(cbPrio, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 209, Short.MAX_VALUE)))))
+                .addGap(0, 215, Short.MAX_VALUE)))))
         .addContainerGap())
     );
     jPanel1Layout.setVerticalGroup(
@@ -204,17 +209,18 @@ public final class ContestTopComponent extends CloneableTopComponent {
           .addComponent(jLabel1)
           .addComponent(edName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(cbPrio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel3)
-          .addComponent(cbResponsible, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel5))
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addComponent(cbPrio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel3)
+            .addComponent(jLabel5))
+          .addComponent(responiblePersonsComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(edDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel4))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
+        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
     );
 
     jScrollPane3.setViewportView(jPanel1);
@@ -227,7 +233,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addGap(0, 0, 0)
-        .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
+        .addComponent(jSplitPane1)
         .addGap(0, 0, 0))
     );
     layout.setVerticalGroup(
@@ -273,18 +279,34 @@ public final class ContestTopComponent extends CloneableTopComponent {
     Contest c = thisContest();
     if (c != null) {
       String oldPrio = priorityToString(c.getPriority());
-      String newPrio = (String)cbPrio.getSelectedItem();
+      String newPrio = (String) cbPrio.getSelectedItem();
       if (!Objects.equals(oldPrio, newPrio)) {
         c.setPriority(priorityToNumber(newPrio));
       }
-    }  
-    
+    }
+
   }//GEN-LAST:event_cbPrioActionPerformed
+
+  private void responiblePersonsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_responiblePersonsComboBoxActionPerformed
+    Contest c = thisContest();
+    if (c != null) {
+      Person oldPerson = c.getPerson();
+      Integer oldPersonId = (oldPerson == null) ? null : oldPerson.getPersonId();
+      Integer newPersonId = responiblePersonsComboBox.getSelectedPersonId();
+      if (!Objects.equals(oldPersonId, newPersonId)) {
+        try {
+          Person newPerson = Manager.getPersonCollection().findEntity(newPersonId);
+          c.setPerson(newPerson);
+        } catch (DataBaseNotReadyException ex) {
+          Exceptions.printStackTrace(ex);
+        }
+      }
+    }
+  }//GEN-LAST:event_responiblePersonsComboBoxActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private de.free_creations.editors.contest.AllocationTable allocationTable;
   private javax.swing.JComboBox cbPrio;
-  private javax.swing.JComboBox cbResponsible;
   private javax.swing.JLabel edContestId;
   private de.free_creations.editors.contest.ContestTypeComboBox edContestType;
   private javax.swing.JTextField edDescription;
@@ -299,6 +321,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
   private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JScrollPane jScrollPane3;
   private javax.swing.JSplitPane jSplitPane1;
+  private de.free_creations.editors.contest.ResponiblePersonsComboBox responiblePersonsComboBox;
   private de.free_creations.editors.contest.TimeTable timeTable;
   // End of variables declaration//GEN-END:variables
 
@@ -394,6 +417,7 @@ public final class ContestTopComponent extends CloneableTopComponent {
     edDescription.setText(noNull(contest.getDescription()));
     timeTable.setContestId(currentKey);
     cbPrio.setSelectedItem(priorityToString(contest.getPriority()));
+    responiblePersonsComboBox.setSelectedPerson(contest.getPerson());
 
   }
 
