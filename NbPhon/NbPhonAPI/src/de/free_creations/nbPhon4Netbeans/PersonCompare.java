@@ -15,6 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
+import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
@@ -111,6 +112,58 @@ public class PersonCompare {
           int checkNull2 = checkNotNull(p1, p2);
           if (checkNull2 != bothValid) {
             return checkNull2;
+          }
+
+          String f1 = nonNull(p1.getSurname());
+          String f2 = nonNull(p2.getSurname());
+          if (f1.equals(f2)) {
+            String v1 = nonNull(p1.getGivenname());
+            String v2 = nonNull(p2.getGivenname());
+            return v1.compareToIgnoreCase(v2);
+          } else {
+            return f1.compareToIgnoreCase(f2);
+          }
+
+        } catch (DataBaseNotReadyException ex) {
+          Exceptions.printStackTrace(ex);
+        }
+        return 0;
+      }
+    };
+  }
+
+  public static PersonComparator byJobType(MutableEntityCollection<Person, Integer> personCollection) {
+    return new PersonComparator(personCollection) {
+      @Override
+      public int compare(MutableEntityCollection<Person, Integer> personCollection, Node n1, Node n2) {
+        assert (personCollection != null);
+        int checkNull = checkValidPersonNodes(n1, n2);
+        if (checkNull != bothValid) {
+          return checkNull;
+        }
+        PersonNode pn1 = ((PersonNode) n1);
+        PersonNode pn2 = ((PersonNode) n2);
+        if (pn1.getKey() == PersonNode.nullKey) {
+          if (pn2.getKey() == PersonNode.nullKey) {
+            return 0;
+          } else {
+            return 1;
+          }
+        }
+        try {
+          Person p1 = personCollection.findEntity(pn1.getKey());
+          Person p2 = personCollection.findEntity(pn2.getKey());
+          int checkNull2 = checkNotNull(p1, p2);
+          if (checkNull2 != bothValid) {
+            return checkNull2;
+          }
+          JobType j1 = p1.getJobType();
+          JobType j2 = p2.getJobType();
+          String jId1 = j1.getJobTypeId();
+          String jId2 = j2.getJobTypeId();
+          int comp1 = -jId1.compareTo(jId2); // reverse alphabetic sort oder LERER -> HELFER
+          if (comp1 != 0) {
+            return comp1;
           }
 
           String f1 = nonNull(p1.getSurname());

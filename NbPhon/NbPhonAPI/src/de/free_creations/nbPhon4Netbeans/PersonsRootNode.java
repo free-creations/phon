@@ -54,7 +54,7 @@ public class PersonsRootNode extends AbstractNode {
   }
 
   public PersonsRootNode(MutableEntityCollection<Person, Integer> pp) {
-    this(pp,false);
+    this(pp, false);
   }
 
   public PersonsRootNode(MutableEntityCollection<Person, Integer> pp, boolean withNobody) {
@@ -68,6 +68,10 @@ public class PersonsRootNode extends AbstractNode {
 
   public void sortByName() {
     children.setComparator(PersonCompare.byName(personCollection));
+  }
+
+  public void sortByJobType() {
+    children.setComparator(PersonCompare.byJobType(personCollection));
   }
 
   public void sortByPriority() {
