@@ -18,7 +18,11 @@ package de.free_creations.editors.contest;
 import de.free_creations.actions.event.AllocatePersonForEvent;
 import de.free_creations.actions.rating.AllocationRating;
 import de.free_creations.dbEntities.Allocation;
+import de.free_creations.dbEntities.Contest;
+import de.free_creations.dbEntities.Event;
+import de.free_creations.dbEntities.Job;
 import de.free_creations.dbEntities.Person;
+import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
 import de.free_creations.nbPhon4Netbeans.PersonNodesArray;
 import de.free_creations.nbPhon4Netbeans.PersonsRootNode;
@@ -33,7 +37,6 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -42,6 +45,7 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.explorer.ExplorerManager;
@@ -91,11 +95,11 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
     }
 
   }
-  
+
   private final Action doubleClickAction = new AbstractAction("Allocate") {
-    
+
     @Override
-    public void actionPerformed(ActionEvent e) {  
+    public void actionPerformed(ActionEvent e) {
       allocateSelectedNode();
       doClose(RET_OK);
     }
@@ -113,15 +117,18 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
 
       this.onlyFree = onlyFree;
       progressHandle = ProgressHandleFactory.createHandle("Connecting to Database.");
+      progressHandle.start();
+      progressBar.setIndeterminate(true);
+      okButton.setEnabled(false);
     }
 
     @Override
     protected Void doInBackground() throws Exception {
       try {
-        progressHandle.start();
         PersonCollection pp = Manager.getPersonCollection();
         AvailablePersonFilter filter = new AvailablePersonFilter(eventId, jobId, onlyFree);
         personsRootNode = new PersonsRootNode(pp, false, filter, doubleClickAction);
+        personsRootNode.sortByRating(eventId, jobId);
       } catch (Throwable ex) {
         logger.log(Level.SEVERE, "Could not access the database.", ex);
       }
@@ -136,6 +143,8 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
       }
       scrollPane.setCursor(null);
       progressHandle.finish();
+      progressBar.setIndeterminate(false);
+      okButton.setEnabled(true);
     }
   }
 
@@ -156,6 +165,22 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
     initComponents();
     this.eventId = eventId;
     this.jobId = jobId;
+    // analyse given variables to assemble the window title
+    String jobdesc = "";
+    String contest = "";
+    String time = "";
+    try {
+      Event event = Manager.getEventCollection().findEntity(eventId);
+      Job job = Manager.getJobCollection().findEntity(jobId);
+      jobdesc = (job == null) ? "" : job.getName();
+      Contest c = (event == null) ? null : event.getContest();
+      contest = (c == null) ? "" : c.getName();
+      TimeSlot timeSlot = (event == null) ? null : event.getTimeSlot();
+      time = (timeSlot == null) ? "" : timeSlot.getLabel();
+    } catch (DataBaseNotReadyException ex) {
+    }
+    setTitle(String.format("%s, %s, %s", jobdesc, time,contest));
+    
 
     Point mousePos = MouseInfo.getPointerInfo().getLocation();
     settleWindowPosition(mousePos);
@@ -174,7 +199,14 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
     BeanTreeView beanTreeView = (BeanTreeView) scrollPane;
     beanTreeView.setRootVisible(false);
     //  associateLookup(ExplorerUtils.createLookup(explorerManager, getActionMap()));
-    refreshView(true);
+    SwingUtilities.invokeLater(new Runnable() {
+
+      @Override
+      public void run() {
+        refreshView(true);
+      }
+    });
+
   }
 
   private void refreshView(boolean onlyFree) {
@@ -206,7 +238,9 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
     btnOnlyFree = new javax.swing.JRadioButton();
     btnAll = new javax.swing.JRadioButton();
     scrollPane = new org.openide.explorer.view.BeanTreeView();
+    progressBar = new javax.swing.JProgressBar();
 
+    setTitle(org.openide.util.NbBundle.getMessage(ProposeAllocationDialog.class, "ProposeAllocationDialog.title")); // NOI18N
     addWindowListener(new java.awt.event.WindowAdapter() {
       public void windowClosing(java.awt.event.WindowEvent evt) {
         closeDialog(evt);
@@ -244,22 +278,28 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
       }
     });
 
+    progressBar.setIndeterminate(true);
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-        .addContainerGap(22, Short.MAX_VALUE)
-        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(cancelButton)
-        .addContainerGap())
       .addGroup(layout.createSequentialGroup()
         .addComponent(btnOnlyFree)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(btnAll)
         .addGap(0, 0, Short.MAX_VALUE))
       .addComponent(scrollPane)
+      .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGap(0, 10, Short.MAX_VALUE)
+            .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(cancelButton))
+          .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap())
     );
 
     layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, okButton});
@@ -271,7 +311,9 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
           .addComponent(btnOnlyFree)
           .addComponent(btnAll))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+        .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+        .addGap(0, 0, 0)
+        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(cancelButton)
@@ -322,6 +364,7 @@ public class ProposeAllocationDialog extends javax.swing.JDialog
   private javax.swing.JButton cancelButton;
   private javax.swing.ButtonGroup freeAllGroup;
   private javax.swing.JButton okButton;
+  private javax.swing.JProgressBar progressBar;
   private javax.swing.JScrollPane scrollPane;
   // End of variables declaration//GEN-END:variables
 

@@ -15,6 +15,7 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
+import de.free_creations.actions.rating.AllocationRating;
 import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
@@ -84,6 +85,45 @@ public class PersonCompare {
           Exceptions.printStackTrace(ex);
         }
         return 0;
+      }
+    };
+  }
+
+  public static PersonComparator byRating(
+          MutableEntityCollection<Person, Integer> personCollection,
+          final Integer eventId, final String JobId) {
+    return new PersonComparator(personCollection) {
+      
+      @Override
+      public int compare(MutableEntityCollection<Person, Integer> personCollection, 
+              Node n1, 
+              Node n2) {
+        int checkNull = checkValidPersonNodes(n1, n2);
+        if (checkNull != bothValid) {
+          return checkNull;
+        }
+        PersonNode pn1 = ((PersonNode) n1);
+        PersonNode pn2 = ((PersonNode) n2);
+        int personId1 = pn1.getKey();
+        int personId2 = pn2.getKey();
+        if (personId1 == PersonNode.nullKey) {
+          if (personId2 == PersonNode.nullKey) {
+            return 0;
+          } else {
+            return 1;
+          }
+        }
+        AllocationRating rating1 = new AllocationRating(personId1, eventId, JobId);
+        AllocationRating rating2 = new AllocationRating(personId2, eventId, JobId);
+        int score1 = rating1.getScore();
+        int score2 = rating2.getScore();
+        int scoreCompare = -Integer.compare(score1, score2);
+        if(scoreCompare != 0){
+          return scoreCompare;
+        }        
+        
+        // same score, so compare on personId (to be compatible with equal)        
+        return Integer.compare(personId1, personId2);
       }
     };
   }

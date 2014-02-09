@@ -62,7 +62,7 @@ public class PersonsRootNode extends AbstractNode {
   }
 
   public PersonsRootNode(MutableEntityCollection<Person, Integer> pp, boolean withNobody, PersonNodesArray.Filter filter, Action preferedAction) {
-    this(new PersonNodesArray(pp, withNobody,filter, preferedAction), pp);
+    this(new PersonNodesArray(pp, withNobody, filter, preferedAction), pp);
   }
 
   @Override
@@ -80,6 +80,10 @@ public class PersonsRootNode extends AbstractNode {
 
   public void sortByPriority() {
     children.setComparator(PersonCompare.byPriority(personCollection));
+  }
+
+  public void sortByRating(Integer eventId, String JobId) {
+    children.setComparator(PersonCompare.byRating(personCollection, eventId, JobId));
   }
 
   /**
