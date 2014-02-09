@@ -58,7 +58,11 @@ public class PersonsRootNode extends AbstractNode {
   }
 
   public PersonsRootNode(MutableEntityCollection<Person, Integer> pp, boolean withNobody) {
-    this(new PersonNodesArray(pp, withNobody), pp);
+    this(pp, withNobody, PersonNodesArray.takeAllFilter, null);
+  }
+
+  public PersonsRootNode(MutableEntityCollection<Person, Integer> pp, boolean withNobody, PersonNodesArray.Filter filter, Action preferedAction) {
+    this(new PersonNodesArray(pp, withNobody,filter, preferedAction), pp);
   }
 
   @Override

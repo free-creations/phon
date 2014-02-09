@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.swing.Action;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 
@@ -32,7 +33,31 @@ import org.openide.nodes.Node;
  * @author Harald Postner <Harald at free-creations.de>
  */
 public class PersonNodesArray extends Children.SortedArray {
-  
+
+  private final Filter filter;
+  private final Action preferedAction;
+
+  /**
+   * A filter can be used to exclude some items from Nodes Array.
+   */
+  public static interface Filter {
+
+    /**
+     * Must return true if the item should be added to the Array.
+     * @param p
+     * @return 
+     */
+    boolean take(Person p);
+  }
+
+  public static Filter takeAllFilter = new Filter() {
+
+    @Override
+    public boolean take(Person p) {
+      return true;
+    }
+  };
+
   private final MutableEntityCollection<Person, Integer> personCollection;
   private final PropertyChangeListener personCollectionListener = new PropertyChangeListener() {
     @Override
@@ -74,11 +99,18 @@ public class PersonNodesArray extends Children.SortedArray {
   }
 
   public PersonNodesArray(MutableEntityCollection<Person, Integer> personCollection, boolean withNobody) {
+    this(personCollection, withNobody, takeAllFilter, null);
+  }
+
+  public PersonNodesArray(MutableEntityCollection<Person, Integer> personCollection, boolean withNobody, Filter filter, Action preferedAction) {
     super();
+    assert (filter != null);
+    this.filter = filter;
     hasNobodyNode = withNobody;
     super.setComparator(PersonCompare.byName(personCollection));
     this.personCollection = personCollection;
     this.personCollection.addPropertyChangeListener(personCollectionListener);
+    this.preferedAction = preferedAction;
   }
 
   @Override
@@ -90,9 +122,11 @@ public class PersonNodesArray extends Children.SortedArray {
     }
     for (Person p : pp) {
       assert (p != null);
-      Integer personid = p.getPersonId();
-      assert (personid != null);
-      result.add(new PersonNode(personid, personCollection));
+      if (filter.take(p)) {
+        Integer personid = p.getPersonId();
+        assert (personid != null);
+        result.add(new PersonNode(personid, personCollection, preferedAction));
+      }
     }
     Comparator<? super Node> comparator = getComparator();
     if (comparator != null) {

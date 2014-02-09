@@ -91,13 +91,29 @@ public class PersonNodesArrayTest {
     assertNotNull(result);
     assertEquals(2, result.size());
   }
-  
-    /**
+
+  @Test
+  public void testInitCollectionWithFilter() {
+    // a filter that takes only the first item
+    PersonNodesArray.Filter filter = new PersonNodesArray.Filter() {
+
+      @Override
+      public boolean take(Person p) {
+        return (p.getPersonId() == 1);
+      }
+    };
+    PersonNodesArray testItem = new PersonNodesArray(personCollectionMock, false, filter, null);
+    ArrayList<Node> result = testItem.initCollection();
+    assertNotNull(result);
+    assertEquals(1, result.size());
+  }
+
+  /**
    * Test of initCollection method, of class PersonNodesArray.
    */
   @Test
   public void testInitCollectionWithNobody() {
-    PersonNodesArray testItem = new PersonNodesArray(personCollectionMock,true);
+    PersonNodesArray testItem = new PersonNodesArray(personCollectionMock, true);
     ArrayList<Node> result = testItem.initCollection();
     assertNotNull(result);
     assertEquals(3, result.size());

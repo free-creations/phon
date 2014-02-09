@@ -172,6 +172,7 @@ public class PersonNode extends AbstractNode implements CommittableNode {
       editAction.actionPerformed(null);
     }
   };
+  private final Action preferedAction;
   private final Action editAction = new AbstractAction("Edit") {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -209,10 +210,15 @@ public class PersonNode extends AbstractNode implements CommittableNode {
   private final Action[] allActions = new Action[]{editAction, editNewWindowAction};
 
   public PersonNode(Integer personId, MutableEntityCollection<Person, Integer> personsManager) {
+    this(personId, personsManager, null);
+  }
+
+  public PersonNode(Integer personId, MutableEntityCollection<Person, Integer> personsManager, Action preferedAction) {
     super(Children.LEAF);
     assert (personsManager != null);
     this.key = personIdToKey(personId);
     this.personsManager = personsManager;
+    this.preferedAction = preferedAction;
     if (key != nullKey) {
       Person.addPropertyChangeListener(listener, personId);
       getCookieSet().add(editCookie);
@@ -231,7 +237,11 @@ public class PersonNode extends AbstractNode implements CommittableNode {
   @Override
   public Action getPreferredAction() {
     if (key != nullKey) {
-      return editAction;
+      if (preferedAction != null) {
+        return preferedAction;
+      } else {
+        return editAction;
+      }
     } else {
       return null;
     }
