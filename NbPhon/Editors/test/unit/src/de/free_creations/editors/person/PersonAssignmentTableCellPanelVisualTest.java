@@ -23,7 +23,6 @@ import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import org.junit.Test;
-import org.openide.util.Exceptions;
 
 /**
  *

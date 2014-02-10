@@ -15,10 +15,11 @@
  */
 package de.free_creations.actions.rating;
 
+import de.free_creations.dbEntities.Allocation;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Job;
-import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
+import de.free_creations.nbPhonAPI.AllocationCollection;
 import de.free_creations.nbPhonAPI.Manager;
 import java.util.List;
 import static org.testng.Assert.*;
@@ -50,6 +51,9 @@ public class AllocationRatingNGTest {
 
   /**
    * Test of getScore method, of class AllocationRating.
+   *
+   * Here we test whether the "getScore" method is sufficiently fast to be
+   * executed over all persons all jobs and all events.
    */
   @Test
   public void testGetScore() {
@@ -66,6 +70,56 @@ public class AllocationRatingNGTest {
         }
       }
     }
+
+  }
+
+  /**
+   * Test of isRealisable method, of class AllocationRating.
+   */
+  @Test
+  public void testIsRealisable() {
+    System.out.println("isRealisable");
+  }
+
+  /**
+   * Test of isAvailable method, of class AllocationRating.
+   */
+  @Test
+  public void testIsAvailable() {
+    System.out.println("isAvailable");
+
+  }
+
+  /**
+   * Test of isClashing method, of class AllocationRating.
+   */
+  @Test
+  public void testIsClashing() {
+    System.out.println("isClashing");
+
+  }
+
+  /**
+   * Test of isVacant method, of class AllocationRating.
+   */
+  @Test
+  public void testIsVacant() {
+    System.out.println("isVacant");
+    List<Allocation> aa = Manager.getAllocationCollection().getAll();
+    assertFalse(aa.isEmpty(), "Bad Test Data?");
+    Allocation a = aa.get(0);
+
+    AllocationRating rating = new AllocationRating(a.getPerson(), a.getEvent(), a.getJob());
+    assertFalse(rating.isVacant());
+
+  }
+
+  /**
+   * Test of isRedundant method, of class AllocationRating.
+   */
+  @Test
+  public void testIsRedundant() {
+    System.out.println("isRedundant");
 
   }
 

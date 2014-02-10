@@ -41,6 +41,7 @@ public class AllocationRating {
   /**
    * the threshold which we consider an impossible allocation.
    */
+  public static final int veryveryGood = 256;
   public static final int veryGood = 124;
   public static final int good = 32;
   public static final int veryInconvenient = -124;
@@ -167,18 +168,29 @@ public class AllocationRating {
    * @throws DataBaseNotReadyException
    */
   private int jobAssessmemnt() {
+    int temp = 0;
     JobType wantedJobType = person.getJobType();
     if (wantedJobType == null) {
       return neutral;
     }
     if (Objects.equals(job.getPriority(), 1)) {
+      //prio one should go to the team leader
+      Contest contest = event.getContest();
+      Person contestLeader = (contest == null) ? null : contest.getPerson();
+      if (contestLeader != null) {
+        if (contestLeader.equals(person)) {
+          return veryveryGood;
+        } else {
+          temp = inconvenient;
+        }
+      }
       // prio one should mostly go to those who have oped for
       if (Objects.equals(wantedJobType, job.getJobType())) {
-        return veryGood;
+        return veryGood + temp;
       } else {
         // prio one might go to adults
         if (Objects.equals(person.getAgegroup(), "ERWACHSEN")) {
-          return inconvenient;
+          return inconvenient + temp;
         } else {
           // but never to children
           return veryVeryInconvenient;
@@ -210,7 +222,11 @@ public class AllocationRating {
     List<Contest> contestLeaderList = person.getContestList();
     if (!contestLeaderList.isEmpty()) {
       if (contestLeaderList.contains(proposedContest)) {
-        return veryGood;
+        if (Objects.equals(job.getPriority(), 1)) {
+          return veryveryGood;
+        }
+      } else {
+        return veryInconvenient;
       }
     }
     ContestType wantedContestType = person.getContestType();
@@ -309,7 +325,7 @@ public class AllocationRating {
 
   /**
    * Determines whether the proposed allocation is clashing with an other
-   * allocation.
+   * allocation for the same person.
    *
    * Note: if the person is already allocated to the given event, this function
    * will always return true, in other words an existing allocation is always
@@ -335,6 +351,26 @@ public class AllocationRating {
     }
     // OK no clash.
     return false;
+  }
+
+  /**
+   * Determines whether the proposed allocation is vacant, in other words nobody
+   * has yet been assigned to this task.
+   *
+   * Note: if the person is already allocated to the given event, this function
+   * will always return false, in other words an existing allocation is never
+   * vacant.
+   *
+   * @return false if somebody is allocated to this task.
+   */
+  public boolean isVacant() {
+    List<Allocation> aa = event.getAllocationList();
+    for (Allocation a : aa) {
+      if (Objects.equals(a.getJob(), job)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**

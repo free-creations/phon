@@ -236,7 +236,7 @@ public class AutomaticAllocationExecutor {
             "<html>"
             + "%d Allocations removed.<br>"
             + "%d new Allocations created.<br>"
-            + "%d Tasks left Vaccant.<br>"
+            + "%d Tasks left Vacant.<br>"
             + "Overall Quality improved by %.2f %%."
             + "</html>",
             removedAllocCount,

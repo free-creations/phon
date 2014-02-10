@@ -20,6 +20,8 @@ import de.free_creations.dbEntities.Availability;
 import de.free_creations.dbEntities.Contest;
 import de.free_creations.dbEntities.Event;
 import de.free_creations.dbEntities.Job;
+import de.free_creations.dbEntities.Person;
+import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhon4Netbeans.ContestJobNode;
 import de.free_creations.nbPhon4Netbeans.ContestNode;
 import java.awt.Color;
@@ -33,6 +35,7 @@ import java.util.Objects;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
+import org.openide.util.Exceptions;
 
 /**
  * Displays one single cell in the Allocation table.
@@ -138,6 +141,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
       if (availabilityId != null) {
         Availability.addPropertyChangeListener(nodeListener, availabilityId);
       }
+      this.setComponentPopupMenu(makeComponentPopupMenu(contestId, availabilityId));
       refresh();
     }
   }
@@ -169,7 +173,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     eventId = null;
     jobId = null;
     contestId = null;
-    JPopupMenu popupMenu = null;
+
     Event.removePropertyChangeListener(nodeListener, oldEventId);
     Contest.removePropertyChangeListener(nodeListener, oldContestId);
 
@@ -185,9 +189,6 @@ public class PersonAssignmentTableCellPanel extends JLabel {
           if (contest != null) {
             contestId = contest.getContestId();
             contest.addPropertyChangeListener(nodeListener);
-            ContestNode tempNode = new ContestNode(contestId, Manager.getContestCollection());
-            popupMenu = tempNode.getContextMenu();
-            tempNode.destroy();
           }
           event.addPropertyChangeListener(nodeListener);
         }
@@ -195,8 +196,57 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     } catch (DataBaseNotReadyException ex) {
     }
 
-    this.setComponentPopupMenu(popupMenu);
+    this.setComponentPopupMenu(makeComponentPopupMenu(contestId, availabilityId));
     refresh();
+  }
+
+  /**
+   * The popup menu permits the user to assign an (other) Task to a person.
+   *
+   * Implementation Note: we need the availability here to determine the
+   * personId and to time-slot. This only works if "startListening" is called
+   * before "setAllocationId". The concept of virtual Allocation would be a much
+   * better solution. See notes in package nbPhonAPI on this subject.
+   *
+   * @param contestId
+   * @return
+   */
+  private JPopupMenu makeComponentPopupMenu(Integer contestId, Integer availabiltyId) {
+    JPopupMenu popupMenu = null;
+    Integer personId = null;
+    Integer timeSlotId = null;
+    try {
+      Availability a = Manager.getAvailabilityCollection().findEntity(availabiltyId);
+      if (a != null) {
+        Person p = a.getPerson();
+        TimeSlot t = a.getTimeSlot();
+        personId = (p == null) ? null : p.getPersonId();
+        timeSlotId = (t == null) ? null : t.getTimeSlotId();
+      }
+    } catch (DataBaseNotReadyException ex) {
+      Exceptions.printStackTrace(ex);
+    }
+
+    ProposeAssignmentAction action = null;
+    if ((personId != null) && (timeSlotId != null)) {
+      action = new ProposeAssignmentAction(personId, timeSlotId);
+    }
+
+    if (contestId != null) {
+      ContestNode tempNode = new ContestNode(contestId, Manager.getContestCollection());
+      popupMenu = tempNode.getContextMenu();
+      tempNode.destroy();
+      if (action != null) {
+        popupMenu.insert(action, 0);
+        popupMenu.insert(new JPopupMenu.Separator(), 1);
+      }
+    } else {
+      if (action != null) {
+        popupMenu = new JPopupMenu();
+        popupMenu.add(action);
+      }
+    }
+    return popupMenu;
   }
 
   private void refresh() {
