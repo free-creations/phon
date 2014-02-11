@@ -79,7 +79,6 @@ public class TeamNode extends AbstractNode {
 
     @Override
     public Transferable paste() throws IOException {
-      System.out.println("#### pasting Person(" + newMemberId + ") into team (" + teamId + ")");
       try {
         Person newMember = Manager.getPersonCollection().findEntity(newMemberId);
         if (newMember != null) {
@@ -248,9 +247,9 @@ public class TeamNode extends AbstractNode {
       return "Singletons";
     }
     try {
-      Team c = teamManager.findEntity(teamId);
-      if (c != null) {
-        return String.format("%s", c.getName());
+      Team t = teamManager.findEntity(teamId);
+      if (t != null) {
+        return String.format("T%s - %s",teamId, t.getName());
       } else {
         return String.format("Zombie %s", teamId);
       }

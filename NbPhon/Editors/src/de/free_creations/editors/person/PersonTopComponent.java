@@ -18,6 +18,7 @@ package de.free_creations.editors.person;
 import de.free_creations.dbEntities.ContestType;
 import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
+import de.free_creations.dbEntities.Team;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.PersonCollection;
@@ -65,15 +66,15 @@ public final class PersonTopComponent extends CloneableTopComponent {
       if (p != null) {
         refreshView(p);
       }
-      
+
     }
   };
-  
+
   public PersonTopComponent() {
     initComponents();
     setName(Bundle.CTL_PersonTopComponent());
   }
-  
+
   PersonTopComponent(Integer key) {
     this();
     viewPersonRecord(key);
@@ -118,6 +119,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
     jScrollPane1 = new javax.swing.JScrollPane();
     assignmentTable = new de.free_creations.editors.person.PersonAssignmentTable();
     jLabel13 = new javax.swing.JLabel();
+    lblTeamName = new javax.swing.JLabel();
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel11.text")); // NOI18N
 
@@ -172,6 +174,8 @@ public final class PersonTopComponent extends CloneableTopComponent {
         edPersontypeActionPerformed(evt);
       }
     });
+
+    teamPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
     edContestType.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -232,6 +236,8 @@ public final class PersonTopComponent extends CloneableTopComponent {
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.jLabel13.text")); // NOI18N
 
+    org.openide.awt.Mnemonics.setLocalizedText(lblTeamName, org.openide.util.NbBundle.getMessage(PersonTopComponent.class, "PersonTopComponent.lblTeamName.text")); // NOI18N
+
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
@@ -257,30 +263,31 @@ public final class PersonTopComponent extends CloneableTopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(jLabel8)
-                  .addComponent(edHandy, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                  .addComponent(edHandy)))
               .addComponent(jLabel1)
-              .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
               .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(jLabel4)
                   .addComponent(edPlz, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(2, 2, 2)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(jLabel5)
-                  .addComponent(edWohnort, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                  .addComponent(edWohnort)))
               .addComponent(edNachname)
-              .addComponent(edContestType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+              .addComponent(edContestType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+              .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addComponent(edEMail)
               .addComponent(edStrasse)
+              .addComponent(edVorname)
               .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addComponent(jLabel6)
                   .addComponent(jLabel2)
-                  .addComponent(jLabel13))
-                .addGap(0, 0, Short.MAX_VALUE))
-              .addComponent(edVorname))))
+                  .addComponent(jLabel13)
+                  .addComponent(lblTeamName, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE)))))
         .addContainerGap())
     );
     jPanel2Layout.setVerticalGroup(
@@ -326,12 +333,15 @@ public final class PersonTopComponent extends CloneableTopComponent {
         .addGap(9, 9, 9)
         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addGap(18, 18, 18))
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(jPanel2Layout.createSequentialGroup()
+            .addComponent(teamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(lblTeamName))
+        .addContainerGap())
     );
 
     jScrollPane4.setViewportView(jPanel2);
@@ -449,7 +459,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       }
     }
   }//GEN-LAST:event_edContestTypeActionPerformed
-  
+
   private JobType getJobtypeTeacher() {
     try {
       return Manager.getJobTypeCollection().findEntity("LEHRER");
@@ -457,7 +467,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       return null;
     }
   }
-  
+
   private JobType getJobtypeHelper() {
     try {
       return Manager.getJobTypeCollection().findEntity("HELFER");
@@ -465,7 +475,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       return null;
     }
   }
-  
+
 
   private void edPersontypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edPersontypeActionPerformed
     Person p = thisPerson();
@@ -547,6 +557,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
   private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JScrollPane jScrollPane3;
   private javax.swing.JScrollPane jScrollPane4;
+  private javax.swing.JLabel lblTeamName;
   private de.free_creations.editors.person.PersonTeamPanel teamPanel;
   private de.free_creations.editors.person.TimeTable timeTable;
   // End of variables declaration//GEN-END:variables
@@ -555,31 +566,31 @@ public final class PersonTopComponent extends CloneableTopComponent {
   public void componentOpened() {
     // TODO add custom code on component opening
   }
-  
+
   @Override
   public void componentClosed() {
     // TODO add custom code on component closing
   }
-  
+
   void writeProperties(java.util.Properties p) {
     // better to version settings since initial version as advocated at
     // http://wiki.apidesign.org/wiki/PropertyFiles
     p.setProperty("version", "1.0");
     // TODO store your settings
   }
-  
+
   void readProperties(java.util.Properties p) {
     String version = p.getProperty("version");
     // TODO read your settings according to their version
   }
-  
+
   public void viewPersonRecord(Integer newKey) {
     if (currentKey != newKey) {
-      
+
       Person.removePropertyChangeListener(listener, currentKey);
       currentKey = newKey;
       Person person = thisPerson();
-      
+
       if (person != null) {
         Person.addPropertyChangeListener(listener, newKey);
         refreshView(person);
@@ -588,7 +599,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       assignmentTable.setPersonId(newKey);
     }
   }
-  
+
   private Person thisPerson() {
     Person p = null;
     try {
@@ -598,7 +609,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
     }
     return p;
   }
-  
+
   private void refreshView(Person person) {
     if (person == null) {
       return;
@@ -620,8 +631,9 @@ public final class PersonTopComponent extends CloneableTopComponent {
     edPersontype.setSelectedItem(personType(person));
     teamPanel.setPersonId(person.getPersonId());
     edNotiz.setText(person.getNotice());
+    lblTeamName.setText(getTeamName(person));
   }
-  
+
   private String personType(Person person) {
     if (person == null) {
       return null;
@@ -646,20 +658,18 @@ public final class PersonTopComponent extends CloneableTopComponent {
         return "Erwachsen";
     }
   }
-  
-  private Integer findTeamleaderId(Person person) {
-//    if (person == null) {
-//      return null;
-//    }
-//    Person p = person.getGewuenschterkollege();
-//    if (p == null) {
-//      return null;
-//    }
-//    return p.getPersonid();
-    return null;
-    
+
+  private String getTeamName(Person person) {
+    if (person == null) {
+      return "";
+    }
+    Team team = person.getTeam();
+    if (team == null) {
+      return "";
+    }
+    return String.format("T%s %s", team.getTeamId(), team.getName());
   }
-  
+
   private String noNull(Integer i) {
     if (i == null) {
       return "";
@@ -667,7 +677,7 @@ public final class PersonTopComponent extends CloneableTopComponent {
       return i.toString();
     }
   }
-  
+
   private String noNull(String s) {
     if (s == null) {
       return "";

@@ -155,7 +155,7 @@ public class JoinPersonInTeam implements CheckedAction {
 
     if (findTeacher(team) == null) {
       if (isTeacher(person)) {
-        team.setName(String.format("Team: %s", person.getSurname()));
+        team.setName(String.format("Team[%s]", person.getSurname()));
       }
     }
 

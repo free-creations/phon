@@ -18,6 +18,7 @@ package de.free_creations.nbPhon4Netbeans;
 import de.free_creations.dbEntities.ContestType;
 import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
+import de.free_creations.dbEntities.Team;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.awt.Image;
@@ -275,7 +276,13 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     try {
       Person p = personsManager.findEntity(key);
       if (p != null) {
-        return String.format("%s, %s", p.getSurname(), p.getGivenname());
+        Team team = p.getTeam();
+        Integer teamId = (team == null) ? null : team.getTeamId();
+        if (teamId == null) {
+          return String.format("%s, %s", p.getSurname(), p.getGivenname());
+        } else {
+          return String.format("%s, %s (T%s)", p.getSurname(), p.getGivenname(), teamId);
+        }
       } else {
         return getName();
       }
@@ -355,17 +362,17 @@ public class PersonNode extends AbstractNode implements CommittableNode {
       }
     }
     boolean isfemale = "Fr.".equals(p.getGender());
-    if ("KIND".equals(p.getAgegroup())) {
-      if (isfemale) {
-        return iconManager().iconChildFemale;
-      } else {
-        return iconManager().iconChildMale;
-      }
-    } else {
+    if ("ERWACHSEN".equals(p.getAgegroup())) {
       if (isfemale) {
         return iconManager().iconWoman;
       } else {
         return iconManager().iconMan;
+      }
+    } else {
+      if (isfemale) {
+        return iconManager().iconChildFemale;
+      } else {
+        return iconManager().iconChildMale;
       }
     }
   }
