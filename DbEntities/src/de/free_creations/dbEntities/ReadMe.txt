@@ -1,6 +1,9 @@
 see:
 http://www.oracle.com/technetwork/java/javase/7u51-relnotes-2085002.html
 
+see also:
+http://stackoverflow.com/questions/21154400/unable-to-start-derby-database-from-netbeans-7-4
+
 
 Synopsis: Additional permission needed to run Java DB network server
 
