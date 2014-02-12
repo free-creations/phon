@@ -1,3 +1,11 @@
+To start the server use a command like
+startNetworkServer -h 203.203.1.1 -p 1527
+
+see: http://www.vogella.com/tutorials/ApacheDerby/article.html
+
+https://builds.apache.org/job/Derby-docs/lastSuccessfulBuild/artifact/trunk/out/adminguide/index.html
+
+------------ security ----------------------------
 see:
 http://www.oracle.com/technetwork/java/javase/7u51-relnotes-2085002.html
 
