@@ -31,6 +31,8 @@ import java.util.Date;
  */
 public class GenerateContestTable {
 
+  private final boolean emptyDatabase = true; // set this to false if you want responsible persons to be allocated
+
   private final int timeSlotCount = 15; // must be the same as in "populateCoreTables.sql"
   private final int locationCount = 19; // must be the same as in "populateExampleData.sql"
   private final int personCount = 30; // range to pick reponsibels from, must be less or equal as in "GenreatePersonTable.java"
@@ -126,10 +128,12 @@ public class GenerateContestTable {
     output.println("--");
     updatePersons(output);
 
-    output.println("-- insert one dummy allocation for the unit tests");
-    output.println(
-            "INSERT INTO \"APP\".\"ALLOCATION\" VALUES(1,1,1,'LEHRER',CURRENT_TIMESTAMP,'AUTOMAT',NULL,NULL);"
-    );
+    if (!emptyDatabase) {
+      output.println("-- insert one dummy allocation for the unit tests");
+      output.println(
+              "INSERT INTO \"APP\".\"ALLOCATION\" VALUES(1,1,1,'LEHRER',CURRENT_TIMESTAMP,'AUTOMAT',NULL,NULL);"
+      );
+    }
 
     output.println("--");
     output.println("/*");
@@ -169,6 +173,9 @@ public class GenerateContestTable {
   }
 
   private String randomPerson() {
+    if (emptyDatabase) {
+      return "NULL";
+    }
     double random = Math.random();
     int nullP = (int) (personCount * undefinedPersonRatio);
     int p = (int) ((personCount + nullP) * random);
@@ -180,6 +187,9 @@ public class GenerateContestTable {
   }
 
   private String randomScheduled() {
+    if(emptyDatabase){
+      return "1";
+    }
     double random = Math.random();
 
     if (unscheduledEventRatio > random) {

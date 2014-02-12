@@ -1,6 +1,19 @@
-
+# Note: Before running the install script
+#
+# 1) make sure that an actual JRE is located in "C:\Program Files (x86)\Java\jdk1.7.0_45\jre*"
+#
+# 2) the Phon distribution must be unziped in ..\NbPhon\dist\nbphon\nbphon\*
+#
+# 3) the derby files must be in "C:\Program Files (x86)\Java\jdk1.7.0_45\db"
+#
+# 4) the example database must be in "..\phonDb\dataExample"
+#
+# 5) the empty database must be in "..\phonDb\dataEmpty"
+#
+#
 # Included files
 !include Sections.nsh
+!include logiclib.nsh
 !include "MUI.nsh"
 !include "StringReplace.nsh"
 
@@ -9,7 +22,7 @@ Name "Phon"
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.0.0
+!define VERSION 0.0.1
 !define COMPANY "free-creations"
 !define URL www.free-creations.de
 
@@ -75,7 +88,7 @@ Section -Main SEC0000
     # The Java Runtime
     SetOverwrite on
     SetOutPath $INSTDIR\jre7
-    File /r "C:\Program Files (x86)\Java\jre7\*"
+    File /r "C:\Program Files (x86)\Java\jdk1.7.0_45\jre\*"
 
 
     # The Phon application (unzip before running this)
@@ -93,7 +106,9 @@ SectionEnd
 # ------------------------------------------------------------------------
 # The Database Server section installs the Derby Database libraries
 # and the binary database files.
-Section /o "Database Server" SEC_Server
+
+SectionGroup /e "Database Server" GRP_SERVER
+Section /o "Empty Database" SEC_ServerEmpty
 
     # The Derby libraries 
     SetOverwrite on
@@ -103,7 +118,7 @@ Section /o "Database Server" SEC_Server
     # The Database Data-files
     SetOverwrite on
     SetOutPath $INSTDIR\phonDb
-    File /r "..\phonDb\data"
+    File /r "..\phonDb\dataEmpty"
 
     # configure the bat file that starts the database
     SetOutPath $INSTDIR\phonDb\bin
@@ -111,7 +126,10 @@ Section /o "Database Server" SEC_Server
     ;-----------------------------------------------------------
     fileWrite $0 'echo off $\r$\n'
     fileWrite $0 'prompt $$G $\r$\n'
-    fileWrite $0 'set DATA_LOC="$INSTDIR\phonDb\data\" $\r$\n'
+    fileWrite $0 'echo *************************************************$\r$\n'
+    fileWrite $0 'echo **** Produktions Datenbank                   ****$\r$\n'
+    fileWrite $0 'echo *************************************************$\r$\n'
+    fileWrite $0 'set DATA_LOC="$INSTDIR\phonDb\dataEmpty\" $\r$\n'
     fileWrite $0 'set _JAVACMD="$INSTDIR\jre7\bin\java.exe" $\r$\n'
     fileWrite $0 'set _JAR="$INSTDIR\derby\db\lib\derbyrun.jar" $\r$\n'
     fileWrite $0 'cd %DATA_LOC% $\r$\n'
@@ -126,9 +144,46 @@ Section /o "Database Server" SEC_Server
 
     CreateShortcut "$SMPROGRAMS\Phon\PhonServer.lnk" $INSTDIR\phonDb\bin\startServer.bat
     CreateShortcut "$DESKTOP\PhonServer.lnk"  $INSTDIR\phonDb\bin\startServer.bat
-
-
 SectionEnd
+
+Section /o "Example Database" SEC_ServerExample
+
+    # The Derby libraries 
+    SetOverwrite on
+    SetOutPath $INSTDIR\derby
+    File /r "C:\Program Files (x86)\Java\jdk1.7.0_45\db"
+
+    # The Database Data-files
+    SetOverwrite on
+    SetOutPath $INSTDIR\phonDb
+    File /r "..\phonDb\dataExample"
+
+    # configure the bat file that starts the database
+    SetOutPath $INSTDIR\phonDb\bin
+    FileOpen $0 "startServer.bat" w
+    ;-----------------------------------------------------------
+    fileWrite $0 'echo off $\r$\n'
+    fileWrite $0 'prompt $$G $\r$\n'
+    fileWrite $0 'echo *************************************************$\r$\n'
+    fileWrite $0 'echo **** Beispiel Datenbank                      ****$\r$\n'
+    fileWrite $0 'echo *************************************************$\r$\n'
+    fileWrite $0 'set DATA_LOC="$INSTDIR\phonDb\dataExample\" $\r$\n'
+    fileWrite $0 'set _JAVACMD="$INSTDIR\jre7\bin\java.exe" $\r$\n'
+    fileWrite $0 'set _JAR="$INSTDIR\derby\db\lib\derbyrun.jar" $\r$\n'
+    fileWrite $0 'cd %DATA_LOC% $\r$\n'
+    fileWrite $0 'echo *************************************************$\r$\n'
+    fileWrite $0 'echo **** Schliessen dieses Fensters beendet alle ****$\r$\n'
+    fileWrite $0 'echo **** Datenbankverbindungen                   ****$\r$\n'
+    fileWrite $0 'echo *************************************************$\r$\n'
+    fileWrite $0 '%_JAVACMD% -jar %_JAR% server start$\r$\n'
+    ;-----------------------------------------------------------
+    # close the file
+    fileClose $0
+
+    CreateShortcut "$SMPROGRAMS\Phon\PhonServer.lnk" $INSTDIR\phonDb\bin\startServer.bat
+    CreateShortcut "$DESKTOP\PhonServer.lnk"  $INSTDIR\phonDb\bin\startServer.bat
+SectionEnd
+SectionGroupEnd
 
 Section -post SEC0001
     SetShellVarContext current
@@ -170,7 +225,15 @@ Section  -un.Main UNSEC0000
     DeleteRegValue HKCU "${REGKEY}\Components" Main
 SectionEnd
 
-Section /o "-un.Database Server" UNSEC_Server
+Section /o "-un.Database Server 1" UNSEC_ServerEmpty
+    RmDir /r /REBOOTOK $INSTDIR/phonDb
+    RmDir /r /REBOOTOK $INSTDIR
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\PhonServer.lnk" 
+    Delete /REBOOTOK "$DESKTOP\PhonServer.lnk"  
+
+SectionEnd
+
+Section /o "-un.Database Server 1" UNSEC_ServerExample
     RmDir /r /REBOOTOK $INSTDIR/phonDb
     RmDir /r /REBOOTOK $INSTDIR
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\PhonServer.lnk" 
@@ -267,7 +330,7 @@ LangString DESC_SectionServer ${LANG_FRENCH} "Le serveur de donnees doit etre in
 
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_Server} $(DESC_SectionServer)
+  !insertmacro MUI_DESCRIPTION_TEXT ${GRP_Server} $(DESC_SectionServer)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -283,3 +346,39 @@ LangString StartMenuPageText ${LANG_FRENCH} "Select the Start Menu folder in whi
 LangString ^UninstallLink ${LANG_ENGLISH} "Uninstall $(^Name)"
 LangString ^UninstallLink ${LANG_GERMAN} "Uninstall $(^Name)"
 LangString ^UninstallLink ${LANG_FRENCH} "Uninstall $(^Name)"
+
+;----------------------------------------------------------------------------
+; Helper Functions to make the selection between empty database and example database mutually exclusive
+; this code is copied from:
+; http://stackoverflow.com/questions/20961153/disable-two-mutually-exclusive-sections-when-sectiongroup-unchecked
+
+Function SaveState
+!macro SaveSel id var
+SectionGetFlags ${id} ${var}
+IntOp ${var} ${var} & ${SF_SELECTED}
+!macroend
+SectionGetFlags ${GRP_Server} $R0
+!insertmacro SaveSel ${SEC_ServerEmpty} $R1
+!insertmacro SaveSel ${SEC_ServerExample} $R2
+
+FunctionEnd
+
+Function .onSelChange
+!macro OneOfTwoItemsInAGroup gid gv i1 v1 i2 v2
+#SectionGetFlags ${gid} $0
+!insertmacro SaveSel ${i1} $1
+!insertmacro SaveSel ${i2} $2
+${If} $1 <> 0
+${AndIf} $2 <> 0
+    StrCpy $1 ${i1}
+    ${IfThen} ${v1} = 0 ${|} StrCpy $1 ${i2} ${|}
+    !insertmacro UnselectSection $1
+    /*${If} ${gv} = $0 
+        !insertmacro UnselectSection ${gid}
+    ${EndIf}*/
+${EndIf}
+!macroend
+!insertmacro OneOfTwoItemsInAGroup ${GRP_Server} $R0 ${SEC_ServerEmpty} $R1 ${SEC_ServerExample} $R2
+
+Call SaveState
+FunctionEnd
