@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="star16.svg"
-   inkscape:export-filename="/home/harald/NetBeansProjects/JMAdmin/artwork/star16.png"
+   inkscape:export-filename="/home/harald/NetBeansProjects/phon/artwork/star16.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -41,13 +41,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="50.5"
-     inkscape:cx="8.5316741"
+     inkscape:cx="8.5712781"
      inkscape:cy="8.0990422"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:snap-grids="true"
+     inkscape:snap-grids="false"
      inkscape:window-width="1280"
      inkscape:window-height="977"
      inkscape:window-x="0"
@@ -85,7 +85,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Layer"
+     inkscape:label="Test"
      style="display:none"
      sodipodi:insensitive="true">
     <path
@@ -105,7 +105,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer1"
-     inkscape:label="Layer#1">
+     inkscape:label="starBackground"
+     style="display:inline">
     <path
        transform="translate(3.7565063,5.4693774)"
        d="M 10.712871,10.5 6.5746753,7.8180216 1.7871287,9.0000002 4.4691074,4.8618042 3.2871287,0.07425767 7.4253247,2.7562363 12.212871,1.5742577 9.5308926,5.7124536 z"
@@ -120,23 +121,29 @@
        sodipodi:cx="7"
        sodipodi:sides="4"
        id="path3802"
-       style="fill:#0e232e;fill-opacity:1;stroke:#000000;stroke-width:0.30000000999999998;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3892)"
+       style="fill:none;stroke:#162128;stroke-width:0.30000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3892)"
        sodipodi:type="star" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="starForeground"
+     style="display:inline">
     <path
        sodipodi:type="star"
-       style="fill:#ffff3e;fill-opacity:1;stroke:#000000;stroke-width:0.30000000999999998;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#ffff3e;fill-opacity:0.64021164;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="path3798"
        sodipodi:sides="4"
        sodipodi:cx="7"
        sodipodi:cy="5.2871289"
        sodipodi:r1="6.3999562"
-       sodipodi:r2="2.5663824"
+       sodipodi:r2="2.4161509"
        sodipodi:arg1="0.95189564"
-       sodipodi:arg2="1.7372938"
+       sodipodi:arg2="1.7869983"
        inkscape:flatsided="false"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="M 10.712871,10.5 6.5746753,7.8180216 1.7871287,9.0000002 4.4691074,4.8618042 3.2871287,0.07425767 7.4253247,2.7562363 12.212871,1.5742577 9.5308926,5.7124536 z"
+       d="M 10.712871,10.5 6.4816835,7.6470299 1.7871287,9.0000002 4.640099,4.7688125 3.2871287,0.07425767 7.5183165,2.9272279 12.212871,1.5742577 9.359901,5.8054454 z"
        transform="translate(3.6371287,5.0757423)" />
   </g>
 </svg>
