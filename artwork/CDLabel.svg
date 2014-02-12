@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="CDLabel.pdf">
+   sodipodi:docname="CDLabel.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -25,7 +25,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1"
-     inkscape:cx="375.43707"
+     inkscape:cx="377.25525"
      inkscape:cy="707.99927"
      inkscape:document-units="mm"
      inkscape:current-layer="layer2"
@@ -108,7 +108,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -127,7 +127,7 @@
        sodipodi:cy="264.37393"
        sodipodi:rx="207.72728"
        sodipodi:ry="204.05559"
-       d="m 578.18181,264.37393 a 207.72728,204.05559 0 1 1 -415.45456,0 207.72728,204.05559 0 1 1 415.45456,0 z"
+       d="m 578.18181,264.37393 c 0,112.69679 -93.00267,204.05559 -207.72728,204.05559 -114.72461,0 -207.72728,-91.3588 -207.72728,-204.05559 0,-112.69679 93.00267,-204.055586 207.72728,-204.055586 114.72461,0 207.72728,91.358796 207.72728,204.055586 z"
        transform="translate(0,2.5390623e-6)" />
     <path
        sodipodi:type="arc"
@@ -137,11 +137,11 @@
        sodipodi:cy="265.85425"
        sodipodi:rx="70.634918"
        sodipodi:ry="70.634918"
-       d="m 442.85715,265.85425 a 70.634918,70.634918 0 1 1 -141.26984,0 70.634918,70.634918 0 1 1 141.26984,0 z"
+       d="m 442.85715,265.85425 c 0,39.01059 -31.62433,70.63492 -70.63492,70.63492 -39.01059,0 -70.63492,-31.62433 -70.63492,-70.63492 0,-39.01059 31.62433,-70.63492 70.63492,-70.63492 39.01059,0 70.63492,31.62433 70.63492,70.63492 z"
        transform="translate(0,2.5390623e-6)" />
     <path
        transform="translate(-7.2167969e-6,524.65798)"
-       d="m 578.18181,264.37393 a 207.72728,204.05559 0 1 1 -415.45456,0 207.72728,204.05559 0 1 1 415.45456,0 z"
+       d="m 578.18181,264.37393 c 0,112.69679 -93.00267,204.05559 -207.72728,204.05559 -114.72461,0 -207.72728,-91.3588 -207.72728,-204.05559 0,-112.69679 93.00267,-204.055586 207.72728,-204.055586 114.72461,0 207.72728,91.358796 207.72728,204.055586 z"
        sodipodi:ry="204.05559"
        sodipodi:rx="207.72728"
        sodipodi:cy="264.37393"
@@ -151,7 +151,7 @@
        sodipodi:type="arc" />
     <path
        transform="translate(-7.2167969e-6,524.65798)"
-       d="m 442.85715,265.85425 a 70.634918,70.634918 0 1 1 -141.26984,0 70.634918,70.634918 0 1 1 141.26984,0 z"
+       d="m 442.85715,265.85425 c 0,39.01059 -31.62433,70.63492 -70.63492,70.63492 -39.01059,0 -70.63492,-31.62433 -70.63492,-70.63492 0,-39.01059 31.62433,-70.63492 70.63492,-70.63492 39.01059,0 70.63492,31.62433 70.63492,70.63492 z"
        sodipodi:ry="70.634918"
        sodipodi:rx="70.634918"
        sodipodi:cy="265.85425"
@@ -416,17 +416,16 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot3258"
-       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI"
-       transform="matrix(1,0,0,1.3442828,-43.636363,-191.07501)"><flowRegion
+       style="font-size:40.00000148px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI"
+       transform="matrix(1.0413003,0,0,1.3442828,-52.240864,-190.16592)"><flowRegion
          id="flowRegion3260"><rect
            id="rect3262"
-           width="219.99998"
-           height="116.23035"
+           width="278.49329"
+           height="138.54707"
            x="230"
            y="325.08945"
-           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Segoe UI;-inkscape-font-specification:Segoe UI" /></flowRegion><flowPara
-         id="flowPara3264">PHON</flowPara><flowPara
-         id="flowPara3266">Testversion</flowPara></flowRoot>    <flowRoot
+           style="font-size:40.00000148px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;font-family:Segoe UI;-inkscape-font-specification:Segoe UI" /></flowRegion><flowPara
+         id="flowPara3057">PHON</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot3268"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><flowRegion
@@ -440,7 +439,7 @@
        xml:space="preserve"
        id="flowRoot3276"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI"
-       transform="translate(169.7748,-142.72728)"><flowRegion
+       transform="translate(151.04464,-141.81819)"><flowRegion
          id="flowRegion3278"><rect
            id="rect3280"
            width="147.27272"
@@ -448,7 +447,19 @@
            x="291.81818"
            y="395.08945"
            style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Segoe UI;-inkscape-font-specification:Segoe UI" /></flowRegion><flowPara
-         id="flowPara3282">9.1.14</flowPara></flowRoot>  </g>
+         id="flowPara3059">13.2.14</flowPara></flowRoot>    <flowRoot
+       transform="matrix(1.0413003,0,0,1.3442828,19.577318,-94.711378)"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI"
+       id="flowRoot3045"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3047"><rect
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Segoe UI;-inkscape-font-specification:Segoe UI"
+           y="325.08945"
+           x="230"
+           height="138.54707"
+           width="278.49329"
+           id="rect3049" /></flowRegion><flowPara
+         id="flowPara3055">Version 0.0.1</flowPara></flowRoot>  </g>
   <g
      transform="translate(0,-2.5390623e-6)"
      id="g2999"
