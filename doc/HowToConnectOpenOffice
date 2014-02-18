@@ -1,0 +1,15 @@
+To open the sample database from NetBeans with OOo Base is possible. I got it working with OOo 3.0, NetBeans 6.1, Java 6u10 and Derby 10.4.1.3. This were the steps I executed:
+
+Start NetBeans, switch to the services tab with "Windows" > "Services", and expand the node Databases. Then right click on Java DB and select "Properties..." to set the path to your Java DB installation (aka Derby). Then right click on Java DB again and select "Start Server". You now hopefully get a success message, that Apache Derby Network Server has been started. If not, get it working anyway before proceeding.
+
+Start OpenOffice.org, select "Tools" > "Options" > "OpenOffice.org" > "Java", and press the button "Class Path...". Press "Add Archive..." and select the JAR file derbyclient.jar from the lib directory of your Java DB installation. Press "OK". If you get the message "You have to restart OpenOffice.org so the new or modified values can take effect. Please restart OpenOffice.org now.", restart OOo and the quickstarter (if it is running, too).
+    
+Start OOo Base, select "Connect to an existing database", select "JDBC" and press "Next >>".
+    
+Enter the Datasource URL "derby://localhost:1527/sample" and the JDBC class driver "org.apache.derby.jdbc.ClientDriver" and press "Test class". If everything is OK, you'll see the message "The JDBC driver was loaded successfully." Proceed with pressing "Next >>".
+    
+Enter the User name "app", select "Password required" and press "Test Connection". Enter now the password "app" and press OK. You should now get the message "Connection Test - The connection was established successfully." Proceed with pressing "Next >>" make your choice and press "Finish". Enter a name for the database, select an appropriate folder, and press "Save".
+    
+If everything went OK, you'll see now the tables CUSTOMER, DISCOUNT_CODE and some more.
+
+From: https://forum.openoffice.org/en/forum/viewtopic.php?f=40&t=5127
