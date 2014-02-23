@@ -1,0 +1,7 @@
+Ideas for creating a Database controll application in C++ or C##
+running as a service in Windows
+
+Creating a System Tray Application with C#
+
+see: 
+http://alanbondo.wordpress.com/2008/06/22/creating-a-system-tray-app-with-c/

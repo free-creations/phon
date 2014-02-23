@@ -38,9 +38,9 @@ FROM
 /**/
 WHERE
   "ALLOC_TEACHER"."JOB" = 'LEHRER'
-  AND  "ALLOC_HELPER"."JOB" <> 'LEHRER'
 /**/
 ORDER BY 
-  "TeacherId" ASC, 
+  "TeacherSurname" ASC, 
+  "TeacherGivenname" ASC, 
   "EVENT"."TIMESLOT" ASC, 
   "HelperJob" ASC
