@@ -1,8 +1,8 @@
-Thu Jan 09 10:40:20 CET 2014 : Apache Derby Network Server 10.8.3.0 - (1405108) wurde gestartet und ist bereit, Verbindungen am Port 1527 zu akzeptieren.
+Mon Feb 24 11:47:28 CET 2014 : Apache Derby Network Server 10.8.3.0 - (1405108) wurde gestartet und ist bereit, Verbindungen am Port 1527 zu akzeptieren.
 ----------------------------------------------------------------
-Thu Jan 09 10:40:20 CET 2014:
-Booten von Derby Version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): Instanz a816c00e-0143-765f-b3d8-00000add1483
-für Datenbankverzeichnis E:\Users\harald\Documents\NetBeansProjects\phon\phonDb\data\phonDb   mit Klassenladeprogrammn sun.misc.Launcher$AppClassLoader@19134f4
+Mon Feb 24 11:47:29 CET 2014:
+Booten von Derby Version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): Instanz a816c00e-0144-6381-b509-00000add1483
+für Datenbankverzeichnis E:\Users\harald\Documents\NetBeansProjects\phon\phonDb\data\phonDb   mit Klassenladeprogrammn sun.misc.Launcher$AppClassLoader@47858e
 
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_45-b18
