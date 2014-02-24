@@ -6,10 +6,12 @@ SELECT
   "CONTEST"."CONTESTID",
   "CONTEST"."DESCRIPTION" AS "ContestDescription",
   "CONTEST"."NAME"  AS "ContestName",
-  "PERSON"."SURNAME", 
-  "PERSON"."GIVENNAME" ,
+  "PERSON"."SURNAME" AS "PersonSurname", 
+  "PERSON"."GIVENNAME" AS "PersonGivenName", 
   "Responsible"."SURNAME" AS "RespSurname", 
   "Responsible"."GIVENNAME" AS "RespGivenname", 
+  "Teacher"."SURNAME" AS "TeacherSurname", 
+  "Teacher"."GIVENNAME" AS "TeacherGivenname", 
   "PERSON"."TELEPHONE", 
   "PERSON"."MOBILE", 
   "PERSON"."EMAIL", 
@@ -25,7 +27,8 @@ SELECT
   "LOCATION"."ROOM",
   "LOCATION"."STREET",
   "JOBTYPE"."JOBTYPEID",
-  "JOBTYPE"."NAME" AS "JobTypeName"
+  "JOBTYPE"."NAME" AS "JobTypeName",
+  "AllocTeacher"."PERSON" AS "TeacherId"
 /**/
 FROM 
   "APP"."ALLOCATION" AS "ALLOC"
@@ -54,6 +57,13 @@ FROM
    LEFT JOIN "APP"."JOBTYPE" AS "JOBTYPE"
    ON "JOB"."JOBTYPE" = "JOBTYPE"."JOBTYPEID"
 
+   LEFT JOIN "APP"."ALLOCATION" AS "AllocTeacher"
+   ON "AllocTeacher"."EVENT" = "EVENT"."EVENTID"
+
+   LEFT JOIN "APP"."PERSON" AS "Teacher"
+   ON "AllocTeacher"."PERSON" = "Teacher"."PERSONID" 
+WHERE
+  "AllocTeacher"."JOB" = 'LEHRER'
 
 
 
