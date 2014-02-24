@@ -1,7 +1,8 @@
 /**/
 SELECT 
-  "ALLOC"."PERSON" ,
-  "ALLOC"."JOB" ,
+  "ALLOC"."ALLOCATIONID",
+  "ALLOC"."PERSON" AS "PersonId",
+  "ALLOC"."JOB" AS "JobId",
   "CONTEST"."CONTESTID",
   "CONTEST"."DESCRIPTION" AS "ContestDescription",
   "CONTEST"."NAME"  AS "ContestName",
@@ -22,7 +23,9 @@ SELECT
   "LOCATION"."NAME" AS "LocationName",
   "LOCATION"."BUILDING",
   "LOCATION"."ROOM",
-  "LOCATION"."STREET"
+  "LOCATION"."STREET",
+  "JOBTYPE"."JOBTYPEID",
+  "JOBTYPE"."NAME" AS "JobTypeName"
 /**/
 FROM 
   "APP"."ALLOCATION" AS "ALLOC"
@@ -43,6 +46,14 @@ FROM
    ON  "EVENT"."LOCATION" = "LOCATION"."LOCATIONID"
 
    LEFT JOIN "APP"."PERSON" AS "Responsible"
-   ON "CONTEST"."PERSON" = "PERSON"."PERSONID" 
-/**/
+   ON "CONTEST"."PERSON" = "Responsible"."PERSONID" 
+
+   LEFT JOIN "APP"."JOB" AS "JOB"
+   ON "ALLOC"."JOB" = "JOB"."JOBID"
+
+   LEFT JOIN "APP"."JOBTYPE" AS "JOBTYPE"
+   ON "JOB"."JOBTYPE" = "JOBTYPE"."JOBTYPEID"
+
+
+
 
