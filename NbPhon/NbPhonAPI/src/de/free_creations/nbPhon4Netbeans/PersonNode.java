@@ -97,8 +97,17 @@ public class PersonNode extends AbstractNode implements CommittableNode {
       if (Person.PROP_GIVENNAME.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
       }
+      if (Person.PROP_TEAM.equals(evt.getPropertyName())) {
+        fireDisplayNameChange(null, getDisplayName());
+      }
       if (Person.PROP_AVAILABILITY.equals(evt.getPropertyName())) {
         fireDisplayNameChange(null, getDisplayName());
+        fireIconChange();
+      }
+      if (Person.PROP_AGEGROUP.equals(evt.getPropertyName())) {
+        fireIconChange();
+      }
+      if (Person.PROP_JOBTYPE.equals(evt.getPropertyName())) {
         fireIconChange();
       }
       if (Person.PROP_CONTESTTYPE.equals(evt.getPropertyName())) {
