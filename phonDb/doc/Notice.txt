@@ -5,3 +5,20 @@ Creating a System Tray Application with C#
 
 see: 
 http://alanbondo.wordpress.com/2008/06/22/creating-a-system-tray-app-with-c/
+
+--------------------------- computername ---------------------------
+
+http://www.administrator.de/forum/computername-auslesen-94866.html
+So ermitteln Sie den Computernamen
+
+    Öffnen Sie "System", indem Sie auf die Schaltfläche StartSchaltfläche "Start" klicken, mit der rechten Maustaste auf Computer klicken und dann auf Eigenschaften klicken.
+
+    Unter Einstellungen für Computernamen, Domäne und Arbeitsgruppe finden Sie den Namen des Computers sowie den vollständigen Computernamen, falls der Computer einer Domäne angehört.
+
+
+@echo off 
+cls 
+
+echo Ihr Computer hat den Namen %computername% und er befindet sich in der Domäne %userdnsdomain%. Aktuell sind Sie auf %logonserver% angemeldet als %username% 
+
+-------------------------------------------------------------------
