@@ -60,6 +60,32 @@ public class AllocationCollection implements MutableEntityCollection<Allocation,
     }
   }
 
+  /**
+   * Returns a list of all automatically generated allocations.
+   * @return 
+   */
+  public List<Allocation> getAllAutomatic() {
+    synchronized (Manager.databaseAccessLock) {
+      try {
+        Manager.ping();
+        EntityManager entityManager = Manager.getEntityManager();
+        TypedQuery<Allocation> query = entityManager.createNamedQuery("Allocation.findAll", Allocation.class);
+        List<Allocation> ll = query.getResultList();
+        
+        ArrayList<Allocation> result = new ArrayList<>();
+        for(Allocation a : ll){
+          if(Allocation.PLANNER_AUTOMAT.equals(a.getPlanner())){
+            result.add(a);
+          }
+        }
+        
+        return result;
+      } catch (DataBaseNotReadyException | ConnectionLostException ignored) {
+        return Collections.emptyList();
+      }
+    }
+  }
+
   @Override
   public Allocation findEntity(Long key) throws DataBaseNotReadyException {
     if (key == null) {

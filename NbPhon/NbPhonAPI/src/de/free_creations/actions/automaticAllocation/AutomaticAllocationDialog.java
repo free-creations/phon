@@ -43,18 +43,18 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
 
   private class Allocator extends SwingWorker<Void, ProgressIndicator> {
 
-    private final boolean fullReAllocation;
+    private final boolean onlyRemoval;
     private boolean halted;
     private String endMessage = "";
 
-    public Allocator(boolean fullReAllocation) {
-      this.fullReAllocation = fullReAllocation;
+    public Allocator(boolean onlyRemoval) {
+      this.onlyRemoval = onlyRemoval;
       halted = false;
     }
 
     @Override
     protected Void doInBackground() throws Exception {
-      AutomaticAllocationExecutor exe = new AutomaticAllocationExecutor(fullReAllocation);
+      AutomaticAllocationExecutor exe = new AutomaticAllocationExecutor(onlyRemoval);
       boolean more = true;
       while (more && (!halted)) {
         publish(exe.getProgress());
@@ -231,7 +231,7 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
       }
     }//GEN-LAST:event_stopCloseButtonActionPerformed
 
-  private void startAllocationAction(boolean fullAllocation) {
+  private void startAllocationAction(boolean onlyRemoval) {
     if (action == null) {
       progressBar.setValue(0);
       lblMessage.setText("");
@@ -239,7 +239,7 @@ public class AutomaticAllocationDialog extends javax.swing.JDialog {
       btnImprove.setEnabled(false);
       btnAllocationFromScratch.setEnabled(false);
       stopCloseButton.setText(txtStop);
-      action = new Allocator(fullAllocation);
+      action = new Allocator(onlyRemoval);
       action.execute();
     }
   }

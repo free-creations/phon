@@ -168,14 +168,14 @@ public class AutomaticAllocationExecutor {
   private int stepsToDo = 0;
   private int stepsDone = 0;
   private final Object ProgressIndicatorLock = new Object();
-  private final boolean fullReAllocation;
+  private final boolean onlyRemoval;
   private int removedAllocCount = 0;
   private int qualityBefore = 0;
   private int allocatedTasks = 0;
   private int vaccantTasks = 0;
 
-  public AutomaticAllocationExecutor(boolean fullReAllocation) {
-    this.fullReAllocation = fullReAllocation;
+  public AutomaticAllocationExecutor(boolean onlyRemoval) {
+    this.onlyRemoval = onlyRemoval;
     // prepare next state
     currentState = State.Initializing;
     currentProgress = new ProgressIndicator(0, "Initialize...");
@@ -215,7 +215,7 @@ public class AutomaticAllocationExecutor {
 
   private void initialize() {
     qualityBefore = assessQuality();
-    if (fullReAllocation) {
+    if (onlyRemoval) {
       currentState = State.RemovingAllAllocations;
       currentProgress = new ProgressIndicator(3, "Removing all allocations...");
     } else {
@@ -248,12 +248,15 @@ public class AutomaticAllocationExecutor {
   }
 
   private void removeAllAllocations() throws DataBaseNotReadyException {
-    ArrayList<Allocation> aa = new ArrayList<>(Manager.getAllocationCollection().getAll());
+    ArrayList<Allocation> aa = new ArrayList<>(Manager.getAllocationCollection().getAllAutomatic());
     removedAllocCount = aa.size();
     Manager.getAllocationCollection().removeAll(aa);
     // prepare next state
-    currentState = State.CollectingTasks;
-    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...", removedAllocCount)));
+//    currentState = State.CollectingTasks;
+//    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...", removedAllocCount)));
+    currentState = State.Finished;
+    setProgress(new ProgressIndicator(100, String.format("%s Allocations removed. Finished.", removedAllocCount)));
+
   }
 
   private void removeBadAllocations() throws DataBaseNotReadyException {
