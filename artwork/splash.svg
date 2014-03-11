@@ -29,7 +29,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.277551"
-     inkscape:cx="204.22841"
+     inkscape:cx="337.48124"
      inkscape:cy="150"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -88,5 +88,19 @@
            y="122.17742"
            style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;font-family:Sans;-inkscape-font-specification:Sans" /></flowRegion><flowPara
          id="flowPara2989">phon</flowPara><flowPara
-         id="flowPara2991">Version 0.0.2</flowPara></flowRoot>  </g>
+         id="flowPara2991">Version 0.0.3</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2993"
+       style="font-size:28px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI Light"
+       transform="translate(299.125,708.51701)"
+       inkscape:transform-center-x="-7.7900391"
+       inkscape:transform-center-y="4.8090397"><flowRegion
+         id="flowRegion2995"><rect
+           id="rect2997"
+           width="200.21506"
+           height="46.980286"
+           x="36.881721"
+           y="227.55376"
+           style="font-size:28px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr;text-anchor:start;font-family:Segoe UI;-inkscape-font-specification:Segoe UI Light" /></flowRegion><flowPara
+         id="flowPara2999">10.03.2014</flowPara></flowRoot>  </g>
 </svg>

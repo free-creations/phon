@@ -15,13 +15,16 @@
  */
 package de.free_creations.nbPhon4Netbeans;
 
+import de.free_creations.dbEntities.JobType;
 import de.free_creations.dbEntities.Person;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
+import de.free_creations.nbPhonAPI.Manager;
 import de.free_creations.nbPhonAPI.MutableEntityCollection;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -80,7 +83,6 @@ public class PersonCompareTest {
     PersonNode np1 = new PersonNode(1, personCollectionMock);
     PersonNode np2 = new PersonNode(2, personCollectionMock);
 
-
     // must accept null records
     int result = testComparator.compare(null, null);
     assertEquals(0, result);
@@ -138,5 +140,64 @@ public class PersonCompareTest {
 
     result = testComparator.compare(np2, np1);
     assertTrue(result > 0);
+  }
+
+  /**
+   * Test of PersonCompare.byName
+   */
+  @Test
+  public void testByJobTypeNullRecords() {
+    PersonCompare.PersonComparator testComparator = PersonCompare.byJobType(personCollectionMock);
+    PersonNode np1 = new PersonNode(1, personCollectionMock);
+    PersonNode np2 = new PersonNode(2, personCollectionMock);
+
+    // must accept null records
+    int result = testComparator.compare(null, null);
+    assertEquals(0, result);
+
+    result = testComparator.compare(np1, null);
+    assertTrue(result > 0);
+
+    result = testComparator.compare(null, np2);
+    assertTrue(result < 0);
+
+    // must accept null person-records
+    // all jobs null
+    result = testComparator.compare(np1, np2);
+    assertEquals(0, result);
+
+    // fetch jobtypes
+    JobType lehrerJob = null;
+    JobType helperJob = null;
+    try {
+      lehrerJob = Manager.getJobTypeCollection().findEntity("LEHRER");
+      helperJob = Manager.getJobTypeCollection().findEntity("HELFER");
+    } catch (DataBaseNotReadyException ex) {
+      Exceptions.printStackTrace(ex);
+    }
+
+    // one jobtype not null
+    Person p1 = new Person();
+    personCollectionMock.p1 = p1;
+    Person p2 = new Person();
+    personCollectionMock.p2 = p2;
+    p1.setJobType(lehrerJob);
+    p2.setJobType(null);
+    result = testComparator.compare(np1, np2);
+    assertTrue(result < 0);
+
+    result = testComparator.compare(np2, np1);
+    assertTrue(result > 0);
+
+    //  both jobtypes not null
+    p1.setJobType(lehrerJob);
+    p2.setJobType(helperJob);
+    result = testComparator.compare(np1, np2);
+    assertTrue(result < 0);
+
+    result = testComparator.compare(np2, np1);
+    assertTrue(result > 0);
+
+
   }
 }

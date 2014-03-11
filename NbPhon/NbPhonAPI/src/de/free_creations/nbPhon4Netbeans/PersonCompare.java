@@ -93,10 +93,10 @@ public class PersonCompare {
           MutableEntityCollection<Person, Integer> personCollection,
           final Integer eventId, final String JobId) {
     return new PersonComparator(personCollection) {
-      
+
       @Override
-      public int compare(MutableEntityCollection<Person, Integer> personCollection, 
-              Node n1, 
+      public int compare(MutableEntityCollection<Person, Integer> personCollection,
+              Node n1,
               Node n2) {
         int checkNull = checkValidPersonNodes(n1, n2);
         if (checkNull != bothValid) {
@@ -118,10 +118,10 @@ public class PersonCompare {
         int score1 = rating1.getScore();
         int score2 = rating2.getScore();
         int scoreCompare = -Integer.compare(score1, score2);
-        if(scoreCompare != 0){
+        if (scoreCompare != 0) {
           return scoreCompare;
-        }        
-        
+        }
+
         // same score, so compare on personId (to be compatible with equal)        
         return Integer.compare(personId1, personId2);
       }
@@ -199,6 +199,10 @@ public class PersonCompare {
           }
           JobType j1 = p1.getJobType();
           JobType j2 = p2.getJobType();
+          int checkNull3 = checkNotNull(j1, j2);
+          if (checkNull3 != bothValid) {
+            return -checkNull3; // reverse order null is the largest
+          }
           String jId1 = j1.getJobTypeId();
           String jId2 = j2.getJobTypeId();
           int comp1 = -jId1.compareTo(jId2); // reverse alphabetic sort oder LERER -> HELFER
