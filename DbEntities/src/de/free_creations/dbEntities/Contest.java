@@ -77,6 +77,7 @@ public class Contest implements Serializable, DbEntity {
   public static final String PROP_EVENTADDED = "contestPROP_EVENTADDED";
   public static final String PROP_DESCRIPTION = "contestPROP_DESCRIPTION";
   public static final String PROP_PRIORITY = "contestPROP_PRIORITY";
+  public static final String PROP_SCHEDULING = "contestPROP_SCHEDULING";
 
   public Contest() {
   }
@@ -260,5 +261,22 @@ public class Contest implements Serializable, DbEntity {
     if (!Objects.equals(old, priority)) {
       firePropertyChange(PROP_PRIORITY, old, priority);
     }
+  }
+
+  /**
+   * Returns true if at least one event is scheduled.
+   *
+   * @return true if at least one event is scheduled.
+   */
+  public boolean isScheduled() {
+    if (eventList == null) {
+      return false;
+    }
+    for (Event e : eventList) {
+      if (e.isScheduled()) {
+        return true;
+      }
+    }
+    return false;
   }
 }
