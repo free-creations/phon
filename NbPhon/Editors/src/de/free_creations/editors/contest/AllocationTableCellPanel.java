@@ -78,6 +78,12 @@ public class AllocationTableCellPanel extends JLabel {
   private CellKey cellKey = null;
   private Integer personId = null;
 
+  /**
+   * plannerIsAutomat indicates that the allocation was generated automatically,
+   * and should be shown in gray.
+   */
+  private static boolean plannerIsAutomat = false;
+
   private static class ColorPair {
 
     public final Color foreground;
@@ -90,6 +96,7 @@ public class AllocationTableCellPanel extends JLabel {
   }
 
   private final ColorPair defaultColors;
+  private final ColorPair defaultAutomatColors;
   private final ColorPair disabledColors;
   private final ColorPair errorColors;
   private final ColorPair doubleErrorColors;
@@ -110,6 +117,7 @@ public class AllocationTableCellPanel extends JLabel {
     this.selectedBackgroundColor = selectedBackgroundColor;
     this.selectedForegroundColor = selectedForegroundColor;
     this.defaultColors = new ColorPair(Color.black, Color.white);
+    this.defaultAutomatColors = new ColorPair(new Color(48, 57, 187), Color.white);
     this.disabledColors = new ColorPair(Color.black, disabledColor);
     this.errorColors = new ColorPair(Color.red, new Color(235, 235, 235));
     this.doubleErrorColors = new ColorPair(Color.red, disabledColor);
@@ -194,6 +202,8 @@ public class AllocationTableCellPanel extends JLabel {
       if (person == null) {
         return null; //oops
       }
+      plannerIsAutomat = Allocation.PLANNER_AUTOMAT.equals(allocation.getPlanner());
+
       return person.getPersonId();
 
     } catch (DataBaseNotReadyException ex) {
@@ -263,7 +273,11 @@ public class AllocationTableCellPanel extends JLabel {
       }
       if (a.isAvailable()) {
         if (event.isScheduled()) {
-          return defaultColors;
+          if (plannerIsAutomat) {
+            return defaultAutomatColors;
+          } else {
+            return defaultColors;
+          }
         } else {
           return disabledColors;
         }

@@ -127,6 +127,7 @@ public class Event implements Serializable, DbEntity {
       boolean old = isScheduled();
       this.scheduled = value ? 1 : 0;
       firePropertyChange(PROP_SCHEDULED, old, value);
+      firePropertyChangeOnContest(Contest.PROP_SCHEDULING, null, null);
     }
   }
 
@@ -285,6 +286,14 @@ public class Event implements Serializable, DbEntity {
     }
     allocationList.add(a);
     firePropertyChange(PROP_ALLOCATIONADDED, null, a.identity());
+  }
+
+  private void firePropertyChangeOnContest(String propertyName, Object oldValue, Object newValue) {
+    if (contest != null) {
+      PropertyChangeManager.instance().firePropertyChange(
+              contest.identity(),
+              propertyName, oldValue, newValue);
+    }
   }
 
 }

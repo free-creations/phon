@@ -308,7 +308,6 @@ public class PersonNode extends AbstractNode implements CommittableNode {
     } else {
       return String.format("<html><s>%s</s></html>", getDisplayName());
     }
-
   }
 
   @Override

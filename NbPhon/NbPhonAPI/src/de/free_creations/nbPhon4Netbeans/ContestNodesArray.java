@@ -35,7 +35,7 @@ import org.openide.nodes.Node;
  */
 public class ContestNodesArray extends Children.SortedArray {
 
-  private final boolean withNullItem;  
+  private final boolean withNullItem;
   private final boolean attachJobtypes;
 
   private final Comparator<Node> contestComparator = new Comparator<Node>() {
@@ -61,13 +61,20 @@ public class ContestNodesArray extends Children.SortedArray {
           return notNullCheck;
         }
 
-        String w1 = j1.getName();
-        String w2 = j1.getName();
+        // first let's compare the names only taking into account the letters
+        String w1 = cleanString(j1.getName());
+        String w2 = cleanString(j2.getName());
         int result = Utils.stringCompareNull(w1, w2);
         if (result == 0) {
-          // OOps, they have both the same long description (probably both null)
-          // So we'll discriminate through the primary key.
-          return Utils.integerCompareNull(jn1.getContestId(), jn2.getContestId());
+          // the letters are the same, than compre the full name
+          String full1 = j1.getName();
+          String full2 = j2.getName();
+          result = Utils.stringCompareNull(full1, full2);
+          if (result == 0) {
+          // OOps, they have both the same name (probably both null)
+            // So we'll discriminate through the primary key.
+            return Utils.integerCompareNull(jn1.getContestId(), jn2.getContestId());
+          }
         }
 
         // OK, this is the result we wanted.
@@ -79,6 +86,21 @@ public class ContestNodesArray extends Children.SortedArray {
         return Utils.integerCompareNull(jn1.getContestId(), jn2.getContestId());
       }
     }
+
+    /**
+     * will replace any non-letter characters with nothing.
+     *
+     * @param dirty
+     * @return
+     */
+    private String cleanString(String dirty) {
+      if (dirty != null) {
+        return dirty.replaceAll("\\P{L}+", "");
+      } else {
+        return "";
+      }
+    }
+
   };
   private final MutableEntityCollection<Contest, Integer> contestCollection;
   private final PropertyChangeListener contestCollectionListener = new PropertyChangeListener() {
@@ -124,19 +146,19 @@ public class ContestNodesArray extends Children.SortedArray {
   /**
    * Create nodes for all contest keys found in the given contestCollection.
    *
-   * @param contestCollection for every item found in this collection a node 
-   * object will be created. 
+   * @param contestCollection for every item found in this collection a node
+   * object will be created.
    */
 //  public ContestNodesArray(MutableEntityCollection<Contest, Integer> contestCollection) {
 //    this(contestCollection, false, true);
 //  }
-
   /**
    * Create nodes for all contest keys found in the given contestCollection.
    *
-   * @param contestCollection for every item found in this collection a node 
-   * object will be created. 
-   * @param withNullItem add an extra item with null key (used to show in drop down boxes)
+   * @param contestCollection for every item found in this collection a node
+   * object will be created.
+   * @param withNullItem add an extra item with null key (used to show in drop
+   * down boxes)
    * @param attachJobtypes attach job type nodes to each contest node.
    */
   public ContestNodesArray(MutableEntityCollection<Contest, Integer> contestCollection, boolean withNullItem, boolean attachJobtypes) {

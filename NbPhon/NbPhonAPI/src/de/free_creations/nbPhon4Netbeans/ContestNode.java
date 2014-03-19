@@ -108,6 +108,16 @@ public class ContestNode extends AbstractNode implements CommittableNode {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       notifyPendingChanges();
+      if (Contest.PROP_NAME.equals(evt.getPropertyName())) {
+        fireDisplayNameChange(null, getDisplayName());
+      }
+      if (Contest.PROP_CONTESTTYPE.equals(evt.getPropertyName())) {
+        fireDisplayNameChange(null, getDisplayName());
+        fireIconChange();
+      }
+      if (Contest.PROP_SCHEDULING.equals(evt.getPropertyName())) {
+        fireDisplayNameChange(null, getDisplayName());
+      }
 
     }
   };
@@ -178,7 +188,11 @@ public class ContestNode extends AbstractNode implements CommittableNode {
   public ContestNode(Integer contestId, MutableEntityCollection<Contest, Integer> contestManager, boolean showJobTypes) {
     super(makeChildren(contestId, showJobTypes));
     this.key = contestId;
+    if(contestManager == null){
+      contestManager = Manager.getContestCollection();
+    }
     this.contestManager = contestManager;
+    
     if (key != null) {
       Contest.addPropertyChangeListener(listener, contestId);
       getCookieSet().add(editCookie);
@@ -259,9 +273,9 @@ public class ContestNode extends AbstractNode implements CommittableNode {
     try {
       Contest j = contestManager.findEntity(key);
       if (j != null) {
-        String wertung = j.getName();
-        if (wertung != null) {
-          return String.format("%s", wertung);
+        String usersName = j.getName();
+        if (usersName != null) {
+          return String.format("%s", usersName);
         } else {
           return getName();
         }
@@ -272,6 +286,29 @@ public class ContestNode extends AbstractNode implements CommittableNode {
       Exceptions.printStackTrace(ex);
       return getName();
     }
+  }
+
+  @Override
+  public String getHtmlDisplayName() {
+    if (isScheduled()) {
+      return String.format("<html>%s</html>", getDisplayName());
+    } else {
+      return String.format("<html><s>%s</s></html>", getDisplayName());
+    }
+  }
+
+  /**
+   * @return true if the Contest is scheduled for at least one event
+   */
+  private boolean isScheduled() {
+    try {
+      Contest c = contestManager.findEntity(key);
+      if (c != null) {
+        return c.isScheduled();
+      }
+    } catch (DataBaseNotReadyException ex) {
+    }
+    return false;
   }
 
   @Override

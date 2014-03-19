@@ -72,6 +72,11 @@ public class PersonAssignmentTableCellPanel extends JLabel {
 
   private Color selectedBackgroundColor;
   private Color selectedForegroundColor;
+  /**
+   * plannerIsAutomat indicates that the allocation was generated automatically,
+   * and should be shown in gray.
+   */
+  private boolean plannerIsAutomat = false;
 
   private static class ColorPair {
 
@@ -85,6 +90,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
   }
 
   private final ColorPair defaultColors;
+  private final ColorPair defaultAutomatColors;
   private final ColorPair disabledColors;
   private final ColorPair errorColors;
   private final ColorPair doubleErrorColors;
@@ -111,6 +117,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     this.selectedBackgroundColor = selectedBackgroundColor;
     this.selectedForegroundColor = selectedForegroundColor;
     this.defaultColors = new ColorPair(Color.black, Color.white);
+    this.defaultAutomatColors = new ColorPair(new Color(48, 57, 187), Color.white);
     this.disabledColors = new ColorPair(Color.black, disabledColor);
     this.errorColors = new ColorPair(Color.red, new Color(235, 235, 235));
     this.doubleErrorColors = new ColorPair(Color.red, disabledColor);
@@ -173,6 +180,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     eventId = null;
     jobId = null;
     contestId = null;
+    plannerIsAutomat = false; //the default
 
     Event.removePropertyChangeListener(nodeListener, oldEventId);
     Contest.removePropertyChangeListener(nodeListener, oldContestId);
@@ -180,6 +188,7 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     try {
       Allocation alloc = Manager.getAllocationCollection().findEntity(allocationId);
       if (alloc != null) {
+        plannerIsAutomat = Allocation.PLANNER_AUTOMAT.equals(alloc.getPlanner());
         Job job = alloc.getJob();
         jobId = (job == null) ? null : job.getJobId();
         Event event = alloc.getEvent();
@@ -288,7 +297,11 @@ public class PersonAssignmentTableCellPanel extends JLabel {
       }
       if (isAvailable) {
         if (event.isScheduled()) {
-          return defaultColors;
+          if (plannerIsAutomat) {
+            return defaultAutomatColors;
+          } else {
+            return defaultColors;
+          }
         } else {
           return errorColors;
         }

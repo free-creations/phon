@@ -74,13 +74,15 @@ public class PersonAssignmentTable extends JTable {
           String jobId = data.jobId;
           Integer personId = getPersonId();
           Integer timeSlotId = getTimeSlotId(row, col);
-          AllocatePersonToJob action
-                  = new AllocatePersonToJob(personId,
-                          contestId,
-                          jobId,
-                          timeSlotId,
-                          "USER");
-          action.apply(0);
+          if (personId != null) {
+            AllocatePersonToJob action
+                    = new AllocatePersonToJob(personId,
+                            contestId,
+                            jobId,
+                            timeSlotId,
+                            "USER");
+            action.apply(0);
+          }
           return true;
 
         }
