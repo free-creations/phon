@@ -28,6 +28,8 @@ import de.free_creations.nbPhonAPI.Manager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 
 /**
  * This rule applies when a person is assigned for a job in a contest.
@@ -100,19 +102,23 @@ public class AllocatePersonToJob implements CheckedAction {
       throw new RuntimeException(String.format("Invalid TimeSlot Id %s.", timeSlotId));
     }
 
-    List<Allocation> aTemp = Manager.getAllocationCollection().findAll(person, timeSlot);
+    ArrayList<Allocation> clashingAllocs = new ArrayList<>();
+    //Collect all persons-allocation previously assigned to this person for the given time (should  be 0 or 1);
+    // These will later be deleted.
+    clashingAllocs.addAll(Manager.getAllocationCollection().findAll(person, timeSlot));
 
-    // the requested allocation might already be realized.
-    if (isRequestedAllocation(aTemp)) {
+    // the requested allocation might already be realized (it is then in the clashing allocs).
+    if (isRequestedAllocation(clashingAllocs)) {
       return; // OK there is nothing to do.
     }
 
     // remove all persons-allocation previously assigned to this person for the given time (should  be 0 or 1);
-    ArrayList<Allocation> aSnapShot = new ArrayList<>(aTemp);
-    for (Allocation a : aSnapShot) {
-      Manager.getAllocationCollection().removeEntity(a);
-    }
+//    ArrayList<Allocation> aSnapShot = new ArrayList<>(aTemp);
+//    for (Allocation a : aSnapShot) {
+//      Manager.getAllocationCollection().removeEntity(a);
+//    }
     if (contestId == null) {
+      removeAllocations(clashingAllocs);
       return;
     }
 
@@ -130,15 +136,45 @@ public class AllocatePersonToJob implements CheckedAction {
     if (event == null) {
       throw new RuntimeException(String.format("No event for %s, %s.", contest, timeSlot));
     }
-    // remove all other allocations for the given job at the given time
-    aTemp = Manager.getAllocationCollection().findAll(event, job);
-    aSnapShot = new ArrayList<>(aTemp);
-    for (Allocation a : aSnapShot) {
-      Manager.getAllocationCollection().removeEntity(a);
+
+    //Collect all other allocations for the given job at the given time.
+    // These will later be deleted.
+    clashingAllocs.addAll(Manager.getAllocationCollection().findAll(event, job));
+
+    // try to remove all clashing allocations.
+    boolean removalOK = removeAllocations(clashingAllocs);
+    if (!removalOK) {
+      return;
     }
 
     // sight, finally we can proceed to the new allocation
     Manager.getAllocationCollection().newEntity(person, event, job, planner);
+  }
+
+  /**
+   * Removes all allocations in the given list.
+   *
+   * If the list contains one or more committed allocations, the user is asked
+   * whether he really wants to remove the allocation.
+   *
+   * @param clashingAllocs
+   * @return true if the action was performed. Returns false if the user has
+   * objected to the removal.
+   * @throws DataBaseNotReadyException
+   */
+  private boolean removeAllocations(List<Allocation> clashingAllocs) throws DataBaseNotReadyException {
+
+    // check if there is not any commited allocation among the clashing allocations
+    for (Allocation a : clashingAllocs) {
+      if (a.isCommited()) {
+        boolean removeAnyway = warnAndAskUser(a);
+        if (!removeAnyway) {
+          return false;
+        }
+      }
+    }
+    Manager.getAllocationCollection().removeAll(clashingAllocs);
+    return true;
   }
 
   /**
@@ -182,4 +218,27 @@ public class AllocatePersonToJob implements CheckedAction {
     return true;
   }
 
+  /**
+   * Warn the the user about the possible removal of a committed allocation.
+   *
+   * @param a the allocation that might be removed
+   * @return true if the users allows the removal.
+   */
+  private boolean warnAndAskUser(Allocation a) {
+    Person person = a.getPerson();
+    String givenname = person == null ? "N" : person.getGivenname();
+    String surname = person == null ? "N" : person.getSurname();
+    
+    String message = String.format("Job currently allocated and COMMITTED to %s, %s. "
+            + "Do really want to want to change?",
+            givenname,
+            surname);
+
+    NotifyDescriptor d
+            = new NotifyDescriptor.Confirmation(
+                    message,
+                    "Allocate Person to Job",
+                    NotifyDescriptor.OK_CANCEL_OPTION);
+    return (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION);
+  }
 }

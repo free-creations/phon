@@ -193,7 +193,7 @@ public class AutomaticAllocationExecutor {
         initialize();
         return true;
       case RemovingAllAllocations:
-        removeAllAllocations();
+        removeAllAutomaticNotCommittedAllocations();
         return true;
       case RemovingBadAllocations:
         removeBadAllocations();
@@ -247,10 +247,16 @@ public class AutomaticAllocationExecutor {
     setProgress(new ProgressIndicator(100, "Finished."));
   }
 
-  private void removeAllAllocations() throws DataBaseNotReadyException {
-    ArrayList<Allocation> aa = new ArrayList<>(Manager.getAllocationCollection().getAllAutomatic());
-    removedAllocCount = aa.size();
-    Manager.getAllocationCollection().removeAll(aa);
+  private void removeAllAutomaticNotCommittedAllocations() throws DataBaseNotReadyException {
+    ArrayList<Allocation> automatic = new ArrayList<>(Manager.getAllocationCollection().getAllAutomatic());
+    ArrayList<Allocation> automaticNotCommitted = new ArrayList<>();
+    for(Allocation a:automatic){
+      if(!a.isCommited()){
+        automaticNotCommitted.add(a);
+      }
+    }    
+    removedAllocCount = automaticNotCommitted.size();
+    Manager.getAllocationCollection().removeAll(automaticNotCommitted);
     // prepare next state
 //    currentState = State.CollectingTasks;
 //    setProgress(new ProgressIndicator(10, String.format("%s Allocations removed. Collecting Tasks...", removedAllocCount)));
@@ -417,6 +423,10 @@ public class AutomaticAllocationExecutor {
    * redundant or has bad quality factor.
    */
   private boolean isBad(Allocation a) {
+    if(a.isCommited()){
+      // commited (=locked) allocations shall never be removed, so these are never bad.
+      return false;
+    }
     AllocationRating rating = new AllocationRating(a);
     if (rating.isRedundant()) {
       // redudant is always bad

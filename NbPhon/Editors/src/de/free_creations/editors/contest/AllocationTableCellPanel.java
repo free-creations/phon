@@ -24,13 +24,14 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import de.free_creations.editors.contest.AllocationTable.CellKey;
 import de.free_creations.nbPhon4Netbeans.PersonNode;
+import de.free_creations.nbPhon4Netbeans.IconManager;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Objects;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
@@ -48,12 +49,16 @@ public class AllocationTableCellPanel extends JLabel {
    * Indicates that the value of displayed by this panel has changed.
    */
   public static final String PROP_VALUE_CHANGED = "PROP_VALUE_CHANGED";
+  private static long allocationId = -1;
 
   private final PropertyChangeListener nodeListener = new PropertyChangeListener() {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       switch (evt.getPropertyName()) {
+        case (Allocation.PROP_COMMITED):
+          allocIsCommitted = evt.getNewValue() instanceof Boolean ? (boolean) evt.getNewValue() : false;
+
         case (Event.PROP_SCHEDULED):
         case (Event.PROP_ALLOCATIONADDED):
         case (Event.PROP_ALLOCATIONREMOVED):
@@ -82,7 +87,8 @@ public class AllocationTableCellPanel extends JLabel {
    * plannerIsAutomat indicates that the allocation was generated automatically,
    * and should be shown in gray.
    */
-  private static boolean plannerIsAutomat = false;
+  private boolean plannerIsAutomat = false;
+  private boolean allocIsCommitted = false;
 
   private static class ColorPair {
 
@@ -144,7 +150,7 @@ public class AllocationTableCellPanel extends JLabel {
     }
 
     Integer oldPersonId = personId;
-    Integer newPersonId = findPersonId(cellKey);
+    Integer newPersonId = findPersonIdAndAllocation(cellKey);
 
     if (oldPersonId != null) {
       Person.removePropertyChangeListener(nodeListener, oldPersonId);
@@ -167,8 +173,8 @@ public class AllocationTableCellPanel extends JLabel {
    * Determine which person is allocated to a given job for a given event. The
    * job and the event are given by the cell key.
    *
-   * Note this procedure is also used by the AllocationTableCellEditor (defined
-   * in AllocationTable) therfore it is public static. Sorry for the hack.
+   * Note this procedure is used by the AllocationTableCellEditor (defined in
+   * AllocationTable) therfore it is public static. Sorry for the hack.
    *
    * @param cellKey
    * @return
@@ -194,15 +200,70 @@ public class AllocationTableCellPanel extends JLabel {
       if (job == null) {
         return null; //oops
       }
+
       Allocation allocation = Manager.getAllocationCollection().findEntity(event, job);
       if (allocation == null) {
         return null; //that's OK.
       }
+
+      Person person = allocation.getPerson();
+      if (person == null) {
+        return null; //oops
+      }
+
+      return person.getPersonId();
+
+    } catch (DataBaseNotReadyException ex) {
+    }
+    return null;
+  }
+
+  /**
+   * Determine which person is allocated to a given job for a given event. The
+   * job and the event are given by the cell key.
+   *
+   * This procedure is a paste and copy of findPersonId, but sets some private
+   * variables related to the allocation. Sorry for the hack.
+   *
+   * @param cellKey
+   * @return
+   */
+  private Integer findPersonIdAndAllocation(CellKey cellKey) {
+    allocIsCommitted = false;
+    plannerIsAutomat = false;
+    if (cellKey == null) {
+      return null;
+    }
+    Integer eventId = cellKey.eventId;
+    if (eventId == null) {
+      return null;
+    }
+    String jobId = cellKey.jobId;
+    if (jobId == null) {
+      return null;
+    }
+    try {
+      Event event = Manager.getEventCollection().findEntity(eventId);
+      if (event == null) {
+        return null; //oops
+      }
+      Job job = Manager.getJobCollection().findEntity(jobId);
+      if (job == null) {
+        return null; //oops
+      }
+      Allocation.removePropertyChangeListener(nodeListener, allocationId);
+      Allocation allocation = Manager.getAllocationCollection().findEntity(event, job);
+      if (allocation == null) {
+        return null; //that's OK.
+      }
+      allocationId = allocation.getAllocationId();
+      allocation.addPropertyChangeListener(nodeListener);
       Person person = allocation.getPerson();
       if (person == null) {
         return null; //oops
       }
       plannerIsAutomat = Allocation.PLANNER_AUTOMAT.equals(allocation.getPlanner());
+      allocIsCommitted = allocation.isCommited();
 
       return person.getPersonId();
 
@@ -224,6 +285,12 @@ public class AllocationTableCellPanel extends JLabel {
       setText(tempNode.getDisplayName());
     }
     Image image = tempNode.getIcon(BeanInfo.ICON_COLOR_16x16);
+
+    if (allocIsCommitted) {
+      if (image instanceof BufferedImage) {
+        image = IconManager.iconManager().getLockedImage((BufferedImage) image);
+      }
+    }
     Icon icon = null;
     if (image != null) {
       icon = new ImageIcon(image);

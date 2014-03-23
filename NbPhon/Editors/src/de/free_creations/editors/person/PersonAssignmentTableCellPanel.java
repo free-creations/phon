@@ -24,11 +24,13 @@ import de.free_creations.dbEntities.Person;
 import de.free_creations.dbEntities.TimeSlot;
 import de.free_creations.nbPhon4Netbeans.ContestJobNode;
 import de.free_creations.nbPhon4Netbeans.ContestNode;
+import de.free_creations.nbPhon4Netbeans.IconManager;
 import java.awt.Color;
 import javax.swing.JLabel;
 import de.free_creations.nbPhonAPI.DataBaseNotReadyException;
 import de.free_creations.nbPhonAPI.Manager;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
@@ -56,6 +58,8 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       switch (evt.getPropertyName()) {
+        case (Allocation.PROP_COMMITED):
+          allocIsCommitted = evt.getNewValue() instanceof Boolean ? (boolean) evt.getNewValue() : false;
         case (Event.PROP_SCHEDULED):
         case (Availability.PROP_AVAILABLE):
         case (Contest.PROP_CONTESTTYPE):
@@ -77,6 +81,8 @@ public class PersonAssignmentTableCellPanel extends JLabel {
    * and should be shown in gray.
    */
   private boolean plannerIsAutomat = false;
+
+  private boolean allocIsCommitted = false;
 
   private static class ColorPair {
 
@@ -181,14 +187,18 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     jobId = null;
     contestId = null;
     plannerIsAutomat = false; //the default
+    allocIsCommitted = false;
 
+    Allocation.removePropertyChangeListener(nodeListener, oldAllocationId);
     Event.removePropertyChangeListener(nodeListener, oldEventId);
     Contest.removePropertyChangeListener(nodeListener, oldContestId);
 
     try {
       Allocation alloc = Manager.getAllocationCollection().findEntity(allocationId);
       if (alloc != null) {
+        alloc.addPropertyChangeListener(nodeListener);
         plannerIsAutomat = Allocation.PLANNER_AUTOMAT.equals(alloc.getPlanner());
+        allocIsCommitted = alloc.isCommited();
         Job job = alloc.getJob();
         jobId = (job == null) ? null : job.getJobId();
         Event event = alloc.getEvent();
@@ -263,6 +273,12 @@ public class PersonAssignmentTableCellPanel extends JLabel {
     String text = null;
     if (allocationId != -1) {
       Image image = ContestJobNode.getIcon(contestId, jobId);
+
+      if (allocIsCommitted) {
+        if (image instanceof BufferedImage) {
+          image = IconManager.iconManager().getLockedImage((BufferedImage) image);
+        }
+      }
       icon = (image == null) ? null : new ImageIcon(image);
       text = ContestJobNode.getLongHtmlDescription(contestId, jobId);
     }

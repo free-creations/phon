@@ -35,6 +35,7 @@ import org.openide.util.Exceptions;
 public class IconManager {
 
   public final BufferedImage iconStar;
+  public final BufferedImage iconLock;
   //---- Team Node
   public final BufferedImage iconTeam;
   public final BufferedImage iconTeamOpened;
@@ -106,6 +107,7 @@ public class IconManager {
     iconMan = ImageIO.read(IconManager.class.getResource("resources/man16.png"));
     iconWoman = ImageIO.read(IconManager.class.getResource("resources/woman16.png"));
     iconStar = ImageIO.read(IconManager.class.getResource("resources/star16.png"));
+    iconLock = ImageIO.read(IconManager.class.getResource("resources/lock24.png"));
     iconNobody = ImageIO.read(IconManager.class.getResource("resources/nobody16.png"));
     iconGroupleader = ImageIO.read(IconManager.class.getResource("resources/groupLeader16.png"));
     //---- Instruments
@@ -244,6 +246,27 @@ public class IconManager {
   private final Object staredImageCacheLock = new Object();
 
   /**
+   * Overlays a lock onto the given image and caches it for further use.
+   *
+   * @param originalImage
+   * @return
+   */
+  public BufferedImage getLockedImage(BufferedImage originalImage) {
+    synchronized (lockedImageCacheLock) {
+      if (originalImage == null) {
+        return null;
+      }
+      if (!lockedImageCache.containsKey(originalImage)) {
+        BufferedImage staredImage = mergeImages(originalImage, iconLock, 0);
+        lockedImageCache.put(originalImage, staredImage);
+      }
+      return lockedImageCache.get(originalImage);
+    }
+  }
+  private final HashMap<BufferedImage, BufferedImage> lockedImageCache = new HashMap<>();
+  private final Object lockedImageCacheLock = new Object();
+
+  /**
    * Renders the image in gray and caches it for further use.
    *
    * @param originalImage
@@ -265,7 +288,8 @@ public class IconManager {
   private final Object disabledImageCacheLock = new Object();
 
   /**
-   * Overlays a star onto the given image and caches it for further use.
+   * Paints the contest-symbol under the given image and caches it for further
+   * use.
    *
    * @param baseImage
    * @param contestType
