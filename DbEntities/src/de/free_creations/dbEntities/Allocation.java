@@ -364,6 +364,14 @@ public class Allocation implements Serializable, DbEntity {
             propertyName, oldValue, newValue);
   }
 
+  private void firePropertyChangeOnPerson(String propertyName, Object oldValue, Object newValue) {
+    if (person != null) {
+      PropertyChangeManager.instance().firePropertyChange(
+              person.identity(),
+              propertyName, oldValue, newValue);
+    }
+  }
+
   @Override
   public EntityIdentity identity() {
     return new EntityIdentity(Allocation.class, allocationId);
@@ -377,12 +385,13 @@ public class Allocation implements Serializable, DbEntity {
     return commited > 0;
   }
 
-  public void setCommited(boolean value) {
+  public void setCommited(boolean newValue) {
     boolean old = isCommited();
-    if (old == value) {
+    if (old == newValue) {
       return;
     }
-    commited = (value) ? 1 : 0;
-    firePropertyChange(PROP_COMMITED, old, value);
+    commited = (newValue) ? 1 : 0;
+    firePropertyChange(PROP_COMMITED, old, newValue);
+    firePropertyChangeOnPerson(PROP_COMMITED, old, newValue);
   }
 }

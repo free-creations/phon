@@ -31,7 +31,7 @@ import java.util.Date;
  */
 public class GenerateContestTable {
 
-  private final boolean emptyDatabase = true; // set this to false if you want responsible persons to be allocated
+  private final boolean emptyDatabase = false; // set this to false if you want responsible persons to be allocated
 
   private final int timeSlotCount = 15; // must be the same as in "populateCoreTables.sql"
   private final int locationCount = 19; // must be the same as in "populateExampleData.sql"
