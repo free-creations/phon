@@ -1,0 +1,7 @@
+Select all records that are not joined
+see:     http://www.mwegner.de/php-sql/left-join-not-in-not-exists.html
+
+SELECT t1.IDt1
+    FROM tabelle1 AS t1
+    LEFT JOIN tabelle2 AS t2 ON t2.IDt1 = t1.IDt1
+    WHERE t2.IDt1 IS NULL
