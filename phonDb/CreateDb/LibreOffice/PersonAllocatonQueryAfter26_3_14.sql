@@ -1,9 +1,10 @@
 /*
-Query to produce the document "Anschreiben.doc".
-(same as AllocationQuery.sql but additionally zip code etc. starttime endtime)
+
+ Same as PersonAllocationQuery but restricted on allocations after a given date
 
 */
 SELECT 
+  "ALLOC"."LASTCHANGE",
   "ALLOC"."ALLOCATIONID",
   "ALLOC"."PERSON" AS "PersonId",
   "ALLOC"."JOB" AS "JobId",
@@ -76,6 +77,8 @@ FROM
    ON "AllocTeacher"."PERSON" = "Teacher"."PERSONID" 
 WHERE
   "AllocTeacher"."JOB" = 'LEHRER'
+AND
+  "ALLOC"."LASTCHANGE" > '2014-03-17 00:00:00.000'
 
 
 
